@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""xsset
+"""branchesdata
 
 Container to collect, store, and process multi-group cross-sections set.
 
@@ -10,7 +10,7 @@ email: dan.kotlyar@me.gatech.edu
 """
 
 
-class BasicDataSet:
+class SingleSet:
     """Container that stores the most basic data set
 
     Parameters
@@ -64,7 +64,7 @@ class BasicDataSet:
         pass
 
 
-class DataSets:
+class BranchoffSets:
     """A container to store sets for different operational conditions
 
     Methods
@@ -75,12 +75,11 @@ class DataSets:
 
     """
 
-    def __init__(self, ndep, nomHistory, states, depInterp):
+    def __init__(self, ndep, states, depInterp):
         # Init to empty dictionary
         self._datasets = {}
         self._ndep = ndep  # integer to the number of total dependencies
         # tuple of numerical values with which the main branch was created
-        self.nomHistory = nomHistory 
         self.states = states  # all the possible states ; each state will also
         # have an index
         # depInterp - a list of pre-scribed interpolation technique for each
