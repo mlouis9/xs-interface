@@ -11,93 +11,86 @@ email: dan.kotlyar@me.gatech.edu
 
 import numpy as np
 import copy
+import xsInterface
+import xsInterface.errorChecking as err
 
 class SingleSet():
     """Container that stores the most basic data set
 
     Parameters
     ----------
-    dataLabel : dict
-        Labels that describe the type of data inputted to the set.
-        Keys describe the name of the stored attributed and values the
-        corresponding description used for error tracking.
-    xsLabel : dict
-        specific label description only for xs.
-    ngroups : int
-        Number of energy groups. 
-
-
+    userLabel : dict
+        Assigns a label to data and tells singleSet how to error check that 
+        data
+    
     Attributes
     ----------
     COMPLETE
 
     """
-
-    def __init__(self, dataLabel, xsLabel, ngroups):
+    
+    def __init__(self,tallyEdges):
         """Assign parameters that describe the flow"""
-
-        self._dataLabel = dataLabel
-        self._xsLabel = xsLabel
-        self._ngroups = ngroups
-        self._attr = {}
+        # Set SingleSet properties using the user defined label
+        self.tallyEdges = tallyEdges
+        self.ng         = len(tallyEdges) + 1
         
-        # dataLabel = {"keff": "description to throw errors", ...}
-        # xsLabel = {"abs": "Abso cross section"}
+        # Initialize muted dictionaries
+        self._tallies = {}
+        self._props = {}
     
-    def addLabel(self, mode="xsLabel", **kwargs):
-        """Set or add a new label to data"""
+    def add(self, *args):
+        """Add data to SingleSet obect"""
+        # *args:
+        # must either be a Tally or Prop object
         
-        if mode == "xsLabel":
-            for key,value in kwargs.items():
-                self._xsLabel[key] = value
-        elif mode == "dataLabel":
-            for key,value in kwargs.items():
-                self._dataLabel[key] = value
-    
-    def add(self, dataType, **kwargs):
-        """Feed in cross sections"""
-        # dataType will allow us to control whether this a matrix, float,
-        # vector
-        # **kwargs:
-        # name of the cross sections and their correponsing values
-        # 
-        # we can write this method in one go or multiple times depending on
-        # the material being fed to the container.
-        
-        for key,value in kwargs.items():
-            if isinstance(value,dataType):
-                self._attr[key] = value
+        for obj in args:
+            if type(obj) == xsInterface.Tally():
+                err.checkObj(obj)
+                self._tallies[obj.name] = obj
+            
+            elif type(obj) == xsInterface.Prop():
+                err.checkObj(obj)
+                self._props[obj.name] = obj
+            
             else:
-                # Pass error if invalid dataType?
+                # Raise error
                 pass
     
     def get(self, *attributes):
         """obtain the data of specific attributes"""
         # can be return as a separate results container.
-        
-        out = {}
-        for attribute in attributes:
-            out[attribute] = copy.deepcopy(self._attr[attribute])
-        
-        return out
+        pass
     
-    def condense(self, *attributes, flux="flux", eneCutoffs=None):
+    def condense(self, tallyEdges=None, selfCondense=False):
         """Energy condensation"""
-        # how to incorporate eneCutoffs?
-        # Error check that data is an np.array()
+        # Decide whether condense data or make a copy
+        if selfCondense==False:
+            out = copy.deepcopy(self)
+        else:
+            out = self
         
-        # ene = self["ene"]
-        # mask = ene == eneCutoffs
+        # Identify initial and final tally edges
+        tallyEdges0 = out.tallyEdges
+        tallyEdges1 = tallyEdges
         
-        # Condense each value in attributes over energy range
-        for attribute in attributes:
-            attr = self._attr[attribute]
-            phi  = self._attr[flux]
-            self._attr[attribute] = np.sum(attr*phi)/np.sum(phi)
+        # Condense flux first to create condenseMap for xs condensation
+        for tallyName,tally in self._tallies.items():
+            if tally.type == 'flux':
+                flux0 = copy.deepcopy(tally)
+                flux1 = tally
+                flux1.condense(tallyEdges0,tallyEdges1)
+                out.ng = flux1.ng
         
-        # condnse flux over energy range
-        self._attr[flux] = np.sum(phi)
+        # Condense each value in attributes over the specified cutoff range
+        for tallyName,tally in self._tallies.items():
+            tally.condense(tallyEdges0,tallyEdges1,flux0,flux1)
+            err.checkObj(tally)
+            out.add(tally)
         
+        if selfCondense==False:
+            return out
+    
     def printData(self, whatxs, howprint, setrules):
         """print according to a user provided template"""
         pass
