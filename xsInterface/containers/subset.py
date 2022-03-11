@@ -7,6 +7,7 @@ Created on Fri Mar  4 12:57:03 2022
 
 import numpy as np
 import xsInterface.errorChecking as err
+import xsInterface.initialization as pre
         
 def Tally():
     """Object that stores data related to a specific tally in a SingleSet
@@ -23,6 +24,8 @@ def Tally():
     type : str
         tells whether the tally is a cross section ('xs'), reaction rate 
         ('rr'), or flux ('flux')
+    deps : list of str
+        tells the name of certain dependencies 
     tallyEdges : ndarray
         tells what binedges were used to calculated the tallies
     value : ndarray
@@ -33,7 +36,7 @@ def Tally():
     def __init__(self,dim,tallyEdges):
         """initialize TallyObject"""
         # initialize object data
-        self._objData = err._objData(self,tallyEdges=tallyEdges)
+        self._objData = pre._makeObjData(self)
         
         # Preallocate attributes
         for attr in self._attrDict:
@@ -63,13 +66,44 @@ def Prop():
         gives the name of the tally
     value : ndarray
         gives the value of the property
+    deps : list of str
+        tells what dependencies 
         
     """
     
     def __init__(self):
         """initialize TallyObject"""
         # Retrieve package data
-        self._objData = err._packageAttr(self)
+        self._objData = pre._makeObjData(self)
+        
+        # Preallocate attributes
+        for attr in self._attrDict:
+            self.add(attr=None)
+    
+    def add(self,**kwargs):
+        """specify one or more attributes in the TallyObject"""
+        for key,value in kwargs.items():
+            err.checkAttr(self,key,value)
+            setattr(self,key,value)
+
+def Index():
+    """Object that stores data related to an index
+    
+    Attributes
+    ----------
+    _objData : dict
+        object that contains information for error checking
+    name : str
+        gives the name of the tally
+    value : ndarray
+        gives the value of the property
+        
+    """
+    
+    def __init__(self):
+        """initialize TallyObject"""
+        # Retrieve 
+        self._objData = pre._makeObjData(self)
         
         # Preallocate attributes
         for attr in self._attrDict:

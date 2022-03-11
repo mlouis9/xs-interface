@@ -9,44 +9,99 @@ Last updated on Tue Feb 01 13:30:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 """
 
-import pandas
+import pandas as pd
+import xsInterface.initialization as pre
 
-class MultiSets(pandas.DataFrame):
+class MultiSet():
     """A container to store sets for different operational conditions
 
     Methods
     -------
-    addset : add new BasicDataSet
-    getset : obtain the BasicDataSet object
+    add : add new SingleSet object
+    get : retrieve data from the MultiSet object
     getvalues : obtain values of a specific attribute
 
     """
 
-    def __init__(self, ndep, states, legend, depInterp):
+    def __init__(self, tallyRules, propRules, tallyEdges, indexes):
         # Init to empty dictionary
-        self._datasets = {}
-        self._ndep = ndep  # integer to the number of total dependencies
-        # tuple of numerical values with which the main branch was created
-        self.states = states  # all the possible states ; each state will also
-        # have an index
-        # depInterp - a list of pre-scribed interpolation technique for each
-        # dependnecy (linear, root square)
+        self._objData = pre.getObjData
+        self.tallies = {}
+        self.indexes = indexes
+        self.tallyEdges = tallyEdges
+        
+        # create the isFilled matrix
+        indexVec = list(np.zeros(indexes.numDeps+value.dim))
+        self.isFilled = np.full(indexVec, False)
+        
+        # Preallocate tallies 
+        for key,value in tallyRules.items():
+            # Create an index for each dependency + dimension of tally
+            indexVec = list(np.zeros(indexes.numDeps+value.dim))
+            self.tallies[key] = np.empty(indexVec)
+        
+        # Preallocate props
+        for key,value in propRules.items():
+            # Create an index for each dependency + dimension of prop (1)
+            indexVec = list(np.zeros(indexes.numDeps+1))
+            self.tallies[key] = np.empty(indexVec)
 
-    def addset(self, *states, **BasicDataSet):
+    def add(self, *singleSets):
         """Add a new set
 
         COMPLETE
 
         Parameters
         ----------
-        states : contains all the states (T, density, boron, enrichment, ...)
-        BasicDataSet : corresponding object for each
-
 
         """
-        # self._datasets[state] = BasicDataSet
-        pass
+        
+        for singleSet in SingleSets:
+            
+            for key,value in singleSet.indexes.items():
+                
+                # Preallocate spaces and edit indexes object for new index
+                # values
+                multiValues = self.indexes[key]
+                if value not in multiValues:
+                    # Add new index value to the indexes object
+                    ndx = multiValues.searchsorted(value)
+                    np.insert(multiValues,ndx,value)
+                    tallies = self.tallies                
+                    
+                    # preallocate space for tallies
+                    for tally in tallies:
+                        _preallocate(self,obj)
+                    
+                    # preallocate space for objects
+                    for prop in props: 
+                        _preallocate(self,obj)
+                    
+                    # preallocate space in isFilled matrix
+                    _preallocate(self,self.isFilled)
+                
+                # Add the SingleSet values to the MultiSet
+                for tally in tallies:
+                    _addVal(self,obj)
+                
+                for prop in props:
+                    _addVal(self,obj)
+                
+                self.isFilled(fillindex)
 
+    def insert(**kwargs):
+        """Inserts an undefined point in a MultiSet via interpolation"""
+        for key,value in kwargs.items():
+            self.interpolate()
+    
+    def node2ndx(**kwargs):
+        """finds the index corresponding to the node values"""
+        
+        out = []
+        for key,value in kwargs.items()
+            loc = self.nodeloc[key]
+            ndx = np.where(self.nodes[key]==value)
+            out.append((loc,ndx))
 
     def intrpset(self, layer, interpFlag):
         pass
@@ -126,3 +181,32 @@ class MultiSets(pandas.DataFrame):
         pass
         # interpolation flag to indicate whether interpolation should be
         # performed
+
+###############################################################################
+#### Helper Functions #########################################################
+###############################################################################
+
+def _preallocate(self,obj):
+    # indexVec 1 describes the size and shape of the
+    # preallocation matrix. indexVec 2 describes the position
+    # the reallocation matrix should 
+    indexPoint = indexes.points[key]
+    indexVec0 = indexes.vec
+    indexVec1 = copy.deepcopy(indexVec0)
+    indexVec2 = copy.deepcopy(indexVec0)
+    
+    # append dimensions describing group structure
+    for i in range(tally.dim)+indexes.numPoints:
+        indexVec1.append(self.ng)
+        indexVec2.append(self.ng)
+    
+    # adjust values at target point
+    indexVec1[indexPoint] = 1
+    indexVec2[indexPoint] = ndx
+    
+    # create the preallocation matrix for the tally
+    preMat = np.empty(indexVec1)
+    preMat[:] = NaN
+    
+    # insert preallocation matrix
+    np.insert(tally,indexVec2,preMat,axis=indexPoints)

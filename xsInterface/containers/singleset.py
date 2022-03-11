@@ -38,6 +38,7 @@ class SingleSet():
         # Initialize muted dictionaries
         self._tallies = {}
         self._props = {}
+        self._nodes = {}
     
     def add(self, *args):
         """Add data to SingleSet obect"""
@@ -46,12 +47,12 @@ class SingleSet():
         
         for obj in args:
             if type(obj) == xsInterface.Tally():
-                err.checkObj(obj)
-                self._tallies[obj.name] = obj
+                err.check_comp(self,obj)
+                self.tallies[obj.name] = obj
             
             elif type(obj) == xsInterface.Prop():
-                err.checkObj(obj)
-                self._props[obj.name] = obj
+                err.check_comp(self,obj)
+                self.props[obj.name] = obj
             
             else:
                 # Raise error
