@@ -46,10 +46,10 @@ class BranchesSets:
         pass
 
 
-    def intrpset(self, layer=time, interpFlag):
-        
+    def intrpset(self, layer, interpFlag):
+        pass
 
-    def getset(self, state=(time = 4), interpFlag):
+    def getset(self, state, interpFlag):
         """Obtains the NodeResults object for a specific node
 
         Parameters
