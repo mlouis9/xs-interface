@@ -29,10 +29,10 @@ class SingleSet():
 
     """
     
-    def __init__(self,tallyEdges):
+    def __init__(self,rules):
         """Assign parameters that describe the flow"""
-        # Set SingleSet properties using the user defined label
-        self.tallyEdges = tallyEdges
+        # Set SingleSet properties using the input rules object
+        self.tallyEdges = rules.tallyEdges
         self.ng         = len(tallyEdges) + 1
         
         # Initialize muted dictionaries
@@ -91,6 +91,9 @@ class SingleSet():
         
         if selfCondense==False:
             return out
+    
+    def rules(self):
+        """Returns a dictionary of the rules accumulated in the single 
     
     def printData(self, whatxs, howprint, setrules):
         """print according to a user provided template"""

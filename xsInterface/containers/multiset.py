@@ -58,6 +58,10 @@ class MultiSet():
         
         for singleSet in SingleSets:
             
+            # Ensure that input SingleSet object is properly filled and 
+            # formatted before insertion
+            err._check_comp(self,singleSet)
+            
             for key,value in singleSet.indexes.items():
                 
                 # Preallocate spaces and edit indexes object for new index

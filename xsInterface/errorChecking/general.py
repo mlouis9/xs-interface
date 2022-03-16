@@ -20,11 +20,11 @@ def _checkAttr(obj,key,value):
     _checkType(value,attrData)
     _checkSize(value,attrData)
 
-def _checkObj(obj):
-    """Performs all error checking on an object based on the data stored in
-    objData"""
+def _checkObj(parent):
+    """Checks whether all child objects are compatible with the rules in the
+    parent object"""
     # extract object data
-    objData = obj._objData
+    parent = parent._objData
     
     # Perform an error check for all attributes in the object
     for key,value in objData.items():
@@ -36,6 +36,10 @@ def _checkObj(obj):
         # Perform check on the aattribute's value
         _checkType(value,attrData)
         _checkSize(value,attrData)
+
+def _checkComp(parent,child):
+    """Checks whether the child object is compatible with its parent"""
+    pass
 
 def _checkName(key,attrData):
     """Tests whether specified attribute is valid in the object"""
