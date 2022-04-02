@@ -22,7 +22,9 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    packages=['xsInterface', 'xsInterface.functions', 'xsInterface.tests',
-              'xsInterface.containers', 'xsInterface.inputsets',
-              'xsInterface.examples'],
+    packages=['xsInterface', 'xsInterface.containers',
+              'xsInterface.containers', 'xsInterface.debug',
+              'xsInterface.errors', 'xsInterface.examples',
+              'xsInterface.functions', 'xsInterface.inputsets',
+              'xsInterface.tests', ],
 )
