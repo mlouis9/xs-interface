@@ -15,7 +15,7 @@ import numpy as np
 
 from xsInterface.errors.checkerrors import _isint, _islist, _inlist,\
     _ispositive, _isequallength, _is1darray, _isstr, _isuniquelist,\
-    _isnonNegativeArray, _issortedarray
+    _isnonNegativeArray, _issortedarray, _isarray
 
 TIME_UNITS = ['MWd/kg', 'days', 'hours', 'minutes', 'seconds']
 
@@ -140,6 +140,7 @@ class Perturbations():
                 self.histories[history] = None
 
         if timeValues is not None:
+            _isarray(timeValues, "Time/Burnup values")
             timeValues = np.array(timeValues, dtype=float)
             # check that time array is non-negative 1-dim array
             _is1darray(timeValues, "Time/Burnup values")
@@ -184,10 +185,12 @@ class Perturbations():
 
             # check that attributes are not already defined
             if self.branches[name] is not None:
-                raise ValueError("argument is already populated")
+                raise ValueError("Branch name <{}> is already populated"
+                                 .format(name))
             else:
+                _isarray(value, "Branch <{}> values".format(name))
                 vals = np.array(value, dtype=float)
-                _is1darray(vals, "values for argument {}".format(name))
+                _is1darray(vals, "Branch <{}> values".format(name))
                 self.branches[name] = vals
 
     def AddHistories(self, **kwargs):
@@ -222,16 +225,19 @@ class Perturbations():
             _isstr(name, "keyword state name")
 
             # check that this attribute exists in the list of states
-            _inlist(name, "keyword state name", self._historyList)
+            _inlist(name, "History keyword", self._historyList)
 
             # check that attributes are not already defined
             if self.histories[name] is not None:
-                raise ValueError("argument is already populated")
+                raise ValueError("History <{}> is already populated"
+                                 .format(name))
             else:
+                _isarray(value, "History <{}> values".format(name))
                 vals = np.array(value, dtype=float)
-                _isequallength(vals, self._branchN, "history values for "
-                               "argument {}".format(name))
-                _is1darray(vals, "values for argument {}".format(name))
+                _is1darray(vals, "History values for <{}>".format(name))
+                _isequallength(vals, self._branchN, "History values for "
+                               "<{}>".format(name))
+
                 self.histories[name] = vals
 
     def _proofTest(self):
