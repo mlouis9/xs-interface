@@ -236,3 +236,23 @@ def _compare2lists(list1, list2, description1, description2):
     if list1 != list2:
         raise ValueError("{} {}\n is not equal to \n {} {}"
                          .format(description1, list1, description2, list2))
+
+
+def _isuniquelist(list0, description):
+    """check that components in a list do not appear more than once"""
+    # insert the list to the set
+    list_set = set(list0)
+    # convert the set to the list
+    unique_list = (list(list_set))
+    if len(unique_list) != len(list0):
+        raise ValueError("{} {} contains duplicate components".format(
+            description, list0))
+
+
+def _issortedarray(var, description):
+    """check that an array is sorted"""
+    if not (np.diff(var) >= 0).all():
+        raise ValueError("{} must be sorted {}"
+                         .format(description, var))
+
+    

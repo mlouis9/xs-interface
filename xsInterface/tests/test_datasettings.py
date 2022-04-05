@@ -76,6 +76,9 @@ def test_adddata():
     with pytest.raises(KeyError, match="macro*"):
         rc.AddData("macro", ["abs", "nsf", "sct"], "BAD_FORMAT")
 
+    with pytest.raises(ValueError, match="attribute names in*"):
+        rc.AddData("macro", ["abs", "nsf", "sct", "abs"], "array")
+
 
 def test_proofTest():
     """Errors for the adddata method"""
