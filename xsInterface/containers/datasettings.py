@@ -14,7 +14,7 @@ email: dan.kotlyar@me.gatech.edu
 import numpy as np
 
 from xsInterface.errors.checkerrors import _isint, _islist, _isbool, _inlist,\
-    _ispositive, _isstr
+    _ispositive, _isstr, _isuniquelist
 
 FRMT_OPTS = ["array", "dict"]
 DATA_TYPES = ["macro", "micro", "kinetics", "meta"]
@@ -134,6 +134,7 @@ class DataSettings():
         _islist(attributes, "names of "+dataType+" attributes")
         _inlist(dataType, "data types", DATA_TYPES)
         _inlist(frmt, dataType+" format", FRMT_OPTS)
+        _isuniquelist(attributes, "attribute names in ")
 
         # define the specific dictionary for the selected data type
         dataDict = {"attributes": attributes,
