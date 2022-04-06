@@ -16,6 +16,10 @@ email: dan.kotlyar@me.gatech.edu
 
 import numpy as np
 
+from xsInterface.errors.checkerrors import _isobject
+
+from xsInterface.containers.datasettings import DataSettings
+
 
 class SingleSet():
     """Container that stores the most basic data set
@@ -35,8 +39,8 @@ class SingleSet():
                  spectrum=None, energyStruct=None):
         """Assign parameters that describe the flow"""
         # Set SingleSet properties using the input rules object
-        pass
-        # make sure that settings are properly defined using the proofTest
+        # check variable types
+        _isobject(settings, DataSettings, "data settings")
         
     def add(self, **kwargs):
         """add data and populate attributes"""

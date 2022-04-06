@@ -9,13 +9,13 @@ Last updated on Wed Apr 06 14:30:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 """
 
-from xsInterface.functions.header import INPUT_CARDS
+from xsInterface.errors.error_header import DataSettingsCard
 
 class DataSettingsError(Exception):
-    def __init__(self, message):
+    def __init__(self, message, method):
         str1 = "The following entries are expected: \n"
         str1 += "---------------------------------------------------------- \n"
-        for istr in INPUT_CARDS["DataSettings"].keys():
-            str1 += istr + "\n\t{}\n".format(INPUT_CARDS["region"][istr])
+        for istr in DataSettingsCard[method].keys():
+            str1 += istr + "\n\t{}\n".format(DataSettingsCard[method][istr])
         super().__init__(message+"\n"+str1)
 
