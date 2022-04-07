@@ -152,6 +152,7 @@ class Perturbations():
             # Assign histories
             self.time["values"] = timeValues
             self.time["units"] = timeUnits
+            self.time["npoints"] = len(timeValues)
 
     def AddBranches(self, **kwargs):
         """Add the branch perturbation values for a specific state

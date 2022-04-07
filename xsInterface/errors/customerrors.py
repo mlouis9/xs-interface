@@ -11,6 +11,7 @@ email: dan.kotlyar@me.gatech.edu
 
 from xsInterface.errors.error_header import DataSettingsCard
 
+
 class DataSettingsError(Exception):
     def __init__(self, message, method):
         str1 = "The following entries are expected: \n"
