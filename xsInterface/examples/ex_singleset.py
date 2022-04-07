@@ -50,5 +50,6 @@ states.AddHistories(nom=[900, 700, 550],
 # -----------------------------------------------------------------------------
 
 ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[0.1, 4E+5])
+ss.state([620,600,500], "nom", 1)
 a = 1
 
