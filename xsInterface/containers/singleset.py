@@ -56,20 +56,29 @@ class SingleSet():
         # errors checking
         # ---------------------------------------------------------------------
         self._initErrors(dataSetup, statesSetup, fluxName, energyStruct)
+        self._dSetup = dataSetup  # description of data rules
+        self._sSetup = statesSetup  # description of states
 
-    def state(self, branch, history=None, timeIdx=None, timePoint=None):
+    def State(self, branch, history=None, timeIdx=None, timePoint=None):
         """add the values that describe this state"""
-        pass
+        branchIndices, timeIdx, timePoint =\
+            self._stateErrors(branch, history, timeIdx, timePoint)
+        self.stateVals = branch
+        self.stateIdx = branchIndices
+        self.timeIdx = timeIdx
+        self.timePoint = timePoint
+        self.historyName = history
+        self.historyVals = self._sSetup.histories[history]
 
-    def data(self, **kwargs):
+    def Data(self, **kwargs):
         """add data and populate attributes"""
         pass
 
-    def getvalues(self, **kwargs):
+    def Getvalues(self, **kwargs):
         """get data"""
         pass
 
-    def condense(self, condEnergy, parameters):
+    def Condense(self, condEnergy, parameters):
         """energy condensation"""
         pass
 
@@ -101,9 +110,9 @@ class SingleSet():
             _isequallength(energyStruct, dSetup.ng, "Energy structure")
             _issortedarray(energyStruct, "Energy structure")
 
-    def _stateErrors(self, stSetup, branch, history, timeIdx, timePoint):
+    def _stateErrors(self, branch, history, timeIdx, timePoint):
         """check that a state is described properly"""
-
+        stSetup = self._sSetup
         # Array with indices correponding to the branch values
         branchIndices = np.zeros(stSetup._branchN, dtype=int)
 
@@ -116,14 +125,14 @@ class SingleSet():
         # check that the value for each branch is defines
         for brIdx, brName in enumerate(stSetup._branchList):
             # create lower (val0) and upper (val1) bounds of the branches
-            val0 = stSetup.branch[brName]-REL_PRECISION*stSetup.branch[brName]
-            val1 = stSetup.branch[brName]+REL_PRECISION*stSetup.branch[brName]
-            idx, = np.where((branch[brIdx] > val0) and (branch[brIdx] < val1))
+            val0 = stSetup.branches[brName]-REL_PRECISION*stSetup.branches[brName]
+            val1 = stSetup.branches[brName]+REL_PRECISION*stSetup.branches[brName]
+            idx, = np.where(((branch[brIdx] > val0) and (branch[brIdx] < val1)))
             if not idx.size:
                 raise ValueError(
                         "Branch <{}> with value {} does not exist!!!\n in the "
                         "pre-defined branch points {}"
-                        .format(brName, branch[brIdx],stSetup.branch[brName]))     
+                        .format(brName, branch[brIdx],stSetup.branches[brName]))     
             else:
                 branchIndices[brIdx] = idx[0]
 
@@ -135,6 +144,7 @@ class SingleSet():
             _isint(timeIdx, "Time index")
             _isnonnegative(timeIdx, "Time index")
             _inrange(timeIdx, "Time index", [0, stSetup.time["npoints"]])
+            timePoint = stSetup.time["values"][timeIdx]
         elif timePoint is not None:
             _isnumber(timePoint, "Time point")
             _isnonnegative(timePoint, "Time point")
@@ -151,4 +161,5 @@ class SingleSet():
                                  .format(timePoint, stSetup.time["values"]))
             else:
                 timeIdx = timeIdx[0]
-        return timeIdx
+                timePoint = stSetup.time["values"][timeIdx]
+        return branchIndices, timeIdx, timePoint
