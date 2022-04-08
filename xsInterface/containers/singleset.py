@@ -2,6 +2,7 @@
 """singleset
 
 Container to collect, store, and process data including:
+    - state of the perturbation
     - multi-group macroscopic cross sections
     - multi-group microscopic cross sections
     - kinetic parameters
@@ -9,7 +10,10 @@ Container to collect, store, and process data including:
 
 
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
-Last updated on Wed Apr 06 12:30:00 2022 @author: Dan Kotlyar
+Last updated on Fri Apr 07 04:10:00 2022 @author: Dan Kotlyar
+
+changed what?: State methog
+                 more detail
 
 email: dan.kotlyar@me.gatech.edu
 """
@@ -42,22 +46,22 @@ class SingleSet():
         sorted energy structure array. Includes the energy structure excluding
         the lowest energy value. For a two group structure: [E1, E2], where
         E1 is the enrgy cutoff and E2 is the highest energy of the neutrons.
-
-    Attributes
-    ----------
-    COMPLETE
+    relPrecision : float
+        relative precision that is used to find if a close perturbation exists
 
     """
 
     def __init__(self, dataSetup, statesSetup,
-                 fluxName=None, energyStruct=None):
+                 fluxName=None, energyStruct=None, relPrecision=REL_PRECISION):
         """Assign parameters that describe the flow"""
 
         # errors checking
         # ---------------------------------------------------------------------
-        self._initErrors(dataSetup, statesSetup, fluxName, energyStruct)
+        self._initErrors(dataSetup, statesSetup, fluxName, energyStruct,
+                         relPrecision)
         self._dSetup = dataSetup  # description of data rules
         self._sSetup = statesSetup  # description of states
+        self._relPrc = relPrecision
 
     def State(self, branch, history=None, timeIdx=None, timePoint=None):
         """add the values that describe this state"""
@@ -82,7 +86,7 @@ class SingleSet():
         """energy condensation"""
         pass
 
-    def _initErrors(self, dSetup, sSetup, fluxName, energyStruct):
+    def _initErrors(self, dSetup, sSetup, fluxName, energyStruct, relPrec):
         """check that the object is properly initialized"""
 
         # check that objects are at all defined
@@ -109,6 +113,7 @@ class SingleSet():
             _ispositiveArray(energyStruct, "Energy structure")
             _isequallength(energyStruct, dSetup.ng, "Energy structure")
             _issortedarray(energyStruct, "Energy structure")
+        _isnumber(relPrec, "Relative precision")
 
     def _stateErrors(self, branch, history, timeIdx, timePoint):
         """check that a state is described properly"""
@@ -121,18 +126,20 @@ class SingleSet():
         branch = np.array(branch, dtype=float)  # convert to ndarray
         _is1darray(branch, "Branch values")
         _isequallength(branch, stSetup._branchN, "Branch values")
-        
+
         # check that the value for each branch is defines
         for brIdx, brName in enumerate(stSetup._branchList):
             # create lower (val0) and upper (val1) bounds of the branches
-            val0 = stSetup.branches[brName]-REL_PRECISION*stSetup.branches[brName]
-            val1 = stSetup.branches[brName]+REL_PRECISION*stSetup.branches[brName]
-            idx, = np.where(((branch[brIdx] > val0) and (branch[brIdx] < val1)))
+            val0 =\
+                stSetup.branches[brName]-self._relPrc*stSetup.branches[brName]
+            val1 =\
+                stSetup.branches[brName]+self._relPrc*stSetup.branches[brName]
+            idx, = np.where((branch[brIdx] > val0) & (branch[brIdx] < val1))
             if not idx.size:
                 raise ValueError(
-                        "Branch <{}> with value {} does not exist!!!\n in the "
-                        "pre-defined branch points {}"
-                        .format(brName, branch[brIdx],stSetup.branches[brName]))     
+                    "Branch <{}> with value {} does not exist!!!\n in the "
+                    "pre-defined branch points {}"
+                    .format(brName, branch[brIdx], stSetup.branches[brName]))
             else:
                 branchIndices[brIdx] = idx[0]
 
@@ -149,10 +156,10 @@ class SingleSet():
             _isnumber(timePoint, "Time point")
             _isnonnegative(timePoint, "Time point")
             lowBound =\
-                stSetup.time["values"]-REL_PRECISION*stSetup.time["values"]
+                stSetup.time["values"]-self._relPrc*stSetup.time["values"]
             upperBound =\
-                stSetup.time["values"]+REL_PRECISION*stSetup.time["values"]
-            timeIdx, = np.where((timePoint > lowBound) and
+                stSetup.time["values"]+self._relPrc*stSetup.time["values"]
+            timeIdx, = np.where((timePoint > lowBound) &
                                 (timePoint < upperBound))
             if not timeIdx.size:
                 raise ValueError("Time point {} does not exist!!!\n in the "

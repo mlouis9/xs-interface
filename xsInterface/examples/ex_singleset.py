@@ -10,7 +10,7 @@ Container to collect, store, and process data including:
 
 
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
-Last updated on Wed Apr 06 18:30:00 2022 @author: Dan Kotlyar
+Last updated on Fri Apr 07 12:30:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 """
@@ -50,6 +50,6 @@ states.AddHistories(nom=[900, 700, 550],
 # -----------------------------------------------------------------------------
 
 ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[0.1, 4E+5])
-ss.State([620,600,500], "nom", 1)
+ss.State([600.001,600,500], "nom", timePoint=2.51)
 a = 1
 
