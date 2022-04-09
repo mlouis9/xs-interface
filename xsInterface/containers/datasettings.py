@@ -14,10 +14,9 @@ email: dan.kotlyar@me.gatech.edu
 import numpy as np
 
 from xsInterface.errors.checkerrors import _isint, _islist, _isbool, _inlist,\
-    _ispositive, _isstr, _isuniquelist
-
-FRMT_OPTS = ["array", "dict"]
-DATA_TYPES = ["macro", "micro", "kinetics", "meta"]
+    _ispositive, _isstr, _isuniquelist, _isnonNegativeArray, _isarray,\
+    _is1darray, _isequallength
+from xsInterface.containers.container_header import DATA_TYPES
 
 
 class DataSettings():
@@ -111,7 +110,7 @@ class DataSettings():
         self._kinetics = {}
         self._meta = {}
 
-    def AddData(self, dataType, attributes, frmt):
+    def AddData(self, dataType, attributes, attrDims=None):
         """Add relevant macroscopic/microscopic/meta data
 
         Parameters
@@ -120,25 +119,39 @@ class DataSettings():
             type of data
         attributes : list of strings
             user-defined names for the provided data type (e.g., ``abs``)
-        frmt : string {"array", "dict"}
-            method to provide data. ``array`` denotes that each parameters is
-            provided individually with a given array of multi-group data.
-            ``dict`` indicates that the data is provided within a dictionary,
-            where keys indicate name of parameters and values represent
-            the multi-group
-            values.
-
+        attrDims : array of int
+            dimensions for each attribute, where zero represents a scalar, and
+            higher numbers represent arrays.
         """
         # Error checking
         _isstr(dataType, "data types")
-        _islist(attributes, "names of "+dataType+" attributes")
         _inlist(dataType, "data types", DATA_TYPES)
-        _inlist(frmt, dataType+" format", FRMT_OPTS)
+        _islist(attributes, "names of "+dataType+" attributes")
         _isuniquelist(attributes, "attribute names in ")
+        if attrDims is None:
+            attrDims = np.ones(len(attributes))
+        # check dimensions
+        _isarray(attrDims, "Attributes dimensions")
+        attrDims = np.array(attrDims, dtype=int)
+        _is1darray(attrDims, "Attributes dimensions")
+        _isnonNegativeArray(attrDims, "Attributes dimensions")
+        _isequallength(attrDims, len(attributes), "Attributes dimensions")
 
-        # define the specific dictionary for the selected data type
-        dataDict = {"attributes": attributes,
-                    "format": frmt}
+        # check if data is already populated
+        data0 = getattr(self, "_"+dataType)
+        if data0 == {}:  # data is new
+            # define the specific dictionary for the selected data type
+            dataDict = {"attributes": attributes,
+                        "dimensions": attrDims}
+        else:  # data already exists
+            attr0 = data0["attributes"]
+            dim0 = data0["dimensions"]
+            # create a new/appended list of attributes
+            attr1 = attr0 + attributes
+            _isuniquelist(attr1, "attribute names in ")
+            dim1 = np.append(dim0, attrDims)
+            dataDict = {"attributes": attr1,
+                        "dimensions": dim1}
 
         # set a muted attribute with the settings for the selected data type
         setattr(self, "_"+dataType, dataDict)

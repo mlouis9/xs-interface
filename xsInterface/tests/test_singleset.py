@@ -13,8 +13,8 @@ Container to collect, store, and process data including:
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
 Last updated on Fri Apr 07 04:10:00 2022 @author: Dan Kotlyar
 
-changed what?: State methog
-                 more detail
+changed what?: reset and state testing
+
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -33,10 +33,11 @@ from xsInterface.containers.singleset import SingleSet
 rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
                   meta=True, isotopes=[531350, 541350])
 rc.AddData("macro",
-           ["inf_rabs", "inf_nsf", "kappa", "inf_sp0", "inf_flx"], "array")
-rc.AddData("kinetics", ["beta", "decay"], "array")
-rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"], "dict")
-rc.AddData("meta", ["burnup", "keff"], "array")
+           ["inf_rabs", "inf_nsf", "kappa", "inf_sp0", "inf_flx"],
+           [1, 1, 1, 2, 1])
+rc.AddData("kinetics", ["beta", "decay"], [1, 1])
+rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"], [1, 1, 1])
+rc.AddData("meta", ["burnup", "keff"], [1, 1])
 
 
 # -----------------------------------------------------------------------------
@@ -96,34 +97,34 @@ def test_state():
     ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
 
     with pytest.raises(TypeError, match="Branch values*"):
-        ss.State("NOT_ARRAY", "nom", timePoint=2.5)
+        ss.AddState("NOT_ARRAY", "nom", timePoint=2.5)
 
     with pytest.raises(TypeError, match="Branch values*"):
-        ss.State([[1]], "nom", timePoint=2.5)
+        ss.AddState([[1]], "nom", timePoint=2.5)
 
     with pytest.raises(ValueError, match="Branch*"):
-        ss.State([625., 600, 500], "nom", timePoint=2.5)
+        ss.AddState([625., 600, 500], "nom", timePoint=2.5)
 
     with pytest.raises(TypeError, match="History*"):
-        ss.State([600., 600, 500], 444444, timePoint=2.5)
+        ss.AddState([600., 600, 500], 444444, timePoint=2.5)
 
     with pytest.raises(KeyError, match="History*"):
-        ss.State([600., 600, 500], "BAD_HIST", timePoint=2.5)
+        ss.AddState([600., 600, 500], "BAD_HIST", timePoint=2.5)
 
     with pytest.raises(TypeError, match="Time index*"):
-        ss.State([600., 600, 500], "nom", timeIdx=2.4)
+        ss.AddState([600., 600, 500], "nom", timeIdx=2.4)
 
     with pytest.raises(ValueError, match="Time index*"):
-        ss.State([600., 600, 500], "nom", timeIdx=-2)
+        ss.AddState([600., 600, 500], "nom", timeIdx=-2)
 
     with pytest.raises(ValueError, match="Time index*"):
-        ss.State([600., 600, 500], "nom", timeIdx=20000)
+        ss.AddState([600., 600, 500], "nom", timeIdx=20000)
 
     with pytest.raises(TypeError, match="Time point*"):
-        ss.State([600., 600, 500], "nom", timePoint="NOT_NUM")
+        ss.AddState([600., 600, 500], "nom", timePoint="NOT_NUM")
 
     with pytest.raises(ValueError, match="Time point*"):
-        ss.State([600., 600, 500], "nom", timePoint=-25.)
+        ss.AddState([600., 600, 500], "nom", timePoint=-25.)
 
     with pytest.raises(ValueError, match="Time point*"):
-        ss.State([600., 600, 500], "nom", timePoint=2.75)
+        ss.AddState([600., 600, 500], "nom", timePoint=2.75)

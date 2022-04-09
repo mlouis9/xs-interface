@@ -26,10 +26,12 @@ from xsInterface.containers.singleset import SingleSet
 rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
                   meta=True, isotopes=[531350, 541350])
 rc.AddData("macro",
-           ["inf_rabs", "inf_nsf", "kappa", "inf_sp0", "inf_flx"], "array")
-rc.AddData("kinetics", ["beta", "decay"], "array")
-rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"], "dict")
-rc.AddData("meta", ["burnup", "keff"], "array")
+           ["inf_rabs", "inf_nsf", "kappa", "inf_flx"],
+           [1, 1, 1, 1])
+rc.AddData("macro", ["inf_sp0"], [2])
+rc.AddData("kinetics", ["beta", "decay"])
+rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
+rc.AddData("meta", ["burnup", "keff"])
 
 
 # -----------------------------------------------------------------------------
@@ -50,6 +52,4 @@ states.AddHistories(nom=[900, 700, 550],
 # -----------------------------------------------------------------------------
 
 ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[0.1, 4E+5])
-ss.State([600.001,600,500], "nom", timePoint=2.51)
-a = 1
-
+ss.AddState([600.001, 600, 500], "nom", timePoint=2.5)

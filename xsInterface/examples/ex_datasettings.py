@@ -22,10 +22,14 @@ rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
 
 # Feed in the required data
 # -----------------------------------------------------------------------------
-rc.AddData("macro", ["inf_rabs", "inf_nsf", "kappa", "inf_sp0"], "array")
-rc.AddData("kinetics", ["beta", "decay"], "array")
-rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"], "dict")
-rc.AddData("meta", ["burnup", "keff"], "array")
+rc.AddData("macro", ["inf_rabs", "inf_nsf", "kappa", "inf_sp0"],
+           [1, 1, 1, 2])
+rc.AddData("kinetics", ["beta", "decay"],
+           [1, 1])
+rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"],
+           [1, 1, 1])
+rc.AddData("meta", ["burnup", "keff"],
+           [1, 0])
 
 # Proof check the data
 # -----------------------------------------------------------------------------

@@ -23,11 +23,11 @@ rc = DataSettings(NG=2, DN=7, macro=True, micro=False, kinetics=True,
 
 # Feed in Macroscopic parameters
 # -----------------------------------------------------------------------------
-rc.AddData("macro", ["abs", "nsf", "sct"], "array")
+rc.AddData("macro", ["abs", "nsf", "sct"], [1, 1, 2])
 
 # Feed in kinetics parameters
 # -----------------------------------------------------------------------------
-rc.AddData("kinetics", ["beta", "decay"], "array")
+rc.AddData("kinetics", ["beta", "decay"], [1, 1])
 
 
 def test_badReset():
@@ -65,19 +65,26 @@ def test_adddata():
                       meta=False, isotopes=None)
 
     with pytest.raises(TypeError, match="data types*"):
-        rc.AddData(10, ["abs", "nsf", "sct"], "array")
+        rc.AddData(10, ["abs", "nsf", "sct"], [1, 1, 2])
 
     with pytest.raises(TypeError, match="names of"):
-        rc.AddData("macro", "BAD_ATTR", "array")
+        rc.AddData("macro", "BAD_ATTR", [1, 1, 2])
 
     with pytest.raises(KeyError, match="data type*"):
-        rc.AddData("BAD_DATA_TYPE", ["abs", "nsf", "sct"], "array")
+        rc.AddData("BAD_DATA_TYPE", ["abs", "nsf", "sct"], [1, 1, 2])
 
-    with pytest.raises(KeyError, match="macro*"):
+    with pytest.raises(TypeError, match="Attributes dimensions*"):
         rc.AddData("macro", ["abs", "nsf", "sct"], "BAD_FORMAT")
 
-    with pytest.raises(ValueError, match="attribute names in*"):
-        rc.AddData("macro", ["abs", "nsf", "sct", "abs"], "array")
+    with pytest.raises(ValueError, match="Attributes dimensions*"):
+        rc.AddData("macro", ["abs", "nsf", "sct"], [1, 1, -1])
+
+    with pytest.raises(ValueError, match="attribute names*"):
+        rc.AddData("macro", ["abs", "nsf", "sct", 'abs'], [1, 1, 1, 1])
+
+    with pytest.raises(ValueError, match="attribute names*"):
+        rc.AddData("macro", ["abs", "nsf", "sct"], [1, 1, 1])
+        rc.AddData("macro", ["abs1", "nsf1", "sct"], [1, 1, 1])
 
 
 def test_proofTest():
@@ -85,8 +92,8 @@ def test_proofTest():
 
     rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
                       meta=False, isotopes=[92, 94, 95])
-    rc.AddData("kinetics", ["beta", "decay"], "array")
-    rc.AddData("macro", ["abs", "nsf", "sct"], "array")
+    rc.AddData("kinetics", ["beta", "decay"], [1, 1])
+    rc.AddData("macro", ["abs", "nsf", "sct"], [1, 1, 1])
 
     with pytest.raises(ValueError, match="micro*"):
         rc._proofTest()

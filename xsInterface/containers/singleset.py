@@ -26,8 +26,9 @@ from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
     _is1darray, _ispositiveArray, _isequallength, _issortedarray, _inlist,\
     _isnumber, _isnonnegative, _isint, _inrange
+from xsInterface.containers.container_header import DATA_TYPES, REL_PRECISION
 
-REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
+# REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
 
 
 class SingleSet():
@@ -49,6 +50,37 @@ class SingleSet():
     relPrecision : float
         relative precision that is used to find if a close perturbation exists
 
+    Attributes
+    ----------
+    state : dict
+        describes the state (branch, time, history)
+    macro : dict
+        names and values of macro data
+    micro : dict
+        names and values of micro data
+    kinetics : dict
+        names and values of kinetics data
+    meta : dict
+        names and values of meta data
+
+    Raises
+    ------
+    TypeError
+        If ``dataSetup`` or ``statesSetup`` are not objects.
+        If ``fluxName`` is not string.
+        If ``energyStruct`` is not an array.
+        If ``relPrecision`` is not a number.
+    ValueError
+        If ``fluxName`` does not exist in the pre-defined values.
+        If ``energyStruct`` is not sorted, includes negative values, or not of
+        the right length.
+
+    Examples
+    --------
+    >>>
+    >>> ss = SingleSet(rc, states, fluxName="inf_flx",
+    >>>                energyStruct=[0.1, 4E+5])
+
     """
 
     def __init__(self, dataSetup, statesSetup,
@@ -62,19 +94,59 @@ class SingleSet():
         self._dSetup = dataSetup  # description of data rules
         self._sSetup = statesSetup  # description of states
         self._relPrc = relPrecision
+        self.state = {}  # dict to store state description
+        # data dictionaries
+        self.macro = {}
+        self.micro = {}
+        self.kinetics = {}
+        self.meta = {}
 
-    def State(self, branch, history=None, timeIdx=None, timePoint=None):
-        """add the values that describe this state"""
+    def AddState(self, branch, history=None, timeIdx=None, timePoint=None):
+        """add the values that describe this state
+
+        Parameters
+        ----------
+        branch : array
+            set of values to describe a specific branch-off
+            e.g. [Tf, Tm]=[900, 600]
+        history : string
+            the name of the history
+        timeIdx : int
+            time index
+        timePoint : float
+            an existing time point.
+            If ``timeIdx`` is defined then this is redundant
+
+        Raises
+        ------
+        TypeError
+            If ``branch`` is not an array.
+            If ``history`` is not string.
+            If ``timeIdx`` is not an integer.
+            If ``timePoint`` is not a number.
+        ValueError
+            If ``branch`` values do not exist.
+            If ``history`` value does not exist.
+            If ``timeIdx`` is out of range.
+            If ``timePoint`` does not exist.
+
+        Examples
+        --------
+        >>>
+        >>> ss = SingleSet(rc, states, fluxName="inf_flx",
+        >>>                energyStruct=[0.1, 4E+5])
+        >>> ss.AddState([600.001, 600, 500], "nom", timePoint=2.5)
+
+        """
         branchIndices, timeIdx, timePoint =\
             self._stateErrors(branch, history, timeIdx, timePoint)
-        self.stateVals = branch
-        self.stateIdx = branchIndices
-        self.timeIdx = timeIdx
-        self.timePoint = timePoint
-        self.historyName = history
-        self.historyVals = self._sSetup.histories[history]
+        stateDict = {"stateVals": branch, "stateIdx": branchIndices,
+                     "timeIdx": timeIdx, "timePoint": timePoint,
+                     "historyName": history,
+                     "historyVals": self._sSetup.histories[history]}
+        self.state = stateDict
 
-    def Data(self, **kwargs):
+    def AddData(self, dtype, **kwargs):
         """add data and populate attributes"""
         pass
 
