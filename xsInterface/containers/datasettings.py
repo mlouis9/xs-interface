@@ -126,12 +126,15 @@ class DataSettings():
         # Error checking
         _isstr(dataType, "data types")
         _inlist(dataType, "data types", DATA_TYPES)
+        if not self.dataFlags[dataType]:
+            raise ValueError("Data type <{}> was disabled when DataSettings "
+                             "object was created".format(dataType))
         _islist(attributes, "names of "+dataType+" attributes")
         _isuniquelist(attributes, "attribute names in ")
 
         if attrDims is None and dataType == DATA_TYPES[3]:  # meta data
             attrDims = np.zeros(len(attributes))
-        if attrDims is None:
+        elif attrDims is None:
             attrDims = np.ones(len(attributes))
         # check dimensions
         _isarray(attrDims, "Attributes dimensions")

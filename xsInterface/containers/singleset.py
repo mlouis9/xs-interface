@@ -10,10 +10,9 @@ Container to collect, store, and process data including:
 
 
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
-Last updated on Fri Apr 07 04:10:00 2022 @author: Dan Kotlyar
+Last updated on Sun Apr 10 16:55:00 2022 @author: Dan Kotlyar
 
-changed what?: State methog
-                 more detail
+Last changed what?: AddData method
 
 email: dan.kotlyar@me.gatech.edu
 """
@@ -100,6 +99,9 @@ class SingleSet():
         self.micro = {}
         self.kinetics = {}
         self.meta = {}
+        # add isotopes to the micro dictionary
+        if dataSetup.dataFlags["micro"]:
+            self.micro["isotopes"] = dataSetup.isotopes
 
     def AddState(self, branch, history=None, timeIdx=None, timePoint=None):
         """add the values that describe this state
@@ -177,11 +179,14 @@ class SingleSet():
 
         _isstr(dtype, "Data type")
         _inlist(dtype, "Data type", DATA_TYPES)
+        if not self._dSetup.dataFlags[dtype]:
+            raise ValueError("Data type <{}> was disabled in the data setup "
+                             "stage".format(dtype))
         for attr, value in kwargs.items():
             if dtype == DATA_TYPES[0]:  # macro
                 self._addMacroData(attr, value)
             elif dtype == DATA_TYPES[1]:  # micro
-                pass
+                self._addMicroData(attr, value)
             elif dtype == DATA_TYPES[2]:  # kinetics
                 self._addKineticsData(attr, value)
             else:
@@ -314,6 +319,49 @@ class SingleSet():
             _exp2dshape(value, (dsetup.ng, dsetup.ng),
                         "Attribute <{}>".format(attr))
         self.macro[attr] = value
+
+    def _addMicroData(self, attr, value):
+        """add data/attributes values
+        Parameters
+        ----------
+        attr : str
+            name of the macro property to be added
+        value : array
+            value of the macro property to be added
+
+        Note
+        ----
+        All the values must be provided as matrices. Rows represent isotopes
+        and columns energy groups.
+
+        """
+
+        dsetup = self._dSetup  # data setup/rules
+        nisotopes = len(dsetup.isotopes)  # number of isotopes
+        attributes = dsetup.micro["attributes"]
+        dimensions = dsetup.micro["dimensions"]
+        _inlist(attr, "Attribute", attributes)
+        if attr in self.micro:  # check if already exists
+            raise ValueError("Attribute <{}> in micro is already "
+                             "populated with data".format(attr))
+        # find position of the attribute in the list of attributes
+        idx = attributes.index(attr)
+        ndim = dimensions[idx]
+        if ndim == 1:
+            _isarray(value, "Attribute <{}>".format(attr))
+            value = np.array(value)
+            # Expected data includes: microscopic fission, capture, ...
+            _exp2dshape(value, (nisotopes, dsetup.ng),
+                        "Attribute <{}> [row=isotopes, col=energy groups]"
+                        .format(attr))
+        elif ndim == 2:
+            _isarray(value, "Attribute <{}>".format(attr))
+            value = np.array(value)
+            # Expected data includes: scattering cross sections
+            _exp2dshape(value, (nisotopes, dsetup.ng*dsetup.ng),
+                        "Attribute <{}> [row=isotopes, col=energy groups]"
+                        .format(attr))
+        self.micro[attr] = value
 
     def _addKineticsData(self, attr, value):
         """add data/attributes values to kinetics properties

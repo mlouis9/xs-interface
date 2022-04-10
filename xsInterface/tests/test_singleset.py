@@ -31,12 +31,12 @@ from xsInterface.containers.singleset import SingleSet
 #                       Data Settings
 # -----------------------------------------------------------------------------
 rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                  meta=True, isotopes=[531350, 541350])
+                  meta=True, isotopes=[531350, 541350, 922350])
 rc.AddData("macro",
            ["inf_rabs", "inf_nsf", "kappa", "inf_sp0", "inf_flx"],
            [1, 1, 1, 2, 1])
 rc.AddData("kinetics", ["beta", "decay"], [1, 1])
-rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"], [1, 1, 1])
+rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n", "sig_sct"], [1, 1, 1, 2])
 rc.AddData("meta", ["burnup", "keff"], [1, 1])
 rc.AddData("meta", ["date"])
 
@@ -89,6 +89,83 @@ def test_badReset():
     with pytest.raises(TypeError, match="Relative precision*"):
         SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2],
                   relPrecision="NOT_FLOAT")
+
+
+def test_flags():
+    """Errors for not defining flags but trying to insert data"""
+
+    # Data Setup
+    with pytest.raises(ValueError, match="Data type*"):
+        rc = DataSettings(NG=2, DN=7, macro=False, micro=True, kinetics=True,
+                          meta=True, isotopes=[531350, 541350, 922350])
+        rc.AddData("macro", ["attr"])
+
+    with pytest.raises(ValueError, match="Data type*"):
+        rc = DataSettings(NG=2, DN=7, macro=True, micro=False, kinetics=True,
+                          meta=True, isotopes=[531350, 541350, 922350])
+        rc.AddData("micro", ["attr"])
+
+    with pytest.raises(ValueError, match="Data type*"):
+        rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=False,
+                          meta=True, isotopes=[531350, 541350, 922350])
+        rc.AddData("kinetics", ["attr"])
+
+    with pytest.raises(ValueError, match="Data type*"):
+        rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
+                          meta=False, isotopes=[531350, 541350, 922350])
+        rc.AddData("meta", ["attr"])
+
+    rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
+                      meta=True, isotopes=[531350, 541350, 922350])
+
+    # Data insertion
+    with pytest.raises(ValueError, match="Data type*"):
+        rc = DataSettings(NG=2, DN=7, macro=False, micro=True, kinetics=True,
+                          meta=True, isotopes=[531350, 541350, 922350])
+        #rc.AddData("macro", ["inf_sp0"], [2])
+        rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
+        rc.AddData("meta", ["burnup", "keff"], [1, 1])
+        rc.AddData("kinetics", ["beta", "decay"])
+        states = Perturbations(branchN=1, branches=["fuel"])
+        states.AddBranches(fuel=[600, 900, 1200, 1500])
+        ss = SingleSet(rc, states)
+        ss.AddData("macro", gen_attr=[0.1, 0.2])
+
+    with pytest.raises(ValueError, match="Data type*"):
+        rc = DataSettings(NG=2, DN=7, macro=True, micro=False, kinetics=True,
+                          meta=True, isotopes=[531350, 541350, 922350])
+        rc.AddData("macro", ["inf_abs"], [1])
+        # rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
+        rc.AddData("meta", ["burnup", "keff"], [1, 1])
+        rc.AddData("kinetics", ["beta", "decay"])
+        states = Perturbations(branchN=1, branches=["fuel"])
+        states.AddBranches(fuel=[600, 900, 1200, 1500])
+        ss = SingleSet(rc, states)
+        ss.AddData("micro", inf_abs=[0.1, 0.2])
+
+    with pytest.raises(ValueError, match="Data type*"):
+        rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=False,
+                          meta=True, isotopes=[531350, 541350, 922350])
+        rc.AddData("macro", ["inf_abs"], [1])
+        rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
+        rc.AddData("meta", ["burnup", "keff"], [1, 1])
+        # rc.AddData("kinetics", ["beta", "decay"])
+        states = Perturbations(branchN=1, branches=["fuel"])
+        states.AddBranches(fuel=[600, 900, 1200, 1500])
+        ss = SingleSet(rc, states)
+        ss.AddData("kinetics", inf_abs=[0.1, 0.2])
+
+    with pytest.raises(ValueError, match="Data type*"):
+        rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
+                          meta=False, isotopes=[531350, 541350, 922350])
+        rc.AddData("macro", ["inf_abs"], [1])
+        rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
+        # rc.AddData("meta", ["burnup", "keff"], [1, 1])
+        rc.AddData("kinetics", ["beta", "decay"])
+        states = Perturbations(branchN=1, branches=["fuel"])
+        states.AddBranches(fuel=[600, 900, 1200, 1500])
+        ss = SingleSet(rc, states)
+        ss.AddData("meta", inf_abs=[0.1, 0.2])
 
 
 def test_state():
@@ -171,6 +248,44 @@ def test_addMacroData():
         ss.AddData("macro", inf_sp0=[[1, 2, 3], [1, 2, 3]])
 
 
+def test_addMicroData():
+    """Errors for the AddData and specifically the micro data"""
+
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
+    ss.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
+                                 [11, 12, 21, 22]])
+
+    with pytest.raises(KeyError, match="Data type*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("BAD_TYPE", sig_c=[[1, 1], [2, 2], [3, 3]])
+
+    with pytest.raises(KeyError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("micro", bad_attr=[[1, 1], [2, 2], [3, 3]])
+
+    with pytest.raises(ValueError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
+        ss.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("micro", sig_c="not_array")
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("micro", sig_c=[[[1, 1], [2, 2], [3, 3]]])
+
+    with pytest.raises(ValueError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("micro", sig_c=[[1, 1, 1], [2, 2, 2], [3, 3, 3]])
+
+    with pytest.raises(ValueError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("micro", sig_sct=[[1, 1], [2, 2], [3, 3]])
+
+
 def test_addKineticsData():
     """Errors for the AddData and specifically the kinetics data"""
 
@@ -211,7 +326,7 @@ def test_addKineticsData():
 
 
 def test_addMetaData():
-    """Errors for the AddData and specifically the kinetics data"""
+    """Errors for the AddData and specifically the meta data"""
 
     ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
     ss.AddData("meta", burnup=[1, 1, 1, 1],
