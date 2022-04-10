@@ -14,8 +14,8 @@ email: dan.kotlyar@me.gatech.edu
 import numpy as np
 
 from xsInterface.errors.checkerrors import _isint, _islist, _isbool, _inlist,\
-    _ispositive, _isstr, _isuniquelist, _isnonNegativeArray, _isarray,\
-    _is1darray, _isequallength
+    _ispositive, _isstr, _isuniquelist, _isarray,\
+    _is1darray, _isequallength, _isBoundArray
 from xsInterface.containers.container_header import DATA_TYPES
 
 
@@ -45,15 +45,15 @@ class DataSettings():
         number of energy groups for multi-group parameters
     DN : int
         delayed neutron groups for kinetic parameters
-    _dataFlags : dict
+    dataFlags : dict
         boolean flags to indicate the data types that are provided
-    _macro : dict
+    macro : dict
         contains all the macro attributes (e.g., ``abs``)
-    _micro : boolean
+    micro : boolean
         contains all the micro attributes for all the isotopes (e.g., ``fiss``)
-    _kinetics : boolean
+    kinetics : boolean
         contains all the kinetic attributes (e.g., ``beta``)
-    _meta : boolean
+    meta : boolean
         contains all the metadata attributes (e.g., ``time``)
 
     Raises
@@ -103,12 +103,12 @@ class DataSettings():
         self.ng = NG  # number of energy groups
         self.dn = DN  # number of delayed neutron groups
         self.isotopes = isotopes
-        self._dataFlags = {"macro": macro, "micro": micro,
-                           "kinetics": kinetics, "meta": meta}
-        self._macro = {}
-        self._micro = {}
-        self._kinetics = {}
-        self._meta = {}
+        self.dataFlags = {"macro": macro, "micro": micro,
+                          "kinetics": kinetics, "meta": meta}
+        self.macro = {}
+        self.micro = {}
+        self.kinetics = {}
+        self.meta = {}
 
     def AddData(self, dataType, attributes, attrDims=None):
         """Add relevant macroscopic/microscopic/meta data
@@ -134,11 +134,11 @@ class DataSettings():
         _isarray(attrDims, "Attributes dimensions")
         attrDims = np.array(attrDims, dtype=int)
         _is1darray(attrDims, "Attributes dimensions")
-        _isnonNegativeArray(attrDims, "Attributes dimensions")
+        _isBoundArray(attrDims, [0, 2], "Attributes dimensions")
         _isequallength(attrDims, len(attributes), "Attributes dimensions")
 
         # check if data is already populated
-        data0 = getattr(self, "_"+dataType)
+        data0 = getattr(self, dataType)
         if data0 == {}:  # data is new
             # define the specific dictionary for the selected data type
             dataDict = {"attributes": attributes,
@@ -154,15 +154,15 @@ class DataSettings():
                         "dimensions": dim1}
 
         # set a muted attribute with the settings for the selected data type
-        setattr(self, "_"+dataType, dataDict)
+        setattr(self, dataType, dataDict)
 
     def _proofTest(self):
         """Check that data was inputted"""
-        if self._dataFlags["macro"] and self._macro == {}:
+        if self.dataFlags["macro"] and self.macro == {}:
             raise ValueError("macro data is expected to be provided.")
-        if self._dataFlags["micro"] and self._micro == {}:
+        if self.dataFlags["micro"] and self.micro == {}:
             raise ValueError("micro data is expected to be provided.")
-        if self._dataFlags["kinetics"] and self._kinetics == {}:
+        if self.dataFlags["kinetics"] and self.kinetics == {}:
             raise ValueError("kinetics data is expected to be provided.")
-        if self._dataFlags["meta"] and self._meta == {}:
+        if self.dataFlags["meta"] and self.meta == {}:
             raise ValueError("meta data is expected to be provided.")

@@ -53,3 +53,5 @@ states.AddHistories(nom=[900, 700, 550],
 
 ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[0.1, 4E+5])
 ss.AddState([600.001, 600, 500], "nom", timePoint=2.5)
+ss.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
+ss.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])

@@ -128,3 +128,44 @@ def test_state():
 
     with pytest.raises(ValueError, match="Time point*"):
         ss.AddState([600., 600, 500], "nom", timePoint=2.75)
+
+
+def test_addMacroData():
+    """Errors for the AddData and specifically the macro data"""
+
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
+    ss.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
+
+    with pytest.raises(KeyError, match="Data type*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("BAD_TYPE", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
+
+    with pytest.raises(KeyError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("macro", bad_attr=[0.1, 0.2], inf_nsf=[0.3, 0.4])
+
+    with pytest.raises(ValueError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("macro", inf_nsf=[0.1, 0.2])
+        ss.AddData("macro", inf_nsf=[0.1, 0.2])
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("macro", inf_nsf="not_array")
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("macro", inf_nsf=[[1, 2], [1, 2]])
+
+    with pytest.raises(ValueError, match="Energy groups*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("macro", inf_nsf=[1, 2, 3])
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("macro", inf_sp0=[1, 2])
+
+    with pytest.raises(ValueError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("macro", inf_sp0=[[1, 2, 3], [1, 2, 3]])

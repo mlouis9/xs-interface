@@ -25,7 +25,7 @@ from xsInterface.containers.perturbationparameters import Perturbations
 
 from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
     _is1darray, _ispositiveArray, _isequallength, _issortedarray, _inlist,\
-    _isnumber, _isnonnegative, _isint, _inrange
+    _isnumber, _isnonnegative, _isint, _inrange, _exp2dshape
 from xsInterface.containers.container_header import DATA_TYPES, REL_PRECISION
 
 # REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
@@ -147,8 +147,45 @@ class SingleSet():
         self.state = stateDict
 
     def AddData(self, dtype, **kwargs):
-        """add data and populate attributes"""
-        pass
+        """add data/attributes values
+
+        Parameters
+        ----------
+        dtype : str
+            a string from: ["macro", "micro", "kinetics", "meta"]
+        kwargs : named arguments
+            keys represent the data name and value represent the values.
+
+        Raises
+        ------
+        TypeError
+            If ``dtype`` is not a string.
+            If the arrays dimensions are not correct.
+        ValueError
+            If any of the named arguments is already populated with data.
+            If the number of components in the named arguments is not correct.
+        KeyError
+            If ``dtype`` is not in ["macro", "micro", "kinetics", "meta"].
+            If any of the named argument is not defined in the ``DataSettings``
+
+        Examples
+        --------
+        >>>
+        >>> tbc
+
+        """
+
+        _isstr(dtype, "Data type")
+        _inlist(dtype, "Data type", DATA_TYPES)
+        for attr, value in kwargs.items():
+            if dtype == DATA_TYPES[0]:  # macro
+                self._addMacroData(attr, value)
+            elif dtype == DATA_TYPES[1]:  # micro
+                pass
+            elif dtype == DATA_TYPES[2]:  # kinetics
+                pass
+            else:
+                pass
 
     def Getvalues(self, **kwargs):
         """get data"""
@@ -171,10 +208,10 @@ class SingleSet():
         if fluxName is not None:
             _isstr(fluxName, "Flux variable name")
             # make sure this variable is defined on the object
-            if fluxName not in (dSetup._macro['attributes'] or
-                                dSetup._micro['attributes'] or
-                                dSetup._kinetics['attributes'] or
-                                dSetup._meta['attributes']):
+            if fluxName not in (dSetup.macro['attributes'] or
+                                dSetup.micro['attributes'] or
+                                dSetup.kinetics['attributes'] or
+                                dSetup.meta['attributes']):
                 raise ValueError("Flux name <{}> is not on the "
                                  "datasets object".format(fluxName))
 
@@ -242,3 +279,38 @@ class SingleSet():
                 timeIdx = timeIdx[0]
                 timePoint = stSetup.time["values"][timeIdx]
         return branchIndices, timeIdx, timePoint
+
+    def _addMacroData(self, attr, value):
+        """add data/attributes values
+        Parameters
+        ----------
+        attr : str
+            name of the macro property to be added
+        value : array
+            value of the macro property to be added
+        """
+
+        dsetup = self._dSetup  # data setup/rules
+        attributes = dsetup.macro["attributes"]
+        dimensions = dsetup.macro["dimensions"]
+        _inlist(attr, "Attribute", attributes)
+        if attr in self.macro:  # check if already exists
+            raise ValueError("Attribute <{}> in {} is already "
+                             "populated with data".format(attr, DATA_TYPES[0]))
+        # find position of the attribute in the list of attributes
+        idx = attributes.index(attr)
+        ndim = dimensions[idx]
+        if ndim == 1:
+            _isarray(value, "Attribute <{}>".format(attr))
+            value = np.array(value)
+            # Expected data includes: absorption, fission, ... cross sections
+            _is1darray(value, "Attribute <{}>".format(attr))
+            _isequallength(value, dsetup.ng, "Energy groups for "
+                           "attribute <{}>".format(attr))
+        elif ndim == 2:
+            _isarray(value, "Attribute <{}>".format(attr))
+            value = np.array(value)
+            # Expected data includes: scattering matrices cross sections
+            _exp2dshape(value, (dsetup.ng, dsetup.ng),
+                        "Attribute <{}>".format(attr))
+        self.macro[attr] = value
