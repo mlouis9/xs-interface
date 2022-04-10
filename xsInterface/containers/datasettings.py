@@ -128,6 +128,9 @@ class DataSettings():
         _inlist(dataType, "data types", DATA_TYPES)
         _islist(attributes, "names of "+dataType+" attributes")
         _isuniquelist(attributes, "attribute names in ")
+
+        if attrDims is None and dataType == DATA_TYPES[3]:  # meta data
+            attrDims = np.zeros(len(attributes))
         if attrDims is None:
             attrDims = np.ones(len(attributes))
         # check dimensions

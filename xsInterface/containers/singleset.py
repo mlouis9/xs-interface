@@ -183,11 +183,11 @@ class SingleSet():
             elif dtype == DATA_TYPES[1]:  # micro
                 pass
             elif dtype == DATA_TYPES[2]:  # kinetics
-                pass
+                self._addKineticsData(attr, value)
             else:
-                pass
+                self._addMetaData(attr, value)
 
-    def Getvalues(self, **kwargs):
+    def GetValues(self, **kwargs):
         """get data"""
         pass
 
@@ -295,8 +295,8 @@ class SingleSet():
         dimensions = dsetup.macro["dimensions"]
         _inlist(attr, "Attribute", attributes)
         if attr in self.macro:  # check if already exists
-            raise ValueError("Attribute <{}> in {} is already "
-                             "populated with data".format(attr, DATA_TYPES[0]))
+            raise ValueError("Attribute <{}> in macro is already "
+                             "populated with data".format(attr))
         # find position of the attribute in the list of attributes
         idx = attributes.index(attr)
         ndim = dimensions[idx]
@@ -314,3 +314,61 @@ class SingleSet():
             _exp2dshape(value, (dsetup.ng, dsetup.ng),
                         "Attribute <{}>".format(attr))
         self.macro[attr] = value
+
+    def _addKineticsData(self, attr, value):
+        """add data/attributes values to kinetics properties
+        Parameters
+        ----------
+        attr : str
+            name of the kinetics property to be added
+        value : array
+            value of the kinetics property to be added
+        """
+
+        dsetup = self._dSetup  # data setup/rules
+        attributes = dsetup.kinetics["attributes"]
+        dimensions = dsetup.kinetics["dimensions"]
+        _inlist(attr, "Attribute", attributes)
+        if attr in self.kinetics:  # check if already exists
+            raise ValueError("Attribute <{}> in kinetics is already "
+                             "populated with data".format(attr))
+        # find position of the attribute in the list of attributes
+        idx = attributes.index(attr)
+        ndim = dimensions[idx]
+        if ndim == 1:
+            _isarray(value, "Attribute <{}>".format(attr))
+            value = np.array(value)
+            # Expected data includes: decay constants and beta values
+            _is1darray(value, "Attribute <{}>".format(attr))
+            _isequallength(value, dsetup.dn, "Delayed neutron groups for "
+                           "attribute <{}>".format(attr))
+        self.kinetics[attr] = value
+
+    def _addMetaData(self, attr, value):
+        """add data/attributes values to meta properties
+        Parameters
+        ----------
+        attr : str
+            name of the meta property to be added
+        value : array
+            value of the meta property to be added
+        """
+
+        dsetup = self._dSetup  # data setup/rules
+        attributes = dsetup.meta["attributes"]
+        dimensions = dsetup.meta["dimensions"]
+        _inlist(attr, "Attribute", attributes)
+        if attr in self.meta:  # check if already exists
+            raise ValueError("Attribute <{}> in meta is already "
+                             "populated with data".format(attr))
+        # find position of the attribute in the list of attributes
+        idx = attributes.index(attr)
+        ndim = dimensions[idx]
+        if ndim == 1:
+            _isarray(value, "Attribute <{}>".format(attr))
+            value = np.array(value)
+            _is1darray(value, "Attribute <{}>".format(attr))
+        elif ndim == 2:
+            _isarray(value, "Attribute <{}>".format(attr))
+            value = np.array(value)
+        self.meta[attr] = value

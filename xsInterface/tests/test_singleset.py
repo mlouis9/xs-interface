@@ -38,7 +38,7 @@ rc.AddData("macro",
 rc.AddData("kinetics", ["beta", "decay"], [1, 1])
 rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"], [1, 1, 1])
 rc.AddData("meta", ["burnup", "keff"], [1, 1])
-
+rc.AddData("meta", ["date"])
 
 # -----------------------------------------------------------------------------
 #                       Perturbations / Branches States
@@ -169,3 +169,82 @@ def test_addMacroData():
     with pytest.raises(ValueError, match="Attribute*"):
         ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
         ss.AddData("macro", inf_sp0=[[1, 2, 3], [1, 2, 3]])
+
+
+def test_addKineticsData():
+    """Errors for the AddData and specifically the kinetics data"""
+
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss.AddData("kinetics", beta=[1, 1, 1, 1, 1, 1, 1],
+               decay=[1, 1, 1, 1, 1, 1, 1])
+
+    with pytest.raises(KeyError, match="Data type*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("bad_type", beta=[1, 1, 1, 1, 1, 1, 1],
+                   decay=[1, 1, 1, 1, 1, 1, 1])
+
+    with pytest.raises(KeyError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("kinetics", bad_attr=[1, 1, 1, 1, 1, 1, 1],
+                   decay=[1, 1, 1, 1, 1, 1, 1])
+
+    with pytest.raises(ValueError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("kinetics", beta=[1, 1, 1, 1, 1, 1, 1],
+                   decay=[1, 1, 1, 1, 1, 1, 1])
+        ss.AddData("kinetics", beta=[1, 1, 1, 1, 1, 1, 1])
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("kinetics", beta="not_array",
+                   decay=[1, 1, 1, 1, 1, 1, 1])
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("kinetics", beta=[[1, 1, 1, 1, 1, 1, 1]],
+                   decay=[1, 1, 1, 1, 1, 1, 1])
+
+    with pytest.raises(ValueError, match="Delayed neutron groups*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("kinetics", beta=[1, 1],
+                   decay=[1, 1, 1, 1, 1, 1, 1])
+
+
+def test_addMetaData():
+    """Errors for the AddData and specifically the kinetics data"""
+
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss.AddData("meta", burnup=[1, 1, 1, 1],
+               keff=[1, 1, 1, 1], date="April 09, 2022")
+
+    with pytest.raises(KeyError, match="Data type*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("bad_type", burnup=[1, 1, 1, 1],
+                   keff=[1, 1, 1, 1], date="April 09, 2022")
+
+    with pytest.raises(KeyError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("meta", bad_attr=[1, 1, 1, 1],
+                   keff=[1, 1, 1, 1], date="April 09, 2022")
+
+    with pytest.raises(ValueError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("meta", burnup=[1, 1, 1, 1],
+                   keff=[1, 1, 1, 1], date="April 09, 2022")
+        ss.AddData("meta", burnup=[1, 1, 1, 1],
+                   keff=[1, 1, 1, 1], date="April 09, 2022")
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("meta", burnup="not_array",
+                   keff=[1, 1, 1, 1], date="April 09, 2022")
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("meta", burnup=[[1, 1, 1, 1]],
+                   keff=[1, 1, 1, 1], date="April 09, 2022")
+
+    with pytest.raises(ValueError, match="Delayed neutron groups*"):
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss.AddData("kinetics", beta=[1, 1],
+                   decay=[1, 1, 1, 1, 1, 1, 1])
