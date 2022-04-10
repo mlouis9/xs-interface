@@ -9,7 +9,7 @@ Last updated on Wed Apr 06 14:30:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 """
 
-from xsInterface.errors.error_header import DataSettingsCard
+from xsInterface.errors.error_header import DataSettingsCard, SingleSetCard
 
 
 class DataSettingsError(Exception):
@@ -20,3 +20,11 @@ class DataSettingsError(Exception):
             str1 += istr + "\n\t{}\n".format(DataSettingsCard[method][istr])
         super().__init__(message+"\n"+str1)
 
+
+class SingleSetError(Exception):
+    def __init__(self, message, method):
+        str1 = "The following entries are expected: \n"
+        str1 += "---------------------------------------------------------- \n"
+        for istr in SingleSetCard[method].keys():
+            str1 += istr + "\n\t{}\n".format(SingleSetCard[method][istr])
+        super().__init__(message+"\n"+str1)

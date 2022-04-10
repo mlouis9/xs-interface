@@ -26,8 +26,30 @@ DataSettingsCard = {
          "kinetics": "kinetic data",
          "meta": "metadata/general data",
          "isotopes": "ZZAAA0/1 for all the isotopes"},
-    "adddata":
+    "AddData":
         {"dataType": "select from macro / micro / kinetics / meta",
          "attributes": "user-defined names for the provided data type",
          "frmt": "select  array or dict", }
+        }
+
+SingleSetCard = {
+    "init":
+        {"dataSetup":
+            "an object that defines the data (and type) to be collected",
+         "statesSetup":
+            "an object to store the perturbation states",
+         "fluxName":
+            "name of the flux variable on the ``datasets`` object",
+         "energyStruct":
+             "sorted energy structure array (excluding lowest energy)",
+         "relPrecision":
+             "relative precision used to find a close perturbation"},
+    "AddState":
+        {"branch": "set of values to describe a specific branch-off",
+         "history": "the name of the history",
+         "timeIdx": "time index",
+         "timePoint": "existing time point"},
+    "AddData":
+        {"dtype": "a string from: [`macro`, `micro`, `kinetics`, `meta`]",
+         "kwargs": "named arguments: data names and values. abs=[1, 2]"}
         }

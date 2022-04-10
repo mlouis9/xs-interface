@@ -170,8 +170,8 @@ class SingleSet():
 
         Examples
         --------
+        >>> ss.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
         >>>
-        >>> tbc
 
         """
 
