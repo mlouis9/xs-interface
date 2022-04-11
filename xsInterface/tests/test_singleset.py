@@ -11,7 +11,7 @@ Container to collect, store, and process data including:
 
 
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
-Last updated on Fri Apr 07 04:10:00 2022 @author: Dan Kotlyar
+Last updated on Mon Apr 11 05:40:00 2022 @author: Dan Kotlyar
 
 changed what?: reset and state testing
 
@@ -172,6 +172,12 @@ def test_state():
     """Errors for the State method"""
 
     ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+
+    with pytest.raises(ValueError, match="history*"):
+        ss.AddState([625., 600, 500], timePoint=2.5)
+
+    with pytest.raises(ValueError, match="time*"):
+        ss.AddState([625., 600, 500], "nom")
 
     with pytest.raises(TypeError, match="Branch values*"):
         ss.AddState("NOT_ARRAY", "nom", timePoint=2.5)

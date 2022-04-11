@@ -259,6 +259,23 @@ class SingleSet():
     def _stateErrors(self, branch, history, timeIdx, timePoint):
         """check that a state is described properly"""
         stSetup = self._sSetup
+
+        # sufficient data must be provided when calling this method
+        if stSetup.time != {}:
+            if timeIdx is None and timePoint is None:
+                raise ValueError(
+                    "timeIdx or timePoint must be defined in ""AddState")
+
+        if stSetup.histories != {}:
+            if history is None:
+                raise ValueError(
+                    "history must be defined in ""AddState")
+
+        if stSetup.branches != {}:
+            if branch is None:
+                raise ValueError(
+                    "branch must be defined in ""AddState")
+
         # Array with indices correponding to the branch values
         branchIndices = np.zeros(stSetup._branchN, dtype=int)
 
@@ -310,11 +327,6 @@ class SingleSet():
             else:
                 timeIdx = timeIdx[0]
                 timePoint = stSetup.time["values"][timeIdx]
-
-        if stSetup.time != {}:
-            if timeIdx is None:
-                raise ValueError(
-                    "timeIdx or timePoint must be defined in ""AddState")
 
         return branchIndices, timeIdx, timePoint
 
