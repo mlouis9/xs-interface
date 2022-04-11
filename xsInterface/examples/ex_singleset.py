@@ -58,7 +58,8 @@ ss.AddState([600.001, 600, 500], "nom", timePoint=2.5)
 # --------------
 # Add macro data
 # --------------
-ss.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
+ss.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4],
+           kappa=[0.3, 0.4], inf_flx=[0.3, 0.4])
 ss.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
 
 # -----------------
@@ -79,3 +80,8 @@ ss.AddData("meta", burnup=[1, 1, 1, 1],
 ss.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
 ss.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
                              [11, 12, 21, 22]])
+
+# --------------------------------------------
+# check that all the data was properly defined
+# --------------------------------------------
+ss.ProofTest(micro=False, kinetics=False, meta=False)

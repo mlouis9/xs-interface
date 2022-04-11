@@ -10,7 +10,7 @@ Container to collect, store, and process data including:
 
 
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
-Last updated on Sun Apr 10 16:55:00 2022 @author: Dan Kotlyar
+Last updated on Mon Apr 11 05:00:00 2022 @author: Dan Kotlyar
 
 Last changed what?: AddData method
 
@@ -21,11 +21,10 @@ import numpy as np
 
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.perturbationparameters import Perturbations
-
+from xsInterface.containers.container_header import DATA_TYPES, REL_PRECISION
 from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
     _is1darray, _ispositiveArray, _isequallength, _issortedarray, _inlist,\
-    _isnumber, _isnonnegative, _isint, _inrange, _exp2dshape
-from xsInterface.containers.container_header import DATA_TYPES, REL_PRECISION
+    _isnumber, _isnonnegative, _isint, _inrange, _exp2dshape, _compare2lists
 
 # REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
 
@@ -82,8 +81,8 @@ class SingleSet():
 
     """
 
-    def __init__(self, dataSetup, statesSetup,
-                 fluxName=None, energyStruct=None, relPrecision=REL_PRECISION):
+    def __init__(self, dataSetup, statesSetup, fluxName=None,
+                 energyStruct=None, relPrecision=REL_PRECISION):
         """Assign parameters that describe the flow"""
 
         # errors checking
@@ -200,6 +199,34 @@ class SingleSet():
         """energy condensation"""
         pass
 
+    def ProofTest(self, macro=True, micro=True, kinetics=True, meta=True):
+        """Check that all data was inputted"""
+
+        dSetup = self._dSetup  # description of data
+
+        if macro:
+            expMacro = dSetup.macro["attributes"]
+            prdMacro = list(self.macro.keys())
+            _compare2lists(expMacro, prdMacro, "Macro attr. in data setup",
+                           "Macro attrs. actually defined")
+        if micro:
+            expMicro = dSetup.micro["attributes"]
+            prdMicro = list(self.micro.keys())
+            _compare2lists(expMicro, prdMicro, "Micro attr. in data setup",
+                           "Micro attrs. actually defined")
+
+        if kinetics:
+            expKinetics = dSetup.kinetics["attributes"]
+            prdKinetics = list(self.kinetics.keys())
+            _compare2lists(expKinetics, prdKinetics,
+                           "Kinetics attr. in data setup",
+                           "Kinetics attrs. actually defined")
+        if meta:
+            expMeta = dSetup.meta["attributes"]
+            prdMeta = list(self.meta.keys())
+            _compare2lists(expMeta, prdMeta, "Meta attr. in data setup",
+                           "Meta attrs. actually defined")
+
     def _initErrors(self, dSetup, sSetup, fluxName, energyStruct, relPrec):
         """check that the object is properly initialized"""
 
@@ -283,6 +310,12 @@ class SingleSet():
             else:
                 timeIdx = timeIdx[0]
                 timePoint = stSetup.time["values"][timeIdx]
+
+        if stSetup.time != {}:
+            if timeIdx is None:
+                raise ValueError(
+                    "timeIdx or timePoint must be defined in ""AddState")
+
         return branchIndices, timeIdx, timePoint
 
     def _addMacroData(self, attr, value):
