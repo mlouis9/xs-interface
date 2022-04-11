@@ -46,23 +46,3 @@ DEF_OPT = "TBD"
 #                      PLOTTING
 # -----------------------------------------------------------------------------
 FONT_SIZE = 16
-
-# -----------------------------------------------------------------------------
-#                      DATA ATTRIBUTES
-# -----------------------------------------------------------------------------
-# Attributes that must exist for transmutation and decay calculations
-dataSettingsCard =\
-{"NG" : "number of energy groups for multi-group parameters", 
-"DN" : "Delayed neutron groups for kinetic parameters",
-"macro" : "macro data",
-"micro" : "micro data",
-"kinetics" : "kinetic data",
-"meta" : "metadata/general data",
-"isotopes" : "ZZAAA0/1 for all the isotopes"}
-
-INPUT_CARDS = {
-    "DataSettings": dataSettingsCard,
-    }
-
-
-
