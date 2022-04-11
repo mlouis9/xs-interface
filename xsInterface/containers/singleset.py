@@ -24,7 +24,8 @@ from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.containers.container_header import DATA_TYPES, REL_PRECISION
 from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
     _is1darray, _ispositiveArray, _isequallength, _issortedarray, _inlist,\
-    _isnumber, _isnonnegative, _isint, _inrange, _exp2dshape, _compare2lists
+    _isnumber, _isnonnegative, _isint, _inrange, _exp2dshape, _compare2lists,\
+    _islist
 
 # REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
 
@@ -191,9 +192,43 @@ class SingleSet():
             else:
                 self._addMetaData(attr, value)
 
-    def GetValues(self, **kwargs):
-        """get data"""
-        pass
+    def GetValues(self, attributes):
+        """get data for a specific attribute"""
+
+        # Single attribute
+        if isinstance(attributes, str):
+            if attributes in self.state:
+                return self.state[attributes]
+            elif attributes in self.macro:
+                return self.macro[attributes]
+            elif attributes in self.micro:
+                return self.micro[attributes]
+            elif attributes in self.kinetics:
+                return self.kinetics[attributes]
+            elif attributes in self.meta:
+                return self.meta[attributes]
+            else:
+                raise KeyError("Attribute <{}> does not exist on this object"
+                               .format(attributes))
+        # Multiple attributes - return a dictionary
+        _islist(attributes, "Attributes")
+        dictValues = {}
+
+        for attr in attributes:
+            if attr in self.state:
+                dictValues[attr] = self.state[attr]
+            elif attr in self.macro:
+                dictValues[attr] = self.macro[attr]
+            elif attr in self.micro:
+                dictValues[attr] = self.micro[attr]
+            elif attr in self.kinetics:
+                dictValues[attr] = self.kinetics[attr]
+            elif attr in self.meta:
+                dictValues[attr] = self.meta[attr]
+            else:
+                raise KeyError("Attribute <{}> does not exist on this object"
+                               .format(attr))
+        return dictValues
 
     def Condense(self, condEnergy, parameters):
         """energy condensation"""

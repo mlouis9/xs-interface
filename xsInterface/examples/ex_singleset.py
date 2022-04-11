@@ -85,3 +85,8 @@ ss.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
 # check that all the data was properly defined
 # --------------------------------------------
 ss.ProofTest(micro=False, kinetics=False, meta=False)
+
+# --------------------------------------------
+# Get values
+# --------------------------------------------
+ss.GetValues(["inf_flx", "beta"])

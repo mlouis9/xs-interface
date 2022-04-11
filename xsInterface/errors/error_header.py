@@ -51,5 +51,11 @@ SingleSetCard = {
          "timePoint": "existing time point"},
     "AddData":
         {"dtype": "a string from: [`macro`, `micro`, `kinetics`, `meta`]",
-         "kwargs": "named arguments: data names and values. abs=[1, 2]"}
+         "kwargs": "named arguments: data names and values. abs=[1, 2]"},
+    "ProofTest":
+        {"macro": "flag to indicate if all macro parameters must be defined",
+         "micro": "flag to indicate if all micro parameters must be defined",
+         "kinetics": "flag to indicate if all kinetics parameters must be"
+                     " defined",
+         "meta": "flag to indicate if all meta parameters must be defined"}
         }

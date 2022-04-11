@@ -122,7 +122,7 @@ def test_flags():
     with pytest.raises(ValueError, match="Data type*"):
         rc = DataSettings(NG=2, DN=7, macro=False, micro=True, kinetics=True,
                           meta=True, isotopes=[531350, 541350, 922350])
-        #rc.AddData("macro", ["inf_sp0"], [2])
+        # rc.AddData("macro", ["inf_sp0"], [2])
         rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
         rc.AddData("meta", ["burnup", "keff"], [1, 1])
         rc.AddData("kinetics", ["beta", "decay"])
@@ -211,6 +211,20 @@ def test_state():
 
     with pytest.raises(ValueError, match="Time point*"):
         ss.AddState([600., 600, 500], "nom", timePoint=2.75)
+
+
+def test_getValues():
+    """Errors for the getvalues method"""
+
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
+    ss.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
+
+    with pytest.raises(KeyError, match="Attribute*"):
+        ss.GetValues("bad_attr")
+
+    with pytest.raises(TypeError, match="Attribute*"):
+        ss.GetValues(44444)
 
 
 def test_addMacroData():
