@@ -14,10 +14,9 @@ email: dan.kotlyar@me.gatech.edu
 import numpy as np
 
 from xsInterface.errors.checkerrors import _isint, _islist, _isbool, _inlist,\
-    _ispositive, _isstr, _isuniquelist
-
-FRMT_OPTS = ["array", "dict"]
-DATA_TYPES = ["macro", "micro", "kinetics", "meta"]
+    _ispositive, _isstr, _isuniquelist, _isarray,\
+    _is1darray, _isequallength, _isBoundArray
+from xsInterface.containers.container_header import DATA_TYPES
 
 
 class DataSettings():
@@ -46,15 +45,15 @@ class DataSettings():
         number of energy groups for multi-group parameters
     DN : int
         delayed neutron groups for kinetic parameters
-    _dataFlags : dict
+    dataFlags : dict
         boolean flags to indicate the data types that are provided
-    _macro : dict
+    macro : dict
         contains all the macro attributes (e.g., ``abs``)
-    _micro : boolean
+    micro : boolean
         contains all the micro attributes for all the isotopes (e.g., ``fiss``)
-    _kinetics : boolean
+    kinetics : boolean
         contains all the kinetic attributes (e.g., ``beta``)
-    _meta : boolean
+    meta : boolean
         contains all the metadata attributes (e.g., ``time``)
 
     Raises
@@ -104,14 +103,14 @@ class DataSettings():
         self.ng = NG  # number of energy groups
         self.dn = DN  # number of delayed neutron groups
         self.isotopes = isotopes
-        self._dataFlags = {"macro": macro, "micro": micro,
-                           "kinetics": kinetics, "meta": meta}
-        self._macro = {}
-        self._micro = {}
-        self._kinetics = {}
-        self._meta = {}
+        self.dataFlags = {"macro": macro, "micro": micro,
+                          "kinetics": kinetics, "meta": meta}
+        self.macro = {}
+        self.micro = {}
+        self.kinetics = {}
+        self.meta = {}
 
-    def AddData(self, dataType, attributes, frmt):
+    def AddData(self, dataType, attributes, attrDims=None):
         """Add relevant macroscopic/microscopic/meta data
 
         Parameters
@@ -120,36 +119,56 @@ class DataSettings():
             type of data
         attributes : list of strings
             user-defined names for the provided data type (e.g., ``abs``)
-        frmt : string {"array", "dict"}
-            method to provide data. ``array`` denotes that each parameters is
-            provided individually with a given array of multi-group data.
-            ``dict`` indicates that the data is provided within a dictionary,
-            where keys indicate name of parameters and values represent
-            the multi-group
-            values.
-
+        attrDims : array of int
+            dimensions for each attribute, where zero represents a scalar, and
+            higher numbers represent arrays.
         """
         # Error checking
         _isstr(dataType, "data types")
-        _islist(attributes, "names of "+dataType+" attributes")
         _inlist(dataType, "data types", DATA_TYPES)
-        _inlist(frmt, dataType+" format", FRMT_OPTS)
+        if not self.dataFlags[dataType]:
+            raise ValueError("Data type <{}> was disabled when DataSettings "
+                             "object was created".format(dataType))
+        _islist(attributes, "names of "+dataType+" attributes")
         _isuniquelist(attributes, "attribute names in ")
 
-        # define the specific dictionary for the selected data type
-        dataDict = {"attributes": attributes,
-                    "format": frmt}
+        if attrDims is None and dataType == DATA_TYPES[3]:  # meta data
+            attrDims = np.zeros(len(attributes))
+        elif attrDims is None:
+            attrDims = np.ones(len(attributes))
+        # check dimensions
+        _isarray(attrDims, "Attributes dimensions")
+        attrDims = np.array(attrDims, dtype=int)
+        _is1darray(attrDims, "Attributes dimensions")
+        _isBoundArray(attrDims, [0, 2], "Attributes dimensions")
+        _isequallength(attrDims, len(attributes), "Attributes dimensions")
+
+        # check if data is already populated
+        data0 = getattr(self, dataType)
+        if data0 == {}:  # data is new
+            # define the specific dictionary for the selected data type
+            dataDict = {"attributes": attributes,
+                        "dimensions": attrDims}
+        else:  # data already exists
+            attr0 = data0["attributes"]
+            dim0 = data0["dimensions"]
+            # create a new/appended list of attributes
+            attr1 = attr0 + attributes
+            _isuniquelist(attr1, "attribute names in ")
+            dim1 = np.append(dim0, attrDims)
+            dataDict = {"attributes": attr1,
+                        "dimensions": dim1}
 
         # set a muted attribute with the settings for the selected data type
-        setattr(self, "_"+dataType, dataDict)
+        setattr(self, dataType, dataDict)
 
     def _proofTest(self):
         """Check that data was inputted"""
-        if self._dataFlags["macro"] and self._macro == {}:
+        if self.dataFlags["macro"] and self.macro == {}:
             raise ValueError("macro data is expected to be provided.")
-        if self._dataFlags["micro"] and self._micro == {}:
+        if self.dataFlags["micro"] and self.micro == {}:
             raise ValueError("micro data is expected to be provided.")
-        if self._dataFlags["kinetics"] and self._kinetics == {}:
+        if self.dataFlags["kinetics"] and self.kinetics == {}:
             raise ValueError("kinetics data is expected to be provided.")
-        if self._dataFlags["meta"] and self._meta == {}:
+        if self.dataFlags["meta"] and self.meta == {}:
             raise ValueError("meta data is expected to be provided.")

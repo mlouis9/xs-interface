@@ -160,6 +160,14 @@ def _is2darray(var, description):
                         .format(description, var))
 
 
+def _isndimarray(var, description, ndim):
+    """checks if the array is n-Dim"""
+    _isndarray(var, description)
+    if np.array(var).ndim != ndim:
+        raise TypeError("{} must be {}-dim array and not {}"
+                        .format(description, ndim, var))
+
+
 def _exp2dshape(var, expshape, description):
     """checks if the 2d ndarray has a certain shape"""
     _is2darray(var, description)
@@ -254,5 +262,3 @@ def _issortedarray(var, description):
     if not (np.diff(var) >= 0).all():
         raise ValueError("{} must be sorted {}"
                          .format(description, var))
-
-    
