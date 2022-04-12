@@ -19,6 +19,7 @@ Error checking - 04/11/2022 - DK
 """
 
 import numpy as np
+from numpy.matlib import repmat
 
 from xsInterface.errors.checkerrors import _isint, _isarray, _is1darray,\
     _is2darray, _inrange, _ispositive, _isequallength, _isnonNegativeArray,\
@@ -90,17 +91,32 @@ def EnergyCondensation(ndim, ng, boundsE, attr, flux, cutoffE):
     idxE = np.unique(idxE)
 
     # -------------------------------------------------------------------------
-    # Condense a vector
+    # Condense a vector or a scattering matrix
     # -------------------------------------------------------------------------
     condNG = int(len(idxE) - 1)  # number of condensed energy groups
-    condAttr = np.zeros(condNG)  # reset the attribute with the condensed grid
+    if ndim == 1:
+        condAttr = np.zeros(condNG)  # reset attribute with the condensed grid
+        for ig in range(condNG):  # loop over all the condensed groups
+            i0 = idxE[ig]  # left bounding index
+            i1 = idxE[ig+1]  # right bounding index
+            condAttr[ig] = (attr[i0:i1]*flux[i0:i1]).sum()/(flux[i0:i1]).sum()
 
-    for ig in range(condNG):  # loop over all the condensed groups
-        i0 = idxE[ig]  # left bounding index
-        i1 = idxE[ig+1]  # right bounding index
-        condAttr[ig] = (attr[i0:i1] * flux[i0:i1]).sum() / (flux[i0:i1]).sum()
+    idxE[-1] -= 1
+    if ndim == 2:  # scattering matrices
+        condAttr = np.zeros((condNG, condNG))
+        for ig in range(condNG):
+            gFromL = idxE[ig]  # left boundary
+            gFromR = idxE[ig+1]  # right boundary
+            for jg in range(condNG):
+                gToL = idxE[jg]
+                gToR = idxE[jg+1]
+                fluxMtx = repmat(flux[gFromL:gFromR], gToR-gToL, 1)
+                fluxMtx = fluxMtx.transpose()
+                sctRR = (attr[gFromL:gFromR, gToL:gToR]*fluxMtx).sum()
+                condAttr[ig, jg] = sctRR / (flux[gFromL:gFromR]).sum()
 
-    return condAttr
+    condE = boundsE[idxE]  # energy bounds of the condensed energy structure
+    return condAttr, condE
 
 
 def _checkErrors(ndim, ng, boundsE, attr, flux, cutoffE):
