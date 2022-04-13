@@ -12,20 +12,27 @@ Container to collect, store, and process data including:
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
 Last updated on Mon Apr 11 05:00:00 2022 @author: Dan Kotlyar
 
-Last changed what?: AddData method
-
 email: dan.kotlyar@me.gatech.edu
+
+List changes or additions:
+--------------------------
+"Concise description" - MM/DD/YYY - Name initials
+Energy condensation method - 04/13/2022 - DK
+
 """
+
+import copy
 
 import numpy as np
 
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.containers.container_header import DATA_TYPES, REL_PRECISION
+from xsInterface.functions.energycondensation import EnergyCondensation
 from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
     _is1darray, _ispositiveArray, _isequallength, _issortedarray, _inlist,\
     _isnumber, _isnonnegative, _isint, _inrange, _exp2dshape, _compare2lists,\
-    _islist
+    _islist, _isnonNegativeArray
 
 # REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
 
@@ -43,9 +50,11 @@ class SingleSet():
     fluxName : string
         name of the flux variable on the ``datasets`` object.
     energyStruct : array
-        sorted energy structure array. Includes the energy structure excluding
-        the lowest energy value. For a two group structure: [E1, E2], where
-        E1 is the enrgy cutoff and E2 is the highest energy of the neutrons.
+        descending sorted energy structure array. Includes the energy structure
+        including the lowest and highest energy values.
+        For a two group structure: [E1, E2, E3],
+        where E1 is the upper energy bound, E2 is energy cutoff, and E3 is the
+        lowest energy bound.
     relPrecision : float
         relative precision that is used to find if a close perturbation exists
 
@@ -99,6 +108,8 @@ class SingleSet():
         self.micro = {}
         self.kinetics = {}
         self.meta = {}
+        self.energygrid = energyStruct
+        self.fluxname = fluxName
         # add isotopes to the micro dictionary
         if dataSetup.dataFlags["micro"]:
             self.micro["isotopes"] = dataSetup.isotopes
@@ -230,9 +241,74 @@ class SingleSet():
                                .format(attr))
         return dictValues
 
-    def Condense(self, condEnergy, parameters):
-        """energy condensation"""
-        pass
+    def Condense(self, cutoffE):
+        """Energy condensation method
+
+        Condensation is performed for a new energy structure and for all the
+        parameters in the macro and micro dictionaries.
+
+        Parameters
+        ----------
+        cutoffE : 1-dim array
+            energy cutoffs
+
+        Raises
+        ------
+        TypeError
+            If ``cutoffE`` is not array.
+        ValueError
+            If ``cutoffE`` is negative.
+
+        Examples
+        --------
+        >>> ss.Condense([0.0625, 1E+03])
+
+        """
+        condObj = copy.deepcopy(self)  # deep copy of for the condensed object
+
+        # ---------------------------------------------------------------------
+        #           Condense Macro parameters (all energy dependent)
+        # ---------------------------------------------------------------------
+        for attr, value in self.macro.items():
+            ndim = value.ndim  # 1-dim or  2-dim values are allowed
+            ng = int(value.size / ndim)  # number of energy groups
+            boundsE = self.energygrid
+            flux = self.GetValues(self.fluxname)
+            condvals, condE =\
+                EnergyCondensation(ndim, ng, boundsE, value, flux, cutoffE)
+            condObj.macro[attr] = condvals
+
+        # ---------------------------------------------------------------------
+        #               Condense Micro parameters
+        # ---------------------------------------------------------------------
+        ng = len(self.energygrid) - 1
+        for attr, values in self.micro.items():
+            if attr == "isotopes":
+                continue
+            nisotopes = len(self.micro["isotopes"])
+            condvalues = np.array(values)
+            for idx in range(nisotopes):
+                ndim = 1  # by default
+                if values[idx].size > ng:  # if matrix
+                    values0 = np.reshape(values[idx], (ng, ng))
+                    ndim = 2
+                else:
+                    values0 = values[idx]  # if a vector
+                boundsE = self.energygrid
+                flux = self.GetValues(self.fluxname)
+                values1, condE = EnergyCondensation(ndim, ng, boundsE, values0,
+                                                    flux, cutoffE)
+                if ndim == 2:
+                    values1 = np.reshape(values1, ng*ng)
+                condvalues[idx] = values1  # values for each isotope
+
+            # matrix for each attribute
+            condObj.macro[attr] = condvalues
+
+        # update the energy structure
+        condObj.energygrid = condE
+        # condensed object to be retubred
+        return condObj
 
     def ProofTest(self, macro=True, micro=True, kinetics=True, meta=True):
         """Check that all data was inputted"""
@@ -286,9 +362,9 @@ class SingleSet():
             _isarray(energyStruct, "Energy structure")
             energyStruct = np.array(energyStruct)
             _is1darray(energyStruct, "Energy structure")
-            _ispositiveArray(energyStruct, "Energy structure")
-            _isequallength(energyStruct, dSetup.ng, "Energy structure")
-            _issortedarray(energyStruct, "Energy structure")
+            _isnonNegativeArray(energyStruct, "Energy structure")
+            _isequallength(energyStruct, dSetup.ng+1, "Energy structure")
+            _issortedarray(energyStruct[::-1], "Energy structure")
         _isnumber(relPrec, "Relative precision")
 
     def _stateErrors(self, branch, history, timeIdx, timePoint):

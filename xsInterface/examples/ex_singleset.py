@@ -53,7 +53,8 @@ states.AddHistories(nom=[900, 700, 550],
 #                       Data for a Single State
 # -----------------------------------------------------------------------------
 
-ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[0.1, 4E+5])
+ss = SingleSet(rc, states, fluxName="inf_flx",
+               energyStruct=[10.0E+6, 0.6025, 0.0])
 ss.AddState([600.001, 600, 500], "nom", timePoint=2.5)
 # --------------
 # Add macro data
@@ -90,3 +91,8 @@ ss.ProofTest(micro=False, kinetics=False, meta=False)
 # Get values
 # --------------------------------------------
 ss.GetValues(["inf_flx", "beta"])
+
+# --------------------------------------------
+# Energy condensation
+# --------------------------------------------
+ss1 = ss.Condense([0.6025])
