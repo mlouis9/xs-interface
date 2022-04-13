@@ -57,19 +57,20 @@ def test_badReset():
     """Errors when reseting the settings"""
 
     with pytest.raises(TypeError, match="data settings*"):
-        SingleSet(1, states, fluxName="inf_flx", energyStruct=[0.1, 4E+5])
+        SingleSet(1, states, fluxName="inf_flx",
+                  energyStruct=[10.0E+6, 0.6025, 0.0])
 
     with pytest.raises(TypeError, match="perturbation data*"):
-        SingleSet(rc, "BAD_OBJ", fluxName="inf_flx", energyStruct=[0.1, 4E+5])
+        SingleSet(rc, "BAD_OBJ", fluxName="inf_flx",
+                  energyStruct=[10.0E+6, 0.6025, 0.0])
 
     with pytest.raises(TypeError, match="Flux variable*"):
-        SingleSet(rc, states, fluxName=444, energyStruct=[0.1, 4E+5])
+        SingleSet(rc, states, fluxName=444,
+                  energyStruct=[10.0E+6, 0.6025, 0.0])
 
     with pytest.raises(ValueError, match="Flux name*"):
-        SingleSet(rc, states, fluxName="NO_FLUX_VAR", energyStruct=[0.1, 4E+5])
-
-    with pytest.raises(TypeError, match="Energy structure*"):
-        SingleSet(rc, states, fluxName="inf_flx", energyStruct="NOT_ARRAY")
+        SingleSet(rc, states, fluxName="NO_FLUX_VAR",
+                  energyStruct=[10.0E+6, 0.6025, 0.0])
 
     with pytest.raises(TypeError, match="Energy structure*"):
         SingleSet(rc, states, fluxName="inf_flx", energyStruct="NOT_ARRAY")
@@ -84,10 +85,10 @@ def test_badReset():
         SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2, 3])
 
     with pytest.raises(ValueError, match="Energy structure*"):
-        SingleSet(rc, states, fluxName="inf_flx", energyStruct=[2, 1])
+        SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2, 3, 4])
 
     with pytest.raises(TypeError, match="Relative precision*"):
-        SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2],
+        SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1],
                   relPrecision="NOT_FLOAT")
 
 
@@ -171,7 +172,7 @@ def test_flags():
 def test_state():
     """Errors for the State method"""
 
-    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
 
     with pytest.raises(ValueError, match="history*"):
         ss.AddState([625., 600, 500], timePoint=2.5)
@@ -216,7 +217,7 @@ def test_state():
 def test_getValues():
     """Errors for the getvalues method"""
 
-    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
     ss.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
     ss.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
 
@@ -227,120 +228,152 @@ def test_getValues():
         ss.GetValues(44444)
 
 
+def test_condense():
+    """Errors for the energy condensation method"""
+
+    rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
+                      meta=True, isotopes=[531350, 541350, 922350])
+    rc.AddData("macro",
+               ["inf_rabs", "inf_nsf", "kappa", "inf_sp0", "inf_flx"],
+               [1, 1, 1, 2, 1])
+    rc.AddData("kinetics", ["beta", "decay"], [1, 1])
+    rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n", "sig_sct"], [1, 1, 1, 2])
+    rc.AddData("meta", ["burnup", "keff"], [1, 1])
+    rc.AddData("meta", ["date"])
+
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
+    ss.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
+    ss.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
+
+    with pytest.raises(KeyError, match="Attribute <inf_flx>*"):
+        ss.Condense([2])
+
+    ss.AddData("macro", inf_flx=[1, 1])
+
+    with pytest.raises(TypeError, match="Energy*"):
+        ss.Condense("BAD_ENERGY")
+
+    with pytest.raises(ValueError, match="Energy*"):
+        ss.Condense([-10])
+
+    ss1 = ss.Condense([2])
+    assert ss1.macro["inf_nsf"] == pytest.approx(ss.macro["inf_nsf"], 0.0001)
+
+
 def test_addMacroData():
     """Errors for the AddData and specifically the macro data"""
 
-    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
     ss.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
     ss.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
 
     with pytest.raises(KeyError, match="Data type*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("BAD_TYPE", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4])
 
     with pytest.raises(KeyError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("macro", bad_attr=[0.1, 0.2], inf_nsf=[0.3, 0.4])
 
     with pytest.raises(ValueError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("macro", inf_nsf=[0.1, 0.2])
         ss.AddData("macro", inf_nsf=[0.1, 0.2])
 
     with pytest.raises(TypeError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("macro", inf_nsf="not_array")
 
     with pytest.raises(TypeError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("macro", inf_nsf=[[1, 2], [1, 2]])
 
     with pytest.raises(ValueError, match="Energy groups*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("macro", inf_nsf=[1, 2, 3])
 
     with pytest.raises(TypeError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("macro", inf_sp0=[1, 2])
 
     with pytest.raises(ValueError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("macro", inf_sp0=[[1, 2, 3], [1, 2, 3]])
 
 
 def test_addMicroData():
     """Errors for the AddData and specifically the micro data"""
 
-    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
     ss.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
     ss.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
                                  [11, 12, 21, 22]])
 
     with pytest.raises(KeyError, match="Data type*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("BAD_TYPE", sig_c=[[1, 1], [2, 2], [3, 3]])
 
     with pytest.raises(KeyError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("micro", bad_attr=[[1, 1], [2, 2], [3, 3]])
 
     with pytest.raises(ValueError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
         ss.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
 
     with pytest.raises(TypeError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("micro", sig_c="not_array")
 
     with pytest.raises(TypeError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("micro", sig_c=[[[1, 1], [2, 2], [3, 3]]])
 
     with pytest.raises(ValueError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("micro", sig_c=[[1, 1, 1], [2, 2, 2], [3, 3, 3]])
 
     with pytest.raises(ValueError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("micro", sig_sct=[[1, 1], [2, 2], [3, 3]])
 
 
 def test_addKineticsData():
     """Errors for the AddData and specifically the kinetics data"""
 
-    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
     ss.AddData("kinetics", beta=[1, 1, 1, 1, 1, 1, 1],
                decay=[1, 1, 1, 1, 1, 1, 1])
 
     with pytest.raises(KeyError, match="Data type*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("bad_type", beta=[1, 1, 1, 1, 1, 1, 1],
                    decay=[1, 1, 1, 1, 1, 1, 1])
 
     with pytest.raises(KeyError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("kinetics", bad_attr=[1, 1, 1, 1, 1, 1, 1],
                    decay=[1, 1, 1, 1, 1, 1, 1])
 
     with pytest.raises(ValueError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("kinetics", beta=[1, 1, 1, 1, 1, 1, 1],
                    decay=[1, 1, 1, 1, 1, 1, 1])
         ss.AddData("kinetics", beta=[1, 1, 1, 1, 1, 1, 1])
 
     with pytest.raises(TypeError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("kinetics", beta="not_array",
                    decay=[1, 1, 1, 1, 1, 1, 1])
 
     with pytest.raises(TypeError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("kinetics", beta=[[1, 1, 1, 1, 1, 1, 1]],
                    decay=[1, 1, 1, 1, 1, 1, 1])
 
     with pytest.raises(ValueError, match="Delayed neutron groups*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("kinetics", beta=[1, 1],
                    decay=[1, 1, 1, 1, 1, 1, 1])
 
@@ -348,38 +381,38 @@ def test_addKineticsData():
 def test_addMetaData():
     """Errors for the AddData and specifically the meta data"""
 
-    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+    ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
     ss.AddData("meta", burnup=[1, 1, 1, 1],
                keff=[1, 1, 1, 1], date="April 09, 2022")
 
     with pytest.raises(KeyError, match="Data type*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("bad_type", burnup=[1, 1, 1, 1],
                    keff=[1, 1, 1, 1], date="April 09, 2022")
 
     with pytest.raises(KeyError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("meta", bad_attr=[1, 1, 1, 1],
                    keff=[1, 1, 1, 1], date="April 09, 2022")
 
     with pytest.raises(ValueError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("meta", burnup=[1, 1, 1, 1],
                    keff=[1, 1, 1, 1], date="April 09, 2022")
         ss.AddData("meta", burnup=[1, 1, 1, 1],
                    keff=[1, 1, 1, 1], date="April 09, 2022")
 
     with pytest.raises(TypeError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("meta", burnup="not_array",
                    keff=[1, 1, 1, 1], date="April 09, 2022")
 
     with pytest.raises(TypeError, match="Attribute*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("meta", burnup=[[1, 1, 1, 1]],
                    keff=[1, 1, 1, 1], date="April 09, 2022")
 
     with pytest.raises(ValueError, match="Delayed neutron groups*"):
-        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[1, 2])
+        ss = SingleSet(rc, states, fluxName="inf_flx", energyStruct=[3, 2, 1])
         ss.AddData("kinetics", beta=[1, 1],
                    decay=[1, 1, 1, 1, 1, 1, 1])

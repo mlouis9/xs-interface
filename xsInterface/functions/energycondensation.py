@@ -27,7 +27,7 @@ from xsInterface.errors.checkerrors import _isint, _isarray, _is1darray,\
 
 
 def EnergyCondensation(ndim, ng, boundsE, attr, flux, cutoffE):
-    """Stores the names and data that are expected to be stored on containers
+    """Energy condensation method from finer-to-coarser energy grid
 
     Parameters
     ----------
