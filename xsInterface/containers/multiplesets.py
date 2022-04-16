@@ -32,7 +32,7 @@ import numpy as np
 from xsInterface.containers.singleset import SingleSet
 from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.errors.checkerrors import _isobject, _isbool, _isint,\
-    _isarray, _is1darray, _inlist
+    _isarray, _is1darray, _inlist, _isnumber
 
 
 StateDescrp = namedtuple("State", ["history", "time", "branch"])
@@ -96,8 +96,8 @@ class MultipleSets():
 
     """
 
-    def __init__(self, states, macro=True, micro=True, kinetics=True,
-                 meta=True):
+    def __init__(self, states, macro=False, micro=False, kinetics=False,
+                 meta=False):
 
         _isobject(states, Perturbations, "States data")
         _isbool(macro, "Macro flag")
@@ -144,6 +144,10 @@ class MultipleSets():
         for arg in argv:
             # check that argument is a SingleSet object
             _isobject(arg, SingleSet, "Argument / Single Set Data")
+            # check that object contains all the fields
+            arg.ProofTest(self._flags["macro"], self._flags["micro"],
+                          self._flags["kinetics"], self._flags["meta"])
+
             state = getattr(arg, "state")  # get the description of state
             history = state['historyVals']
             time = state['timePoint']
@@ -201,10 +205,14 @@ class MultipleSets():
             branch = np.array(branch)
             _is1darray(branch, "Branch")
             if time is not None:
+                _isnumber(time, "Time")
                 time = float(time)
             if history is not None:
                 if isinstance(history, str):  # name of history is provided
+                    _inlist(history, "History",
+                            list(self.states.histories.keys()))
                     history = self.states.histories[history]
+
                 else:  # numerical value of history provided
                     _isarray(history, "History")
                     history = np.array(history, dtype=float)
@@ -212,10 +220,10 @@ class MultipleSets():
 
             # Obtain the state description
             stateId = str(StateDescrp(history, time, branch))
-            _inlist(stateId, "Get", list(self.setsmap.keys()))
+            _inlist(stateId, "State", list(self.setsmap.keys()))
             setIdx = self.setsmap[stateId]
         else:
-            raise KeyError("setIdx or the history-time-branch values must "
+            raise KeyError("Set index or the history-time-branch values must "
                            "be provided.")
         return self.sets[setIdx]
 
@@ -227,7 +235,7 @@ class MultipleSets():
         """Obtain the values of the specific attribute over a range of states
 
         The method obtains the values across all the provided states.
-        
+
 
         Parameters
         ----------

@@ -89,5 +89,5 @@ ss1.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
 # -----------------------------------------------------------------------------
 ms = MultipleSets(states, macro=True, micro=False, kinetics=False, meta=False)
 ms.Add(ss0, ss1)
-ms.Get(branch=[600, 900, 900], time=2.5, history=[900,700,550])
+ms.Get(branch=[600, 900, 900], time=2.5, history=[900, 700, 550])
 ms.Get(branch=[600, 900, 900], time=2.5, history="nom")

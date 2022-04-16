@@ -336,6 +336,7 @@ class SingleSet():
         if micro:
             expMicro = dSetup.micro["attributes"]
             prdMicro = list(self.micro.keys())
+            prdMicro.remove("isotopes")
             _compare2lists(expMicro, prdMicro, "Micro attr. in data setup",
                            "Micro attrs. actually defined")
 
