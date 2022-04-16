@@ -30,7 +30,7 @@ from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.containers.container_header import DATA_TYPES, REL_PRECISION
 from xsInterface.functions.energycondensation import EnergyCondensation
 from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
-    _is1darray, _ispositiveArray, _isequallength, _issortedarray, _inlist,\
+    _is1darray, _isequallength, _issortedarray, _inlist,\
     _isnumber, _isnonnegative, _isint, _inrange, _exp2dshape, _compare2lists,\
     _islist, _isnonNegativeArray
 
@@ -151,9 +151,9 @@ class SingleSet():
         >>> ss.AddState([600.001, 600, 500], "nom", timePoint=2.5)
 
         """
-        branchIndices, timeIdx, timePoint =\
+        branchIndices, branchValues, timeIdx, timePoint =\
             self._stateErrors(branch, history, timeIdx, timePoint)
-        stateDict = {"stateVals": branch, "stateIdx": branchIndices,
+        stateDict = {"stateVals": branchValues, "stateIdx": branchIndices,
                      "timeIdx": timeIdx, "timePoint": timePoint,
                      "historyName": history,
                      "historyVals": self._sSetup.histories[history]}
@@ -311,7 +311,20 @@ class SingleSet():
         return condObj
 
     def ProofTest(self, macro=True, micro=True, kinetics=True, meta=True):
-        """Check that all data was inputted"""
+        """Check that all data was inputted
+
+        Parameters
+        ----------
+        macro : bool
+            flag to incdicate if all data in macro must be defined
+        micro : bool
+            flag to incdicate if all data in micro must be defined
+        kinetics : bool
+            flag to incdicate if all data in kinetics must be defined
+        meta : bool
+            flag to incdicate if all data in meta must be defined
+
+        """
 
         dSetup = self._dSetup  # description of data
 
@@ -389,6 +402,7 @@ class SingleSet():
 
         # Array with indices correponding to the branch values
         branchIndices = np.zeros(stSetup._branchN, dtype=int)
+        branchValues = np.zeros(stSetup._branchN, dtype=int)
 
         # check that a branch is properly defined
         _isarray(branch, "Branch values")
@@ -411,6 +425,7 @@ class SingleSet():
                     .format(brName, branch[brIdx], stSetup.branches[brName]))
             else:
                 branchIndices[brIdx] = idx[0]
+                branchValues[brIdx] = branch[idx[0]]
 
         if history is not None:
             _isstr(history, "History name")
@@ -439,7 +454,7 @@ class SingleSet():
                 timeIdx = timeIdx[0]
                 timePoint = stSetup.time["values"][timeIdx]
 
-        return branchIndices, timeIdx, timePoint
+        return branchIndices, branchValues, timeIdx, timePoint
 
     def _addMacroData(self, attr, value):
         """add data/attributes values
