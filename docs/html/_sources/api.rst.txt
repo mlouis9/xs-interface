@@ -1,0 +1,37 @@
+.. _api-readers:
+
+File-parsing API
+================
+
+This page contains links to the full documentation for the readers used
+by ``xsInterface``.
+
+.. _api-read-funcs:
+
+Functions
+---------
+
+To be completed in the future.
+
+.. autosummary::
+    :toctree:
+    :nosignatures:
+    :template: myfunction.rst
+
+    # To be completed here
+
+
+.. _api-read-classes:
+
+Classes
+-------
+
+To be completed..
+
+.. autosummary::
+    :toctree:
+    :nosignatures:
+    :template: myclass.rst
+
+    DataSettings
+

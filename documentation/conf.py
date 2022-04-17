@@ -14,6 +14,11 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+import os
+import sys
+
+sys.path.append(os.path.abspath('..'))
+
 
 # -- Project information -----------------------------------------------------
 
@@ -71,5 +76,5 @@ autosummary_generate = True
 # -- Prepend the following lines to each rst file generated
 # Create a common substitution set that doesn't have to be rewritten per-page
 rst_prolog = """
-.. |LoadData| replace:: :class:`~xs/interface.loaddata`
+.. |DataSettings| replace:: :class:`~xsInterface.containers.datasettings.DataSettings`
 """

@@ -23,6 +23,7 @@ Python package to interact with ....
    Examples/index
    Methodology/index
    develop/index
+   API/index
    install
    license
    glossary
