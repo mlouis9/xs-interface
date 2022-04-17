@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Condensation &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Spatial Homogenization" href="spatialhomog.html" />
+    <link rel="prev" title="Methodology" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="energy-condensation">
+<span id="meth-energycond"></span><h1>Energy Condensation<a class="headerlink" href="#energy-condensation" title="Permalink to this headline">¶</a></h1>
+<p>In order to obtain the few-group cross-sections we need to collapse the <span class="math notranslate nohighlight">\(\sigma(E)\)</span> with the flux <span class="math notranslate nohighlight">\(\phi(E)\)</span>.
+To find the few-group cross sections we use the energy continues diffusion equation <a class="reference internal" href="#equation-eq-diffusion">(1)</a>.</p>
+<div class="math notranslate nohighlight" id="equation-eq-diffusion">
+<span class="eqno">(1)<a class="headerlink" href="#equation-eq-diffusion" title="Permalink to this equation">¶</a></span>\[\begin{split}&amp;\frac{1}{v}\frac{\partial \phi}{\partial t}= \nabla \cdot D\nabla\phi-\Sigma_{a}\phi-\Sigma_{s}\phi \\
+     &amp; + \int_{0}^{\infty}\Sigma_{s}(E' \rightarrow E)\phi (E')dE' \\
+     &amp;+\chi(E)\int_{0}^{\infty}\nu(E')\Sigma_{f}(E')\phi(E')\end{split}\]</div>
+<p>Please note that <span class="math notranslate nohighlight">\(\phi=\phi(\mathbf{r},E,t)\)</span>. The group flux is defined as:</p>
+<div class="math notranslate nohighlight" id="equation-eq-groupflux">
+<span class="eqno">(2)<a class="headerlink" href="#equation-eq-groupflux" title="Permalink to this equation">¶</a></span>\[\phi_g(\mathbf{r},t)\equiv \int_{E_g}^{E_{g-1}}\phi(\mathbf{r},E,t)dE\]</div>
+<p>We will now eliminate the energy variable in the energy-dependent diffusion by integrating Eq. <a class="reference internal" href="#equation-eq-diffusion">(1)</a> over the <span class="math notranslate nohighlight">\(g^{th}\)</span> energy group.
+These will generate rigorous definition of group-averaged cross sections.</p>
+<p>The absorption <a class="reference internal" href="#equation-eq-absxs">(3)</a> and production <a class="reference internal" href="#equation-eq-nufissxs">(4)</a> cross sections are straightforward to calculate.
+The scattering removal term has the same form, however, the scattering (source) term requires more work as described in Eq. <a class="reference internal" href="#equation-eq-sctxs">(5)</a>.</p>
+<div class="math notranslate nohighlight" id="equation-eq-absxs">
+<span class="eqno">(3)<a class="headerlink" href="#equation-eq-absxs" title="Permalink to this equation">¶</a></span>\[\Sigma_{ag} = \frac{1}{\phi_g}\int_{E_g}^{E_{g-1}}\Sigma_a(E) \phi(E)dE\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-nufissxs">
+<span class="eqno">(4)<a class="headerlink" href="#equation-eq-nufissxs" title="Permalink to this equation">¶</a></span>\[\begin{split}&amp; \nu_{g'}\Sigma_{fg'} \equiv \frac{1}{\phi_g}\int_{E_g}^{E_{g-1}}\nu(E') \Sigma_f(E') \phi(E') dE' \\
+     &amp; \chi_g \equiv \int_{E_g}^{E_{g-1}} \chi(E)dE\end{split}\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-sctxs">
+<span class="eqno">(5)<a class="headerlink" href="#equation-eq-sctxs" title="Permalink to this equation">¶</a></span>\[\Sigma_{sg'g}\equiv \frac{1}{\phi_g'}\int_{E_g}^{E_{g-1}}dE\int_{E_{g'}}^{E_{g'-1}} \Sigma_s(E'\rightarrow E) \phi(E') dE'\]</div>
+<p>The group-wise diffusion coefficient is evaluated using the <span class="math notranslate nohighlight">\(\nabla \phi\)</span> rather than the flux values:</p>
+<div class="math notranslate nohighlight" id="equation-eq-diffxs">
+<span class="eqno">(6)<a class="headerlink" href="#equation-eq-diffxs" title="Permalink to this equation">¶</a></span>\[D_g=\frac{\int_{E_g}^{E_{g-1}}D(E) \nabla \phi(E)dE}{\int_{E_g}^{E_{g-1}}\nabla \phi(E)dE}\]</div>
+<p>and the neutron speed characterizing group g is:</p>
+<div class="math notranslate nohighlight" id="equation-eq-invv">
+<span class="eqno">(7)<a class="headerlink" href="#equation-eq-invv" title="Permalink to this equation">¶</a></span>\[\frac{1}{v_g}\equiv\frac{1}{\phi_g}\int_{E_g}^{E_{g-1}}\frac{1}{v(E)}\phi(E)dE\]</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Methodology</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Methodology</a></li>
+      <li>Next: <a href="spatialhomog.html" title="next chapter">Spatial Homogenization</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/Methodology/energycond.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
