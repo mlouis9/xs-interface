@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Overview &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Developer Team" href="contributors.html" />
+    <link rel="prev" title="Universal Cross-Section Interface (xsInterface) documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="project-overview">
+<span id="id1"></span><h1>Project Overview<a class="headerlink" href="#project-overview" title="Permalink to this headline">¶</a></h1>
+<p>This package is designed to act as a general cross section interface.
+It is meant to work with any general lattice and core simulator codes.
+For example, the following applications are envisioned:</p>
+<p>Lattice-based tools that can be used:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0306454914004095">Serpent</a> ;</p></li>
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0306454919300167">Shift</a> ;</p></li>
+<li><p>list to be expanded, but the target codes include OpenMC and MOOSE based tools.</p></li>
+</ul>
+<p>After reading and processing the homogenized data, the following multi-group solvers can use the package:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0306454919300167">Shift</a> ;</p></li>
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S014919701630035X">DYN3D</a> ;</p></li>
+<li><p><a class="reference external" href="https://www.nrc.gov/docs/ML1016/ML101610098.pdf">PARCS</a> ;</p></li>
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0029549315003829">GeN-Foam</a>  or any OpenFoam based tool.</p></li>
+</ul>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The package is designed as a general tool. The idea is to avoid the need to dive into the internals of the package.
+The <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code> includes the following capabilities:</p>
+<ol class="arabic simple">
+<li><p>User-defined definitions for input parameters.</p></li>
+<li><p>User-defined perturbations.</p></li>
+<li><p>Energy condensation techniques.</p></li>
+<li><p>Spatial homogenization techniques.</p></li>
+<li><p>General templates to write the output files.</p></li>
+</ol>
+<p>The setup of the problem can be performed via:</p>
+<ol class="arabic simple">
+<li><p>Memory-based Interface (recommended for coupled codes)</p></li>
+<li><p>Input file-based Interface.</p></li>
+</ol>
+<p>The package allows to perform the following important operations:</p>
+<ul class="simple">
+<li><p>Energy condensation.</p></li>
+<li><p>Spatial homogenization.</p></li>
+<li><p>Multivariate interpolation.</p></li>
+<li><p>Generation of spatial transfer functions.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Universal Cross-Section Interface (<code class="docutils literal notranslate"><span class="pre">xsInterface</span></code>) documentation!</a></li>
+      <li>Next: <a href="contributors.html" title="next chapter">Developer Team</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/overview.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

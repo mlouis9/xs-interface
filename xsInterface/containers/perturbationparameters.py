@@ -9,6 +9,7 @@ Created on Mon Apr 04 12:30:00 2022 @author: Dan Kotlyar
 Last updated on Tue Apr 05 07:00:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
+
 """
 
 import numpy as np
@@ -23,25 +24,32 @@ TIME_UNITS = ['MWd/kg', 'days', 'hours', 'minutes', 'seconds']
 class Perturbations():
     """Stores the names and values of the perturbation parameters.
 
+    Summary
+    ----------
     The container uses the following structure:
 
-                     Time-1      Time-i      Time-i
-                    ________________________________
-                    branch-1  |    ...   |  branch-1
-    History1 -->    branch-2  |    ...   |  branch-2
-                      ...     |          |    ...
-                    branch-N  |    ...   |  branch-N
-
-
-                           ........
-
-
-                     Time-1      Time-i      Time-i
-                    ________________________________
-                    branch-1  |    ...   |  branch-1
-    HistoryM -->    branch-2  |    ...   |  branch-2
-                      ...     |          |    ...
-                    branch-N  |    ...   |  branch-N
+    - History 1:
+        - Time 1:
+            - br-1
+            - br-2
+            - br-i
+            - br-N
+        - Time 2:
+            - br-1
+            - br-2
+            - br-i
+            - br-N
+        - Time i:
+            - repeat all branches
+    - History 2:
+        - Repeat all times:
+            - Repeat all branches
+    - History i:
+        - Repeat all times:
+            - Repeat all branches
+    - History N:
+        - Repeat all times:
+            - Repeat all branches
 
     Parameters
     ----------

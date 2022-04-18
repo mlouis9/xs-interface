@@ -1,0 +1,543 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataSettings &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation" href="../install.html" />
+    <link rel="prev" title="File-parsing API" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="datasettings">
+<span id="api-datasettings"></span><h1>DataSettings<a class="headerlink" href="#datasettings" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="xsInterface.containers.datasettings.DataSettings">
+<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.datasettings.</code><code class="sig-name descname">DataSettings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NG</span></em>, <em class="sig-param"><span class="n">DN</span></em>, <em class="sig-param"><span class="n">macro</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">micro</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">kinetics</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">meta</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">isotopes</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the names and data that are expected to be stored on containers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NG</strong> (<em>int</em>) – number of energy groups for multi-group parameters</p></li>
+<li><p><strong>DN</strong> (<em>int</em>) – Delayed neutron groups for kinetic parameters</p></li>
+<li><p><strong>macro</strong> (<em>boolean</em>) – indicate whether macro data is expepcted to be provided</p></li>
+<li><p><strong>micro</strong> (<em>boolean</em>) – indicate whether micro data is expepcted to be provided</p></li>
+<li><p><strong>kinetics</strong> (<em>boolean</em>) – indicate whether kinetic data is expepcted to be provided</p></li>
+<li><p><strong>meta</strong> (<em>boolean</em>) – indicate whether meta data is expepcted to be provided</p></li>
+<li><p><strong>isotopes</strong> (<em>array</em>) – ZZAAA0/1 for all the isotopes to be provided</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="xsInterface.containers.datasettings.DataSettings.NG">
+<code class="sig-name descname">NG</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.NG" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of energy groups for multi-group parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.datasettings.DataSettings.DN">
+<code class="sig-name descname">DN</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.DN" title="Permalink to this definition">¶</a></dt>
+<dd><p>delayed neutron groups for kinetic parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.datasettings.DataSettings.dataFlags">
+<code class="sig-name descname">dataFlags</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.dataFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>boolean flags to indicate the data types that are provided</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.datasettings.DataSettings.macro">
+<code class="sig-name descname">macro</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.macro" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains all the macro attributes (e.g., <code class="docutils literal notranslate"><span class="pre">abs</span></code>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.datasettings.DataSettings.micro">
+<code class="sig-name descname">micro</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.micro" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains all the micro attributes for all the isotopes (e.g., <code class="docutils literal notranslate"><span class="pre">fiss</span></code>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.datasettings.DataSettings.kinetics">
+<code class="sig-name descname">kinetics</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.kinetics" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains all the kinetic attributes (e.g., <code class="docutils literal notranslate"><span class="pre">beta</span></code>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.datasettings.DataSettings.meta">
+<code class="sig-name descname">meta</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains all the metadata attributes (e.g., <code class="docutils literal notranslate"><span class="pre">time</span></code>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">AddData(dataType, attributes, attrDims=None):</code></dt>
+<dd><p>Add relevant macroscopic/microscopic/meta data</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TypeError</strong> – If any of the parameters, e.g., <code class="docutils literal notranslate"><span class="pre">NG</span></code>, <code class="docutils literal notranslate"><span class="pre">DN</span></code> are not integers.
+    If any of the <code class="docutils literal notranslate"><span class="pre">macro</span></code>, <code class="docutils literal notranslate"><span class="pre">micro</span></code>, <code class="docutils literal notranslate"><span class="pre">kinetics</span></code>, <code class="docutils literal notranslate"><span class="pre">meta</span></code>
+    are not booleans.</p></li>
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">NG</span></code> is below one.
+    If <code class="docutils literal notranslate"><span class="pre">DN</span></code> is below one.
+    If <code class="docutils literal notranslate"><span class="pre">isotopes</span></code> list is not provided but <code class="docutils literal notranslate"><span class="pre">micro</span></code> data is expected.</p></li>
+<li><p><strong>KeyError</strong> – If <code class="docutils literal notranslate"><span class="pre">dataType</span></code> or <code class="docutils literal notranslate"><span class="pre">frmt</span></code> do not exist in DATA_TYPES or FRMT_OPTS.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span> <span class="o">=</span> <span class="n">DataSettings</span><span class="p">(</span><span class="n">NG</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">DN</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isotopes</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="perturbations">
+<span id="api-perturbations"></span><h1>Perturbations<a class="headerlink" href="#perturbations" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations">
+<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.perturbationparameters.</code><code class="sig-name descname">Perturbations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">branchN</span></em>, <em class="sig-param"><span class="n">branches</span></em>, <em class="sig-param"><span class="n">histN</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">histories</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeValues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeUnits</span><span class="o">=</span><span class="default_value">'MWd/kg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the names and values of the perturbation parameters.</p>
+<p>The container uses the following structure:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>History 1:</dt><dd><ul>
+<li><dl class="simple">
+<dt>Time 1:</dt><dd><ul>
+<li><p>br-1</p></li>
+<li><p>br-2</p></li>
+<li><p>br-i</p></li>
+<li><p>br-N</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Time 2:</dt><dd><ul>
+<li><p>br-1</p></li>
+<li><p>br-2</p></li>
+<li><p>br-i</p></li>
+<li><p>br-N</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Time i:</dt><dd><ul>
+<li><p>repeat all branches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>History 2:</dt><dd><ul>
+<li><dl class="simple">
+<dt>Repeat all times:</dt><dd><ul>
+<li><p>Repeat all branches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>History i:</dt><dd><ul>
+<li><dl class="simple">
+<dt>Repeat all times:</dt><dd><ul>
+<li><p>Repeat all branches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>History N:</dt><dd><ul>
+<li><dl class="simple">
+<dt>Repeat all times:</dt><dd><ul>
+<li><p>Repeat all branches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>branchN</strong> (<em>int</em>) – number of perturbation states</p></li>
+<li><p><strong>branches</strong> (<em>list of strings</em>) – user-defined names of all the states (e.g., fuelT, modDens)</p></li>
+<li><p><strong>historyM</strong> (<em>int</em>) – number of histories / main branches</p></li>
+<li><p><strong>histories</strong> (<em>list of strings</em>) – user-defined names of all the histories (e.g., nom, hist1, hist2)</p></li>
+<li><p><strong>timeValues</strong> (<em>array</em>) – time/burnup values</p></li>
+<li><p><strong>timeUnits</strong> (<em>str</em>) – indicate time or burnup by indicating the units</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.branches">
+<code class="sig-name descname">branches</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.branches" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains bracnhes names and values (set to None)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.histories">
+<code class="sig-name descname">histories</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.histories" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains histories names and values (set to None)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.time">
+<code class="sig-name descname">time</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains values and units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.timeUnits">
+<code class="sig-name descname">timeUnits</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.timeUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>indicate time or burnup by indicating the units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.branchN">
+<code class="sig-name descname">branchN</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.branchN" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of perturbation states</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.historyM">
+<code class="sig-name descname">historyM</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.historyM" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of histories / main branches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations._branchList">
+<code class="sig-name descname">_branchList</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations._branchList" title="Permalink to this definition">¶</a></dt>
+<dd><p>user-defined names of all the states (e.g., fuelT, modDens)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations._historyList">
+<code class="sig-name descname">_historyList</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations._historyList" title="Permalink to this definition">¶</a></dt>
+<dd><p>user-defined names of all the histories (e.g., nom, hist1, hist2)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">branchN</span></code> or <code class="docutils literal notranslate"><span class="pre">histN</span></code> is not an integer.
+    If <code class="docutils literal notranslate"><span class="pre">branches</span></code> or <code class="docutils literal notranslate"><span class="pre">histories</span></code> is not a list of strings.
+    If <code class="docutils literal notranslate"><span class="pre">timeValues</span></code> is not a 1-dim array.</p></li>
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">branchN</span></code> or <code class="docutils literal notranslate"><span class="pre">histN</span></code> is not positive.
+    If the length of <code class="docutils literal notranslate"><span class="pre">branches</span></code> not equal to <code class="docutils literal notranslate"><span class="pre">branchN</span></code> or <code class="docutils literal notranslate"><span class="pre">histories</span></code>
+    not equal to <code class="docutils literal notranslate"><span class="pre">histN</span></code>.
+    If <code class="docutils literal notranslate"><span class="pre">branches</span></code>,``histories`` or <code class="docutils literal notranslate"><span class="pre">timeValues</span></code> contain duplicates.
+    If <code class="docutils literal notranslate"><span class="pre">timeValues</span></code> contains negative values or not sorted.</p></li>
+<li><p><strong>KeyError</strong> – If <code class="docutils literal notranslate"><span class="pre">timeUnits</span></code> is an undefined string.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">Perturbations</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;fuelT&quot;</span><span class="p">,</span> <span class="s2">&quot;modDens&quot;</span><span class="p">,</span> <span class="s2">&quot;coolDens&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="singleset">
+<span id="api-singleset"></span><h1>SingleSet<a class="headerlink" href="#singleset" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="xsInterface.containers.singleset.SingleSet">
+<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.singleset.</code><code class="sig-name descname">SingleSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataSetup</span></em>, <em class="sig-param"><span class="n">statesSetup</span></em>, <em class="sig-param"><span class="n">fluxName</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">energyStruct</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">relPrecision</span><span class="o">=</span><span class="default_value">1e-05</span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Container that stores the most basic data set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataSetup</strong> (<em>DataSettings object</em>) – an object that defines the data (and type) to be collected</p></li>
+<li><p><strong>statesSetup</strong> (<em>Perturbations object</em>) – an object to store the perturbation states including branches, history,
+and time parameters.</p></li>
+<li><p><strong>fluxName</strong> (<em>string</em>) – name of the flux variable on the <code class="docutils literal notranslate"><span class="pre">datasets</span></code> object.</p></li>
+<li><p><strong>energyStruct</strong> (<em>array</em>) – descending sorted energy structure array. Includes the energy structure
+including the lowest and highest energy values.
+For a two group structure: [E1, E2, E3],
+where E1 is the upper energy bound, E2 is energy cutoff, and E3 is the
+lowest energy bound.</p></li>
+<li><p><strong>relPrecision</strong> (<em>float</em>) – relative precision that is used to find if a close perturbation exists</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.state">
+<code class="sig-name descname">state</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>describes the state (branch, time, history)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.macro">
+<code class="sig-name descname">macro</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.macro" title="Permalink to this definition">¶</a></dt>
+<dd><p>names and values of macro data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.micro">
+<code class="sig-name descname">micro</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.micro" title="Permalink to this definition">¶</a></dt>
+<dd><p>names and values of micro data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.kinetics">
+<code class="sig-name descname">kinetics</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.kinetics" title="Permalink to this definition">¶</a></dt>
+<dd><p>names and values of kinetics data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.meta">
+<code class="sig-name descname">meta</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>names and values of meta data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">dataSetup</span></code> or <code class="docutils literal notranslate"><span class="pre">statesSetup</span></code> are not objects.
+    If <code class="docutils literal notranslate"><span class="pre">fluxName</span></code> is not string.
+    If <code class="docutils literal notranslate"><span class="pre">energyStruct</span></code> is not an array.
+    If <code class="docutils literal notranslate"><span class="pre">relPrecision</span></code> is not a number.</p></li>
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">fluxName</span></code> does not exist in the pre-defined values.
+    If <code class="docutils literal notranslate"><span class="pre">energyStruct</span></code> is not sorted, includes negative values, or not of
+    the right length.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">4E+5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">File-parsing API</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">File-parsing API</a></li>
+      <li>Next: <a href="../install.html" title="next chapter">Installation</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/API/classes.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

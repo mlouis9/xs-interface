@@ -20,10 +20,11 @@ from xsInterface.containers.container_header import DATA_TYPES
 
 
 class DataSettings():
-    """Stores the names and data that are expected to be stored on containers
+    """
+    Stores the names and data that are expected to be stored on containers
 
     Parameters
-    ----------
+    -----------
     NG : int
         number of energy groups for multi-group parameters
     DN : int
@@ -40,7 +41,7 @@ class DataSettings():
         ZZAAA0/1 for all the isotopes to be provided
 
     Attributes
-    ----------
+    -----------
     NG : int
         number of energy groups for multi-group parameters
     DN : int
@@ -56,8 +57,14 @@ class DataSettings():
     meta : boolean
         contains all the metadata attributes (e.g., ``time``)
 
+
+    Methods
+    --------
+    AddData(dataType, attributes, attrDims=None):
+        Add relevant macroscopic/microscopic/meta data
+
     Raises
-    ------
+    -------
     TypeError
         If any of the parameters, e.g., ``NG``, ``DN`` are not integers.
         If any of the ``macro``, ``micro``, ``kinetics``, ``meta``
@@ -70,12 +77,9 @@ class DataSettings():
         If ``dataType`` or ``frmt`` do not exist in DATA_TYPES or FRMT_OPTS.
 
     Examples
-    --------
+    ---------
     >>> rc = DataSettings(NG=2, DN=7, macro=True, micro=False, kinetics=True,
     >>>                   meta=False, isotopes=None)
-    >>> rc.AddData("macro", ["abs", "nsf", "sct"], "array")
-    >>> rc.AddData("kinetics", ["beta", "decay"], "array")
-
     """
 
     def __init__(self, NG, DN, macro=True, micro=False, kinetics=False,
@@ -122,6 +126,12 @@ class DataSettings():
         attrDims : array of int
             dimensions for each attribute, where zero represents a scalar, and
             higher numbers represent arrays.
+
+        Examples
+        --------
+        >>> rc.AddData("macro", ["abs", "nsf", "sct"], "array")
+        >>> rc.AddData("kinetics", ["beta", "decay"], "array")
+
         """
         # Error checking
         _isstr(dataType, "data types")
