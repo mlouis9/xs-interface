@@ -36,27 +36,45 @@
             
   <div class="section" id="project-overview">
 <span id="id1"></span><h1>Project Overview<a class="headerlink" href="#project-overview" title="Permalink to this headline">¶</a></h1>
-<p>The overview of this package ….
-This package is designed to act as a general cross section interface.
-It is meant to to work with any general lattice and core simulator codes.</p>
+<p>This package is designed to act as a general cross section interface.
+It is meant to work with any general lattice and core simulator codes.
+For example, the following applications are envisioned:</p>
+<p>Lattice-based tools that can be used:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0306454914004095">Serpent</a> ;</p></li>
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0306454919300167">Shift</a> ;</p></li>
+<li><p>list to be expanded, but the target codes include OpenMC and MOOSE based tools.</p></li>
+</ul>
+<p>After reading and processing the homogenized data, the following multi-group solvers can use the package:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0306454919300167">Shift</a> ;</p></li>
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S014919701630035X">DYN3D</a> ;</p></li>
+<li><p><a class="reference external" href="https://www.nrc.gov/docs/ML1016/ML101610098.pdf">PARCS</a> ;</p></li>
+<li><p><a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0029549315003829">GeN-Foam</a>  or any OpenFoam based tool.</p></li>
+</ul>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>Specific capabilities should be underlined:</p>
-<p>1. User-defined definitions for input parameters
-2.
-3.</p>
-<p>The package allows to perform importnat operations:</p>
+<p>The package is designed as a general tool. The idea is to avoid the need to dive into the internals of the package.
+The <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code> includes the following capabilities:</p>
+<ol class="arabic simple">
+<li><p>User-defined definitions for input parameters.</p></li>
+<li><p>User-defined perturbations.</p></li>
+<li><p>Energy condensation techniques.</p></li>
+<li><p>Spatial homogenization techniques.</p></li>
+<li><p>General templates to write the output files.</p></li>
+</ol>
+<p>The setup of the problem can be performed via:</p>
+<ol class="arabic simple">
+<li><p>Memory-based Interface (recommended for coupled codes)</p></li>
+<li><p>Input file-based Interface.</p></li>
+</ol>
+<p>The package allows to perform the following important operations:</p>
 <ul class="simple">
-<li><p>Energy condensation</p></li>
-<li><p>Spatial homogenization</p></li>
+<li><p>Energy condensation.</p></li>
+<li><p>Spatial homogenization.</p></li>
+<li><p>Multivariate interpolation.</p></li>
+<li><p>Generation of spatial transfer functions.</p></li>
 </ul>
-<p>some more…</p>
-</div>
-<div class="section" id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<p>[1] ….</p>
-<p>[2] ….</p>
-<p>[3] ….</p>
 </div>
 </div>
 

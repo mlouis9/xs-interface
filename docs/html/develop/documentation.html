@@ -16,7 +16,7 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Coding Style" href="codestyle.html" />
+    <link rel="next" title="Host Documentation on GitHub" href="pages.html" />
     <link rel="prev" title="Contributing" href="contributing.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -138,6 +138,78 @@ contained in the notebook.
 When moving the <code class="docutils literal notranslate"><span class="pre">.rst</span></code> version of the notebook into the <code class="docutils literal notranslate"><span class="pre">docs/examples</span></code> folder, make sure
 that all links to images are correct.</p>
 </div>
+<div class="section" id="linking-to-the-api">
+<h3>Linking to the API<a class="headerlink" href="#linking-to-the-api" title="Permalink to this headline">¶</a></h3>
+<p>When referring to python classes, attributes, functions, or methods, it is
+strongly recommended to utilize
+<a class="reference external" href="http://www.sphinx-doc.org/en/stable/domains.html#python-roles">python object references</a>.
+This creates direct links from your text to the object declaration in our
+<a class="reference external" href="http://serpent-tools.readthedocs.io/en/latest/api/index.html">api section</a> that allows
+people to get more detail on whatever you are referencing, powered by the
+<code class="docutils literal notranslate"><span class="pre">docstrings</span></code> on that object. Two such examples are given below:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">:py:class:`serpentTools.parsers.depletion.DepletionReader`</span></code>
+becomes <code class="xref py py-class docutils literal notranslate"><span class="pre">serpentTools.parsers.depletion.DepletionReader</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:py:meth:`~serpentTools.objects.materials.DepletedMaterial.plot`</span></code> is shortened to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="verifying">
+<span id="docs-verify"></span><h2>Verifying<a class="headerlink" href="#verifying" title="Permalink to this headline">¶</a></h2>
+<p>You worked hard on this documentation, and we want your great work to be properly displayed
+once completed.
+In order to reduce the chances of some errors, try running the following from inside the
+<code class="docutils literal notranslate"><span class="pre">docs</span></code> directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make clean html
+</pre></div>
+</div>
+<p>Navigate to the files created in <code class="docutils literal notranslate"><span class="pre">_build/html</span></code> to ensure that images are loaded properly,
+code is rendered properly, and the converted notebook looks exactly how you expect it to
+look.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If there is an issue with rendering your example, we will likely call upon you to fix these
+issues.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Building the documentation locally requires <code class="docutils literal notranslate"><span class="pre">sphinx</span></code> and a handful of other
+packages. Installing these is outside the scope of this guide, partially because
+<a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/installation.html">the sphinx team has a great guide already</a>.
+Check this out if you are having issues running the <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span> <span class="pre">install</span></code> commands from the
+docs directory.</p>
+</div>
+</div>
+<div class="section" id="adding-objects-to-api">
+<span id="docs-add-api"></span><h2>Adding Objects to API<a class="headerlink" href="#adding-objects-to-api" title="Permalink to this headline">¶</a></h2>
+<p>New reader or container objects should be included in the
+<a class="reference external" href="http://serpent-tools.readthedocs.io/en/latest/api/index.html">api section of the documentation</a>,
+as with any function that the end user may utilize.
+For documenting these, we utilize the
+<a class="reference external" href="http://www.sphinx-doc.org/en/master/ext/autodoc.html">sphinx autodoc</a> features to use the
+docstrings to automatically document new features.
+This is most simply done by calling <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">autoclass::</span></code> or <code class="docutils literal notranslate"><span class="pre">..autofunction::</span></code> like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">autofunction</span><span class="p">::</span> <span class="n">serpentTools</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">plot</span>
+
+<span class="o">..</span> <span class="n">autoclass</span><span class="p">::</span> <span class="n">serpentTools</span><span class="o">.</span><span class="n">parsers</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">ResultsReader</span>
+</pre></div>
+</div>
+<p>More information on style guide can be found in: <a class="reference external" href="https://numpydoc.readthedocs.io/en/latest/format.html#documenting-classes">Style guide</a></p>
+<p>For new readers, those should be included in their own file, such as <code class="docutils literal notranslate"><span class="pre">docs/api/myNewReader.rst</span></code>,
+which can be as bare as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">My</span> <span class="n">New</span> <span class="n">Reader</span>
+<span class="o">=============</span>
+
+<span class="o">..</span> <span class="n">autoclass</span><span class="p">::</span> <span class="n">serpentTools</span><span class="o">.</span><span class="n">parsers</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">MyNewReader</span>
+</pre></div>
+</div>
+<p>Be sure to include your new file in <code class="docutils literal notranslate"><span class="pre">docs/api/index.rst</span></code>, or else your file will be
+left out of the documentation.
+Proper documentation of the class or function requires thorough and concise
+documentation of all attributes, class methods, and construction arguments.
+Follow the above guides, such as <a class="reference internal" href="#docstrings"><span class="std std-ref">Docstrings</span></a>, and this process <em>should</em>
+go smoothly.</p>
 </div>
 </div>
 
@@ -178,7 +250,7 @@ that all links to images are correct.</p>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="index.html">Developer’s Guide</a><ul>
       <li>Previous: <a href="contributing.html" title="previous chapter">Contributing</a></li>
-      <li>Next: <a href="codestyle.html" title="next chapter">Coding Style</a></li>
+      <li>Next: <a href="pages.html" title="next chapter">Host Documentation on GitHub</a></li>
   </ul></li>
   </ul></li>
 </ul>

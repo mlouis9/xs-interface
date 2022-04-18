@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host Documentation on GitHub &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Coding Style" href="codestyle.html" />
+    <link rel="prev" title="Documentation" href="documentation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="host-documentation-on-github">
+<span id="docs-pages"></span><h1>Host Documentation on GitHub<a class="headerlink" href="#host-documentation-on-github" title="Permalink to this headline">¶</a></h1>
+<p>GitHub Pages is available in public repositories with GitHub Free and GitHub Free for organizations,
+and in public and private repositories with GitHub Pro.</p>
+<p>From GitHub Pages &lt;<a class="reference external" href="https://docs.github.com/en/pages">https://docs.github.com/en/pages</a>&gt;`_</p>
+<p>Before you enable <code class="docutils literal notranslate"><span class="pre">pages</span></code> on your GitHub repository several steps need to be undertaken on your personal working station.
+We’ll assume sphinx documentation is already generated in a <code class="docutils literal notranslate"><span class="pre">html</span></code> format.</p>
+<div class="section" id="handling-the-sphinx-documentation">
+<h2>Handling the Sphinx documentation:<a class="headerlink" href="#handling-the-sphinx-documentation" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Create a separate branch for your documentation, e.g., ideally <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> but any name should work.</p></li>
+<li><dl class="simple">
+<dt>Make sure that the root directory (where the setup.py) contains the <code class="docutils literal notranslate"><span class="pre">docs</span></code> directory where you will build your html directory and index.html file.</dt><dd><ul class="simple">
+<li><p>This may require you to create a different directory (e.g., <code class="docutils literal notranslate"><span class="pre">documentation</span></code>) where the <code class="docutils literal notranslate"><span class="pre">make</span></code> and <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> will be hosted.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Change the default build folder as <code class="docutils literal notranslate"><span class="pre">docs</span></code> in your makefile. If you have a make.bat file change there as well.</p></li>
+</ol>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Makefile</span></code></dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BUILDDIR</span> <span class="o">=</span> <span class="o">../</span><span class="n">docs</span>
+</pre></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make.bat</span></code></dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">BUILDDIR</span><span class="o">=../</span><span class="n">docs</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<ol class="arabic" start="4">
+<li><p>Build documentation:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">html</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder in the root directory should have the following content:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">docs</span>
+  <span class="o">|--</span><span class="n">doctrees</span>
+  <span class="o">|--</span><span class="n">html</span>
+     <span class="o">|--</span><span class="n">index</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<p>6. The <code class="docutils literal notranslate"><span class="pre">index.html</span></code> is not inside the top level of <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder.
+Copy the <code class="docutils literal notranslate"><span class="pre">index.html</span></code> inside <code class="docutils literal notranslate"><span class="pre">docs/index.html</span></code> in the <code class="docutils literal notranslate"><span class="pre">docs</span></code> directory. Open the copied file and insert the following line:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">meta</span> <span class="n">http</span><span class="o">-</span><span class="n">equiv</span><span class="o">=</span><span class="s2">&quot;refresh&quot;</span> <span class="n">content</span><span class="o">=</span><span class="s2">&quot;0; url=./html/index.html&quot;</span> <span class="o">/&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>It may be needed to add an empty <code class="docutils literal notranslate"><span class="pre">.nojekyll</span></code> file in the docs directory (or root dir) as GitHub publishes the pages through jekyll.</p></li>
+</ol>
+</div>
+<div class="section" id="enabling-pages-on-github">
+<h2>Enabling Pages on GitHub:<a class="headerlink" href="#enabling-pages-on-github" title="Permalink to this headline">¶</a></h2>
+<p>GitHub is disabled by default. To enable follow the next steps:</p>
+<ol class="arabic simple">
+<li><p>Go to your GitHub repository</p></li>
+<li><p>Open the <code class="docutils literal notranslate"><span class="pre">Settings</span></code> tab and select <code class="docutils literal notranslate"><span class="pre">Pages</span></code> from the sidebar</p></li>
+<li><p>From the source section, select the branch (e.g., <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code>) wherever you have pushed the documentation code.</p></li>
+<li><p>Commit the code and select the branch in the source section.</p></li>
+<li><p>If you create a branch called gh-pages, GitHub will automatically recognize the documentation and show it.</p></li>
+<li><p>Make sure the <code class="docutils literal notranslate"><span class="pre">index.html</span></code> file is available at the top level of the directory (e.g., <code class="docutils literal notranslate"><span class="pre">docs</span></code>) you are hosting. Else, you may see the 404 error.</p></li>
+<li><p>Your page should be available at the mentioned location after you save the configuration.</p></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Developer’s Guide</a><ul>
+      <li>Previous: <a href="documentation.html" title="previous chapter">Documentation</a></li>
+      <li>Next: <a href="codestyle.html" title="next chapter">Coding Style</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/develop/pages.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

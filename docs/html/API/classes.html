@@ -130,6 +130,12 @@
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt>
+<code class="sig-name descname">AddData(dataType, attributes, attrDims=None):</code></dt>
+<dd><p>Add relevant macroscopic/microscopic/meta data</p>
+</dd></dl>
+
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><ul class="simple">
@@ -146,8 +152,308 @@
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span> <span class="o">=</span> <span class="n">DataSettings</span><span class="p">(</span><span class="n">NG</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">DN</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isotopes</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;abs&quot;</span><span class="p">,</span> <span class="s2">&quot;nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;sct&quot;</span><span class="p">],</span> <span class="s2">&quot;array&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;kinetics&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;decay&quot;</span><span class="p">],</span> <span class="s2">&quot;array&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="perturbations">
+<span id="api-perturbations"></span><h1>Perturbations<a class="headerlink" href="#perturbations" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations">
+<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.perturbationparameters.</code><code class="sig-name descname">Perturbations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">branchN</span></em>, <em class="sig-param"><span class="n">branches</span></em>, <em class="sig-param"><span class="n">histN</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">histories</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeValues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeUnits</span><span class="o">=</span><span class="default_value">'MWd/kg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the names and values of the perturbation parameters.</p>
+<p>The container uses the following structure:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>History 1:</dt><dd><ul>
+<li><dl class="simple">
+<dt>Time 1:</dt><dd><ul>
+<li><p>br-1</p></li>
+<li><p>br-2</p></li>
+<li><p>br-i</p></li>
+<li><p>br-N</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Time 2:</dt><dd><ul>
+<li><p>br-1</p></li>
+<li><p>br-2</p></li>
+<li><p>br-i</p></li>
+<li><p>br-N</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Time i:</dt><dd><ul>
+<li><p>repeat all branches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>History 2:</dt><dd><ul>
+<li><dl class="simple">
+<dt>Repeat all times:</dt><dd><ul>
+<li><p>Repeat all branches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>History i:</dt><dd><ul>
+<li><dl class="simple">
+<dt>Repeat all times:</dt><dd><ul>
+<li><p>Repeat all branches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>History N:</dt><dd><ul>
+<li><dl class="simple">
+<dt>Repeat all times:</dt><dd><ul>
+<li><p>Repeat all branches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>branchN</strong> (<em>int</em>) – number of perturbation states</p></li>
+<li><p><strong>branches</strong> (<em>list of strings</em>) – user-defined names of all the states (e.g., fuelT, modDens)</p></li>
+<li><p><strong>historyM</strong> (<em>int</em>) – number of histories / main branches</p></li>
+<li><p><strong>histories</strong> (<em>list of strings</em>) – user-defined names of all the histories (e.g., nom, hist1, hist2)</p></li>
+<li><p><strong>timeValues</strong> (<em>array</em>) – time/burnup values</p></li>
+<li><p><strong>timeUnits</strong> (<em>str</em>) – indicate time or burnup by indicating the units</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.branches">
+<code class="sig-name descname">branches</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.branches" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains bracnhes names and values (set to None)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.histories">
+<code class="sig-name descname">histories</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.histories" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains histories names and values (set to None)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.time">
+<code class="sig-name descname">time</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains values and units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.timeUnits">
+<code class="sig-name descname">timeUnits</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.timeUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>indicate time or burnup by indicating the units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.branchN">
+<code class="sig-name descname">branchN</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.branchN" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of perturbation states</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations.historyM">
+<code class="sig-name descname">historyM</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.historyM" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of histories / main branches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations._branchList">
+<code class="sig-name descname">_branchList</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations._branchList" title="Permalink to this definition">¶</a></dt>
+<dd><p>user-defined names of all the states (e.g., fuelT, modDens)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.perturbationparameters.Perturbations._historyList">
+<code class="sig-name descname">_historyList</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations._historyList" title="Permalink to this definition">¶</a></dt>
+<dd><p>user-defined names of all the histories (e.g., nom, hist1, hist2)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">branchN</span></code> or <code class="docutils literal notranslate"><span class="pre">histN</span></code> is not an integer.
+    If <code class="docutils literal notranslate"><span class="pre">branches</span></code> or <code class="docutils literal notranslate"><span class="pre">histories</span></code> is not a list of strings.
+    If <code class="docutils literal notranslate"><span class="pre">timeValues</span></code> is not a 1-dim array.</p></li>
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">branchN</span></code> or <code class="docutils literal notranslate"><span class="pre">histN</span></code> is not positive.
+    If the length of <code class="docutils literal notranslate"><span class="pre">branches</span></code> not equal to <code class="docutils literal notranslate"><span class="pre">branchN</span></code> or <code class="docutils literal notranslate"><span class="pre">histories</span></code>
+    not equal to <code class="docutils literal notranslate"><span class="pre">histN</span></code>.
+    If <code class="docutils literal notranslate"><span class="pre">branches</span></code>,``histories`` or <code class="docutils literal notranslate"><span class="pre">timeValues</span></code> contain duplicates.
+    If <code class="docutils literal notranslate"><span class="pre">timeValues</span></code> contains negative values or not sorted.</p></li>
+<li><p><strong>KeyError</strong> – If <code class="docutils literal notranslate"><span class="pre">timeUnits</span></code> is an undefined string.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">Perturbations</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;fuelT&quot;</span><span class="p">,</span> <span class="s2">&quot;modDens&quot;</span><span class="p">,</span> <span class="s2">&quot;coolDens&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="singleset">
+<span id="api-singleset"></span><h1>SingleSet<a class="headerlink" href="#singleset" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="xsInterface.containers.singleset.SingleSet">
+<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.singleset.</code><code class="sig-name descname">SingleSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataSetup</span></em>, <em class="sig-param"><span class="n">statesSetup</span></em>, <em class="sig-param"><span class="n">fluxName</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">energyStruct</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">relPrecision</span><span class="o">=</span><span class="default_value">1e-05</span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Container that stores the most basic data set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataSetup</strong> (<em>DataSettings object</em>) – an object that defines the data (and type) to be collected</p></li>
+<li><p><strong>statesSetup</strong> (<em>Perturbations object</em>) – an object to store the perturbation states including branches, history,
+and time parameters.</p></li>
+<li><p><strong>fluxName</strong> (<em>string</em>) – name of the flux variable on the <code class="docutils literal notranslate"><span class="pre">datasets</span></code> object.</p></li>
+<li><p><strong>energyStruct</strong> (<em>array</em>) – descending sorted energy structure array. Includes the energy structure
+including the lowest and highest energy values.
+For a two group structure: [E1, E2, E3],
+where E1 is the upper energy bound, E2 is energy cutoff, and E3 is the
+lowest energy bound.</p></li>
+<li><p><strong>relPrecision</strong> (<em>float</em>) – relative precision that is used to find if a close perturbation exists</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.state">
+<code class="sig-name descname">state</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>describes the state (branch, time, history)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.macro">
+<code class="sig-name descname">macro</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.macro" title="Permalink to this definition">¶</a></dt>
+<dd><p>names and values of macro data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.micro">
+<code class="sig-name descname">micro</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.micro" title="Permalink to this definition">¶</a></dt>
+<dd><p>names and values of micro data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.kinetics">
+<code class="sig-name descname">kinetics</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.kinetics" title="Permalink to this definition">¶</a></dt>
+<dd><p>names and values of kinetics data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="xsInterface.containers.singleset.SingleSet.meta">
+<code class="sig-name descname">meta</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>names and values of meta data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">dataSetup</span></code> or <code class="docutils literal notranslate"><span class="pre">statesSetup</span></code> are not objects.
+    If <code class="docutils literal notranslate"><span class="pre">fluxName</span></code> is not string.
+    If <code class="docutils literal notranslate"><span class="pre">energyStruct</span></code> is not an array.
+    If <code class="docutils literal notranslate"><span class="pre">relPrecision</span></code> is not a number.</p></li>
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">fluxName</span></code> does not exist in the pre-defined values.
+    If <code class="docutils literal notranslate"><span class="pre">energyStruct</span></code> is not sorted, includes negative values, or not of
+    the right length.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">4E+5</span><span class="p">])</span>
 </pre></div>
 </div>
 </dd></dl>

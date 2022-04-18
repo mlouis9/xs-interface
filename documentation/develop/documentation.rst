@@ -129,6 +129,85 @@ When moving the |rst| version of the notebook into the ``docs/examples`` folder,
 that all links to images are correct.
 
 
+Linking to the API
+------------------
+
+When referring to python classes, attributes, functions, or methods, it is 
+strongly recommended to utilize 
+`python object references <http://www.sphinx-doc.org/en/stable/domains.html#python-roles>`_.
+This creates direct links from your text to the object declaration in our
+`api section <http://serpent-tools.readthedocs.io/en/latest/api/index.html>`_ that allows
+people to get more detail on whatever you are referencing, powered by the 
+``docstrings`` on that object. Two such examples are given below:
+
+* ``:py:class:`serpentTools.parsers.depletion.DepletionReader```
+  becomes :py:class:`serpentTools.parsers.depletion.DepletionReader`
+* ``:py:meth:`~serpentTools.objects.materials.DepletedMaterial.plot``` is shortened to
+  :py:meth:`~serpentTools.objects.materials.DepletedMaterial.plot`
+
+.. _docs-verify:
+
+Verifying
+=========
+
+You worked hard on this documentation, and we want your great work to be properly displayed 
+once completed.
+In order to reduce the chances of some errors, try running the following from inside the
+``docs`` directory::
+
+    $ make clean html
+
+Navigate to the files created in ``_build/html`` to ensure that images are loaded properly,
+code is rendered properly, and the converted notebook looks exactly how you expect it to
+look. 
+
+.. warning::
+
+    If there is an issue with rendering your example, we will likely call upon you to fix these
+    issues.
 
 
+.. note::
+
+    Building the documentation locally requires ``sphinx`` and a handful of other
+    packages. Installing these is outside the scope of this guide, partially because
+    `the sphinx team has a great guide already <http://www.sphinx-doc.org/en/master/usage/installation.html>`_.
+    Check this out if you are having issues running the ``make clean install`` commands from the 
+    docs directory.
+
+.. _docs-add-API:
+
+Adding Objects to API
+=====================
+
+New reader or container objects should be included in the 
+`api section of the documentation <http://serpent-tools.readthedocs.io/en/latest/api/index.html>`_, 
+as with any function that the end user may utilize.
+For documenting these, we utilize the 
+`sphinx autodoc <http://www.sphinx-doc.org/en/master/ext/autodoc.html>`_ features to use the 
+docstrings to automatically document new features.
+This is most simply done by calling ``.. autoclass::`` or ``..autofunction::`` like::
+
+    .. autofunction:: serpentTools.plot.plot
+
+    .. autoclass:: serpentTools.parsers.results.ResultsReader
+
+More information on style guide can be found in: `Style guide <https://numpydoc.readthedocs.io/en/latest/format.html#documenting-classes>`_
+
+
+
+For new readers, those should be included in their own file, such as ``docs/api/myNewReader.rst``, 
+which can be as bare as::
+
+    My New Reader
+    =============
+
+    .. autoclass:: serpentTools.parsers.new.MyNewReader
+
+Be sure to include your new file in ``docs/api/index.rst``, or else your file will be 
+left out of the documentation.
+Proper documentation of the class or function requires thorough and concise
+documentation of all attributes, class methods, and construction arguments.
+Follow the above guides, such as :ref:`docstrings`, and this process *should*
+go smoothly.
 
