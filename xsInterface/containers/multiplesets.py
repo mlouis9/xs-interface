@@ -374,7 +374,7 @@ class MultipleSets():
         return df
 
     def Values(self, attrs=None, **kwargs):
-        """Obtain the values of the specific attribute over a range of states
+        """Obtain the values of the specific attribute across different states
 
         The method obtains the values across all the provided states.
         Specific attributes can be selected.

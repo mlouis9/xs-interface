@@ -326,7 +326,7 @@ class SingleSet():
 
         """
 
-        dSetup = self._dSetup  # description of data
+        dSetup = copy.deepcopy(self._dSetup)  # description of data
 
         if macro:
             expMacro = dSetup.macro["attributes"]
@@ -383,7 +383,7 @@ class SingleSet():
 
     def _stateErrors(self, branch, history, timeIdx, timePoint):
         """check that a state is described properly"""
-        stSetup = self._sSetup
+        stSetup = copy.deepcopy(self._sSetup)
 
         # sufficient data must be provided when calling this method
         if stSetup.time != {}:
@@ -465,7 +465,7 @@ class SingleSet():
             value of the macro property to be added
         """
 
-        dsetup = self._dSetup  # data setup/rules
+        dsetup = copy.deepcopy(self._dSetup)  # data setup/rules
         attributes = dsetup.macro["attributes"]
         dimensions = dsetup.macro["dimensions"]
         _inlist(attr, "Attribute", attributes)
@@ -506,7 +506,7 @@ class SingleSet():
 
         """
 
-        dsetup = self._dSetup  # data setup/rules
+        dsetup = copy.deepcopy(self._dSetup)  # data setup/rules
         nisotopes = len(dsetup.isotopes)  # number of isotopes
         attributes = dsetup.micro["attributes"]
         dimensions = dsetup.micro["dimensions"]
@@ -543,7 +543,7 @@ class SingleSet():
             value of the kinetics property to be added
         """
 
-        dsetup = self._dSetup  # data setup/rules
+        dsetup = copy.deepcopy(self._dSetup)  # data setup/rules
         attributes = dsetup.kinetics["attributes"]
         dimensions = dsetup.kinetics["dimensions"]
         _inlist(attr, "Attribute", attributes)

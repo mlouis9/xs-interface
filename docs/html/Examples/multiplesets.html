@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>MultipleSets &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Decay Case" href="decay.html" />
+    <link rel="prev" title="SingleSet" href="singleset.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="multiplesets">
+<span id="multiplesets-example"></span><h1>MultipleSets<a class="headerlink" href="#multiplesets" title="Permalink to this headline">¶</a></h1>
+<p>Example on how to collect, store, and process data using the
+<code class="docutils literal notranslate"><span class="pre">MultipleSets</span></code> container.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span> <span class="o">=</span> <span class="n">MultipleSets</span><span class="p">(</span><span class="n">macro</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="class-description">
+<h2>Class Description<a class="headerlink" href="#class-description" title="Permalink to this headline">¶</a></h2>
+<p><strong>Parameters</strong></p>
+<ul class="simple">
+<li><p>states : Perturbations object an object with perturbation states
+including branches, history, and time parameters.</p></li>
+<li><p>macro : bool flag to incdicate if all data in macro must be defined</p></li>
+<li><p>micro : bool flag to incdicate if all data in micro must be defined</p></li>
+<li><p>kinetics : bool flag to incdicate if all data in kinetics must be
+defined</p></li>
+<li><p>meta : bool flag to incdicate if all data in meta must be defined</p></li>
+</ul>
+<p><strong>Attributes</strong></p>
+<ul class="simple">
+<li><p>setIds : list of strings complete list of strings for all the sets to
+be provided.</p></li>
+<li><p>macro : bool flag to incdicate if all data in macro must be defined</p></li>
+<li><p>micro : bool flag to incdicate if all data in micro must be defined</p></li>
+<li><p>kinetics : bool flag to incdicate if all data in kinetics must be
+defined</p></li>
+<li><p>meta : bool flag to incdicate if all data in meta must be defined</p></li>
+<li><p>sets : dict keys are indices and values are <code class="docutils literal notranslate"><span class="pre">SingleSet</span></code> objects.</p></li>
+<li><p>nsets : int number of <code class="docutils literal notranslate"><span class="pre">SingleSet</span></code>s on the <code class="docutils literal notranslate"><span class="pre">MultipleSets</span></code>
+object.</p></li>
+<li><p>states : dict description of all the perturbation states.</p></li>
+<li><p>setsmap : dict link between the nametuples that describe the state
+and indices in the <code class="docutils literal notranslate"><span class="pre">sets</span></code> dict.</p></li>
+</ul>
+<p><strong>Methods</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
+    <span class="n">Add</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">)</span>
+<span class="o">-----------------------------------------------------------</span>
+</pre></div>
+</div>
+<p><em>Add a single set data object</em></p>
+<ul class="simple">
+<li><p>argv : non-named arguments non-keyworded variable length argument
+list. Each argument represents a <code class="docutils literal notranslate"><span class="pre">SingleSet</span></code> object that contains
+all the required attributes, e.g. <code class="docutils literal notranslate"><span class="pre">macro</span></code> and <code class="docutils literal notranslate"><span class="pre">meta</span></code>.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
+    <span class="n">Get</span><span class="p">(</span><span class="n">setIdx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">branch</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">errFlag</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="o">-----------------------------------------------------------</span>
+</pre></div>
+</div>
+<p><em>get a SingleSet object for a specific state</em> - setIdx : int
+index/position of the set in the sets dictionary - history : array
+values that represent a history - time : float/number value of the time
+point - branch : array set of values for the specific branch - errFlag :
+boolean indicates whether error should be raised if state not found</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
+    <span class="n">DataTable</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">macroFlag</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">microFlag</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+              <span class="n">kineticsFlag</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">metaFlag</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="o">-----------------------------------------------------------</span>
+</pre></div>
+</div>
+<p><em>a table with existing states and values for all attributes</em> Loops
+over the <code class="docutils literal notranslate"><span class="pre">MultipleSets</span></code> object to collect all existing states and
+values for a specific attribute. - attrs : string or list of strings
+name of existing fields/attributes within a <code class="docutils literal notranslate"><span class="pre">SingleSet</span></code> object -
+macroFlag : boolean, default is True flag to indicate if all macro
+attributes are included in the table - microFlag : boolean, default is
+True flag to indicate if all micro attributes are included in the table
+- kineticsFlag : boolean, default is True flag to indicate if all
+kinetics attributes are included in table - metaFlag : boolean, default
+is False flag to indicate if all meta attributes are included in the
+table</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
+    <span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="o">-----------------------------------------------------------</span>
+</pre></div>
+</div>
+<p><em>Obtain the values of the specific attribute across different states</em>- attrs : string, list of strings name of the attributes to be included
+in the returned table. If None then all the attributes are returned -
+kwargs : named arguments keys represent the data name and value
+represent the values. The filtering of data is performed according to
+kwargs. The use can filter according to a specific state, time, or
+history</p>
+</div>
+<div class="section" id="execution-sequence">
+<h2>Execution Sequence<a class="headerlink" href="#execution-sequence" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.containers.datasettings</span> <span class="k">import</span> <span class="n">DataSettings</span>
+<span class="kn">from</span> <span class="nn">xsInterface.containers.perturbationparameters</span> <span class="k">import</span> <span class="n">Perturbations</span>
+<span class="kn">from</span> <span class="nn">xsInterface.containers.singleset</span> <span class="k">import</span> <span class="n">SingleSet</span>
+<span class="kn">from</span> <span class="nn">xsInterface.containers.multiplesets</span> <span class="k">import</span> <span class="n">MultipleSets</span>
+</pre></div>
+</div>
+<div class="section" id="data-settings">
+<h3><strong>Data Settings</strong><a class="headerlink" href="#data-settings" title="Permalink to this headline">¶</a></h3>
+<p>Define what data needs to be collected.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset the data</span>
+<span class="n">rc</span> <span class="o">=</span> <span class="n">DataSettings</span><span class="p">(</span><span class="n">NG</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">DN</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isotopes</span><span class="o">=</span><span class="p">[</span><span class="mi">531350</span><span class="p">,</span> <span class="mi">541350</span><span class="p">,</span> <span class="mi">922350</span><span class="p">])</span>
+<span class="c1"># Add the variables names to be collected</span>
+<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span>
+           <span class="p">[</span><span class="s2">&quot;inf_rabs&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;kappa&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_flx&quot;</span><span class="p">],</span>
+           <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;inf_sp0&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="define-perturbation-states">
+<h3>Define Perturbation States<a class="headerlink" href="#define-perturbation-states" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="n">Perturbations</span><span class="p">(</span><span class="n">branchN</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">branches</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;dens&quot;</span><span class="p">,</span> <span class="s2">&quot;cool&quot;</span><span class="p">],</span>
+                       <span class="n">histN</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">histories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="s2">&quot;pert&quot;</span><span class="p">],</span>
+                       <span class="n">timeValues</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">timeUnits</span><span class="o">=</span><span class="s1">&#39;MWd/kg&#39;</span><span class="p">)</span>
+<span class="n">states</span><span class="o">.</span><span class="n">AddBranches</span><span class="p">(</span><span class="n">fuel</span><span class="o">=</span><span class="p">[</span><span class="mi">600</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">1500</span><span class="p">],</span>
+                   <span class="n">dens</span><span class="o">=</span><span class="p">[</span><span class="mi">600</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">800</span><span class="p">],</span>
+                   <span class="n">cool</span><span class="o">=</span><span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">])</span>
+<span class="n">states</span><span class="o">.</span><span class="n">AddHistories</span><span class="p">(</span><span class="n">nom</span><span class="o">=</span><span class="p">[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">550</span><span class="p">],</span>
+                    <span class="n">pert</span><span class="o">=</span><span class="p">[</span><span class="mi">950</span><span class="p">,</span> <span class="mi">750</span><span class="p">,</span> <span class="mi">600</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="multiple-sets">
+<h3>Multiple Sets<a class="headerlink" href="#multiple-sets" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span> <span class="o">=</span> <span class="n">MultipleSets</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="data-for-single-states">
+<h3>Data for Single States<a class="headerlink" href="#data-for-single-states" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="state-0">
+<h4>State-0<a class="headerlink" href="#state-0" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset and define operation state point</span>
+<span class="n">ss0</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
+               <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">ss0</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">600.0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="c1"># macro data</span>
+<span class="n">ss0</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">inf_nsf</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
+           <span class="n">kappa</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">inf_flx</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
+<span class="n">ss0</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_sp0</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])}</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ss0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="state-1">
+<h4>State-1<a class="headerlink" href="#state-1" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset and define operation state point</span>
+<span class="n">ss1</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
+               <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">ss1</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">900.0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="c1"># macro data</span>
+<span class="n">ss1</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">inf_nsf</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
+           <span class="n">kappa</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">inf_flx</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
+<span class="n">ss1</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_sp0</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ss1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="state-2">
+<h4>State-2<a class="headerlink" href="#state-2" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset and define operation state point</span>
+<span class="n">ss2</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
+               <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">ss2</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">1200.0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="c1"># macro data</span>
+<span class="n">ss2</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">inf_nsf</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
+           <span class="n">kappa</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">inf_flx</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
+<span class="n">ss2</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_sp0</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ss2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="create-a-table-from-multiplesets-container">
+<h3>Create a table from MultipleSets Container<a class="headerlink" href="#create-a-table-from-multiplesets-container" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdTable</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">DataTable</span><span class="p">([</span><span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdTable</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>history</th>
+      <th>time</th>
+      <th>fuel</th>
+      <th>dens</th>
+      <th>cool</th>
+      <th>inf_nsf</th>
+      <th>inf_flx</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>600.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>900.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>1200.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+<div class="section" id="create-values-from-multiplesets-container">
+<h3>Create Values from MultipleSets Container<a class="headerlink" href="#create-values-from-multiplesets-container" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>history</th>
+      <th>time</th>
+      <th>fuel</th>
+      <th>dens</th>
+      <th>cool</th>
+      <th>inf_nsf</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>900.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">dens</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">cool</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>history</th>
+      <th>time</th>
+      <th>fuel</th>
+      <th>dens</th>
+      <th>cool</th>
+      <th>inf_nsf</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>600.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>900.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>1200.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">history</span><span class="o">=</span><span class="s2">&quot;nom&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>history</th>
+      <th>time</th>
+      <th>fuel</th>
+      <th>dens</th>
+      <th>cool</th>
+      <th>inf_nsf</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>600.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>900.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>1200.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>history</th>
+      <th>time</th>
+      <th>fuel</th>
+      <th>dens</th>
+      <th>cool</th>
+      <th>inf_nsf</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>600.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>900.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>1200.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.3, 0.4]</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>history</th>
+      <th>time</th>
+      <th>fuel</th>
+      <th>dens</th>
+      <th>cool</th>
+      <th>inf_nsf</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="singleset.html" title="previous chapter">SingleSet</a></li>
+      <li>Next: <a href="decay.html" title="next chapter">Decay Case</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/Examples/multiplesets.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
