@@ -98,6 +98,6 @@ pdTable = ms.DataTable(['inf_nsf', 'inf_rabs', 'inf_flx'])
 
 pdTable1 = ms.DataTable(macroFlag=True, microFlag=False, kineticsFlag=True)
 
-ms.Values(attrs=None, dens=600)
+ms.Values(attrs=["inf_flx", "inf_nsf"], fuel=900)
 
 #a = 1

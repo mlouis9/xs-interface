@@ -254,8 +254,8 @@ class MultipleSets():
         """direct method to obtain set only if index is known"""
         return self.sets[setIdx]
 
-    def DataTable(self, attrs=None, macroFlag=True, microFlag=True,
-                  kineticsFlag=True, metaFlag=False):
+    def DataTable(self, attrs=None, macroFlag=None, microFlag=None,
+                  kineticsFlag=None, metaFlag=None):
         """Create a table with existing states and values for all attributes
 
         Loops over the ``MultipleSets`` object to collect all existing states
@@ -303,6 +303,16 @@ class MultipleSets():
         ...   1    None   2.5  ...  [2, 2, 2, 2, 2, 2, 2]
 
         """
+
+        # apply default values
+        if macroFlag is None:
+            macroFlag = self._flags["macro"]
+        if microFlag is None:
+            microFlag = self._flags["micro"]
+        if kineticsFlag is None:
+            kineticsFlag = self._flags["kinetics"]
+        if metaFlag is None:
+            metaFlag = self._flags["meta"]
 
         if attrs is not None:
             if isinstance(attrs, str):
