@@ -1,19 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SingleSet &#8212; xsInterface 0.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Decay Case" href="decay.html" />
@@ -38,8 +37,8 @@
 <span id="singleset-example"></span><h1>SingleSet<a class="headerlink" href="#singleset" title="Permalink to this headline">¶</a></h1>
 <p>Example on how to collect, store, and process data using the
 <code class="docutils literal notranslate"><span class="pre">SingleSet</span></code> container.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SingleSet</span><span class="p">(</span><span class="n">dataSetup</span><span class="p">,</span> <span class="n">statesSetup</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-          <span class="n">energyStruct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relPrecision</span><span class="o">=</span><span class="n">REL_PRECISION</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SingleSet</span><span class="p">(</span><span class="n">dataSetup</span><span class="p">,</span> <span class="n">statesSetup</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+          <span class="n">energyStruct</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">relPrecision</span><span class="o">=</span><span class="n">REL_PRECISION</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="section" id="class-description">
@@ -69,7 +68,7 @@ close perturbation exists</p></li>
 <li><p>meta : dict, names and values of meta data</p></li>
 </ul>
 <p><strong>Methods</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AddState</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeIdx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AddState</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">timeIdx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><em>describes the state (branch, time, history)</em></p>
@@ -92,7 +91,7 @@ strings, names of the attributes</p>
 <p><em>Energy condensation method</em> Condensation is performed for a new
 energy structure and for all the parameters in the macro and micro
 dictionaries. - cutoffE : 1-dim array, energy cutoffs</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ProofTest</span><span class="p">(</span><span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ProofTest</span><span class="p">(</span><span class="n">macro</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><em>Check that all data was inputted</em> - macro : bool, flag to incdicate
@@ -103,9 +102,9 @@ incdicate if all data in meta must be defined</p>
 </div>
 <div class="section" id="execution-sequence">
 <h2>Execution Sequence<a class="headerlink" href="#execution-sequence" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.containers.datasettings</span> <span class="kn">import</span> <span class="n">DataSettings</span>
-<span class="kn">from</span> <span class="nn">xsInterface.containers.perturbationparameters</span> <span class="kn">import</span> <span class="n">Perturbations</span>
-<span class="kn">from</span> <span class="nn">xsInterface.containers.singleset</span> <span class="kn">import</span> <span class="n">SingleSet</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.containers.datasettings</span> <span class="k">import</span> <span class="n">DataSettings</span>
+<span class="kn">from</span> <span class="nn">xsInterface.containers.perturbationparameters</span> <span class="k">import</span> <span class="n">Perturbations</span>
+<span class="kn">from</span> <span class="nn">xsInterface.containers.singleset</span> <span class="k">import</span> <span class="n">SingleSet</span>
 </pre></div>
 </div>
 <div class="section" id="data-settings">
@@ -256,7 +255,7 @@ incdicate if all data in meta must be defined</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -273,7 +272,7 @@ incdicate if all data in meta must be defined</p>
       &copy;2022, Dan Kotlyar.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

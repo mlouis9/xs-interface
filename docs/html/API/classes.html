@@ -1,19 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DataSettings &#8212; xsInterface 0.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="EnergyCondensation" href="functions.html" />
@@ -36,9 +35,9 @@
             
   <div class="section" id="datasettings">
 <span id="api-datasettings"></span><h1>DataSettings<a class="headerlink" href="#datasettings" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
+<dl class="class">
 <dt id="xsInterface.containers.datasettings.DataSettings">
-<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.datasettings.</code><code class="sig-name descname">DataSettings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NG</span></em>, <em class="sig-param"><span class="n">DN</span></em>, <em class="sig-param"><span class="n">macro</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">micro</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">kinetics</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">meta</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">isotopes</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.datasettings.</code><code class="sig-name descname">DataSettings</code><span class="sig-paren">(</span><em class="sig-param">NG</em>, <em class="sig-param">DN</em>, <em class="sig-param">macro=True</em>, <em class="sig-param">micro=False</em>, <em class="sig-param">kinetics=False</em>, <em class="sig-param">meta=False</em>, <em class="sig-param">isotopes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stores the names and data that are expected to be stored on containers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -53,7 +52,7 @@
 </ul>
 </dd>
 </dl>
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.datasettings.DataSettings.NG">
 <code class="sig-name descname">NG</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.NG" title="Permalink to this definition">¶</a></dt>
 <dd><p>number of energy groups for multi-group parameters</p>
@@ -64,7 +63,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.datasettings.DataSettings.DN">
 <code class="sig-name descname">DN</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.DN" title="Permalink to this definition">¶</a></dt>
 <dd><p>delayed neutron groups for kinetic parameters</p>
@@ -75,7 +74,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.datasettings.DataSettings.dataFlags">
 <code class="sig-name descname">dataFlags</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.dataFlags" title="Permalink to this definition">¶</a></dt>
 <dd><p>boolean flags to indicate the data types that are provided</p>
@@ -86,7 +85,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.datasettings.DataSettings.macro">
 <code class="sig-name descname">macro</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.macro" title="Permalink to this definition">¶</a></dt>
 <dd><p>contains all the macro attributes (e.g., <code class="docutils literal notranslate"><span class="pre">abs</span></code>)</p>
@@ -97,7 +96,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.datasettings.DataSettings.micro">
 <code class="sig-name descname">micro</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.micro" title="Permalink to this definition">¶</a></dt>
 <dd><p>contains all the micro attributes for all the isotopes (e.g., <code class="docutils literal notranslate"><span class="pre">fiss</span></code>)</p>
@@ -108,7 +107,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.datasettings.DataSettings.kinetics">
 <code class="sig-name descname">kinetics</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.kinetics" title="Permalink to this definition">¶</a></dt>
 <dd><p>contains all the kinetic attributes (e.g., <code class="docutils literal notranslate"><span class="pre">beta</span></code>)</p>
@@ -119,7 +118,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.datasettings.DataSettings.meta">
 <code class="sig-name descname">meta</code><a class="headerlink" href="#xsInterface.containers.datasettings.DataSettings.meta" title="Permalink to this definition">¶</a></dt>
 <dd><p>contains all the metadata attributes (e.g., <code class="docutils literal notranslate"><span class="pre">time</span></code>)</p>
@@ -130,7 +129,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt>
 <code class="sig-name descname">AddData(dataType, attributes, attrDims=None):</code></dt>
 <dd><p>Add relevant macroscopic/microscopic/meta data</p>
@@ -150,7 +149,7 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span> <span class="o">=</span> <span class="n">DataSettings</span><span class="p">(</span><span class="n">NG</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">DN</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span> <span class="o">=</span> <span class="n">DataSettings</span><span class="p">(</span><span class="n">NG</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">DN</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isotopes</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -159,9 +158,9 @@
 </div>
 <div class="section" id="perturbations">
 <span id="api-perturbations"></span><h1>Perturbations<a class="headerlink" href="#perturbations" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
+<dl class="class">
 <dt id="xsInterface.containers.perturbationparameters.Perturbations">
-<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.perturbationparameters.</code><code class="sig-name descname">Perturbations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">branchN</span></em>, <em class="sig-param"><span class="n">branches</span></em>, <em class="sig-param"><span class="n">histN</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">histories</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeValues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeUnits</span><span class="o">=</span><span class="default_value">'MWd/kg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.perturbationparameters.</code><code class="sig-name descname">Perturbations</code><span class="sig-paren">(</span><em class="sig-param">branchN</em>, <em class="sig-param">branches</em>, <em class="sig-param">histN=None</em>, <em class="sig-param">histories=None</em>, <em class="sig-param">timeValues=None</em>, <em class="sig-param">timeUnits='MWd/kg'</em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stores the names and values of the perturbation parameters.</p>
 <p>The container uses the following structure:</p>
 <ul class="simple">
@@ -250,7 +249,7 @@
 </ul>
 </dd>
 </dl>
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.perturbationparameters.Perturbations.branches">
 <code class="sig-name descname">branches</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.branches" title="Permalink to this definition">¶</a></dt>
 <dd><p>contains bracnhes names and values (set to None)</p>
@@ -261,7 +260,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.perturbationparameters.Perturbations.histories">
 <code class="sig-name descname">histories</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.histories" title="Permalink to this definition">¶</a></dt>
 <dd><p>contains histories names and values (set to None)</p>
@@ -272,7 +271,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.perturbationparameters.Perturbations.time">
 <code class="sig-name descname">time</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.time" title="Permalink to this definition">¶</a></dt>
 <dd><p>contains values and units</p>
@@ -283,7 +282,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.perturbationparameters.Perturbations.timeUnits">
 <code class="sig-name descname">timeUnits</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.timeUnits" title="Permalink to this definition">¶</a></dt>
 <dd><p>indicate time or burnup by indicating the units</p>
@@ -294,7 +293,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.perturbationparameters.Perturbations.branchN">
 <code class="sig-name descname">branchN</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.branchN" title="Permalink to this definition">¶</a></dt>
 <dd><p>number of perturbation states</p>
@@ -305,7 +304,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.perturbationparameters.Perturbations.historyM">
 <code class="sig-name descname">historyM</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations.historyM" title="Permalink to this definition">¶</a></dt>
 <dd><p>number of histories / main branches</p>
@@ -316,7 +315,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.perturbationparameters.Perturbations._branchList">
 <code class="sig-name descname">_branchList</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations._branchList" title="Permalink to this definition">¶</a></dt>
 <dd><p>user-defined names of all the states (e.g., fuelT, modDens)</p>
@@ -327,7 +326,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.perturbationparameters.Perturbations._historyList">
 <code class="sig-name descname">_historyList</code><a class="headerlink" href="#xsInterface.containers.perturbationparameters.Perturbations._historyList" title="Permalink to this definition">¶</a></dt>
 <dd><p>user-defined names of all the histories (e.g., nom, hist1, hist2)</p>
@@ -354,7 +353,7 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">Perturbations</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;fuelT&quot;</span><span class="p">,</span> <span class="s2">&quot;modDens&quot;</span><span class="p">,</span> <span class="s2">&quot;coolDens&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">Perturbations</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;fuelT&quot;</span><span class="p">,</span> <span class="s2">&quot;modDens&quot;</span><span class="p">,</span> <span class="s2">&quot;coolDens&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -362,9 +361,9 @@
 </div>
 <div class="section" id="singleset">
 <span id="api-singleset"></span><h1>SingleSet<a class="headerlink" href="#singleset" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
+<dl class="class">
 <dt id="xsInterface.containers.singleset.SingleSet">
-<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.singleset.</code><code class="sig-name descname">SingleSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataSetup</span></em>, <em class="sig-param"><span class="n">statesSetup</span></em>, <em class="sig-param"><span class="n">fluxName</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">energyStruct</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">relPrecision</span><span class="o">=</span><span class="default_value">1e-05</span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.singleset.</code><code class="sig-name descname">SingleSet</code><span class="sig-paren">(</span><em class="sig-param">dataSetup</em>, <em class="sig-param">statesSetup</em>, <em class="sig-param">fluxName=None</em>, <em class="sig-param">energyStruct=None</em>, <em class="sig-param">relPrecision=1e-05</em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Container that stores the most basic data set</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -382,7 +381,7 @@ lowest energy bound.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.singleset.SingleSet.state">
 <code class="sig-name descname">state</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.state" title="Permalink to this definition">¶</a></dt>
 <dd><p>describes the state (branch, time, history)</p>
@@ -393,7 +392,7 @@ lowest energy bound.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.singleset.SingleSet.macro">
 <code class="sig-name descname">macro</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.macro" title="Permalink to this definition">¶</a></dt>
 <dd><p>names and values of macro data</p>
@@ -404,7 +403,7 @@ lowest energy bound.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.singleset.SingleSet.micro">
 <code class="sig-name descname">micro</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.micro" title="Permalink to this definition">¶</a></dt>
 <dd><p>names and values of micro data</p>
@@ -415,7 +414,7 @@ lowest energy bound.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.singleset.SingleSet.kinetics">
 <code class="sig-name descname">kinetics</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.kinetics" title="Permalink to this definition">¶</a></dt>
 <dd><p>names and values of kinetics data</p>
@@ -426,7 +425,7 @@ lowest energy bound.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="xsInterface.containers.singleset.SingleSet.meta">
 <code class="sig-name descname">meta</code><a class="headerlink" href="#xsInterface.containers.singleset.SingleSet.meta" title="Permalink to this definition">¶</a></dt>
 <dd><p>names and values of meta data</p>
@@ -451,9 +450,164 @@ lowest energy bound.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ss</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>               <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">4E+5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="multisets">
+<span id="api-multisets"></span><h1>MultiSets<a class="headerlink" href="#multisets" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="xsInterface.containers.multiplesets.MultipleSets">
+<em class="property">class </em><code class="sig-prename descclassname">xsInterface.containers.multiplesets.</code><code class="sig-name descname">MultipleSets</code><span class="sig-paren">(</span><em class="sig-param">states</em>, <em class="sig-param">macro=False</em>, <em class="sig-param">micro=False</em>, <em class="sig-param">kinetics=False</em>, <em class="sig-param">meta=False</em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets" title="Permalink to this definition">¶</a></dt>
+<dd><p>A container to store the data for all the perturbation states</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>states</strong> (<em>Perturbations object</em>) – an object with perturbation states including branches, history,
+and time parameters.</p></li>
+<li><p><strong>macro</strong> (<em>bool</em>) – flag to incdicate if all data in macro must be defined</p></li>
+<li><p><strong>micro</strong> (<em>bool</em>) – flag to incdicate if all data in micro must be defined</p></li>
+<li><p><strong>kinetics</strong> (<em>bool</em>) – flag to incdicate if all data in kinetics must be defined</p></li>
+<li><p><strong>meta</strong> (<em>bool</em>) – flag to incdicate if all data in meta must be defined</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="xsInterface.containers.multiplesets.MultipleSets.setIds">
+<code class="sig-name descname">setIds</code><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.setIds" title="Permalink to this definition">¶</a></dt>
+<dd><p>complete list of strings for all the sets to be provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xsInterface.containers.multiplesets.MultipleSets.macro">
+<code class="sig-name descname">macro</code><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.macro" title="Permalink to this definition">¶</a></dt>
+<dd><p>flag to incdicate if all data in macro must be defined</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xsInterface.containers.multiplesets.MultipleSets.micro">
+<code class="sig-name descname">micro</code><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.micro" title="Permalink to this definition">¶</a></dt>
+<dd><p>flag to incdicate if all data in micro must be defined</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xsInterface.containers.multiplesets.MultipleSets.kinetics">
+<code class="sig-name descname">kinetics</code><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.kinetics" title="Permalink to this definition">¶</a></dt>
+<dd><p>flag to incdicate if all data in kinetics must be defined</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xsInterface.containers.multiplesets.MultipleSets.meta">
+<code class="sig-name descname">meta</code><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>flag to incdicate if all data in meta must be defined</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xsInterface.containers.multiplesets.MultipleSets.sets">
+<code class="sig-name descname">sets</code><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.sets" title="Permalink to this definition">¶</a></dt>
+<dd><p>keys are indices and values are <code class="docutils literal notranslate"><span class="pre">SingleSet</span></code> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xsInterface.containers.multiplesets.MultipleSets.nsets">
+<code class="sig-name descname">nsets</code><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.nsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of <code class="docutils literal notranslate"><span class="pre">SingleSet``s</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">``MultipleSets</span></code> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xsInterface.containers.multiplesets.MultipleSets.states">
+<code class="sig-name descname">states</code><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.states" title="Permalink to this definition">¶</a></dt>
+<dd><p>description of all the perturbation states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xsInterface.containers.multiplesets.MultipleSets.setsmap">
+<code class="sig-name descname">setsmap</code><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.setsmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>link between the nametuples that describe the state and
+indices in the <code class="docutils literal notranslate"><span class="pre">sets</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">macro</span></code>, <code class="docutils literal notranslate"><span class="pre">micro</span></code>, <code class="docutils literal notranslate"><span class="pre">kinetics</span></code>, <code class="docutils literal notranslate"><span class="pre">meta</span></code> are not boolean.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt>
+<code class="sig-name descname">Add : add a single multiple data for different states</code></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<code class="sig-name descname">Get : obtain a single ``SingleSet`` object for a specific state</code></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<code class="sig-name descname">DataTable : obtain table with states and values for all/selected attributes</code></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<code class="sig-name descname">Values : obtain values of a specific property over multiple states</code></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<code class="sig-name descname">Interpolate : (TBC) obtain the interpolated/weighted</code></dt>
+<dd></dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ms</span> <span class="o">=</span> <span class="n">MultipleSets</span><span class="p">(</span><span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -511,7 +665,7 @@ lowest energy bound.</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -528,7 +682,7 @@ lowest energy bound.</p></li>
       &copy;2022, Dan Kotlyar.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -19,3 +19,11 @@ SingleSet
 ----------
 
 .. autoclass:: xsInterface.containers.singleset::SingleSet
+
+
+.. _api-multisets:
+
+MultiSets
+----------
+
+.. autoclass:: xsInterface.containers.multiplesets::MultipleSets

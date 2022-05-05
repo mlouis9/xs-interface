@@ -262,3 +262,31 @@ def _issortedarray(var, description):
     if not (np.diff(var) >= 0).all():
         raise ValueError("{} must be sorted {}"
                          .format(description, var))
+
+
+def _arriscloseInList(myarr, description, list_arrays):
+    """test for approximate equality (for floating point types)"""
+    idx0 = -1
+    for idx, elem in enumerate(list_arrays):
+        if (elem.size == myarr.size) and np.allclose(elem, myarr):
+            idx0 = idx
+            break
+    if idx0 > -1:
+        return idx0
+    else:
+        raise ValueError("{} {} does not exist in {}"
+                         .format(description, myarr, list_arrays))
+
+
+def _arrIdenticalInList(myarr, description, list_arrays):
+    """test for identical equality"""
+    idx0 = -1
+    for idx, elem in enumerate(list_arrays):
+        if (elem.size == myarr.size) and np.array_equal(elem, myarr):
+            idx0 = idx
+            break
+    if idx0 > -1:
+        return idx0
+    else:
+        raise ValueError("{} {} does not exist in {}"
+                         .format(description, myarr, list_arrays))

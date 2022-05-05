@@ -155,7 +155,47 @@ def test_getSet():
         ms.Add(ss0)
         ms.Get(branch=[1, 2, 3], history="NO_HISTORY")
 
-    with pytest.raises(KeyError, match="State*"):
+    with pytest.raises(ValueError, match="History*"):
         ms = MultipleSets(states, macro=True, micro=False)
         ms.Add(ss0)
         ms.Get(branch=[1, 2, 3], history=[3, 4, 5])
+
+
+def test_DataTable():
+    """Errors when obtaining the table with all states and data"""
+    
+    with pytest.raises(TypeError, match="Attributes*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.DataTable(attrs = 4444)  
+    
+    with pytest.raises(TypeError, match="Macro*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.DataTable(macroFlag="NOT_BOOLEAN")   
+        
+    with pytest.raises(KeyError, match="Error*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.DataTable(attrs="BAD_ATTR")
+
+
+def test_Values():
+    """Errors when obtaining the table with all states and data"""
+    
+    with pytest.raises(AttributeError, match="No pandas*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.Values()  
+    
+    with pytest.raises(KeyError, match="Attribute*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.DataTable()
+        ms.Values('BAD_ATTR')    
+        
+    with pytest.raises(TypeError, match="Attributes*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.DataTable()
+        ms.Values(44444)  

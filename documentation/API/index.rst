@@ -18,6 +18,10 @@ Classes
     - multi-group microscopic cross sections
     - kinetic parameters
     - metadata
+- :ref:`api-multisets`: Container to store the data for all the perturbation states as a function of:
+    - history,
+    - time, and
+    - branch
 
 
 .. toctree::
