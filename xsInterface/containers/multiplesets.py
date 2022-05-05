@@ -5,9 +5,11 @@ Container to collect and store ``SingleSet``s.
 The container incorporates methods to allow adding and retreiving data easily:
     - Add method (store single or multiple ``SingleSet``s)
     - Get method (obtain a ``SingleSet``)
+    - Values 
+    - Condense
 It also includes processing of data, such as:
-    - Intersecting aspecific values over multiple single sets.
-    - COMPLETE
+    - Intersecting a specific values over multiple single sets.
+    - 
 
 
 
@@ -28,11 +30,14 @@ Get method - 04/16/2022 - DK
 from collections import namedtuple
 
 import numpy as np
+import pandas as pd
+import itertools
 
 from xsInterface.containers.singleset import SingleSet
 from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.errors.checkerrors import _isobject, _isbool, _isint,\
-    _isarray, _is1darray, _inlist, _isnumber
+    _isarray, _is1darray, _inlist, _isnumber, _inrange, _arriscloseInList,\
+    _islist
 
 
 StateDescrp = namedtuple("State", ["history", "time", "branch"])
@@ -163,7 +168,8 @@ class MultipleSets():
             self.setsmap[str(stateId)] = self.nsets
             self.nsets += 1
 
-    def Get(self, setIdx=None, branch=None, time=None, history=None):
+    def Get(self, setIdx=None, branch=None, time=None, history=None,
+            errFlag=False):
         """Obtains a SingleSet object for a specific state
 
         Parameters
@@ -176,6 +182,8 @@ class MultipleSets():
             value of the time point
         branch : array
             set of values for the specific branch
+        errFlag : boolean
+            indicates whether error should be raised if state not found
 
         Returns
         -------
@@ -200,13 +208,15 @@ class MultipleSets():
         # check variable type
         if setIdx is not None:
             _isint(setIdx, "Set Index")
+            _inrange(setIdx, "Set Index", [0, self.nsets-1])
         elif branch is not None:
             _isarray(branch, "Branch")
-            branch = np.array(branch)
+            branch = np.array(branch, dtype=float)
             _is1darray(branch, "Branch")
             if time is not None:
                 _isnumber(time, "Time")
                 time = float(time)
+                _inlist(time, "Time", self.states.time['values'])
             if history is not None:
                 if isinstance(history, str):  # name of history is provided
                     _inlist(history, "History",
@@ -215,13 +225,23 @@ class MultipleSets():
 
                 else:  # numerical value of history provided
                     _isarray(history, "History")
-                    history = np.array(history, dtype=float)
                     _is1darray(history, "History")
-
+                    history = np.array(history, dtype=float)
+                    historyList = list(self.states.histories.values())
+                    idxHist =\
+                        _arriscloseInList(history, "History", historyList)
+                    history = historyList[idxHist]
+            _isbool(errFlag, "Error flag")
             # Obtain the state description
             stateId = str(StateDescrp(history, time, branch))
-            _inlist(stateId, "State", list(self.setsmap.keys()))
-            setIdx = self.setsmap[stateId]
+            try:
+                _inlist(stateId, "State", list(self.setsmap.keys()))
+                setIdx = self.setsmap[stateId]
+            except KeyError:
+                if errFlag:
+                    _inlist(stateId, "State", list(self.setsmap.keys()))
+                else:
+                    return None
         else:
             raise KeyError("Set index or the history-time-branch values must "
                            "be provided.")
@@ -231,7 +251,65 @@ class MultipleSets():
         """direct method to obtain set only if index is known"""
         return self.sets[setIdx]
 
-    def Values(self, attr, histories=None, times=None, branches=None):
+    def DataTable(self, attrs):
+        """Obtain a table that contains all the existing states and values
+
+        Loops over the ``MultipleSets`` object to collect all existing states
+        and values for a specific attribute.
+
+        Parameters
+        ----------
+        attr : ste
+            name of an existing field/attribute within a `SingleSet` object
+
+
+        Returns
+        -------
+        table : Pandas object
+            contains all the state names, branches, and values for the specific
+
+
+        Examples
+        --------
+        >>> ms.DataTable('flx')
+
+        """
+
+        if isinstance(attrs, str):
+            attrs = [attrs]
+        _islist(attrs, "Attributes")
+
+        # Pandas table to store information of time, states, and branch values
+        df = pd.DataFrame(
+            columns=["history", "time"] + self.states._branchList + attrs)
+
+        # histrorical branches
+        hstList = [None]
+        if not self.states._historyList == []:
+            hstList = self.states._historyList
+
+        # time points
+        timeVals = [None]
+        if not self.states.time == {}:
+            timeVals = self.states.time['values']
+
+        idx = 0
+        # loop over all histories, times, and branches
+        branches = list(self.states.branches.values())
+        for history in hstList:
+            for time in timeVals:
+                for branch in itertools.product(*branches):
+                    branchArr = np.array(branch, dtype=float)
+                    ss = self.Get(branch=branchArr, time=time, history=history)
+                    if ss is not None:
+                        vals = ss.GetValues(attrs)
+                        df.loc[idx] = [history, time] + list(branchArr) +\
+                                list(vals.values())
+                        idx += 1
+                        
+        return df
+
+    def Values(self, attrs, histories=None, times=None, branches=None):
         """Obtain the values of the specific attribute over a range of states
 
         The method obtains the values across all the provided states.
@@ -239,9 +317,9 @@ class MultipleSets():
 
         Parameters
         ----------
-        channel : str
-            identifier of the channel
-        layer : int
+        histories : list of strings or arrays
+            arrays 
+        times : array
             identifier of the axial layer
         pty : str
             name of the property
@@ -267,4 +345,13 @@ class MultipleSets():
 
         """
 
-        pass
+        # Error checking
+        if histories is not None:
+            _islist(histories, "Histories")
+        
+        # Obtain the 
+        if (histories and times and branches) is not None:      
+            for history in histories:
+                for time in times:
+                    for branch in branches:
+                        ss = self.Get(branch=branch, time=time, history=history)

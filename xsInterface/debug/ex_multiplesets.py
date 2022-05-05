@@ -43,13 +43,10 @@ rc.AddData("meta", ["date"])
 #                       Perturbations / Branches States
 # -----------------------------------------------------------------------------
 states = Perturbations(branchN=3, branches=["fuel", "dens", "cool"],
-                       histN=2, histories=["nom", "pert"],
                        timeValues=[0, 2, 2.5, 3, 4], timeUnits='MWd/kg')
 states.AddBranches(fuel=[600, 900, 1200, 1500],
                    dens=[600, 700, 800],
                    cool=[500, 600])
-states.AddHistories(nom=[900, 700, 550],
-                    pert=[950, 750, 600])
 
 
 # -----------------------------------------------------------------------------
@@ -58,7 +55,7 @@ states.AddHistories(nom=[900, 700, 550],
 ss0 = SingleSet(rc, states, fluxName="inf_flx",
                 energyStruct=[10.0E+6, 0.6025, 0.0])
 #ss0.AddState([600.001, 600, 500], "nom", timePoint=2.5)
-ss0.AddState([600.001, 600, 500], "nom", timePoint=2.5)
+ss0.AddState([600.0, 600, 500], timePoint=2.5)
 # Add data
 # --------------
 ss0.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4],
@@ -78,7 +75,7 @@ ss0.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
 # -----------------------------------------------------------------------------
 ss1 = SingleSet(rc, states, fluxName="inf_flx",
                 energyStruct=[10.0E+6, 0.6025, 0.0])
-ss1.AddState([900, 600, 500], "nom", timePoint=2.5)
+ss1.AddState([900, 600, 500], timePoint=2.5)
 # Add data
 # --------------
 ss1.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4],
@@ -86,11 +83,16 @@ ss1.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4],
 ss1.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
 
 # -----------------------------------------------------------------------------
-#                    Add data to a MultipleSets Container
+#                    Add/Get data to a MultipleSets Container
 # -----------------------------------------------------------------------------
 ms = MultipleSets(states, macro=True, micro=False, kinetics=False, meta=False)
 ms.Add(ss0, ss1)
-ms.Get(branch=[600, 900, 900], time=2.5, history=[900, 700, 550])
-ms.Get(branch=[600, 900, 900], time=2.5, history="nom")
-ms.Get(branch=[600, 900, 900], time=2.5, history=[900, 700, 550.0001])
-ms[0]
+ms.Get(branch=[600, 600, 500], time=2.5)
+
+# -----------------------------------------------------------------------------
+#                    Get Values from MultipleSets Container
+# -----------------------------------------------------------------------------
+#ms.DataTable('inf_nsf')
+ms.DataTable(['inf_nsf', 'inf_flx'])
+
+#a = 1

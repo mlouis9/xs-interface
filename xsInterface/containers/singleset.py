@@ -32,7 +32,7 @@ from xsInterface.functions.energycondensation import EnergyCondensation
 from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
     _is1darray, _isequallength, _issortedarray, _inlist,\
     _isnumber, _isnonnegative, _isint, _inrange, _exp2dshape, _compare2lists,\
-    _islist, _isnonNegativeArray
+    _islist, _isnonNegativeArray, _arriscloseInList
 
 # REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
 
@@ -151,12 +151,12 @@ class SingleSet():
         >>> ss.AddState([600.001, 600, 500], "nom", timePoint=2.5)
 
         """
-        branchIndices, branchValues, timeIdx, timePoint =\
+        branchIndices, branchValues, timeIdx, timePoint, historyValue =\
             self._stateErrors(branch, history, timeIdx, timePoint)
         stateDict = {"stateVals": branchValues, "stateIdx": branchIndices,
                      "timeIdx": timeIdx, "timePoint": timePoint,
                      "historyName": history,
-                     "historyVals": self._sSetup.histories[history]}
+                     "historyVals": historyValue}
         self.state = stateDict
 
     def AddData(self, dtype, **kwargs):
@@ -403,7 +403,7 @@ class SingleSet():
 
         # Array with indices correponding to the branch values
         branchIndices = np.zeros(stSetup._branchN, dtype=int)
-        branchValues = np.zeros(stSetup._branchN, dtype=int)
+        branchValues = np.zeros(stSetup._branchN, dtype=float)
 
         # check that a branch is properly defined
         _isarray(branch, "Branch values")
@@ -413,24 +413,25 @@ class SingleSet():
 
         # check that the value for each branch is defines
         for brIdx, brName in enumerate(stSetup._branchList):
-            # create lower (val0) and upper (val1) bounds of the branches
-            val0 =\
-                stSetup.branches[brName]-self._relPrc*stSetup.branches[brName]
-            val1 =\
-                stSetup.branches[brName]+self._relPrc*stSetup.branches[brName]
-            idx, = np.where((branch[brIdx] > val0) & (branch[brIdx] < val1))
-            if not idx.size:
+            # Find the closest value numerically
+            cond = np.isclose(stSetup.branches[brName],
+                              branch[brIdx], rtol=self._relPrc)
+            if not cond.any():
                 raise ValueError(
                     "Branch <{}> with value {} does not exist!!!\n in the "
                     "pre-defined branch points {}"
                     .format(brName, branch[brIdx], stSetup.branches[brName]))
             else:
-                branchIndices[brIdx] = idx[0]
-                branchValues[brIdx] = branch[idx[0]]
+                idx = np.where(cond)[0][0]
+                branchIndices[brIdx] = idx
+                branchValues[brIdx] = stSetup.branches[brName][idx]
 
         if history is not None:
             _isstr(history, "History name")
             _inlist(history, "History name", stSetup._historyList)
+            historyValue = stSetup.histories[history]
+        else:
+            historyValue = None
         # check that timeIdx or timePoint are properly defined
         if timeIdx is not None:
             _isint(timeIdx, "Time index")
@@ -440,22 +441,19 @@ class SingleSet():
         elif timePoint is not None:
             _isnumber(timePoint, "Time point")
             _isnonnegative(timePoint, "Time point")
-            lowBound =\
-                stSetup.time["values"]-self._relPrc*stSetup.time["values"]
-            upperBound =\
-                stSetup.time["values"]+self._relPrc*stSetup.time["values"]
-            timeIdx, = np.where((timePoint > lowBound) &
-                                (timePoint < upperBound))
-            if not timeIdx.size:
+            # Find the closest (numerically) time value 
+            cond = np.isclose(stSetup.time["values"],
+                              timePoint, rtol=self._relPrc)
+            if not cond.any():
                 raise ValueError("Time point {} does not exist!!!\n in the "
                                  "pre-defined points on the branches "
                                  "container {}"
                                  .format(timePoint, stSetup.time["values"]))
             else:
-                timeIdx = timeIdx[0]
+                timeIdx = np.where(cond)[0][0]
                 timePoint = stSetup.time["values"][timeIdx]
 
-        return branchIndices, branchValues, timeIdx, timePoint
+        return branchIndices, branchValues, timeIdx, timePoint, historyValue
 
     def _addMacroData(self, attr, value):
         """add data/attributes values
