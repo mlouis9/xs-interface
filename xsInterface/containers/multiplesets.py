@@ -94,9 +94,9 @@ class MultipleSets():
     -------
     Add : add a single multiple data for different states
     Get : obtain a single ``SingleSet`` object for a specific state
+    DataTable : obtain table with states and values for all/selected attributes
     Values : obtain values of a specific property over multiple states
-    Complete : complete data for missing state points
-    Interpolate : obtain the interpolated/weighted
+    Interpolate : (TBC) obtain the interpolated/weighted
 
     Examples
     --------
