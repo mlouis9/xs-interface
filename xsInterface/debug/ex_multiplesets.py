@@ -11,7 +11,7 @@ It also includes processing of data, such as:
 
 
 Created on Fri Apr 15 05:30:00 2022 @author: Dan Kotlyar
-Last updated on Fri Apr 15 06:30:00 2022 @author: Dan Kotlyar
+Last updated on Thu May 05 09:15:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -81,7 +81,8 @@ ss1.AddState([900, 600, 500], timePoint=2.5)
 ss1.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4],
             kappa=[0.3, 0.4], inf_flx=[0.3, 0.4])
 ss1.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
-
+ss1.AddData("kinetics", beta=[2, 2, 2, 2, 2, 2, 2],
+            decay=[1, 1, 1, 1, 1, 1, 1])
 # -----------------------------------------------------------------------------
 #                    Add/Get data to a MultipleSets Container
 # -----------------------------------------------------------------------------
@@ -93,6 +94,10 @@ ms.Get(branch=[600, 600, 500], time=2.5)
 #                    Get Values from MultipleSets Container
 # -----------------------------------------------------------------------------
 #ms.DataTable('inf_nsf')
-ms.DataTable(['inf_nsf', 'inf_flx'])
+pdTable = ms.DataTable(['inf_nsf', 'inf_rabs', 'inf_flx'])
+
+pdTable1 = ms.DataTable(macroFlag=True, microFlag=False, kineticsFlag=True)
+
+ms.Values(attrs=None, dens=600)
 
 #a = 1

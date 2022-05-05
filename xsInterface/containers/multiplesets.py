@@ -5,16 +5,17 @@ Container to collect and store ``SingleSet``s.
 The container incorporates methods to allow adding and retreiving data easily:
     - Add method (store single or multiple ``SingleSet``s)
     - Get method (obtain a ``SingleSet``)
-    - Values 
-    - Condense
+    - DataTable (obtain states and data values in an easy-to-read table format)
+    - Values (obtain values for specific set of states)
+    - Condense (to be completed based on ``SingleSet``)
 It also includes processing of data, such as:
-    - Intersecting a specific values over multiple single sets.
-    - 
+    - Future: Intersecting a specific values over multiple single sets.
+    - Interpolation
 
 
 
 Created on Thu Apr 14 05:45:00 2022 @author: Dan Kotlyar
-Last updated on Sat Apr 16 08:30:00 2022 @author: Dan Kotlyar
+Last updated on Thu May 05 12:30:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -24,6 +25,8 @@ List changes or additions:
 __init__ capability - 04/14/2022 - DK
 Add method - 04/14/2022 - DK
 Get method - 04/16/2022 - DK
+DataTable - 05/05/2022 - DK
+Values - 05/05/2022 - DK
 
 """
 
@@ -251,33 +254,76 @@ class MultipleSets():
         """direct method to obtain set only if index is known"""
         return self.sets[setIdx]
 
-    def DataTable(self, attrs):
-        """Obtain a table that contains all the existing states and values
+    def DataTable(self, attrs=None, macroFlag=True, microFlag=True,
+                  kineticsFlag=True, metaFlag=False):
+        """Create a table with existing states and values for all attributes
 
         Loops over the ``MultipleSets`` object to collect all existing states
         and values for a specific attribute.
 
         Parameters
         ----------
-        attr : ste
-            name of an existing field/attribute within a `SingleSet` object
+        attrs : string or list of strings
+            name of existing fields/attributes within a `SingleSet` object
+        macroFlag : boolean, default is True
+            flag to indicate if all macro attributes are included in the table
+        microFlag : boolean, default is True
+            flag to indicate if all micro attributes are included in the table
+        kineticsFlag : boolean, default is True
+            flag to indicate if all kinetics attributes are included in table
+        metaFlag : boolean, default is False
+            flag to indicate if all meta attributes are included in the table        
 
+        Attributes
+        ----------
+        pandasTable : Pandas object
+            contains all the state names, branches, and values for the specific
 
         Returns
         -------
         table : Pandas object
             contains all the state names, branches, and values for the specific
 
+        Raises
+        ------
+        TypeError
+            If ``attrs`` is not string, list, or None.
+            If ``macroFlag``, ``microFlag``, ``kineticsFlag``, ``metaFlag`` are
+            not booleans.
+
 
         Examples
         --------
-        >>> ms.DataTable('flx')
+        >>> pdTable = ms.DataTable('flx')
+        >>> pdTable = ms.DataTable(['inf_nsf', 'inf_rabs', 'inf_flx'])
+        >>> pdTable = ms.DataTable(macroFlag=True, microFlag=False,
+                                   kineticsFlag=False)
+        ...   history  time  ...                   beta
+        ...   0    None   2.5  ...  [1, 1, 1, 1, 1, 1, 1]
+        ...   1    None   2.5  ...  [2, 2, 2, 2, 2, 2, 2]
 
         """
 
-        if isinstance(attrs, str):
-            attrs = [attrs]
-        _islist(attrs, "Attributes")
+        if attrs is not None:
+            if isinstance(attrs, str):
+                attrs = [attrs]
+            _islist(attrs, "Attributes")
+        else:
+            attrs = []
+            _isbool(macroFlag, "Macro flag")
+            _isbool(microFlag, "Micro flag")
+            _isbool(kineticsFlag, "Kinetics flag")
+            _isbool(metaFlag, "Meta flag")
+            if self.sets != {}:
+                dSetup = self.sets[0]._dSetup
+                if macroFlag:
+                    attrs = attrs + dSetup.macro["attributes"]
+                if microFlag:
+                    attrs = attrs + dSetup.micro["attributes"]
+                if kineticsFlag:
+                    attrs = attrs + dSetup.kinetics["attributes"]
+                if metaFlag:
+                    attrs = attrs + dSetup.meta["attributes"]
 
         # Pandas table to store information of time, states, and branch values
         df = pd.DataFrame(
@@ -300,58 +346,100 @@ class MultipleSets():
             for time in timeVals:
                 for branch in itertools.product(*branches):
                     branchArr = np.array(branch, dtype=float)
+                    # Obtain the state description
+                    stateId = StateDescrp(history, time, branch)
                     ss = self.Get(branch=branchArr, time=time, history=history)
                     if ss is not None:
+                        try:
+                            vals = ss.GetValues(attrs)
+                        except KeyError as detail:
+                            raise KeyError("Error in {}\n {} \n"
+                                           .format(stateId, detail))
                         vals = ss.GetValues(attrs)
                         df.loc[idx] = [history, time] + list(branchArr) +\
                                 list(vals.values())
                         idx += 1
                         
+        self.pandasTable = df
         return df
 
-    def Values(self, attrs, histories=None, times=None, branches=None):
+    def Values(self, attrs=None, **kwargs):
         """Obtain the values of the specific attribute over a range of states
 
         The method obtains the values across all the provided states.
+        Specific attributes can be selected.
 
 
         Parameters
         ----------
-        histories : list of strings or arrays
-            arrays 
-        times : array
-            identifier of the axial layer
-        pty : str
-            name of the property
+        attrs : string, list of strings
+            name of the attributes to be included in the returned table.
+            If None then all the attributes are returned
+        kwargs : named arguments
+            keys represent the data name and value represent the values.
+            The filtering of data is performed according to kwargs.
+            The use can filter according to a specific state, time, or history
 
         Returns
         -------
-        vals : float, str, list or ndarray
-            values for the property across multiple spatial regions
+        pd : Pandas Object (dataframe)
+            states and values across multiple states
 
         Raises
         ------
         TypeError
-            If ``channel`` is not str and ``layer`` is not int.
+            If ``attrs`` is not str, list of str, or None.
         KeyError
             If the node (channel, layer) does not exist.
         AttributeError
-            If the property ``pty`` does not exist.
+            If ``pandasTable`` is not an attribute on the object.
 
         Examples
         --------
-        >>> inputs.getvalues('A1', 1, 'Q')
-        3000
+        >>> ms.Values(attrs=None, dens=600)
+        ... history  time  ...                   beta                  decay
+        ... 0    None   2.5  ...  [1, 1, 1, 1, 1, 1, 1]  [1, 1, 1, 1, 1, 1, 1]
+        ... 1    None   2.5  ...  [2, 2, 2, 2, 2, 2, 2]  [1, 1, 1, 1, 1, 1, 1]
+
+        >>> ms.Values(attrs=None, time=2.5, fuel=900, dens=600)
+        ... history  time  ...                   beta                  decay
+        ... 1    None   2.5  ...  [2, 2, 2, 2, 2, 2, 2]  [1, 1, 1, 1, 1, 1, 1]
 
         """
 
-        # Error checking
-        if histories is not None:
-            _islist(histories, "Histories")
+        if not hasattr(self, 'pandasTable'):
+            raise AttributeError("No pandasTable attribute.\n Create using the"
+                             " DataTable method")
+        # pandas table with all states and values
+        pd = self.pandasTable
         
-        # Obtain the 
-        if (histories and times and branches) is not None:      
-            for history in histories:
-                for time in times:
-                    for branch in branches:
-                        ss = self.Get(branch=branch, time=time, history=history)
+        # Column index for the starting position of values
+        valsIdx0 = len(self.states._branchList) + 3  # 3 for (idx, hist., time)
+        idx = [i for i in range(valsIdx0)]  # indices to be included
+        
+
+        # Error checking for attributes
+        if attrs is not None:
+            if isinstance(attrs, str):
+                attrs = [attrs]
+            _islist(attrs, "Attributes")
+            for attr in attrs:
+                # attribute must exist in the table
+                _inlist(attr, "Attribute", pd.columns.values)
+                idx0 = pd.columns.get_loc(attr)
+                if idx0 not in idx:  # only if the column has not been added
+                    idx += [idx0]
+            
+        # loop over all the dependencies
+        for col, value in kwargs.items():
+            if not pd[col].isnull().any():  # check: column contains no None
+                pd = pd[pd[col] == value]  # select the values of interest in col.
+        
+        if attrs is not None:  # all attributes should be included
+            pd = pd.iloc[:, idx]
+        
+        return pd
+                
+                
+                
+                
