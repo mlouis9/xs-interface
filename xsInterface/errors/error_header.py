@@ -18,19 +18,15 @@ email: dan.kotlyar@me.gatech.edu
 # -----------------------------------------------------------------------------
 
 DataSettingsCard = {
-    "init":
-        {"NG": "number of energy groups for multi-group parameters",
-         "DN": "number of delayed neutron groups for kinetic parameters",
-         "macro": "macro data",
-         "micro": "micro data",
-         "kinetics": "kinetic data",
-         "meta": "metadata/general data",
-         "isotopes": "ZZAAA0/1 for all the isotopes"},
-    "AddData":
-        {"dataType": "select from macro / micro / kinetics / meta",
-         "attributes": "user-defined names for the provided data type",
-         "frmt": "select  array or dict", }
-        }
+    "NG": "number of energy groups for multi-group parameters",
+    "DN": "number of delayed neutron groups for kinetic parameters",
+    "macro": "macro data",
+    "micro": "micro data",
+    "kinetics": "kinetic data",
+    "meta": "metadata/general data",
+    "isotopes": "ZZAAA0/1 for all the isotopes",
+    "dim": "attr. dimensions (0=scalar, arrays are for dim > 0",
+    }
 
 SingleSetCard = {
     "init":
