@@ -10,7 +10,7 @@
 
 set settings NG 2 DN 7
 macro =  abs, fiss, nsf
-dim = 1, 1, 1
+dim_macro = 1, 1, 1, 1
 micro =  abs, fiss, nsf
 kinetics =  abs, fiss, nsf
 meta =  abs, fiss, nsf
