@@ -29,13 +29,13 @@ from xsInterface.errors.customerrors import InputCardError
 # -----------------------------------------------------------------------------
 path2File = os.path.abspath(os.getcwd()) + "\\inputfiles\\"
 
-def test_bad_settings():
+def test_bad_settings(inputSettings):
     """Errors when reseting the settings"""
 
-    inp = path2File  + "inp_example1"
 
     with pytest.raises(InputCardError, match="Expected inputs*"):
-        ReadInput(inp)
+        ReadInput(inputSettings)
 
 
+    
 
