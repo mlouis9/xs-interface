@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Input Cards &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../Examples/index.html" />
+    <link rel="prev" title="User’s Manual" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="input-cards">
+<span id="inputcards"></span><h1>Input Cards<a class="headerlink" href="#input-cards" title="Permalink to this headline">¶</a></h1>
+<p>A list of all the input cards is descrbed in the table below.
+Description on the format, comments, and magic capabilities is provided in <a class="reference internal" href="#gen-comments"><span class="std std-ref">General comments</span></a>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 77%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Set what?</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#i-settings"><span class="std std-ref">settings</span></a></p></td>
+<td><p>Names and dimensions of variables to be defined.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#i-states"><span class="std std-ref">states</span></a></p></td>
+<td><p>Branches, history, and time-dependent perturbations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#i-data"><span class="std std-ref">data</span></a></p></td>
+<td><p>Define data to be added.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="general-comments">
+<span id="gen-comments"></span><h2>General comments<a class="headerlink" href="#general-comments" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Comments are denoted as <code class="docutils literal notranslate"><span class="pre">#</span></code> and <code class="docutils literal notranslate"><span class="pre">%</span></code>. Input followowing these signs is ignored.</p></li>
+<li><p>Commas are allowed.</p></li>
+<li><p>Case insensitive (captial and lower cases are allowed)</p></li>
+<li><dl class="simple">
+<dt>Setting lines can include or exclude the card name.</dt><dd><ul>
+<li><p>Example of excluding: <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">settings</span> <span class="pre">2</span> <span class="pre">7</span></code></p></li>
+<li><p>Example of including: <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">settings</span> <span class="pre">NG=2,</span> <span class="pre">DN=7</span></code></p></li>
+<li><p>The benifit of including is to determine the order at which values are provided.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">=</span></code> signs are allowed to be added (but not mandatory) when the card name is provided.</p></li>
+<li><p>Empty lines are allowed between settings lines.</p></li>
+<li><p>Special characters (<code class="docutils literal notranslate"><span class="pre">?</span> <span class="pre">$</span> <span class="pre">&amp;</span> <span class="pre">&#64;</span> <span class="pre">~</span> <span class="pre">&lt;</span> <span class="pre">&gt;</span></code>) are not allowed.</p></li>
+</ul>
+</div>
+<div class="section" id="settings">
+<span id="i-settings"></span><h2>settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<p><strong>Names and dimensions of variables to be provided.</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">settings</span> <span class="o">&lt;</span><span class="n">NG</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">DN</span><span class="o">&gt;</span>
+<span class="n">sub_card</span> <span class="o">&lt;</span><span class="n">val1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val3</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>where in the <strong>set</strong> line,</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NG</span></code> number of energy groups</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DN</span></code> number of delayed neutrons</p></li>
+</ul>
+</dd>
+<dt>and, the list of <strong>sub-cards</strong> options is:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">macro</span></code> names for the macroscopic parameters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">micro</span></code> names for the microscopic parameters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kinetics</span></code> names for the kinetics parameters (e.g., beta values)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">meta</span></code> names for the metastable parameters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">isotopes</span></code> a list of isotopes in a ZZAAAM (e.g., 922350). User has a flexibility to define their own format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dim_macro</span></code> dimensions of the macroscopic parameters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dim_micro</span></code> dimensions of the microscopic parameters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dim_kinetics</span></code> dimensions of the kinetics parameters (e.g., beta values)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dim_meta</span></code> dimensions of the metastable parameters</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>At least one of the following should be provided: <cite>macro</cite>, <cite>micro</cite>, <cite>kinetics</cite>, <cite>meta</cite>. User can omit specific entries (e.g., <code class="docutils literal notranslate"><span class="pre">meta</span></code>).</p></li>
+<li><p>Dimensions are not required to be provided and the dafualt is 1-dim for every parameter. If a 2D array is provided, the user needs to define the dimensions. <code class="docutils literal notranslate"><span class="pre">0</span></code> indicates that dimensions are not required to be verified.</p></li>
+<li><p>The sub-cards can be defined multiple times, e.g.,</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">macro</span> <span class="n">fiss</span>
+<span class="n">macro</span> <span class="n">nsf</span><span class="p">,</span> <span class="n">kappa</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If sub-cards are defined multiple times, the corresponding dimensions must describe these accordingly, e.g.,</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">macro</span> <span class="n">fiss</span> <span class="n">nsf</span>
+<span class="n">dim_macro</span> <span class="mi">1</span> <span class="mi">1</span>
+<span class="n">macro</span> <span class="n">sct</span>
+<span class="n">dim_macro</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">macro</span> <span class="n">fiss</span> <span class="n">nsf</span>
+<span class="n">macro</span> <span class="n">sct</span>
+<span class="n">dim_macro</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If the sub-card <code class="docutils literal notranslate"><span class="pre">micro</span></code> is defined then the sub-card <code class="docutils literal notranslate"><span class="pre">isotopes</span></code> will be expected as well.</p></li>
+</ul>
+</div>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">settings</span> <span class="n">NG</span> <span class="mi">2</span> <span class="n">DN</span> <span class="mi">7</span>
+<span class="n">macro</span> <span class="o">=</span>  <span class="nb">abs</span><span class="p">,</span> <span class="n">fiss</span><span class="p">,</span> <span class="n">nsf</span>
+<span class="n">macro</span> <span class="o">=</span> <span class="n">sct</span>
+<span class="n">dim_macro</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+<span class="n">micro</span> <span class="o">=</span>  <span class="nb">abs</span><span class="p">,</span> <span class="n">fiss</span><span class="p">,</span> <span class="n">nsf</span>
+<span class="n">kinetics</span> <span class="o">=</span>  <span class="n">beta</span> <span class="n">decay_const</span>
+<span class="n">meta</span> <span class="o">=</span>  <span class="n">time</span> <span class="n">keff</span>
+<span class="n">isotopes</span> <span class="o">=</span> <span class="mi">531350</span><span class="p">,</span> <span class="mi">541350</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="states">
+<span id="i-states"></span><h2>states<a class="headerlink" href="#states" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<p>TBC</p>
+</div>
+<div class="section" id="data">
+<span id="i-data"></span><h2>data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<p>TBC</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">User’s Manual</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">User’s Manual</a></li>
+      <li>Next: <a href="../Examples/index.html" title="next chapter">Examples</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/Manual/input_cards.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

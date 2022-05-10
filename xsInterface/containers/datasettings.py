@@ -30,13 +30,13 @@ class DataSettings():
     DN : int
         Delayed neutron groups for kinetic parameters
     macro : boolean
-        indicate whether macro data is expepcted to be provided
+        indicate whether macro data is expected to be provided
     micro : boolean
-        indicate whether micro data is expepcted to be provided
+        indicate whether micro data is expected to be provided
     kinetics : boolean
-        indicate whether kinetic data is expepcted to be provided
+        indicate whether kinetic data is expected to be provided
     meta : boolean
-        indicate whether meta data is expepcted to be provided
+        indicate whether meta data is expected to be provided
     isotopes : array
         ZZAAA0/1 for all the isotopes to be provided
 

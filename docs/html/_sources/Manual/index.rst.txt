@@ -4,44 +4,22 @@
 User's Manual
 =============
 
-The User\'s Manual for the ``xsInterface`` package describes how 
-to use the different containers and function to easily add, edit, and retrieve data. 
+The User\'s Manual for the ``xsInterface`` package describes the 
+input of the code and its various applications. 
+The User\'s Manual also describes the printed output options as well as the embedded post-processing capabilities. 
+Input examples are provided for the main applications to assist in the preparation of new problems.
 
-Add/Edit Data
--------------
+The following table describes all the components to understand how to set the input cards, set the input problems, execute the simulation, and post-process the results.
 
-Multiple containers exist to enable easy addition and edit of data
-
-	1. :ref:`Material Container <material_cont>`: define a single or multiple ``TransmutationData`` containers.
-	2. Component Container
-	3. Other containers
-
-
-Obtain and Process Data
------------------------
-
-Verstile functionality was added to obtain and compare data
-
-	1. Obtain properties for a specific material
-	2. Obtain dimensions
-
-
-Measured Data
--------------
-
-The package includes
-
-	1. Dry experiments
-	2. Wet experiments
-
-Process the Data
-----------------
-Following a successive execution of each of the above stages, the containers will be populated with data unique to each container.
-The following sub-sections describe the data stored on each container:
-
-	1. Display results
-	2. Print results into a file
-
+===================== ============================================
+Chapters							Description
+===================== ============================================
+:ref:`inputcards`			Inputs cards necessary to set an input file
+--------------------- --------------------------------------------
+:ref:`codeexe`				Modes of executions
+--------------------- --------------------------------------------
+:ref:`processres`		  Results post-processing features.
+===================== ============================================
 
 
 .. toctree::
@@ -49,7 +27,24 @@ The following sub-sections describe the data stored on each container:
    :hidden:
    :caption: Contents:
 
-   material_cont.rst
+   input_cards
+   code_exe
+   process_results
+
+
+Execution Sequence
+------------------
+
+1. aaa,
+
+2. bbb,
+
+3. ccc,
+
+
+.. role:: underline
+    :class: underline
+
 
 
 
