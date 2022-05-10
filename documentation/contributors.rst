@@ -11,4 +11,5 @@ Here are all the people that helped make this project happen
 
 * `Dr. Dan Kotlyar <https://github.com/CORE-GATECH-GROUP>`_
 
-* Painter Bailey
+* `Bailey Painter <https://www.linkedin.com/in/bpainterne/>`_
+

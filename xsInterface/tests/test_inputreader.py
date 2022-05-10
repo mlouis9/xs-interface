@@ -24,17 +24,95 @@ import os
 from xsInterface.functions.readinput import ReadInput
 from xsInterface.errors.customerrors import InputCardError
 
+
+# -----------------------------------------------------------------------------
+# Settings card
+# -----------------------------------------------------------------------------
+
+BAD_SETTINGS = {
+#"template": [
+#    'set settings NG 2 DN 7 BAD_CARD',  
+#    'macro =  abs, fiss, nsf   ',  
+#    'dim_macro = 1, 1, 1       ',  
+#    'micro =  abs, fiss, nsf   ',  
+#    'kinetics =  abs, fiss, nsf',  
+#    'meta =  abs, fiss, nsf    ',  
+#    'isotopes = 531350, 5141350'],          
+"noset": [
+    ' REDUNDANT LINE           ',
+    'set settings NG 2 GR 7    ',  
+    'macro =  abs, fiss, nsf   ',  
+    'dim_macro = 1, 1, 1       ',  
+    'micro =  abs, fiss, nsf   ',  
+    'kinetics =  abs, fiss, nsf',  
+    'meta =  abs, fiss, nsf    ',  
+    'isotopes = 531350, 5141350'],
+"DN": [
+    'set settings NG 2 GR 7    ',  
+    'macro =  abs, fiss, nsf   ',  
+    'dim_macro = 1, 1, 1       ',  
+    'micro =  abs, fiss, nsf   ',  
+    'kinetics =  abs, fiss, nsf',  
+    'meta =  abs, fiss, nsf    ',  
+    'isotopes = 531350, 5141350'],
+"NG": [
+    'set settings NG 2 DN 7 BAD_CARD',  
+    'macro =  abs, fiss, nsf   ',  
+    'dim_macro = 1, 1, 1       ',  
+    'micro =  abs, fiss, nsf   ',  
+    'kinetics =  abs, fiss, nsf',  
+    'meta =  abs, fiss, nsf    ',  
+    'isotopes = 531350, 5141350'],
+"dim": [
+    'set settings NG 2 DN 7 BAD_CARD',  
+    'macro =  abs, fiss, nsf   ',  
+    'dim_macro = 1, 1, 1, 1    ',  
+    'micro =  abs, fiss, nsf   ',  
+    'kinetics =  abs, fiss, nsf',  
+    'meta =  abs, fiss, nsf    ',  
+    'isotopes = 531350, 5141350'],
+"card": [
+    'set settings NG 2 DN 7 BAD_CARD',  
+    'macro =  abs, fiss, nsf   ',  
+    'dim_macro = 1, 1, 1, 1    ',  
+    'micro =  abs, fiss, nsf   ',  
+    'bad_card =  abs, fiss, nsf',  
+    'meta =  abs, fiss, nsf    ',  
+    'isotopes = 531350, 5141350'],
+"isotopes": [
+    'set settings NG 2 DN 7 BAD_CARD',  
+    'macro =  abs, fiss, nsf   ',  
+    'dim_macro = 1, 1, 1,      ',  
+    'micro =  abs, fiss, nsf   ',  
+    'kinetics =  abs, fiss, nsf',  
+    'meta =  abs, fiss, nsf    '], 
+}
+
 # -----------------------------------------------------------------------------
 # Path to all the input files
 # -----------------------------------------------------------------------------
 path2File = os.path.abspath(os.getcwd()) + "\\inputfiles\\"
 
-def test_bad_settings(inputSettings):
+def test_bad_settings(tmp_path):
     """Errors when reseting the settings"""
-
-
-    with pytest.raises(InputCardError, match="Expected inputs*"):
-        ReadInput(inputSettings)
+    
+    
+    d = tmp_path / "temp"
+    d.mkdir()
+    p = d / "inp.txt"
+    filepath = str(p)
+    
+    
+    # multiple bad settings
+    for keyTest in BAD_SETTINGS: 
+    
+        with open(filepath, 'w') as f:
+            for item in BAD_SETTINGS["DN"]:
+                f.write("%s\n" % item)
+        
+        # the input writing is perforned using conftest
+        with pytest.raises(InputCardError, match="!!!*"):
+            ReadInput(filepath)
 
 
     

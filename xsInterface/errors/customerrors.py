@@ -46,7 +46,7 @@ class InputGeneralError(Exception):
     def __init__(self, message):
         str1 = "\nAn issue with the following line:\n"
         str1 += "------------------------------------ "
-        super().__init__(str1+"\n"+message)
+        super().__init__("!!!\n"+str1+"\n"+message)
 
 
 class InputCardError(Exception):
@@ -55,4 +55,4 @@ class InputCardError(Exception):
         str1 += "---------------------------------------------------------- \n"
         for istr in INPUT_CARDS[card].keys():
             str1 += istr + "\n\t{}\n".format(INPUT_CARDS[card][istr])
-        super().__init__(message+"\n"+str1)
+        super().__init__("!!!\n"+message+"\n"+str1)

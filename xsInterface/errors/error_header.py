@@ -25,7 +25,7 @@ DataSettingsCard = {
     "kinetics": "kinetic data",
     "meta": "metadata/general data",
     "isotopes": "ZZAAA0/1 for all the isotopes",
-    "dim": "attr. dimensions (0=scalar, arrays are for dim > 0",
+    "dim_*": "dimensions for attribute * (0=scalar, arrays are for dim > 0)",
     }
 
 SingleSetCard = {
