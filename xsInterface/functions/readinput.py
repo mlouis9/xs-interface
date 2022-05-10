@@ -189,6 +189,9 @@ def _ImportSettings(setLine, tlines):
     for k in flags:
         flags[k] = True if dvals.get(k) is not None else False
 
+    if dvals["isotopes"] is not None:
+        dvals["isotopes"] = np.array(dvals["isotopes"])
+
     # Assign data to container:
     # -------------------------------------------------------------------------
     rc = DataSettings(NG, DN, flags["macro"], flags["micro"],

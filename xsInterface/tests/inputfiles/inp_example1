@@ -8,18 +8,15 @@
 # -----------------------------------------------------------------------------
 
 
-set settings NG 2 DN 7
-
+set settings NG 2 GR 7
 macro =  abs, fiss, nsf
-
 dim_macro = 1, 1, 1
 micro =  abs, fiss, nsf
-
 kinetics =  abs, fiss, nsf
-
 meta =  abs, fiss, nsf
-
 isotopes = 531350, 5141350
+
+
 
 # -----------------------------------------------------------------------------
 #                            PERTURBATIONS
