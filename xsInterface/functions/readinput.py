@@ -24,11 +24,10 @@ from re import compile, IGNORECASE
 
 import numpy as np
 
+from xsInterface.containers.container_header import DataSettingsCard,\
+    BranchCard, HistoryCard
 from xsInterface.containers.datasettings import DataSettings
-from xsInterface.functions.stringsconversion import str2array
-from xsInterface.errors.checkerrors import _isstr, _isequallength,\
-    _compare2lists
-from xsInterface.errors.error_header import DataSettingsCard
+from xsInterface.errors.checkerrors import _isstr, _compare2lists
 from xsInterface.errors.customerrors import NonInputError, InputGeneralError,\
     InputCardError
 
@@ -43,11 +42,15 @@ FIRSTWORD_REGEX = compile(r'\w+[_-]\w+|\w+')  # 1st word (e.g., dim_mac or mac)
 
 # Regular expressions for all set cards
 CARD_REGEX = {
-    "settings": compile(r'\s*(set\s+)(settings\s+)', IGNORECASE),
-    "perturbations": compile(r'\s*(set\s+)(perturbations\s+)', IGNORECASE), }
+    "settings": compile(r'\s*(set\s+)(settings)', IGNORECASE),
+    "branches": compile(r'\s*(set\s+)(branches)', IGNORECASE),
+    "histories": compile(r'\s*(set\s+)(histories)', IGNORECASE),
+    "times": compile(r'\s*(set\s+)(times)', IGNORECASE), }
 
 INPUT_CARDS =\
-    {'settings': DataSettingsCard}
+    {'settings': DataSettingsCard,
+     'branches': BranchCard,
+     'histories': HistoryCard}
 
 
 
@@ -90,28 +93,38 @@ def ReadInput(inputFile):
     data = _CleanFile(dataFile)    
     
     # Process all cards
-    setLineData = _ProcessCards(data)
+    setLineData, states = _ProcessCards(data)
     
-    return setLineData
+    return setLineData, states
 
 
 def _ProcessCards(data):
     """Process the set lines and corresponding data"""
-    
-    setLineData = []
+
+    # Reset all values    
+    setLine = []
+    states = {"branches": None, "histories": None, "times": None}
 
     for cardKey, cardData in data.items(): 
     
         settingsFound = CARD_REGEX["settings"].search(cardKey)  
-    
+        branchesFound = CARD_REGEX["branches"].search(cardKey)  
+        historiesFound = CARD_REGEX["histories"].search(cardKey)  
+
         # settings
         if settingsFound is not None:
             # strip the ``set <card>`` from data
-            setLineData = cardKey[settingsFound.span()[1]:]
+            setLine = cardKey[settingsFound.span()[1]:]
             # return container with settings
-            rc = _ImportSettings(setLineData, cardData)
+            rc = _ImportSettings(setLine, cardData)
+        elif branchesFound is not None:
+            setLine = cardKey[branchesFound.span()[1]:]
+            states["branches"] = _ImportBranches(setLine, cardData) 
+        elif historiesFound is not None:
+            setLine = cardKey[historiesFound.span()[1]:]
+            states["histories"] = _ImportHistories(setLine, cardData) 
             
-    return rc
+    return rc, states
 
 
 def _CleanFile(dataFile):
@@ -215,6 +228,87 @@ def _ImportSettings(setLine, tlines):
 
 
 # -----------------------------------------------------------------------------
+#                  Perturbations
+# -----------------------------------------------------------------------------
+
+def _ImportWhat(setLine, tlines, card, expinputs, expvals, dtype):
+    """import card-values from the input"""
+    # setLine :: the line of the set card
+    # tlines :: data/lines following the set line
+    # card :: name of the card
+    # expinputs :: expected names of the cards to be provided
+    # expvals :: expected number of values to be provided in the set line
+    # dtype :: convert to data to this type
+
+    # Process the set line values
+    # -------------------------------------------------------------------------
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+    setNames, setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
+    
+    setValues = np.array(setValues, dtype=int)
+    
+    if setNames == []:  # card names not provided
+        N = int(setValues[0])
+    else:
+        try:
+            _compare2lists(expinputs, copy.deepcopy(setNames),
+                           "Expected inputs", "User inputs")
+        except ValueError as detail:
+            raise InputCardError("{}\n{}\n".format(detail, errmsg),
+                                 INPUT_CARDS, card)
+        N = int(setValues[setNames.index('n')])
+
+    # all cards and corresponding values are placed in a dictionary
+    errmsg = "<set {}>.\n".format(card)
+    data = _GetCardData(tlines, card, errmsg)
+    
+    for item, value in data.items():
+        data[item] = np.array(value, dtype=dtype)
+    
+    if N != len(data):
+        raise InputCardError(
+            "<{}> expected {}.\n<{}> {}: {} are provided\n".format(
+                N, card, len(data), card,
+                list(data.keys())), INPUT_CARDS, card)        
+    
+    return data
+
+
+def _ImportBranches(setLine, tlines):
+    """import branches definitions from the input"""
+
+    card = "branches"  # set card name     
+    expinputs = ['N']  # expected entries
+    expvals = [1, 1]  # range of the number of expected values
+    dtype= float
+    branches = _ImportWhat(setLine, tlines, card, expinputs, expvals, dtype)    
+    return branches
+
+
+def _ImportHistories(setLine, tlines):
+    """import branches definitions from the input"""
+
+    card = "histories"  # set card name     
+    expinputs = ['N']  # expected entries
+    expvals = [1, 1]  # range of the number of expected values
+    dtype= float
+    histories = _ImportWhat(setLine, tlines, card, expinputs, expvals, dtype)    
+    return histories
+
+
+def _ImportTimes(setLine, tlines):
+    """import branches definitions from the input"""
+
+    card = "times"  # set card name     
+    expinputs = ['units']  # expected entries
+    expvals = [1, 1]  # range of the number of expected values
+    dtype= float
+
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+    
+
+
+# -----------------------------------------------------------------------------
 #                  Supplementary Functions
 # -----------------------------------------------------------------------------
 
@@ -238,10 +332,40 @@ def _ProcessSetLine(tline, expvals, card, errmsg):
         values = [val for val in tline]
     else:
         raise InputCardError(
-            "Error in card <{}>. [{}-{}] values are expected.\n{}\n"
+            "Error in card <{}>. Range of [{},{}] values are expected.\n{}\n"
             .format(card, expvals[0], expvals[1], errmsg), INPUT_CARDS, card)        
     
     return names, values
+
+
+def _GetCardData(tlines, setcard, errmsg):
+    """process card's sublines and data"""
+    # tlines are the text lines to be processed
+    # set card name, e.g., 'settings'
+    # errmsg, error message to be presented
+    
+    # store results in a dictionary
+    
+    cardData = {}  # reset the dictionary with all expected keys
+   
+    # loop over all the data lines
+    for tline in tlines:
+        tline = tline.replace('=', '')  # remove "=" signs
+        
+        idx = FIRSTWORD_REGEX.search(tline).span()
+        name = tline[idx[0]:idx[1]]
+        vals = tline[idx[1]:]
+        # convert to an array of strings from a text line
+        values = vals.split()
+        
+        cardData[name] = values
+        
+    # check that not all keys are empty
+    if not any(cardData.values()):
+        raise InputCardError("!!!\nNo data is provided.\n{}\n".format(errmsg),
+                             INPUT_CARDS, setcard)
+
+    return cardData
 
 
 def _ProcessCardData(tlines, expinputs, setcard, errmsg):

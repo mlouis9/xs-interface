@@ -18,8 +18,6 @@ from xsInterface.errors.checkerrors import _isint, _islist, _inlist,\
     _ispositive, _isequallength, _is1darray, _isstr, _isuniquelist,\
     _isnonNegativeArray, _issortedarray, _isarray
 
-TIME_UNITS = ['MWd/kg', 'days', 'hours', 'minutes', 'seconds']
-
 
 class Perturbations():
     """Stores the names and values of the perturbation parameters.
@@ -156,7 +154,7 @@ class Perturbations():
             _issortedarray(timeValues, "Time/Burnup values")
             _isuniquelist(timeValues, "Time/Burnup values")
             # Check variables types
-            _inlist(timeUnits, "Time/Burnup units", TIME_UNITS)
+            _isstr(timeUnits, "Time/Burnup units")
             # Assign histories
             self.time["values"] = timeValues
             self.time["units"] = timeUnits
