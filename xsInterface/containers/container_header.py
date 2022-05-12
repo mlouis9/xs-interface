@@ -36,3 +36,7 @@ BranchCard = {
 HistoryCard = {
     "N": "number of histories",
     }
+
+TimeCard = {
+    "UNITS": "time/burnup units",
+    }

@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------------------
 
 
-set settings NG 2 DN 7
+set settings 2 7
 macro =  abs, fiss, nsf
 dim_macro = 1, 1, 1
 micro =  abs, fiss, nsf
@@ -27,9 +27,9 @@ cool 500 600
 
 set histories 2
 nom 600 500 500
-pert 900 700 600
+pert 900 700 625
 
-set times units=
+set times nounits
 0 1 2 3 4 5 6 7 8
 9 11 18 19
 40 50

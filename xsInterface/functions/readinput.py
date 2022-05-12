@@ -5,14 +5,14 @@ Read the user-based input file.
 All the input data are provided via the use of input cards.
 
 Created on Mon May 06 12:10:00 2022 @author: Dan Kotlyar
-Last updated on Mon May 06 12:10:00 2022 @author: Dan Kotlyar
+Last updated on Thu May 12 11:30:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 Clean the inpit file from comments  - 05/06/2022 - DK
-Error checking - 04/11/2022 - DK
+Import Settings, States - 05/12/2022 - DK
 
 
 
@@ -25,8 +25,9 @@ from re import compile, IGNORECASE
 import numpy as np
 
 from xsInterface.containers.container_header import DataSettingsCard,\
-    BranchCard, HistoryCard
+    BranchCard, HistoryCard, TimeCard
 from xsInterface.containers.datasettings import DataSettings
+from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.errors.checkerrors import _isstr, _compare2lists
 from xsInterface.errors.customerrors import NonInputError, InputGeneralError,\
     InputCardError
@@ -50,7 +51,8 @@ CARD_REGEX = {
 INPUT_CARDS =\
     {'settings': DataSettingsCard,
      'branches': BranchCard,
-     'histories': HistoryCard}
+     'histories': HistoryCard,
+     'times': TimeCard}
 
 
 
@@ -101,32 +103,256 @@ def ReadInput(inputFile):
 def _ProcessCards(data):
     """Process the set lines and corresponding data"""
 
-    # Reset all values    
+    # Reset all values
+    # -------------------------------------------------------------------------    
     setLine = []
-    states = {"branches": None, "histories": None, "times": None}
+    sd = {"brN": None, "branches": None, "histN": None,
+          "histories": None, "times": None, "units": None}
+    # -------------------------------------------------------------------------    
+
+    cardsList = list(INPUT_CARDS.keys())
 
     for cardKey, cardData in data.items(): 
     
-        settingsFound = CARD_REGEX["settings"].search(cardKey)  
-        branchesFound = CARD_REGEX["branches"].search(cardKey)  
-        historiesFound = CARD_REGEX["histories"].search(cardKey)  
-
+        cFound = {}  # cards Found dictionary
+        for key in cardsList:
+            cFound[key] = CARD_REGEX[key].search(cardKey)  
+        
         # settings
-        if settingsFound is not None:
+        if cFound['settings'] is not None:
             # strip the ``set <card>`` from data
-            setLine = cardKey[settingsFound.span()[1]:]
+            setLine = cardKey[cFound['settings'].span()[1]:]
             # return container with settings
             rc = _ImportSettings(setLine, cardData)
-        elif branchesFound is not None:
-            setLine = cardKey[branchesFound.span()[1]:]
-            states["branches"] = _ImportBranches(setLine, cardData) 
-        elif historiesFound is not None:
-            setLine = cardKey[historiesFound.span()[1]:]
-            states["histories"] = _ImportHistories(setLine, cardData) 
-            
+        elif cFound['branches'] is not None:
+            setLine = cardKey[cFound['branches'].span()[1]:]
+            sd["brN"], sd["branches"] = _ImportBranches(setLine, cardData) 
+        elif cFound['histories'] is not None:
+            setLine = cardKey[cFound['histories'].span()[1]:]
+            sd["histN"], sd["histories"] = _ImportHistories(setLine, cardData) 
+        elif cFound['times'] is not None:
+            setLine = cardKey[cFound['times'].span()[1]:]
+            sd["units"], sd["times"] = _ImportTimes(setLine, cardData)
+        else:
+            raise InputGeneralError("Card does not exist: <{}>"
+                                    .format(cardKey))
+    
+    
+    # Populate containers
+    # -------------------------------------------------------------------------
+    try:
+        states = _PopulateStates(sd)
+    except (ValueError or TypeError or KeyError) as detail:
+        errmsg = "Perturbation States"
+        raise InputCardError("{}\n{}\n".format(detail, errmsg),
+                             INPUT_CARDS, "settings") 
+
     return rc, states
 
 
+# -----------------------------------------------------------------------------
+#                  Populate Data/Storage Containers
+# -----------------------------------------------------------------------------
+def _PopulateStates(sd):
+    """"populate the states container"""
+    
+    branches = None
+    histories = None
+
+    # Reset container    
+    if sd["branches"] is not None:
+        branches = list(sd["branches"].keys())
+    if sd["histories"] is not None:
+        histories = list(sd["histories"].keys())        
+    
+    states = Perturbations(sd["brN"], branches, sd["histN"], histories,
+                           sd["times"], sd["units"])
+
+    # Add data
+    if sd["branches"] is not None:
+        states.AddBranches(**sd["branches"])
+    if sd["histories"] is not None:
+        states.AddHistories(**sd["histories"])
+
+    states._proofTest()
+    return states
+
+# -----------------------------------------------------------------------------
+#                  Settings
+# -----------------------------------------------------------------------------
+
+def _ImportSettings(setLine, tlines):
+    """import settings from the input"""
+
+    # Requirements
+    # -------------------------------------------------------------------------
+    expinputs = ['<NG>', '<DN>']
+    expvals = [2, 2]  # range of the number of expected values
+    card = "settings"  # set card name
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+
+    # Process the set line values
+    # -------------------------------------------------------------------------
+    setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
+    setValues = np.array(setValues, dtype=int)
+    NG = int(setValues[0])
+    DN = int(setValues[1])
+
+    # Process the set card values
+    # -------------------------------------------------------------------------
+    expinputs = ['macro', 'micro', 'kinetics', 'meta', 'isotopes', 'dim_macro',
+                 'dim_micro', 'dim_kinetics', 'dim_meta']
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+
+    # all cards and corresponding values are placed in a dictionary
+    dvals0 = _CardDataDict(tlines, card, errmsg)
+    
+    dvals = {}
+    for key in expinputs:
+        if key in dvals0:
+            dvals[key] = dvals0[key]
+        else:
+            dvals[key] = None
+    
+    # Data manipulation
+    # -------------------------------------------------------------------------
+    flags = {"macro": False, "micro": False, "kinetics": False, "meta": False}
+    for k in flags:
+        flags[k] = True if dvals.get(k) is not None else False
+
+    if dvals["isotopes"] is not None:
+        dvals["isotopes"] = np.array(dvals["isotopes"])
+
+    # Assign data to designated container
+    # -------------------------------------------------------------------------
+    try:
+        rc = DataSettings(NG, DN, flags["macro"], flags["micro"],
+                          flags["kinetics"], flags["meta"], dvals["isotopes"])
+        if flags["macro"]:
+            rc.AddData("macro", dvals["macro"], dvals["dim_macro"])
+        if flags["micro"]:
+            rc.AddData("micro", dvals["micro"], dvals["dim_micro"])
+        if flags["kinetics"]:
+            rc.AddData("kinetics", dvals["kinetics"], dvals["dim_kinetics"])
+        if flags["meta"]:
+            rc.AddData("meta", dvals["meta"], dvals["dim_meta"])
+    except (ValueError or TypeError or KeyError) as detail:
+        raise InputCardError("{}\n{}\n".format(detail, errmsg),
+                             INPUT_CARDS, "settings")        
+
+    return rc
+
+# -----------------------------------------------------------------------------
+#                  Perturbations
+# -----------------------------------------------------------------------------
+
+def _ImportBranches(setLine, tlines):
+    """import branches definitions from the input"""
+
+    # Requirements
+    # -------------------------------------------------------------------------
+    card = "branches" 
+    expinputs = ['<N>']
+    expvals = [1, 1]
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+
+    # Process the set line values
+    # -------------------------------------------------------------------------
+    setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
+    setValues = np.array(setValues, dtype=int)
+    N = int(setValues[0])
+
+    # Process the set card values
+    # -------------------------------------------------------------------------
+    errmsg = "<set {}>.\n".format(card)
+    data = _CardDataDict(tlines, card, errmsg)
+
+    # Error Checking
+    # -------------------------------------------------------------------------
+#    if N != len(data):
+#        raise InputCardError(
+#            "<{}> expected {}.\n<{}> {}: {} are provided\n".format(
+#                N, card, len(data), card,
+#                list(data.keys())), INPUT_CARDS, card)
+
+    # Data manipulation
+    # -------------------------------------------------------------------------       
+    for item, value in data.items():
+        data[item] = np.array(value, dtype=float)
+
+    return N, data
+
+
+def _ImportHistories(setLine, tlines):
+    """import branches definitions from the input"""
+
+    # Requirements
+    # -------------------------------------------------------------------------
+    card = "histories" 
+    expinputs = ['<N>']
+    expvals = [1, 1]
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+
+    # Process the set line values
+    # -------------------------------------------------------------------------
+    setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
+    setValues = np.array(setValues, dtype=int)
+    N = int(setValues[0])
+
+    # Process the set card values
+    # -------------------------------------------------------------------------
+    errmsg = "<set {}>.\n".format(card)
+    data = _CardDataDict(tlines, card, errmsg)
+
+    # Error Checking
+    # -------------------------------------------------------------------------
+    # N/A
+
+    # Data manipulation
+    # -------------------------------------------------------------------------       
+    for item, value in data.items():
+        data[item] = np.array(value, dtype=float)
+
+    return N, data
+
+
+def _ImportTimes(setLine, tlines):
+    """import branches definitions from the input"""
+
+    # Requirements
+    # -------------------------------------------------------------------------
+    card = "times" 
+    expinputs = ['<UNITS>']
+    expvals = [0, 1]
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+
+    # Process the set line values
+    # -------------------------------------------------------------------------
+    setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
+    if setValues != []:
+        units = setValues[0]
+    else:
+        units = None
+
+    # Process the set card values
+    # -------------------------------------------------------------------------
+    errmsg = "<set {}>.\n".format(card)
+    data = _CardDataList(tlines, card, errmsg)
+
+    # Error Checking
+    # -------------------------------------------------------------------------
+    # N/A
+
+    # Data manipulation
+    # -------------------------------------------------------------------------       
+    data = np.array(data, dtype=float)
+
+    return units, data
+
+
+# -----------------------------------------------------------------------------
+#                  Supplementary Functions
+# -----------------------------------------------------------------------------
 def _CleanFile(dataFile):
     """Remove comments and empty lines."""
     # a dictionary to separate between the different set cards
@@ -157,189 +383,29 @@ def _CleanFile(dataFile):
     return dataSets
 
 
-# -----------------------------------------------------------------------------
-#                  Settings
-# -----------------------------------------------------------------------------
-
-def _ImportSettings(setLine, tlines):
-    """import settings from the input"""
-
-    expinputs = ['ng', 'dn']  # expected entries
-    expvals = [2, 2]  # range of the number of expected values
-    card = "settings"  # set card name
-    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
-
-    # Process the set line values
-    # -------------------------------------------------------------------------
-    setNames, setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
-    
-    setValues = np.array(setValues, dtype=int)
-    
-    if setNames == []:  # card names not provided
-        NG = int(setValues[0])
-        DN = int(setValues[1])
-    else:
-        try:
-            _compare2lists(expinputs, copy.deepcopy(setNames),
-                           "Expected inputs", "User inputs")
-        except ValueError as detail:
-            raise InputCardError("{}\n{}\n".format(detail, errmsg),
-                                 INPUT_CARDS, "settings")
-        NG = int(setValues[setNames.index('ng')])
-        DN = int(setValues[setNames.index('dn')])
-        
-        
-    # Process the set card values
-    # -------------------------------------------------------------------------
-    expinps = ['macro', 'micro', 'kinetics', 'meta', 'isotopes', 'dim_macro',
-               'dim_micro', 'dim_kinetics', 'dim_meta']
-    errmsg = "{} must be provided in <set {}>.\n".format(expinps, card)
-
-    # all cards and corresponding values are placed in a dictionary
-    dvals = _ProcessCardData(tlines, expinps, card, errmsg)
-    # identify what data is defines and what not
-    flags = {"macro": False, "micro": False, "kinetics": False, "meta": False}
-    for k in flags:
-        flags[k] = True if dvals.get(k) is not None else False
-
-    if dvals["isotopes"] is not None:
-        dvals["isotopes"] = np.array(dvals["isotopes"])
-
-    # Assign data to container:
-    # -------------------------------------------------------------------------
-    rc = DataSettings(NG, DN, flags["macro"], flags["micro"],
-                      flags["kinetics"], flags["meta"], dvals["isotopes"])
-
-
-    try:
-        if flags["macro"]:
-            rc.AddData("macro", dvals["macro"], dvals["dim_macro"])
-        if flags["micro"]:
-            rc.AddData("micro", dvals["micro"], dvals["dim_micro"])
-        if flags["kinetics"]:
-            rc.AddData("kinetics", dvals["kinetics"], dvals["dim_kinetics"])
-        if flags["meta"]:
-            rc.AddData("meta", dvals["meta"], dvals["dim_meta"])
-    except (ValueError or TypeError or KeyError) as detail:
-        raise InputCardError("{}\n{}\n".format(detail, errmsg),
-                             INPUT_CARDS, "settings")        
-
-    return rc
-
-
-# -----------------------------------------------------------------------------
-#                  Perturbations
-# -----------------------------------------------------------------------------
-
-def _ImportWhat(setLine, tlines, card, expinputs, expvals, dtype):
-    """import card-values from the input"""
-    # setLine :: the line of the set card
-    # tlines :: data/lines following the set line
-    # card :: name of the card
-    # expinputs :: expected names of the cards to be provided
-    # expvals :: expected number of values to be provided in the set line
-    # dtype :: convert to data to this type
-
-    # Process the set line values
-    # -------------------------------------------------------------------------
-    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
-    setNames, setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
-    
-    setValues = np.array(setValues, dtype=int)
-    
-    if setNames == []:  # card names not provided
-        N = int(setValues[0])
-    else:
-        try:
-            _compare2lists(expinputs, copy.deepcopy(setNames),
-                           "Expected inputs", "User inputs")
-        except ValueError as detail:
-            raise InputCardError("{}\n{}\n".format(detail, errmsg),
-                                 INPUT_CARDS, card)
-        N = int(setValues[setNames.index('n')])
-
-    # all cards and corresponding values are placed in a dictionary
-    errmsg = "<set {}>.\n".format(card)
-    data = _GetCardData(tlines, card, errmsg)
-    
-    for item, value in data.items():
-        data[item] = np.array(value, dtype=dtype)
-    
-    if N != len(data):
-        raise InputCardError(
-            "<{}> expected {}.\n<{}> {}: {} are provided\n".format(
-                N, card, len(data), card,
-                list(data.keys())), INPUT_CARDS, card)        
-    
-    return data
-
-
-def _ImportBranches(setLine, tlines):
-    """import branches definitions from the input"""
-
-    card = "branches"  # set card name     
-    expinputs = ['N']  # expected entries
-    expvals = [1, 1]  # range of the number of expected values
-    dtype= float
-    branches = _ImportWhat(setLine, tlines, card, expinputs, expvals, dtype)    
-    return branches
-
-
-def _ImportHistories(setLine, tlines):
-    """import branches definitions from the input"""
-
-    card = "histories"  # set card name     
-    expinputs = ['N']  # expected entries
-    expvals = [1, 1]  # range of the number of expected values
-    dtype= float
-    histories = _ImportWhat(setLine, tlines, card, expinputs, expvals, dtype)    
-    return histories
-
-
-def _ImportTimes(setLine, tlines):
-    """import branches definitions from the input"""
-
-    card = "times"  # set card name     
-    expinputs = ['units']  # expected entries
-    expvals = [1, 1]  # range of the number of expected values
-    dtype= float
-
-    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
-    
-
-
-# -----------------------------------------------------------------------------
-#                  Supplementary Functions
-# -----------------------------------------------------------------------------
-
 def _ProcessSetLine(tline, expvals, card, errmsg):
     """process the line and obtain the cards names and values"""
-    # tline is the text line to be processed
-    # expvals is the range [a,b] of expected values
+    # tline:: is the text line to be processed
+    # expvals:: is the range [a,b] of expected values
+    # card:: name of the card
+    # errmsg:: additional error message added to InputCardError
     
-    tline = tline.replace('=', '')  # remove "=" signs
     tline = tline.split()
     
-    names = []
     values = []
-    
-    # check if card names are provided
-    if (int(2*expvals[0]) <= len(tline) <= int(2*expvals[1])):
-        names = [name for name in tline[0::2]]
-        values = [val for val in tline[1::2]]
-    # only values provided
-    elif (int(expvals[0]) <= len(tline) <= int(expvals[1])):
+    if (int(expvals[0]) <= len(tline) <= int(expvals[1])):
         values = [val for val in tline]
     else:
         raise InputCardError(
-            "Error in card <{}>. Range of [{},{}] values are expected.\n{}\n"
-            .format(card, expvals[0], expvals[1], errmsg), INPUT_CARDS, card)        
+            "!!!\nRange of [{},{}] values are expected.\n{}\n"
+            .format(expvals[0], expvals[1], errmsg), INPUT_CARDS, card)        
     
-    return names, values
+    return values
 
 
-def _GetCardData(tlines, setcard, errmsg):
-    """process card's sublines and data"""
+
+def _CardDataDict(tlines, setcard, errmsg):
+    """process card's data that do not include naming of variables"""
     # tlines are the text lines to be processed
     # set card name, e.g., 'settings'
     # errmsg, error message to be presented
@@ -357,88 +423,39 @@ def _GetCardData(tlines, setcard, errmsg):
         vals = tline[idx[1]:]
         # convert to an array of strings from a text line
         values = vals.split()
-        
         cardData[name] = values
         
     # check that not all keys are empty
     if not any(cardData.values()):
-        raise InputCardError("!!!\nNo data is provided.\n{}\n".format(errmsg),
+        raise InputCardError("!!!\nNo data provided.\n{}\n".format(errmsg),
                              INPUT_CARDS, setcard)
 
     return cardData
 
 
-def _ProcessCardData(tlines, expinputs, setcard, errmsg):
-    """process card's sublines and data"""
+def _CardDataList(tlines, setcard, errmsg):
+    """process card's data that do not include naming of variables"""
     # tlines are the text lines to be processed
-    # expinputs is a list of variables allowed
     # set card name, e.g., 'settings'
     # errmsg, error message to be presented
-    
-    # store results in a dictionary
-    
-    cardData = {}  # reset the dictionary with all expected keys
-    for expinp in expinputs:
-        cardData[expinp] = None
+        
+    cardData = []  # reset the list
     
     # loop over all the data lines
-    for tline in tlines:
-        tline = tline.replace('=', '')  # remove "=" signs
+    for tline in tlines:       
+        cardData = cardData + tline.split()
         
-        idx = FIRSTWORD_REGEX.search(tline).span()
-        name = tline[idx[0]:idx[1]]
-        vals = tline[idx[1]:]
-        # convert to an array of strings from a text line
-        values = vals.split()
-        
-        if name in expinputs:
-            if cardData[name] is None:
-                cardData[name] = values
-            else:
-                cardData[name] = cardData[name] + values  # concat data
-        else:
-            raise InputCardError("{}\n".format(errmsg), INPUT_CARDS, setcard)
-
     # check that not all keys are empty
-    if not any(cardData.values()):
-        raise InputCardError("No data is provided.\n{}\n".format(errmsg),
+    if cardData == []:
+        raise InputCardError("!!!\nNo data provided.\n{}\n".format(errmsg),
                              INPUT_CARDS, setcard)
 
     return cardData
 
 
-def _CardsNames(tline):
-    """obtain the names of all the cards in the line"""
-    cards0 = EQUAL_REGEX.findall(tline)  # obtain ``cards = `` patterns
-    if cards0 is not None:
-        cards1 = []  # remove the `=` and spaces from the strings
-        for card in cards0:
-            card = card.replace("=", '')  # remove `=` signs
-            card = card.replace(' ', '')  # remove spaces
-            cards1.append(card)
-    return cards1
-
-
-def _CardsValues(tline):
-    """obtain the values of all the cards in the line"""
-    vals0 = EQUAL_REGEX.split(tline)  # obtain the values for the cards
-    # remove empty components within the list ['', 'mat1'] --> ['mat1']
-    for val in range(vals0.count('')):
-        vals0.remove('')
-    # no cards values are provided
-    if len(vals0) < 1:
-        raise InputGeneralError("\n{}\nMissing cards\' values.".format(tline))
-    return vals0
-
-
-def _CompareCardsValues(cards, vals, tline):
-    """compare the number of cards and corresponding values"""
-    if cards == []:
-        pass
-    elif len(cards) != len(vals):
-        raise InputGeneralError("\nNumber of cards {} is not matching\n"
-                                "number of values {}.\nLine:{}"
-                                .format(cards, vals, tline))
+# -----------------------------------------------------------------------------
+#                   DATA MANIPULATION FUNCTIONS
+# -----------------------------------------------------------------------------
 
 def _StripLine(tline):
     """Strip new line, tabs, spaces, comments"""
@@ -493,3 +510,5 @@ def _ApplyRepetition(tline):
         for nrep in range(num):
             tlineNew += ' ' + wordsrep[idx]
     return tlineNew
+
+
