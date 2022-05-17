@@ -18,7 +18,7 @@ Set what?							Description
 --------------------- -------------------------------------------------------------------
 :ref:`i_times`				Time units and values.
 --------------------- -------------------------------------------------------------------
-:ref:`i_singleset`		Define data to be added to a specific (branch, history, time) set.
+:ref:`i_data`					Define data to be added to a specific (branch, history, time) set.
 ===================== ===================================================================
 
 
@@ -259,11 +259,11 @@ and, the time/burnup  values are provided in the following lines.
 	9 11 18 19
 	40 50
 
-.. _i_singleset:
+.. _i_data:
 
-================
-Single Set Data
-================
+======
+Data
+======
 
 
 **Data for a specific (branch, history, and time) set.**
@@ -271,68 +271,84 @@ Single Set Data
 *Mandatory Card*
 
 .. code::
-		
-   set singleset <flux> <energy> 
-   sub_card <val1> <val2> <val3> ...
-   ...
-  
+
+	set data <FLUX> <ENE>
+	block <BLOCK-1>
+		<block_card1> <val1> <val2> <val3> ...
+		<block_card2> <val1> <val2> <val3> ...
+		...
+	block <BLOCK-2>
+		<block_card1> <val1> <val2> <val3> ...
+		<block_card2> <val1> <val2> <val3> ...
+		...  
+
 
 where in the **set** line,
- - ``NG`` number of energy groups
- - ``DN`` number of delayed neutrons
+ - ``FLUX`` name of the flux variable
+ - ``ENE`` energy structure in descending order. Must include upper and lower boundaries, e.g., for a 2-group structure:
 
-and, the list of **sub-cards** options is:
-	- ``branch`` numeric values corresponding to all the parameters in the branch-off.
-	- ``history``
-	- ``time`` 
-	- ``macro`` names for the macroscopic parameters
-	- ``micro`` names for the microscopic parameters
-	- ``kinetics`` names for the kinetics parameters (e.g., beta values)
-	- ``meta`` names for the metastable parameters
-	- ``isotopes`` a list of isotopes in a ZZAAAM (e.g., 922350). User has a flexibility to define their own format.
+	.. code::
+
+		set data inf_flx 10.0E+6, 0.6025, 0.0
+
+
+the  **BLOCK** options must include one of the following options to indicate what information comes next:
+	- ``state`` state parameters (e.g., branch, history, time)
+	- ``macro`` macroscopic parameters (e.g., energy groups dependent cross sections)
+	- ``micro`` microscopic parameters (e.g., energy groups dependent cross sections)
+	- ``kinetics`` kinetics parameters (e.g., beta values)
+	- ``meta`` metastable parameters
+
+
+the **sub-cards** defined under the different blocks are described below.
+	**block** ``state``:
+		- ``branch`` numeric values corresponding to all the parameters in the branch-off (e.g., 900.0, 500.0, 760.).
+		- ``history`` name of the history (e.g., `nominal`).
+		- ``time`` numeric value of the time point.
+	**block** ``macro``, ``kinetics``, ``meta``:
+		- ``<block_card>`` is name corresponding to existing parameters provided under the :ref:`i_settings` card.
+	**block** ``micro``:
+		- need to complete!!!
 
 **Notes:**
 	
-	*	At least one of the following should be provided: `macro`, `micro`, `kinetics`, `meta`. User can omit specific entries (e.g., ``meta``).
-	* Dimensions are not required to be provided and the dafualt is 1-dim for every parameter. If a 2D array is provided, the user needs to define the dimensions. ``0`` indicates that dimensions are not required to be verified.
-	*	The sub-cards can be defined multiple times, e.g., 
-
-	.. code::
-
-		macro fiss
-		macro nsf, kappa
-
-		
-	* If sub-cards are defined multiple times, the corresponding dimensions must describe these accordingly, e.g.,
-	
-	.. code::
-
-		macro fiss nsf
-		dim_macro 1 1
-		macro sct
-		dim_macro 2
-
-	or
-	
-	.. code::
-
-		macro fiss nsf
-		macro sct
-		dim_macro 1 1 2	
-
-	* If the sub-card ``micro`` is defined then the sub-card ``isotopes`` will be expected as well.
-
+	*	``state`` must be defined. 
+	* At least one of the following should be provided: `macro`, `micro`, `kinetics`, `meta`.
 
 
 **Example**:
 
 .. code::
 
-	set settings NG 2 DN 7
-	macro =  abs, fiss, nsf
-	macro = sct
-	dim_macro = 1, 1, 1, 2
-	micro =  abs, fiss, nsf
-	kinetics =  beta decay_const
-	meta =  time keff
-	isotopes = 531350, 541350
+	set data inf_flx 10.0E+6, 0.6025, 0.0
+
+	#-------------
+	block state
+	#----------
+	branch 900.0, 550.0, 650.0
+	history nom
+	time 0.0
+	
+	#-------------
+	block macro
+	#----------
+	inf_rabs 0.1, 0.2
+	inf_nsf 0.3 0.4
+	inf_flx 0.1 0.2
+	inf_sp0 = 0.1  0.2 -0.05, 0.3
+	
+	#-------------
+	block kinetics
+	#-------------
+	beta 1, 1, 1, 1, 1, 1, 1
+	decay 1, 1, 1, 1, 1, 1, 1 
+	
+	#-------------
+	block meta
+	#-------------
+	date April 09, 2022
+	
+	#-------------
+	block micro
+	#-------------
+	sig_sct [[11, 12, 21, 22], [11, 12, 21, 22], [11, 12, 21, 22]]
