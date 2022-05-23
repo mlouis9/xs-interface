@@ -293,7 +293,7 @@ where in the **set** line,
 
 
 the  **BLOCK** options must include one of the following options to indicate what information comes next:
-	- ``state`` state parameters (e.g., branch, history, time)
+	- ``state`` state parameters (e.g., branch, time, history)
 	- ``macro`` macroscopic parameters (e.g., energy groups dependent cross sections)
 	- ``micro`` microscopic parameters (e.g., energy groups dependent cross sections)
 	- ``kinetics`` kinetics parameters (e.g., beta values)
@@ -302,13 +302,22 @@ the  **BLOCK** options must include one of the following options to indicate wha
 
 the **sub-cards** defined under the different blocks are described below.
 	**block** ``state``:
-		- ``branch`` numeric values corresponding to all the parameters in the branch-off (e.g., 900.0, 500.0, 760.).
-		- ``history`` name of the history (e.g., `nominal`).
-		- ``time`` numeric value of the time point.
+		- ``branch`` numeric values corresponding to all the parameters in the branch-off (e.g., 900.0, 500.0, 760.). Mandatory card.
+		- ``time`` numeric value of the time point. Optional card.
+		- ``history`` name of the history (e.g., `nominal`). Optional card.
+		
 	**block** ``macro``, ``kinetics``, ``meta``:
 		- ``<block_card>`` is name corresponding to existing parameters provided under the :ref:`i_settings` card.
 	**block** ``micro``:
-		- need to complete!!!
+		- ``name`` of the microscopic properties followed by numeric values.
+		- the ``name`` of the property must be defined in a new line. Values must also be provided in new lines, where represents a specific isotope. e.g.,
+
+		.. code::
+
+			sig_f
+			val11, val2  % isotope-1
+			val11, val2  % isotope-2
+			val11, val2  % isotope-3 
 
 **Notes:**
 	
@@ -351,4 +360,11 @@ the **sub-cards** defined under the different blocks are described below.
 	#-------------
 	block micro
 	#-------------
-	sig_sct [[11, 12, 21, 22], [11, 12, 21, 22], [11, 12, 21, 22]]
+	sig_sct
+	11, 12, 21, 22  % isotope-1  
+	11, 12, 21, 22  % isotope-2
+	11, 12, 21, 22  % isotope-3
+	sig_f
+	11, 12  % isotope-1  
+	11, 12  % isotope-2
+	11, 12  % isotope-3

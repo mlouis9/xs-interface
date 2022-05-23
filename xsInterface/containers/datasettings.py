@@ -109,12 +109,12 @@ class DataSettings():
         self.isotopes = isotopes
         self.dataFlags = {"macro": macro, "micro": micro,
                           "kinetics": kinetics, "meta": meta}
-        self.macro = {}
-        self.micro = {}
-        self.kinetics = {}
-        self.meta = {}
+        self.macro = []
+        self.micro = []
+        self.kinetics = []
+        self.meta = []
 
-    def AddData(self, dataType, attributes, attrDims=None):
+    def AddData(self, dataType, attributes):
         """Add relevant macroscopic/microscopic/meta data
 
         Parameters
@@ -123,9 +123,6 @@ class DataSettings():
             type of data
         attributes : list of strings
             user-defined names for the provided data type (e.g., ``abs``)
-        attrDims : array of int
-            dimensions for each attribute, where zero represents a scalar, and
-            higher numbers represent arrays.
 
         Examples
         --------
@@ -142,43 +139,28 @@ class DataSettings():
         _islist(attributes, "names of "+dataType+" attributes")
         _isuniquelist(attributes, "attribute names in ")
 
-        if attrDims is None and dataType == DATA_TYPES[3]:  # meta data
-            attrDims = np.zeros(len(attributes))
-        elif attrDims is None:
-            attrDims = np.ones(len(attributes))
-        # check dimensions
-        _isarray(attrDims, "Attributes dimensions")
-        attrDims = np.array(attrDims, dtype=int)
-        _is1darray(attrDims, "Attributes dimensions")
-        _isBoundArray(attrDims, [0, 2], "Attributes dimensions")
-        _isequallength(attrDims, len(attributes), "Attributes dimensions")
-
         # check if data is already populated
         data0 = getattr(self, dataType)
-        if data0 == {}:  # data is new
+        if data0 == []:  # data is new
             # define the specific dictionary for the selected data type
-            dataDict = {"attributes": attributes,
-                        "dimensions": attrDims}
+            attrList = attributes
         else:  # data already exists
-            attr0 = data0["attributes"]
-            dim0 = data0["dimensions"]
+            attr0 = data0
             # create a new/appended list of attributes
             attr1 = attr0 + attributes
             _isuniquelist(attr1, "attribute names in ")
-            dim1 = np.append(dim0, attrDims)
-            dataDict = {"attributes": attr1,
-                        "dimensions": dim1}
+            attrList = attr1
 
         # set a muted attribute with the settings for the selected data type
-        setattr(self, dataType, dataDict)
+        setattr(self, dataType, attrList)
 
     def _proofTest(self):
         """Check that data was inputted"""
-        if self.dataFlags["macro"] and self.macro == {}:
+        if self.dataFlags["macro"] and self.macro == []:
             raise ValueError("macro data is expected to be provided.")
-        if self.dataFlags["micro"] and self.micro == {}:
+        if self.dataFlags["micro"] and self.micro == []:
             raise ValueError("micro data is expected to be provided.")
-        if self.dataFlags["kinetics"] and self.kinetics == {}:
+        if self.dataFlags["kinetics"] and self.kinetics == []:
             raise ValueError("kinetics data is expected to be provided.")
-        if self.dataFlags["meta"] and self.meta == {}:
+        if self.dataFlags["meta"] and self.meta == []:
             raise ValueError("meta data is expected to be provided.")

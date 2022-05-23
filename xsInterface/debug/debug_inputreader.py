@@ -18,4 +18,4 @@ inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
         "xs-interface\\xsInterface\\debug\\inp_example1"
 
-rc, states = ReadInput(inputFile)
+rc, states, msets = ReadInput(inputFile)

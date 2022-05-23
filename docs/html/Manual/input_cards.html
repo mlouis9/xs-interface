@@ -299,18 +299,18 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </ul>
 </dd>
 <dt>the  <strong>BLOCK</strong> options must include one of the following options to indicate what information comes next:</dt><dd><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">state</span></code> state parameters (e.g., branch, history, time)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state</span></code> state parameters (e.g., branch, time, history)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">macro</span></code> macroscopic parameters (e.g., energy groups dependent cross sections)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">micro</span></code> microscopic parameters (e.g., energy groups dependent cross sections)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">kinetics</span></code> kinetics parameters (e.g., beta values)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">meta</span></code> metastable parameters</p></li>
 </ul>
 </dd>
-<dt>the <strong>sub-cards</strong> defined under the different blocks are described below.</dt><dd><dl class="simple">
+<dt>the <strong>sub-cards</strong> defined under the different blocks are described below.</dt><dd><dl>
 <dt><strong>block</strong> <code class="docutils literal notranslate"><span class="pre">state</span></code>:</dt><dd><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">branch</span></code> numeric values corresponding to all the parameters in the branch-off (e.g., 900.0, 500.0, 760.).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">history</span></code> name of the history (e.g., <cite>nominal</cite>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">time</span></code> numeric value of the time point.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">branch</span></code> numeric values corresponding to all the parameters in the branch-off (e.g., 900.0, 500.0, 760.). Mandatory card.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">time</span></code> numeric value of the time point. Optional card.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">history</span></code> name of the history (e.g., <cite>nominal</cite>). Optional card.</p></li>
 </ul>
 </dd>
 <dt><strong>block</strong> <code class="docutils literal notranslate"><span class="pre">macro</span></code>, <code class="docutils literal notranslate"><span class="pre">kinetics</span></code>, <code class="docutils literal notranslate"><span class="pre">meta</span></code>:</dt><dd><ul class="simple">
@@ -318,8 +318,15 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </ul>
 </dd>
 <dt><strong>block</strong> <code class="docutils literal notranslate"><span class="pre">micro</span></code>:</dt><dd><ul class="simple">
-<li><p>need to complete!!!</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> of the microscopic properties followed by numeric values.</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the property must be defined in a new line. Values must also be provided in new lines, where represents a specific isotope. e.g.,</p></li>
 </ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sig_f</span>
+<span class="n">val11</span><span class="p">,</span> <span class="n">val2</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">val11</span><span class="p">,</span> <span class="n">val2</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">2</span>
+<span class="n">val11</span><span class="p">,</span> <span class="n">val2</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">3</span>
+</pre></div>
+</div>
 </dd>
 </dl>
 </dd>
@@ -363,7 +370,14 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <span class="c1">#-------------</span>
 <span class="n">block</span> <span class="n">micro</span>
 <span class="c1">#-------------</span>
-<span class="n">sig_sct</span> <span class="p">[[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">]]</span>
+<span class="n">sig_sct</span>
+<span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">2</span>
+<span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">3</span>
+<span class="n">sig_f</span>
+<span class="mi">11</span><span class="p">,</span> <span class="mi">12</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">11</span><span class="p">,</span> <span class="mi">12</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">2</span>
+<span class="mi">11</span><span class="p">,</span> <span class="mi">12</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">3</span>
 </pre></div>
 </div>
 </div>

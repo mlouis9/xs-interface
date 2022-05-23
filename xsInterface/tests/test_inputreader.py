@@ -42,7 +42,6 @@ BAD_SETTINGS = {
     ' REDUNDANT LINE           ',
     'set settings NG 2 GR 7    ',  
     'macro =  abs, fiss, nsf   ',  
-    'dim_macro = 1, 1, 1       ',  
     'micro =  abs, fiss, nsf   ',  
     'kinetics =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
@@ -50,7 +49,6 @@ BAD_SETTINGS = {
 "DN": [
     'set settings NG 2 GR 7    ',  
     'macro =  abs, fiss, nsf   ',  
-    'dim_macro = 1, 1, 1       ',  
     'micro =  abs, fiss, nsf   ',  
     'kinetics =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
@@ -58,7 +56,6 @@ BAD_SETTINGS = {
 "NG": [
     'set settings NG 2 DN 7 BAD_CARD',  
     'macro =  abs, fiss, nsf   ',  
-    'dim_macro = 1, 1, 1       ',  
     'micro =  abs, fiss, nsf   ',  
     'kinetics =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
@@ -66,7 +63,6 @@ BAD_SETTINGS = {
 "dim": [
     'set settings NG 2 DN 7 BAD_CARD',  
     'macro =  abs, fiss, nsf   ',  
-    'dim_macro = 1, 1, 1, 1    ',  
     'micro =  abs, fiss, nsf   ',  
     'kinetics =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
@@ -74,7 +70,6 @@ BAD_SETTINGS = {
 "card": [
     'set settings NG 2 DN 7 BAD_CARD',  
     'macro =  abs, fiss, nsf   ',  
-    'dim_macro = 1, 1, 1, 1    ',  
     'micro =  abs, fiss, nsf   ',  
     'bad_card =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
@@ -82,7 +77,6 @@ BAD_SETTINGS = {
 "isotopes": [
     'set settings NG 2 DN 7 BAD_CARD',  
     'macro =  abs, fiss, nsf   ',  
-    'dim_macro = 1, 1, 1,      ',  
     'micro =  abs, fiss, nsf   ',  
     'kinetics =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    '], 

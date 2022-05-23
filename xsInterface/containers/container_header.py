@@ -26,7 +26,6 @@ DataSettingsCard = {
     "kinetics": "kinetic data",
     "meta": "metadata/general data",
     "isotopes": "ZZAAA0/1 for all the isotopes",
-    "dim_*": "dimensions for attribute * (0=scalar, arrays are for dim > 0)",
     }
 
 BranchCard = {
@@ -39,4 +38,14 @@ HistoryCard = {
 
 TimeCard = {
     "UNITS": "time/burnup units",
+    }
+
+DataCard = {
+    "FLUX": "name of the flux variable",
+    "ENE": " energy structure in descending order. with Upper, lower bounds",
+    "state": "state parameters (e.g., branch, time, history)",
+    "macro": "macro data block",
+    "micro": "micro data block",
+    "kinetics": "kinetic data block",
+    "meta": "metadata/general data block",
     }

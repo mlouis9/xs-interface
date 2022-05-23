@@ -9,12 +9,12 @@
 
 
 set settings 2 7
-macro =  abs, fiss, nsf
+macro =  inf_flx, inf_nsf, inf_rabs, inf_sp0
 dim_macro = 1, 1, 1
-micro =  abs, fiss, nsf
-kinetics =  abs, fiss, nsf
-meta =  abs, fiss, nsf
-isotopes = 531350, 5141350
+#micro =  abs, fiss, nsf
+kinetics =  beta, decay
+meta =  date
+#isotopes = 531350, 5141350
 
 # -----------------------------------------------------------------------------
 #                            PERTURBATIONS
@@ -39,7 +39,7 @@ set data inf_flx 10.0E+6, 0.6025, 0.0
 #-------------
 block state
 #----------
-branch 900.0, 550.0, 650.0
+branch 900.0, 600.0, 600.0
 history nom
 time 0.0
 
@@ -63,8 +63,15 @@ block meta
 date April 09, 2022
 
 #-------------
-block micro
+#block micro
 #-------------
-sig_sct [[11, 12, 21, 22], [11, 12, 21, 22], [11, 12, 21, 22]]
+#sig_sct
+#11, 12, 21, 22  % isotope-1  
+#11, 12, 21, 22  % isotope-2
+#11, 12, 21, 22  % isotope-3
+#sig_f
+#11, 12  % isotope-1  
+#11, 12  % isotope-2
+#11, 12  % isotope-3
 
 

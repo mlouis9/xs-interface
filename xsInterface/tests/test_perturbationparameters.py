@@ -122,11 +122,6 @@ def test_badReset():
                       histN=2, histories=["nom", "pert"],
                       timeValues=[2, 2, 3], timeUnits='MWd/kg')
 
-    with pytest.raises(KeyError, match="Time/Burnup units*"):
-        Perturbations(branchN=3, branches=["fuel", "mod", "cool"],
-                      histN=2, histories=["nom", "pert"],
-                      timeValues=[1, 2, 3], timeUnits='BAD_UNIT')
-
 
 def test_addbranch():
     """Errors for the AddBranches method"""
