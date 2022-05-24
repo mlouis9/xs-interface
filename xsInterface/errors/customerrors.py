@@ -29,12 +29,12 @@ class NonInputError(Exception):
         str1 = "Data can only be defined after data is set: "\
             "\"set <card> <data>\"\n"\
             "e.g. \"set settings\" \n"
-        super().__init__(message+"\n"+str1)
+        super().__init__("!!!\n"+message+"\n"+str1)
 
 
 class InputGeneralError(Exception):
     def __init__(self, message):
-        str1 = "\nAn issue with the following line:\n"
+        str1 = "\nGeneral Error with:\n"
         str1 += "------------------------------------ "
         super().__init__("!!!\n"+str1+"\n"+message)
 

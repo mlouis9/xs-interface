@@ -16,6 +16,6 @@ from xsInterface.functions.readinput import ReadInput
 
 inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\debug\\inp_example1"
+        "xs-interface\\xsInterface\\debug\\inp_example2"
 
 rc, states, msets = ReadInput(inputFile)

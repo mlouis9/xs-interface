@@ -251,13 +251,13 @@ class Perturbations():
         """Check that all the data was inputted"""
         if self.branches != {}:
             for key, value in self.branches.items():
-                if value is None or value == []:
+                if ((value is None) or (len(value) == 0)):
                     raise ValueError("No data is provided for branch <{}>."
                                      .format(key))
 
         if self.histories != {}:
             for key, value in self.histories.items():
-                if value is None or value == []:
+                if ((value is None) or (len(value) == 0)):
                     raise ValueError("No data is provided for history <{}>."
                                      .format(key))
 

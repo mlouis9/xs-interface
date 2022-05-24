@@ -1,0 +1,33 @@
+# -----------------------------------------------------------------------------
+#            INPUT EXAMPLE FOR A SINGLE CROSS SECTION TYPE
+# -----------------------------------------------------------------------------
+
+set settings 2 7         
+macro =  inf_abs, inf_flx 
+micro = sig_f             
+isotopes = 541350 531350  
+
+set branches  3
+fuel 600 900 1200 1500
+mod 500 600 700
+cool 500 600
+
+set histories 2
+nom 600 500 500
+pert 900 700 625
+
+set times nounits
+0 1 2 3
+
+set data inf_flx 10.0, 0.6025, 0.0
+block state                      
+branch 900.0, 600.0, 600.0       
+history nom                       
+time 0.0                        
+block macro                      
+inf_abs 0.1, 0.2   
+inf_flx 1E+9, 1E+14                
+block micro                      
+sig_f                           
+1 2                             
+3 4                              

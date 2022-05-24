@@ -5,7 +5,7 @@ Read the user-based input file.
 All the input data are provided via the use of input cards.
 
 Created on Mon May 06 12:10:00 2022 @author: Dan Kotlyar
-Last updated on Sun May 22 07:10:00 2022 @author: Dan Kotlyar
+Last updated on Tue May 24 17:00:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -14,7 +14,7 @@ List changes / additions:
 Clean the inpit file from comments  - 05/06/2022 - DK
 Import Settings, States - 05/12/2022 - DK
 Import single data set - 05/22/2022 - DK
-
+Import & populate multiple data set - 05/24/2022 - DK
 
 
 """
@@ -154,26 +154,38 @@ def _ProcessCards(data):
             else:
                 raise InputGeneralError("Card does not exist: <{}>"
                                         .format(cardKey))
-        except (ValueError or TypeError or KeyError) as detail:   
+        except ValueError as detail:   
             raise InputCardError("{}\n{}\n".format(detail, errmsg),
                                  INPUT_CARDS, card)     
-    
+        except TypeError as detail:   
+            raise InputCardError("{}\n{}\n".format(detail, errmsg),
+                                 INPUT_CARDS, card)    
+        except KeyError as detail:   
+            raise InputCardError("{}\n{}\n".format(detail, errmsg),
+                                 INPUT_CARDS, card)    
+
     # Populate containers
     # -------------------------------------------------------------------------
     try:
         #                                                              `states`
         #----------------------------------------------------------------------
-        errmsg = "Perturbation States"
-        card = "settings"
+        errmsg = "Error when inputting branches/states/times cards.\nPlease "\
+        "check that these cards are properly defined.\n"
         states = _PopulateStates(sd)
         #                                                           `Data` sets
         #----------------------------------------------------------------------
         errmsg = "Data Sets"
         card = "data"
-        multisets = _PopulateDataSets(rc, states, singlesets)       
-    except (ValueError or TypeError or KeyError) as detail:
-        raise InputCardError("{}\n{}\n".format(detail, errmsg),
-                             INPUT_CARDS, card) 
+        multisets = _PopulateDataSets(rc, states, singlesets)
+    except TypeError as detail:
+        raise InputGeneralError("{}\nInternal Error:{}\n"
+                                .format(errmsg, detail))         
+    except ValueError as detail:
+        raise InputGeneralError("{}\nInternal Error:{}\n"
+                                .format(errmsg, detail))  
+    except KeyError as detail:
+        raise InputGeneralError("{}\nInternal Error:{}\n"
+                                .format(errmsg, detail))  
         
     return rc, states, multisets
 
@@ -192,6 +204,7 @@ def _PopulateStates(sd):
         branches = list(sd["branches"].keys())
     if sd["histories"] is not None:
         histories = list(sd["histories"].keys())        
+ 
     
     states = Perturbations(sd["brN"], branches, sd["histN"], histories,
                            sd["times"], sd["units"])
@@ -540,7 +553,7 @@ def _ProcessSetLine(tline, expvals, card, errmsg):
         values = [val for val in tline]
     else:
         raise InputCardError(
-            "!!!\nRange of [{},{}] values are expected.\n{}\n"
+            "Range of [{},{}] values are expected.\n{}\n"
             .format(expvals[0], expvals[1], errmsg), INPUT_CARDS, card)        
     
     return values
@@ -570,7 +583,7 @@ def _CardDataDict(tlines, setcard, errmsg):
         
     # check that not all keys are empty
     if not any(cardData.values()):
-        raise InputCardError("!!!\nNo data provided.\n{}\n".format(errmsg),
+        raise InputCardError("No data provided.\n{}\n".format(errmsg),
                              INPUT_CARDS, setcard)
 
     return cardData
@@ -590,7 +603,7 @@ def _CardDataList(tlines, setcard, errmsg):
         
     # check that not all keys are empty
     if cardData == []:
-        raise InputCardError("!!!\nNo data provided.\n{}\n".format(errmsg),
+        raise InputCardError("No data provided.\n{}\n".format(errmsg),
                              INPUT_CARDS, setcard)
 
     return cardData
@@ -643,7 +656,7 @@ def _BlockMicroDict(tlines, setcard, errmsg):
             
     # check that the dict is not empty
     if cardData == {}:
-        raise InputCardError("!!!\nNo data provided.\n{}\n".format(errmsg),
+        raise InputCardError("No data provided.\n{}\n".format(errmsg),
                              INPUT_CARDS, setcard)
 
     return cardData
