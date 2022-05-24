@@ -29,15 +29,7 @@ from xsInterface.errors.customerrors import InputCardError
 # Settings card
 # -----------------------------------------------------------------------------
 
-BAD_SETTINGS = {
-#"template": [
-#    'set settings NG 2 DN 7 BAD_CARD',  
-#    'macro =  abs, fiss, nsf   ',  
-#    'dim_macro = 1, 1, 1       ',  
-#    'micro =  abs, fiss, nsf   ',  
-#    'kinetics =  abs, fiss, nsf',  
-#    'meta =  abs, fiss, nsf    ',  
-#    'isotopes = 531350, 5141350'],          
+BAD_SETTINGS = {       
 "noset": [
     ' REDUNDANT LINE           ',
     'set settings NG 2 GR 7    ',  
@@ -82,6 +74,24 @@ BAD_SETTINGS = {
     'meta =  abs, fiss, nsf    '], 
 }
 
+
+BAD_BRACNHES = {       
+"negbranches": [
+    'set branches -2',
+    'fuel 600 900 1200 1500',
+    'mod 500 600 700',  
+    'cool 500 600', ],
+"N": [
+    'set branches 2',
+    'fuel 600 900 1200 1500',
+    'mod 500 600 700',  
+    'cool 500 600', ], 
+"nobranches": [
+    'set branches 3',
+    'fuel ',
+    'mod 500 600 700',  
+    'cool 500 600', ], }
+
 # -----------------------------------------------------------------------------
 # Path to all the input files
 # -----------------------------------------------------------------------------
@@ -89,13 +99,11 @@ path2File = os.path.abspath(os.getcwd()) + "\\inputfiles\\"
 
 def test_bad_settings(tmp_path):
     """Errors when reseting the settings"""
-    
-    
+
     d = tmp_path / "temp"
     d.mkdir()
     p = d / "inp.txt"
     filepath = str(p)
-    
     
     # multiple bad settings
     for keyTest in BAD_SETTINGS: 
@@ -108,6 +116,25 @@ def test_bad_settings(tmp_path):
         with pytest.raises(InputCardError, match="!!!*"):
             ReadInput(filepath)
 
+
+def test_bad_branches(tmp_path):
+    """Branches errors"""
+
+    d = tmp_path / "temp"
+    d.mkdir()
+    p = d / "inp.txt"
+    filepath = str(p)
+    
+    # multiple bad settings
+    for keyTest in BAD_BRACNHES: 
+    
+        with open(filepath, 'w') as f:
+            for item in BAD_SETTINGS["DN"]:
+                f.write("%s\n" % item)
+        
+        # the input writing is perforned using conftest
+        with pytest.raises(InputCardError, match="!!!*"):
+            ReadInput(filepath)
 
     
 

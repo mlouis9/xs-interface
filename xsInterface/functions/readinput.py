@@ -125,30 +125,38 @@ def _ProcessCards(data):
         cFound = {}  # cards Found dictionary
         for key in cardsList:
             cFound[key] = CARD_REGEX[key].search(cardKey)  
-        
-        # settings
-        if cFound['settings'] is not None:
-            # strip the ``set <card>`` from data
-            setLine = cardKey[cFound['settings'].span()[1]:]
-            # return container with settings
-            rc = _ImportSettings(setLine, cardData)
-        elif cFound['branches'] is not None:
-            setLine = cardKey[cFound['branches'].span()[1]:]
-            sd["brN"], sd["branches"] = _ImportBranches(setLine, cardData) 
-        elif cFound['histories'] is not None:
-            setLine = cardKey[cFound['histories'].span()[1]:]
-            sd["histN"], sd["histories"] = _ImportHistories(setLine, cardData) 
-        elif cFound['times'] is not None:
-            setLine = cardKey[cFound['times'].span()[1]:]
-            sd["units"], sd["times"] = _ImportTimes(setLine, cardData)
-        elif cFound['data'] is not None:
-            setLine = cardKey[cFound['data'].span()[1]:]
-            singlesets[iset] = _ImportData(setLine, cardData)
-            iset += 1
-        else:
-            raise InputGeneralError("Card does not exist: <{}>"
-                                    .format(cardKey))
-    
+            errmsg = cardKey
+        try:
+            if cFound['settings'] is not None:
+                card = 'settings'
+                # strip the ``set <card>`` from data
+                setLine = cardKey[cFound['settings'].span()[1]:]
+                # return container with settings
+                rc = _ImportSettings(setLine, cardData)
+            elif cFound['branches'] is not None:
+                card = 'branches'
+                setLine = cardKey[cFound['branches'].span()[1]:]
+                sd["brN"], sd["branches"] = _ImportBranches(setLine, cardData) 
+            elif cFound['histories'] is not None:
+                card = 'histories'
+                setLine = cardKey[cFound['histories'].span()[1]:]
+                sd["histN"], sd["histories"] =\
+                    _ImportHistories(setLine, cardData) 
+            elif cFound['times'] is not None:
+                card = 'times'
+                setLine = cardKey[cFound['times'].span()[1]:]
+                sd["units"], sd["times"] = _ImportTimes(setLine, cardData)
+            elif cFound['data'] is not None:
+                card = 'data'
+                setLine = cardKey[cFound['data'].span()[1]:]
+                singlesets[iset] = _ImportData(setLine, cardData)
+                iset += 1
+            else:
+                raise InputGeneralError("Card does not exist: <{}>"
+                                        .format(cardKey))
+        except (ValueError or TypeError or KeyError) as detail:   
+            raise InputCardError("{}\n{}\n".format(detail, errmsg),
+                                 INPUT_CARDS, card)     
     
     # Populate containers
     # -------------------------------------------------------------------------
@@ -164,7 +172,6 @@ def _ProcessCards(data):
         card = "data"
         multisets = _PopulateDataSets(rc, states, singlesets)       
     except (ValueError or TypeError or KeyError) as detail:
-        
         raise InputCardError("{}\n{}\n".format(detail, errmsg),
                              INPUT_CARDS, card) 
         
@@ -313,6 +320,9 @@ def _ImportBranches(setLine, tlines):
     # -------------------------------------------------------------------------       
     for item, value in data.items():
         data[item] = np.array(value, dtype=float)
+        if value == [] or value is None:
+            raise InputCardError("No data provided for branch <{}>.\n{}"
+                                 .format(item, errmsg), INPUT_CARDS, card)
 
     return N, data
 
@@ -346,7 +356,9 @@ def _ImportHistories(setLine, tlines):
     # -------------------------------------------------------------------------       
     for item, value in data.items():
         data[item] = np.array(value, dtype=float)
-
+        if value == [] or value is None:
+            raise InputCardError("No data provided for history <{}>.\n{}"
+                                 .format(item, errmsg), INPUT_CARDS, card)
     return N, data
 
 

@@ -147,7 +147,7 @@ def _isBoundArray(var, bounds, description):
 
 def _is1darray(var, description):
     """checks if the array is 1D"""
-    if np.array(var).ndim != 1:
+    if np.array(var).ndim != 1 or var.size == 0:
         raise TypeError("{} must be 1D array and not {}"
                         .format(description, var))
 

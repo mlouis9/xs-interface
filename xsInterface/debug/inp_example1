@@ -22,7 +22,7 @@ isotopes = 531350, 541350, 922350
 set branches 3
 fuel 600 900 1200 1500
 mod 500 600 700
-cool 500 600
+cool 600 500
 
 set histories 2
 nom 600 500 500

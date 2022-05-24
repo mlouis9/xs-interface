@@ -106,7 +106,7 @@ class Perturbations():
     """
 
     def __init__(self, branchN, branches, histN=None, histories=None,
-                 timeValues=None, timeUnits='MWd/kg'):
+                 timeValues=None, timeUnits='n/a'):
         """Assign parameters to describe the required/provided states"""
 
         # Define empty dictionaries to store branches, histories, and times
@@ -251,13 +251,13 @@ class Perturbations():
         """Check that all the data was inputted"""
         if self.branches != {}:
             for key, value in self.branches.items():
-                if value is None:
+                if value is None or value == []:
                     raise ValueError("No data is provided for branch <{}>."
                                      .format(key))
 
         if self.histories != {}:
             for key, value in self.histories.items():
-                if value is None:
+                if value is None or value == []:
                     raise ValueError("No data is provided for history <{}>."
                                      .format(key))
 
