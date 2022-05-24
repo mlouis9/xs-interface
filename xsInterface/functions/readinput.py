@@ -397,8 +397,9 @@ def _ImportData(setLine, tlines):
     # Process the set line values
     # -------------------------------------------------------------------------
     setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
-    flxName = setValues[0]
-    eneStruct = setValues[1:]  # must be in descending order
+    # idxData = setValues[0]  # index of the data set
+    flxName = setValues[1]
+    eneStruct = setValues[2:]  # must be in descending order
 
     # Separate between the different blocks
     dataBlocks = _SeparateBlock(card, tlines)
@@ -449,6 +450,7 @@ def _CleanFile(dataFile):
     # values represent the input values
     dataSets = {}
     currKey = []
+    idata = 0
     for tline in dataFile:
         if tline.strip() != '':  # empty line?
             tline = _StripLine(tline)
@@ -463,6 +465,11 @@ def _CleanFile(dataFile):
 
         if setMatch is not None:
             currKey = tline
+            # <set data> card can be defined multiple times
+            if CARD_REGEX["data"].search(currKey) is not None:
+                # add index to data
+                currKey = tline.replace('data', 'data{:d}'.format(idata))
+                idata += 1            
             dataSets[currKey] = []
         elif dataSets != {} and currKey in dataSets.keys():
             dataSets[currKey].append(tline)
