@@ -18,8 +18,6 @@ from xsInterface.errors.checkerrors import _isint, _islist, _inlist,\
     _ispositive, _isequallength, _is1darray, _isstr, _isuniquelist,\
     _isnonNegativeArray, _issortedarray, _isarray
 
-TIME_UNITS = ['MWd/kg', 'days', 'hours', 'minutes', 'seconds']
-
 
 class Perturbations():
     """Stores the names and values of the perturbation parameters.
@@ -108,7 +106,7 @@ class Perturbations():
     """
 
     def __init__(self, branchN, branches, histN=None, histories=None,
-                 timeValues=None, timeUnits='MWd/kg'):
+                 timeValues=None, timeUnits='n/a'):
         """Assign parameters to describe the required/provided states"""
 
         # Define empty dictionaries to store branches, histories, and times
@@ -156,7 +154,7 @@ class Perturbations():
             _issortedarray(timeValues, "Time/Burnup values")
             _isuniquelist(timeValues, "Time/Burnup values")
             # Check variables types
-            _inlist(timeUnits, "Time/Burnup units", TIME_UNITS)
+            _isstr(timeUnits, "Time/Burnup units")
             # Assign histories
             self.time["values"] = timeValues
             self.time["units"] = timeUnits
@@ -253,13 +251,13 @@ class Perturbations():
         """Check that all the data was inputted"""
         if self.branches != {}:
             for key, value in self.branches.items():
-                if value is None:
+                if ((value is None) or (len(value) == 0)):
                     raise ValueError("No data is provided for branch <{}>."
                                      .format(key))
 
         if self.histories != {}:
             for key, value in self.histories.items():
-                if value is None:
+                if ((value is None) or (len(value) == 0)):
                     raise ValueError("No data is provided for history <{}>."
                                      .format(key))
 

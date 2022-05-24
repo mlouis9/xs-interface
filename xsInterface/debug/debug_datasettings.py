@@ -21,8 +21,8 @@ rc = DataSettings(NG=2, DN=7, macro=True, micro=False, kinetics=True,
 
 # Feed in Macroscopic parameters
 # -----------------------------------------------------------------------------
-rc.AddData("macro", ["abs", "nsf", "sct"], [1, 1, 2])
+rc.AddData("macro", ["abs", "nsf", "sct"])
 
 # Feed in kinetics parameters
 # -----------------------------------------------------------------------------
-rc.AddData("kinetics", ["beta", "decay"], [1, 1])
+rc.AddData("kinetics", ["beta", "decay"])

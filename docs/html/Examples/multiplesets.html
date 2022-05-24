@@ -1,18 +1,19 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MultipleSets &#8212; xsInterface 0.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Decay Case" href="decay.html" />
@@ -37,7 +38,7 @@
 <span id="multiplesets-example"></span><h1>MultipleSets<a class="headerlink" href="#multiplesets" title="Permalink to this headline">¶</a></h1>
 <p>Example on how to collect, store, and process data using the
 <code class="docutils literal notranslate"><span class="pre">MultipleSets</span></code> container.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span> <span class="o">=</span> <span class="n">MultipleSets</span><span class="p">(</span><span class="n">macro</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span> <span class="o">=</span> <span class="n">MultipleSets</span><span class="p">(</span><span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="section" id="class-description">
@@ -81,8 +82,8 @@ list. Each argument represents a <code class="docutils literal notranslate"><spa
 all the required attributes, e.g. <code class="docutils literal notranslate"><span class="pre">macro</span></code> and <code class="docutils literal notranslate"><span class="pre">meta</span></code>.</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
-    <span class="n">Get</span><span class="p">(</span><span class="n">setIdx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">branch</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-        <span class="n">errFlag</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">Get</span><span class="p">(</span><span class="n">setIdx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">branch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">errFlag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="o">-----------------------------------------------------------</span>
 </pre></div>
 </div>
@@ -92,8 +93,8 @@ values that represent a history - time : float/number value of the time
 point - branch : array set of values for the specific branch - errFlag :
 boolean indicates whether error should be raised if state not found</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
-    <span class="n">DataTable</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">macroFlag</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">microFlag</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-              <span class="n">kineticsFlag</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">metaFlag</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+    <span class="n">DataTable</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">macroFlag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">microFlag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">kineticsFlag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metaFlag</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="o">-----------------------------------------------------------</span>
 </pre></div>
 </div>
@@ -109,7 +110,7 @@ kinetics attributes are included in table - metaFlag : boolean, default
 is False flag to indicate if all meta attributes are included in the
 table</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
-    <span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 <span class="o">-----------------------------------------------------------</span>
 </pre></div>
 </div>
@@ -122,10 +123,10 @@ history</p>
 </div>
 <div class="section" id="execution-sequence">
 <h2>Execution Sequence<a class="headerlink" href="#execution-sequence" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.containers.datasettings</span> <span class="k">import</span> <span class="n">DataSettings</span>
-<span class="kn">from</span> <span class="nn">xsInterface.containers.perturbationparameters</span> <span class="k">import</span> <span class="n">Perturbations</span>
-<span class="kn">from</span> <span class="nn">xsInterface.containers.singleset</span> <span class="k">import</span> <span class="n">SingleSet</span>
-<span class="kn">from</span> <span class="nn">xsInterface.containers.multiplesets</span> <span class="k">import</span> <span class="n">MultipleSets</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.containers.datasettings</span> <span class="kn">import</span> <span class="n">DataSettings</span>
+<span class="kn">from</span> <span class="nn">xsInterface.containers.perturbationparameters</span> <span class="kn">import</span> <span class="n">Perturbations</span>
+<span class="kn">from</span> <span class="nn">xsInterface.containers.singleset</span> <span class="kn">import</span> <span class="n">SingleSet</span>
+<span class="kn">from</span> <span class="nn">xsInterface.containers.multiplesets</span> <span class="kn">import</span> <span class="n">MultipleSets</span>
 </pre></div>
 </div>
 <div class="section" id="data-settings">
@@ -616,7 +617,7 @@ history</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -633,7 +634,7 @@ history</p>
       &copy;2022, Dan Kotlyar.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

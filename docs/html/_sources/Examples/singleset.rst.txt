@@ -50,7 +50,7 @@ Class Description
    e.g. [Tf, Tm]=[900, 600]
 -  history : string, the name of the history
 -  timeIdx : int, time index
--  timePoint : float, an existing time point. If ``timeIdx`` is defined
+-  time : float, an existing time point. If ``timeIdx`` is defined
    then this is redundant
 
 .. code:: python
@@ -99,13 +99,12 @@ Define what data needs to be collected.
                       meta=True, isotopes=[531350, 541350, 922350])
     # Add the variables names to be collected
     rc.AddData("macro",
-               ["inf_rabs", "inf_nsf", "kappa", "inf_flx"],
-               [1, 1, 1, 1])
-    rc.AddData("macro", ["inf_sp0"], [2])
+               ["inf_rabs", "inf_nsf", "kappa", "inf_flx"])
+    rc.AddData("macro", ["inf_sp0"])
     rc.AddData("kinetics", ["beta", "decay"])
     rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
-    rc.AddData("micro", ["sig_sct"], [2])
-    rc.AddData("meta", ["burnup", "keff"], [1, 1])
+    rc.AddData("micro", ["sig_sct"])
+    rc.AddData("meta", ["burnup", "keff"])
     rc.AddData("meta", ["date"])
 
 Define Perturbation States

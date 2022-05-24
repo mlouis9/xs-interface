@@ -32,7 +32,7 @@ from xsInterface.functions.energycondensation import EnergyCondensation
 from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
     _is1darray, _isequallength, _issortedarray, _inlist,\
     _isnumber, _isnonnegative, _isint, _inrange, _exp2dshape, _compare2lists,\
-    _islist, _isnonNegativeArray, _arriscloseInList
+    _islist, _isnonNegativeArray
 
 # REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
 
@@ -114,7 +114,7 @@ class SingleSet():
         if dataSetup.dataFlags["micro"]:
             self.micro["isotopes"] = dataSetup.isotopes
 
-    def AddState(self, branch, history=None, timeIdx=None, timePoint=None):
+    def AddState(self, branch, history=None, timeIdx=None, time=None):
         """add the values that describe this state
 
         Parameters
@@ -126,7 +126,7 @@ class SingleSet():
             the name of the history
         timeIdx : int
             time index
-        timePoint : float
+        time : float
             an existing time point.
             If ``timeIdx`` is defined then this is redundant
 
@@ -136,25 +136,25 @@ class SingleSet():
             If ``branch`` is not an array.
             If ``history`` is not string.
             If ``timeIdx`` is not an integer.
-            If ``timePoint`` is not a number.
+            If ``time`` is not a number.
         ValueError
             If ``branch`` values do not exist.
             If ``history`` value does not exist.
             If ``timeIdx`` is out of range.
-            If ``timePoint`` does not exist.
+            If ``time`` does not exist.
 
         Examples
         --------
         >>>
         >>> ss = SingleSet(rc, states, fluxName="inf_flx",
         >>>                energyStruct=[0.1, 4E+5])
-        >>> ss.AddState([600.001, 600, 500], "nom", timePoint=2.5)
+        >>> ss.AddState([600.001, 600, 500], "nom", time=2.5)
 
         """
-        branchIndices, branchValues, timeIdx, timePoint, historyValue =\
-            self._stateErrors(branch, history, timeIdx, timePoint)
+        branchIndices, branchValues, timeIdx, time, historyValue =\
+            self._stateErrors(branch, history, timeIdx, time)
         stateDict = {"stateVals": branchValues, "stateIdx": branchIndices,
-                     "timeIdx": timeIdx, "timePoint": timePoint,
+                     "timeIdx": timeIdx, "time": time,
                      "historyName": history,
                      "historyVals": historyValue}
         self.state = stateDict
@@ -329,25 +329,25 @@ class SingleSet():
         dSetup = copy.deepcopy(self._dSetup)  # description of data
 
         if macro:
-            expMacro = dSetup.macro["attributes"]
+            expMacro = dSetup.macro
             prdMacro = list(self.macro.keys())
             _compare2lists(expMacro, prdMacro, "Macro attr. in data setup",
                            "Macro attrs. actually defined")
         if micro:
-            expMicro = dSetup.micro["attributes"]
+            expMicro = dSetup.micro
             prdMicro = list(self.micro.keys())
             prdMicro.remove("isotopes")
             _compare2lists(expMicro, prdMicro, "Micro attr. in data setup",
                            "Micro attrs. actually defined")
 
         if kinetics:
-            expKinetics = dSetup.kinetics["attributes"]
+            expKinetics = dSetup.kinetics
             prdKinetics = list(self.kinetics.keys())
             _compare2lists(expKinetics, prdKinetics,
                            "Kinetics attr. in data setup",
                            "Kinetics attrs. actually defined")
         if meta:
-            expMeta = dSetup.meta["attributes"]
+            expMeta = dSetup.meta
             prdMeta = list(self.meta.keys())
             _compare2lists(expMeta, prdMeta, "Meta attr. in data setup",
                            "Meta attrs. actually defined")
@@ -365,10 +365,8 @@ class SingleSet():
         if fluxName is not None:
             _isstr(fluxName, "Flux variable name")
             # make sure this variable is defined on the object
-            if fluxName not in (dSetup.macro['attributes'] or
-                                dSetup.micro['attributes'] or
-                                dSetup.kinetics['attributes'] or
-                                dSetup.meta['attributes']):
+            if fluxName not in (dSetup.macro or dSetup.micro or
+                                dSetup.kinetics or dSetup.meta):
                 raise ValueError("Flux name <{}> is not on the "
                                  "datasets object".format(fluxName))
 
@@ -381,15 +379,15 @@ class SingleSet():
             _issortedarray(energyStruct[::-1], "Energy structure")
         _isnumber(relPrec, "Relative precision")
 
-    def _stateErrors(self, branch, history, timeIdx, timePoint):
+    def _stateErrors(self, branch, history, timeIdx, time):
         """check that a state is described properly"""
         stSetup = copy.deepcopy(self._sSetup)
 
         # sufficient data must be provided when calling this method
         if stSetup.time != {}:
-            if timeIdx is None and timePoint is None:
+            if timeIdx is None and time is None:
                 raise ValueError(
-                    "timeIdx or timePoint must be defined in ""AddState")
+                    "timeIdx or time must be defined in ""AddState")
 
         if stSetup.histories != {}:
             if history is None:
@@ -432,28 +430,32 @@ class SingleSet():
             historyValue = stSetup.histories[history]
         else:
             historyValue = None
-        # check that timeIdx or timePoint are properly defined
+        # check that timeIdx or time are properly defined
         if timeIdx is not None:
+            if isinstance(timeIdx, (np.ndarray, list)) and len(timeIdx) == 1:
+                timeIdx = float(timeIdx)
             _isint(timeIdx, "Time index")
             _isnonnegative(timeIdx, "Time index")
             _inrange(timeIdx, "Time index", [0, stSetup.time["npoints"]])
-            timePoint = stSetup.time["values"][timeIdx]
-        elif timePoint is not None:
-            _isnumber(timePoint, "Time point")
-            _isnonnegative(timePoint, "Time point")
+            time = stSetup.time["values"][timeIdx]
+        elif time is not None:
+            if isinstance(time, (np.ndarray, list)) and len(time) == 1:
+                time = float(time)
+            _isnumber(time, "Time point")
+            _isnonnegative(time, "Time point")
             # Find the closest (numerically) time value 
             cond = np.isclose(stSetup.time["values"],
-                              timePoint, rtol=self._relPrc)
+                              time, rtol=self._relPrc)
             if not cond.any():
                 raise ValueError("Time point {} does not exist!!!\n in the "
                                  "pre-defined points on the branches "
                                  "container {}"
-                                 .format(timePoint, stSetup.time["values"]))
+                                 .format(time, stSetup.time["values"]))
             else:
                 timeIdx = np.where(cond)[0][0]
-                timePoint = stSetup.time["values"][timeIdx]
+                time = stSetup.time["values"][timeIdx]
 
-        return branchIndices, branchValues, timeIdx, timePoint, historyValue
+        return branchIndices, branchValues, timeIdx, time, historyValue
 
     def _addMacroData(self, attr, value):
         """add data/attributes values
@@ -466,28 +468,26 @@ class SingleSet():
         """
 
         dsetup = copy.deepcopy(self._dSetup)  # data setup/rules
-        attributes = dsetup.macro["attributes"]
-        dimensions = dsetup.macro["dimensions"]
+        attributes = dsetup.macro
         _inlist(attr, "Attribute", attributes)
         if attr in self.macro:  # check if already exists
             raise ValueError("Attribute <{}> in macro is already "
                              "populated with data".format(attr))
-        # find position of the attribute in the list of attributes
-        idx = attributes.index(attr)
-        ndim = dimensions[idx]
-        if ndim == 1:
-            _isarray(value, "Attribute <{}>".format(attr))
-            value = np.array(value)
-            # Expected data includes: absorption, fission, ... cross sections
-            _is1darray(value, "Attribute <{}>".format(attr))
-            _isequallength(value, dsetup.ng, "Energy groups for "
-                           "attribute <{}>".format(attr))
-        elif ndim == 2:
-            _isarray(value, "Attribute <{}>".format(attr))
-            value = np.array(value)
+
+        _isarray(value, "Attribute <{}>".format(attr))
+        value = np.array(value, dtype=float)
+        ndim = value.ndim
+        if ndim == 2:
             # Expected data includes: scattering matrices cross sections
             _exp2dshape(value, (dsetup.ng, dsetup.ng),
                         "Attribute <{}>".format(attr))
+        elif ndim == 1:        
+            # Expected data includes: absorption, fission, ... cross sections
+            if len(value) == dsetup.ng*dsetup.ng:  # convert to 2-dim
+                value = np.reshape(value, (dsetup.ng, dsetup.ng))
+            else:
+                _isequallength(value, dsetup.ng, "Energy groups for "
+                               "attribute <{}>".format(attr))
         self.macro[attr] = value
 
     def _addMicroData(self, attr, value):
@@ -508,29 +508,25 @@ class SingleSet():
 
         dsetup = copy.deepcopy(self._dSetup)  # data setup/rules
         nisotopes = len(dsetup.isotopes)  # number of isotopes
-        attributes = dsetup.micro["attributes"]
-        dimensions = dsetup.micro["dimensions"]
+        attributes = dsetup.micro
         _inlist(attr, "Attribute", attributes)
         if attr in self.micro:  # check if already exists
             raise ValueError("Attribute <{}> in micro is already "
                              "populated with data".format(attr))
-        # find position of the attribute in the list of attributes
-        idx = attributes.index(attr)
-        ndim = dimensions[idx]
-        if ndim == 1:
-            _isarray(value, "Attribute <{}>".format(attr))
-            value = np.array(value)
+
+        _isarray(value, "Attribute <{}>".format(attr))
+        value = np.array(value, dtype=float)
+
+        try:
             # Expected data includes: microscopic fission, capture, ...
             _exp2dshape(value, (nisotopes, dsetup.ng),
                         "Attribute <{}> [row=isotopes, col=energy groups]"
                         .format(attr))
-        elif ndim == 2:
-            _isarray(value, "Attribute <{}>".format(attr))
-            value = np.array(value)
-            # Expected data includes: scattering cross sections
+        except ValueError:
             _exp2dshape(value, (nisotopes, dsetup.ng*dsetup.ng),
                         "Attribute <{}> [row=isotopes, col=energy groups]"
                         .format(attr))
+            
         self.micro[attr] = value
 
     def _addKineticsData(self, attr, value):
@@ -544,22 +540,18 @@ class SingleSet():
         """
 
         dsetup = copy.deepcopy(self._dSetup)  # data setup/rules
-        attributes = dsetup.kinetics["attributes"]
-        dimensions = dsetup.kinetics["dimensions"]
+        attributes = dsetup.kinetics
         _inlist(attr, "Attribute", attributes)
         if attr in self.kinetics:  # check if already exists
             raise ValueError("Attribute <{}> in kinetics is already "
                              "populated with data".format(attr))
-        # find position of the attribute in the list of attributes
-        idx = attributes.index(attr)
-        ndim = dimensions[idx]
-        if ndim == 1:
-            _isarray(value, "Attribute <{}>".format(attr))
-            value = np.array(value)
-            # Expected data includes: decay constants and beta values
-            _is1darray(value, "Attribute <{}>".format(attr))
-            _isequallength(value, dsetup.dn, "Delayed neutron groups for "
-                           "attribute <{}>".format(attr))
+
+        _isarray(value, "Attribute <{}>".format(attr))
+        value = np.array(value)
+        # Expected data includes: decay constants and beta values
+        _is1darray(value, "Attribute <{}>".format(attr))
+        _isequallength(value, dsetup.dn, "Delayed neutron groups for "
+                       "attribute <{}>".format(attr))
         self.kinetics[attr] = value
 
     def _addMetaData(self, attr, value):
@@ -573,20 +565,13 @@ class SingleSet():
         """
 
         dsetup = self._dSetup  # data setup/rules
-        attributes = dsetup.meta["attributes"]
-        dimensions = dsetup.meta["dimensions"]
+        attributes = dsetup.meta
         _inlist(attr, "Attribute", attributes)
         if attr in self.meta:  # check if already exists
             raise ValueError("Attribute <{}> in meta is already "
                              "populated with data".format(attr))
-        # find position of the attribute in the list of attributes
-        idx = attributes.index(attr)
-        ndim = dimensions[idx]
-        if ndim == 1:
-            _isarray(value, "Attribute <{}>".format(attr))
-            value = np.array(value)
-            _is1darray(value, "Attribute <{}>".format(attr))
-        elif ndim == 2:
-            _isarray(value, "Attribute <{}>".format(attr))
-            value = np.array(value)
+        try:
+            value = np.array(value, dtype='float')
+        except ValueError:
+            pass
         self.meta[attr] = value

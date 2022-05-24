@@ -158,7 +158,7 @@ class MultipleSets():
 
             state = getattr(arg, "state")  # get the description of state
             history = state['historyVals']
-            time = state['timePoint']
+            time = state['time']
             branch = state['stateVals']
             # State nametuple
             stateId = StateDescrp(history, time, branch)
@@ -327,13 +327,13 @@ class MultipleSets():
             if self.sets != {}:
                 dSetup = self.sets[0]._dSetup
                 if macroFlag:
-                    attrs = attrs + dSetup.macro["attributes"]
+                    attrs = attrs + dSetup.macro
                 if microFlag:
-                    attrs = attrs + dSetup.micro["attributes"]
+                    attrs = attrs + dSetup.micro
                 if kineticsFlag:
-                    attrs = attrs + dSetup.kinetics["attributes"]
+                    attrs = attrs + dSetup.kinetics
                 if metaFlag:
-                    attrs = attrs + dSetup.meta["attributes"]
+                    attrs = attrs + dSetup.meta
 
         # Pandas table to store information of time, states, and branch values
         df = pd.DataFrame(
