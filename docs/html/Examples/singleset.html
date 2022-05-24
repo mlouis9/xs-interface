@@ -78,7 +78,7 @@ close perturbation exists</p></li>
 e.g. [Tf, Tm]=[900, 600]</p></li>
 <li><p>history : string, the name of the history</p></li>
 <li><p>timeIdx : int, time index</p></li>
-<li><p>timePoint : float, an existing time point. If <code class="docutils literal notranslate"><span class="pre">timeIdx</span></code> is defined
+<li><p>time : float, an existing time point. If <code class="docutils literal notranslate"><span class="pre">timeIdx</span></code> is defined
 then this is redundant</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GetValues</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
@@ -116,13 +116,12 @@ incdicate if all data in meta must be defined</p>
                   <span class="n">meta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">isotopes</span><span class="o">=</span><span class="p">[</span><span class="mi">531350</span><span class="p">,</span> <span class="mi">541350</span><span class="p">,</span> <span class="mi">922350</span><span class="p">])</span>
 <span class="c1"># Add the variables names to be collected</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span>
-           <span class="p">[</span><span class="s2">&quot;inf_rabs&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;kappa&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_flx&quot;</span><span class="p">],</span>
-           <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;inf_sp0&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+           <span class="p">[</span><span class="s2">&quot;inf_rabs&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;kappa&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_flx&quot;</span><span class="p">])</span>
+<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;inf_sp0&quot;</span><span class="p">])</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;kinetics&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;decay&quot;</span><span class="p">])</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;sig_c&quot;</span><span class="p">,</span> <span class="s2">&quot;sig_f&quot;</span><span class="p">,</span> <span class="s2">&quot;sig_n2n&quot;</span><span class="p">])</span>
-<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;sig_sct&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;burnup&quot;</span><span class="p">,</span> <span class="s2">&quot;keff&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;sig_sct&quot;</span><span class="p">])</span>
+<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;burnup&quot;</span><span class="p">,</span> <span class="s2">&quot;keff&quot;</span><span class="p">])</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
 </pre></div>
 </div>

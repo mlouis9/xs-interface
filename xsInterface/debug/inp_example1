@@ -10,11 +10,10 @@
 
 set settings 2 7
 macro =  inf_flx, inf_nsf, inf_rabs, inf_sp0
-dim_macro = 1, 1, 1
-#micro =  abs, fiss, nsf
+micro =  sig_f, sig_sct
 kinetics =  beta, decay
 meta =  date
-#isotopes = 531350, 5141350
+isotopes = 531350, 541350, 922350
 
 # -----------------------------------------------------------------------------
 #                            PERTURBATIONS
@@ -63,15 +62,15 @@ block meta
 date April 09, 2022
 
 #-------------
-#block micro
+block micro
 #-------------
-#sig_sct
-#11, 12, 21, 22  % isotope-1  
-#11, 12, 21, 22  % isotope-2
-#11, 12, 21, 22  % isotope-3
-#sig_f
-#11, 12  % isotope-1  
-#11, 12  % isotope-2
-#11, 12  % isotope-3
+sig_sct
+11, 12, 21, 22  % isotope-1  
+11, 12, 21, 22  % isotope-2
+11, 12, 21, 22  % isotope-3
+sig_f
+11, 12  % isotope-1  
+11, 12 3 % isotope-2
+11, 12  % isotope-3
 
 

@@ -44,6 +44,7 @@ EQUAL_REGEX = compile(r'\s*\w+\s*\=\s*', IGNORECASE)
 PUNCT_MARKS_REGEX = compile(r'\"[^\"]+\"')  # everything in punctuation marks
 FIRSTWORD_REGEX = compile(r'\w+[_-]\w+|\w+')  # 1st word (e.g., dim_mac or mac)
 SECONDWORD_REGEX = compile(r'\s*(set\s+)(\w+[_-]\w+)')  # 2nd word
+NUM_REGEX = compile(r'[0-9+-eE]*', IGNORECASE)
 # Regular expressions for all set cards
 CARD_REGEX = {
     "settings": compile(r'\s*(set\s+)(settings)', IGNORECASE),
@@ -408,13 +409,18 @@ def _ImportData(setLine, tlines):
 
         if blkname not in expblocks:
             raise InputCardError(
-                "!!!\Following blocks <{}> are expected.\n"
+                "Following blocks <{}> are expected.\n"
                 .format(expblocks), INPUT_CARDS, card)    
         
         # Process the block card values
         # ---------------------------------------------------------------------
         errmsg = "<set {}; block {}>.\n".format(card, blkname)
-    
+
+        if blkname == 'micro':
+            data = _BlockMicroDict(blklines, card, errmsg)
+            blksdata[blkname] = data
+            continue
+            
         data = _CardDataDict(blklines, card, errmsg)
     
         # Data manipulation
@@ -570,6 +576,58 @@ def _CardDataList(tlines, setcard, errmsg):
 
     return cardData
 
+
+def _BlockMicroDict(tlines, setcard, errmsg):
+    """process the micro block"""
+    # tlines are the text lines to be processed (include variable names)
+    # set card name, e.g., 'settings'
+    # errmsg, error message to be presented
+    
+    # store results in a dictionary
+    
+    cardData = {}  # reset the dictionary with all expected keys
+    name = None
+    values = []
+    # loop over all the data lines
+    for tline in tlines:
+        tline = tline.replace('=', '')  # remove "=" signs
+        # check if the line contains numeric values or not
+        flagNum = True
+        try:
+            values = np.array(tline.split(), dtype=float)
+            flagNum = True
+        except ValueError:
+            flagNum = False
+        
+        if flagNum:  # line with numbers
+            if (name is None) or (name not in cardData):
+                raise NonInputError(
+                    "\nThe following line:\n<{}>\n is not associated to any "
+                    "input in block <{}>.\n".format(tline, setcard))
+            else:
+                pvals = cardData[name]
+                if pvals.size == 0:  # new data
+                    cardData[name] = np.array([values])
+                else:
+                    try:  # append to existing data
+                        cardData[name] = np.append(pvals, [values], axis=0)
+                    except ValueError:
+                        raise InputCardError(
+                            "{}\nNumber of entries in line: \n<{}>\nnot "
+                            "consistent with previous lines\n"
+                            .format(errmsg, tline), INPUT_CARDS, setcard)                        
+    
+        else:  # line with the variable name
+            idx = FIRSTWORD_REGEX.search(tline).span()
+            name = tline[idx[0]:idx[1]]
+            cardData[name] = np.array([[]])  # define an empty array
+            
+    # check that the dict is not empty
+    if cardData == {}:
+        raise InputCardError("!!!\nNo data provided.\n{}\n".format(errmsg),
+                             INPUT_CARDS, setcard)
+
+    return cardData
 
 # -----------------------------------------------------------------------------
 #                   DATA MANIPULATION FUNCTIONS

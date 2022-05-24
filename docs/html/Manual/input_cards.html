@@ -36,7 +36,7 @@
             
   <div class="section" id="input-cards">
 <span id="inputcards"></span><h1>Input Cards<a class="headerlink" href="#input-cards" title="Permalink to this headline">¶</a></h1>
-<p>A list of all the input cards is descrbed in the table below.
+<p>A list of all the input cards is descirbed in the table below.
 Description on the format, comments, and magic capabilities is provided in <a class="reference internal" href="#gen-comments"><span class="std std-ref">General comments</span></a>.</p>
 <table class="docutils align-default">
 <colgroup>
@@ -69,18 +69,9 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <div class="section" id="general-comments">
 <span id="gen-comments"></span><h2>General comments<a class="headerlink" href="#general-comments" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Comments are denoted as <code class="docutils literal notranslate"><span class="pre">#</span></code> and <code class="docutils literal notranslate"><span class="pre">%</span></code>. Input followowing these signs is ignored.</p></li>
+<li><p>Comments are denoted as <code class="docutils literal notranslate"><span class="pre">#</span></code> and <code class="docutils literal notranslate"><span class="pre">%</span></code>. Inputs following these signs are ignored.</p></li>
 <li><p>Commas are allowed.</p></li>
 <li><p>Case insensitive (captial and lower cases are allowed)</p></li>
-<li><dl class="simple">
-<dt>Setting lines can include or exclude the card name.</dt><dd><ul>
-<li><p>Example of excluding: <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">settings</span> <span class="pre">2</span> <span class="pre">7</span></code></p></li>
-<li><p>Example of including: <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">settings</span> <span class="pre">NG=2,</span> <span class="pre">DN=7</span></code></p></li>
-<li><p>The benifit of including is to determine the order at which values are provided.</p></li>
-</ul>
-</dd>
-</dl>
-</li>
 <li><p><code class="docutils literal notranslate"><span class="pre">=</span></code> signs are allowed to be added (but not mandatory) when the card name is provided.</p></li>
 <li><p>Empty lines are allowed between settings lines.</p></li>
 <li><p>Special characters (<code class="docutils literal notranslate"><span class="pre">?</span> <span class="pre">$</span> <span class="pre">&amp;</span> <span class="pre">&#64;</span> <span class="pre">~</span> <span class="pre">&lt;</span> <span class="pre">&gt;</span></code>) are not allowed.</p></li>
@@ -107,10 +98,6 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <li><p><code class="docutils literal notranslate"><span class="pre">kinetics</span></code> names for the kinetics parameters (e.g., beta values)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">meta</span></code> names for the metastable parameters</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">isotopes</span></code> a list of isotopes in a ZZAAAM (e.g., 922350). User has a flexibility to define their own format.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dim_macro</span></code> dimensions of the macroscopic parameters</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dim_micro</span></code> dimensions of the microscopic parameters</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dim_kinetics</span></code> dimensions of the kinetics parameters (e.g., beta values)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dim_meta</span></code> dimensions of the metastable parameters</p></li>
 </ul>
 </dd>
 </dl>
@@ -118,26 +105,10 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <blockquote>
 <div><ul class="simple">
 <li><p>At least one of the following should be provided: <cite>macro</cite>, <cite>micro</cite>, <cite>kinetics</cite>, <cite>meta</cite>. User can omit specific entries (e.g., <code class="docutils literal notranslate"><span class="pre">meta</span></code>).</p></li>
-<li><p>Dimensions are not required to be provided and the dafualt is 1-dim for every parameter. If a 2D array is provided, the user needs to define the dimensions. <code class="docutils literal notranslate"><span class="pre">0</span></code> indicates that dimensions are not required to be verified.</p></li>
 <li><p>The sub-cards can be defined multiple times, e.g.,</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">macro</span> <span class="n">fiss</span>
 <span class="n">macro</span> <span class="n">nsf</span><span class="p">,</span> <span class="n">kappa</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>If sub-cards are defined multiple times, the corresponding dimensions must describe these accordingly, e.g.,</p></li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">macro</span> <span class="n">fiss</span> <span class="n">nsf</span>
-<span class="n">dim_macro</span> <span class="mi">1</span> <span class="mi">1</span>
-<span class="n">macro</span> <span class="n">sct</span>
-<span class="n">dim_macro</span> <span class="mi">2</span>
-</pre></div>
-</div>
-<p>or</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">macro</span> <span class="n">fiss</span> <span class="n">nsf</span>
-<span class="n">macro</span> <span class="n">sct</span>
-<span class="n">dim_macro</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">2</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -148,7 +119,6 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">settings</span> <span class="n">NG</span> <span class="mi">2</span> <span class="n">DN</span> <span class="mi">7</span>
 <span class="n">macro</span> <span class="o">=</span>  <span class="nb">abs</span><span class="p">,</span> <span class="n">fiss</span><span class="p">,</span> <span class="n">nsf</span>
 <span class="n">macro</span> <span class="o">=</span> <span class="n">sct</span>
-<span class="n">dim_macro</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
 <span class="n">micro</span> <span class="o">=</span>  <span class="nb">abs</span><span class="p">,</span> <span class="n">fiss</span><span class="p">,</span> <span class="n">nsf</span>
 <span class="n">kinetics</span> <span class="o">=</span>  <span class="n">beta</span> <span class="n">decay_const</span>
 <span class="n">meta</span> <span class="o">=</span>  <span class="n">time</span> <span class="n">keff</span>
@@ -250,7 +220,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </div>
 <dl class="simple">
 <dt>where in the <strong>set</strong> line,</dt><dd><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">UNITS</span></code> describe the units of time/burnup dependence.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UNITS</span></code> describe the units of time/burnup dependence. Can be arbitrary defined.</p></li>
 </ul>
 </dd>
 <dt>and, the time/burnup  values are provided in the following lines.</dt><dd><ul class="simple">
