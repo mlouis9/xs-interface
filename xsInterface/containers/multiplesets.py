@@ -424,7 +424,7 @@ class MultipleSets():
         pd = self.pandasTable
         
         # Column index for the starting position of values
-        valsIdx0 = len(self.states._branchList) + 3  # 3 for (idx, hist., time)
+        valsIdx0 = len(self.states._branchList) + 2  # 2 for (hist., time)
         idx = [i for i in range(valsIdx0)]  # indices to be included
         
 
