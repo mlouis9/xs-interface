@@ -101,9 +101,9 @@ def ReadInput(inputFile):
     data = _CleanFile(dataFile)    
     
     # Process all cards
-    setLineData, states, msets = _ProcessCards(data)
+    rc, states, msets = _ProcessCards(data)
     
-    return setLineData, states, msets
+    return rc, states, msets
 
 
 def _ProcessCards(data):
