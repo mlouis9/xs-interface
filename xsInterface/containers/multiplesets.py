@@ -251,7 +251,7 @@ class MultipleSets():
         return self.sets[setIdx]
 
     def __getitem__(self, setIdx):
-        """direct method to obtain set only if index is known"""
+        """direct method to obtain a set only if index is known"""
         return self.sets[setIdx]
 
     def DataTable(self, attrs=None, macroFlag=None, microFlag=None,
@@ -449,7 +449,67 @@ class MultipleSets():
             pd = pd.iloc[:, idx]
         
         return pd
-                
+
+
+    def _IsCompleteTable(self):
+        """Check that Pandas table contains all states
+
+        Check whether all states were provided by user. Return a dictionary
+        with the missing states. This method can be executed only after the
+        pandas tables are generated.
+
+        Returns
+        -------
+        missingStates : dict
+            states names as keys and their correponding values
+
+        Raises
+        ------
+        AttributeError
+            If ``pandasTable`` is not an attribute on the object.
+
+        """
+
+        # store all the missing states
+        missingStates = []
+
+        if not hasattr(self, 'pandasTable'):
+            raise AttributeError("No pandasTable attribute.\n Create using the"
+                             " DataTable method")
+        # pandas table with all states and values
+        pd = self.pandasTable
+
+        # histrorical branches
+        hstList = [None]
+        if not self.states._historyList == []:
+            hstList = self.states._historyList
+
+        # time points
+        timeVals = [None]
+        if not self.states.time == {}:
+            timeVals = self.states.time['values']
+
+        # loop over all histories, times, and branches
+        branches = list(self.states.branches.values())
+        
+        
+        # Loop and check is states exist or not
+        for history in hstList:
+            for time in timeVals:
+                for branch in itertools.product(*branches):
+                    stateId = StateDescrp(history, time, branch)
+                    stateData = pd.Values(attrs=None, **branch)
+                    
+                    # check is state exists
+                    if stateData != []:
+                        pass
+                    else:
+                        missingStates.append(stateId)
+                    
+        return missingStates
+
+
+              
                 
                 
                 

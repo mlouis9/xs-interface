@@ -30,6 +30,7 @@ from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.singleset import SingleSet
 from xsInterface.containers.multiplesets import MultipleSets
 from xsInterface.containers.perturbationparameters import Perturbations
+from xsInterface.containers.universes import Universes
 from xsInterface.errors.checkerrors import _isstr
 from xsInterface.errors.customerrors import NonInputError, InputGeneralError,\
     InputCardError
@@ -62,7 +63,7 @@ INPUT_CARDS =\
 
 
 
-def ReadInput(inputFile):
+def ReadInput(**kwargs):
     """Read the input file defined by the user
 
     This function reads the input defined by the user and populates the
@@ -70,8 +71,10 @@ def ReadInput(inputFile):
 
     Parameters
     ----------
-    inputFile : file path
-        the full directory + file name path
+    kwargs : named arguments
+        keys represent the universe Id and value represent the full
+        file directory path + file name.
+
 
     Raises
     ------
@@ -86,24 +89,36 @@ def ReadInput(inputFile):
 
     """
 
-    # check that `inputFile` variable is a string
-    _isstr(inputFile, "Input file")
+    univs = Universes()
 
-    # read the file and return its content
-    filePath = Path(inputFile)
-    if not filePath.is_file():
-        raise OSError("The file {} does not exist.".format(inputFile))
+    for univId, inputFile in kwargs.items():
 
-    with open(inputFile, 'r') as fObject:
-        dataFile = fObject.readlines()
+        print("... Reading universe <{}> ...".format(univId))        
+
+        # check that `inputFile` variable is a string
+        _isstr(inputFile, "Input file")
+    
+        # read the file and return its content
+        filePath = Path(inputFile)
+        if not filePath.is_file():
+            raise OSError("The file {} does not exist.".format(inputFile))
+    
+        with open(inputFile, 'r') as fObject:
+            dataFile = fObject.readlines()
+            
+        # strip comments and empty lines
+        data = _CleanFile(dataFile)    
         
-    # strip comments and empty lines
-    data = _CleanFile(dataFile)    
+        # Process all cards
+        rc, states, msets = _ProcessCards(data)
+        
+        # add the data to the universe containers
+        univs.Add(univId, rc, states, msets)
     
-    # Process all cards
-    rc, states, msets = _ProcessCards(data)
+    # Build Pandas Tables for all the universes
+    univs.PandaTables()
     
-    return rc, states, msets
+    return univs
 
 
 def _ProcessCards(data):
