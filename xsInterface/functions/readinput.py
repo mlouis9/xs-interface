@@ -274,7 +274,7 @@ def _ImportSettings(setLine, tlines):
 
     # Process the set card values
     # -------------------------------------------------------------------------
-    expinputs = ['macro', 'micro', 'kinetics', 'meta', 'isotopes']
+    expinputs = ['macro', 'micro', 'kinetics', 'meta', 'isotopes', 'nuclides']
     errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
 
     # all cards and corresponding values are placed in a dictionary
@@ -299,8 +299,11 @@ def _ImportSettings(setLine, tlines):
     # Assign data to designated container
     # -------------------------------------------------------------------------
     try:
+        if dvals["nuclides"] is not None:
+            nuclides = dvals["nuclides"][0]
         rc = DataSettings(NG, DN, flags["macro"], flags["micro"],
-                          flags["kinetics"], flags["meta"], dvals["isotopes"])
+                          flags["kinetics"], flags["meta"], dvals["isotopes"],
+                          nuclides)
         if flags["macro"]:
             rc.AddData("macro", dvals["macro"])
         if flags["micro"]:

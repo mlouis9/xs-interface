@@ -367,9 +367,9 @@ class MultipleSets():
                                            .format(stateId, detail))
                         vals = ss.GetValues(attrs)
                         df.loc[idx] = [history, time] + list(branchArr) +\
-                                list(vals.values())
+                            list(vals.values())
                         idx += 1
-                        
+
         self.pandasTable = df
         return df
 
@@ -419,14 +419,13 @@ class MultipleSets():
 
         if not hasattr(self, 'pandasTable'):
             raise AttributeError("No pandasTable attribute.\n Create using the"
-                             " DataTable method")
+                                 " DataTable method")
         # pandas table with all states and values
         pd = self.pandasTable
-        
+
         # Column index for the starting position of values
         valsIdx0 = len(self.states._branchList) + 2  # 2 for (hist., time)
         idx = [i for i in range(valsIdx0)]  # indices to be included
-        
 
         # Error checking for attributes
         if attrs is not None:
@@ -439,17 +438,17 @@ class MultipleSets():
                 idx0 = pd.columns.get_loc(attr)
                 if idx0 not in idx:  # only if the column has not been added
                     idx += [idx0]
-            
+
         # loop over all the dependencies
         for col, value in kwargs.items():
             if not pd[col].isnull().any():  # check: column contains no None
-                pd = pd[pd[col] == value]  # select the values of interest in col.
-        
+                # select the values of interest in col.
+                pd = pd[pd[col] == value]
+
         if attrs is not None:  # all attributes should be included
             pd = pd.iloc[:, idx]
-        
-        return pd
 
+        return pd
 
     def _IsCompleteTable(self):
         """Check that Pandas table contains all states
@@ -470,14 +469,13 @@ class MultipleSets():
 
         """
 
-        # store all the missing states
+        # store all the missing & existing states
         missingStates = []
+        existingStates = []
 
         if not hasattr(self, 'pandasTable'):
             raise AttributeError("No pandasTable attribute.\n Create using the"
-                             " DataTable method")
-        # pandas table with all states and values
-        pd = self.pandasTable
+                                 " DataTable method")
 
         # histrorical branches
         hstList = [None]
@@ -491,25 +489,19 @@ class MultipleSets():
 
         # loop over all histories, times, and branches
         branches = list(self.states.branches.values())
-        
-        
+
         # Loop and check is states exist or not
         for history in hstList:
             for time in timeVals:
                 for branch in itertools.product(*branches):
+                    branchArr = np.array(branch, dtype=float)
                     stateId = StateDescrp(history, time, branch)
-                    stateData = pd.Values(attrs=None, **branch)
-                    
+                    ss = self.Get(branch=branchArr, time=time, history=history)
+
                     # check is state exists
-                    if stateData != []:
-                        pass
-                    else:
+                    if ss is None:
                         missingStates.append(stateId)
-                    
-        return missingStates
+                    else:
+                        existingStates.append(stateId)
 
-
-              
-                
-                
-                
+        return missingStates, existingStates

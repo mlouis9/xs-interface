@@ -10,7 +10,7 @@ Container to collect, store, and process data including:
 
 
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
-Last updated on Mon Apr 11 05:00:00 2022 @author: Dan Kotlyar
+Last updated on Tue June 21 09:00:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -18,6 +18,7 @@ List changes or additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 Energy condensation method - 04/13/2022 - DK
+Manipulate method - 06/21/2022 - DK
 
 """
 
@@ -35,7 +36,7 @@ from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
     _islist, _isnonNegativeArray
 
 # REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
-
+OPERATION_MODES = ["multiply", "divide", "add", "subtract"]
 
 class SingleSet():
     """Container that stores the most basic data set
@@ -241,6 +242,109 @@ class SingleSet():
                                .format(attr))
         return dictValues
 
+
+    def Manipulate(self, mode, attr, attr1, attr2):
+        """Mathematical operation between two attributes or attribute-constant
+
+        Mathematical operation is performed between two macro/micro attributes
+        including:
+            - Multiplication, division, addition, and subtraction operations
+
+        Parameters
+        ----------
+        mode : string
+            type of the mathematical relation
+            ["multiply", "divide", "add", "subtract"]
+        attr : string
+            name of attribute where results will be written to.            
+        attr1 : string
+            name of attribute 1 (can be macro or micro)
+        attr2 : string
+            name of attribute 2 (can be macro or micro)  
+
+
+        Raises
+        ------
+        TypeError
+            If any of the ``mode``, ``attr``, ``attr1``, ``attr2`` is not str.
+        ValueError
+            If ``mode`` is not defined.
+
+
+        Examples
+        --------
+        >>> ss.BinaryOperation(substract, FISS_NEW,  FISS, sig_f)
+
+        """
+        # deep copy for the self object
+        selfCopy = copy.deepcopy(self)
+        ng = self._dSetup.ng
+        # Variables types
+        _isstr(attr, "Attribute")
+        _isstr(attr1, "Attribute 1")
+        _isstr(attr2, "Attribute 2")
+        _inlist(mode, "Mode of operation", OPERATION_MODES)
+
+        # Attribute 1        
+        if attr1 in self.macro:
+            microFlag1 = False
+            val1 = self.macro[attr1]
+        elif attr1 in self.micro:
+            microFlag1 = True
+            val1 = self.micro[attr1]
+            colN = val1.shape[1]
+            nd1 = self.micro[self._dSetup.nuclides]
+            nd1 = np.tile(nd1, (1, colN))
+            # val1 = sum(val1*nd1)
+        else:
+            raise KeyError("Attribute 1 <{}> does not exist in macro or micro"
+                           .format(attr1))            
+        # Attribute 2
+        if attr2 in self.macro:
+            microFlag2 = False
+            val2 = self.macro[attr2]
+        elif attr2 in self.micro:
+            microFlag2 = True
+            val2 = self.micro[attr2]
+            colN = val2.shape[1]
+            nd2 = self.micro[self._dSetup.nuclides]
+            nd2 = np.tile(nd2, (1, colN))
+            # val2 = sum(val2*nd2)
+        else:
+            raise KeyError("Attribute 2 <{}> does not exist in macro or micro"
+                           .format(attr2))
+
+        if (microFlag1 and microFlag2):  # both are micro parameters
+            pass
+        elif microFlag1:  # attr1 is micro and attr2 is macro
+            val1 = sum(val1*nd1)
+            if val1.size == 2*ng:  # scattering matrices
+                val1 = np.reshape(val1, (ng, ng))
+        elif microFlag2:  # attr2 is micro and attr1 is macro
+            val2 = sum(val2*nd2)
+            if val2.size == 2*ng:  # scattering matrices
+                val2 = np.reshape(val2, (ng, ng))
+        else:  # both attr1 and attr2 are macro parameters
+            pass
+
+            
+        if mode == "multiply":
+            val = val1 * val2
+        elif mode == "divide":
+            val = val1 / val2
+        elif mode == "add":
+            val = val1 + val2
+        else: # mode == "subtract"
+            val = val1 - val2
+        
+        if (microFlag1 and microFlag2):
+            selfCopy.micro[attr] = val
+        else:
+            selfCopy.macro[attr] = val
+            
+        return selfCopy
+        
+
     def Condense(self, cutoffE):
         """Energy condensation method
 
@@ -283,7 +387,7 @@ class SingleSet():
         # ---------------------------------------------------------------------
         ng = len(self.energygrid) - 1
         for attr, values in self.micro.items():
-            if attr == "isotopes":
+            if (attr == "isotopes" or attr == self._dSetup.nuclides):
                 continue
             nisotopes = len(self.micro["isotopes"])
             condvalues = np.array(values)
@@ -303,7 +407,7 @@ class SingleSet():
                 condvalues[idx] = values1  # values for each isotope
 
             # matrix for each attribute
-            condObj.macro[attr] = condvalues
+            condObj.micro[attr] = condvalues
 
         # update the energy structure
         condObj.energygrid = condE
@@ -517,15 +621,21 @@ class SingleSet():
         _isarray(value, "Attribute <{}>".format(attr))
         value = np.array(value, dtype=float)
 
-        try:
-            # Expected data includes: microscopic fission, capture, ...
-            _exp2dshape(value, (nisotopes, dsetup.ng),
-                        "Attribute <{}> [row=isotopes, col=energy groups]"
+        if attr == dsetup.nuclides:
+            _exp2dshape(value, (nisotopes, 1),
+                        "Attribute <{}> [row=isotopes, col=nuclide density]"
                         .format(attr))
-        except ValueError:
-            _exp2dshape(value, (nisotopes, dsetup.ng*dsetup.ng),
-                        "Attribute <{}> [row=isotopes, col=energy groups]"
-                        .format(attr))
+        else:
+            try:
+                
+                # Expected data includes: microscopic fission, capture, ...
+                _exp2dshape(value, (nisotopes, dsetup.ng),
+                            "Attribute <{}> [row=isotopes, col=energy groups]"
+                            .format(attr))
+            except ValueError:
+                _exp2dshape(value, (nisotopes, dsetup.ng*dsetup.ng),
+                            "Attribute <{}> [row=isotopes, col=energy groups]"
+                            .format(attr))
             
         self.micro[attr] = value
 

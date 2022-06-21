@@ -39,6 +39,8 @@ class DataSettings():
         indicate whether meta data is expected to be provided
     isotopes : array
         ZZAAA0/1 for all the isotopes to be provided
+    nuclides : str
+        name of the variable that will store nuclides densities in #/b/cm
 
     Attributes
     -----------
@@ -79,11 +81,11 @@ class DataSettings():
     Examples
     ---------
     >>> rc = DataSettings(NG=2, DN=7, macro=True, micro=False, kinetics=True,
-    >>>                   meta=False, isotopes=None)
+    >>>                   meta=False, isotopes=None, nuclides=None)
     """
 
     def __init__(self, NG, DN, macro=True, micro=False, kinetics=False,
-                 meta=False, isotopes=None):
+                 meta=False, isotopes=None, nuclides=None):
         """Assign parameters that describe the required data to be provided"""
 
         # Check variables types
@@ -100,9 +102,10 @@ class DataSettings():
         if micro:
             if isotopes is not None:
                 isotopes = np.array(isotopes, dtype=int)
+                _isstr(nuclides, "Nuclides variable name")
             else:
                 raise ValueError("<isotopes> list/array must be provided")
-
+                
         # Reset variables
         self.ng = NG  # number of energy groups
         self.dn = DN  # number of delayed neutron groups
@@ -113,6 +116,7 @@ class DataSettings():
         self.micro = []
         self.kinetics = []
         self.meta = []
+        self.nuclides = nuclides
 
     def AddData(self, dataType, attributes):
         """Add relevant macroscopic/microscopic/meta data

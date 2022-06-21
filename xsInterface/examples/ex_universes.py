@@ -42,5 +42,5 @@ universes.Values("u0", attrs=["inf_nsf", 'inf_sp0'], fuel=900)
 msets0.Values(attrs=["inf_nsf", 'inf_sp0'], fuel=900)
 
 # check that all states are defined
-msets0._IsCompleteTable()
+missingStates, existingStates = msets0._IsCompleteTable()
 

@@ -10,28 +10,27 @@
 
 set settings 2 7
 macro =  inf_flx, inf_nsf, inf_rabs, inf_sp0
-micro =  sig_f, sig_sct
+micro =  sig_f, sig_sct, nd
 kinetics =  beta, decay
 meta =  date
 isotopes = 531350, 541350, 922350
+nuclides = nd
 
 # -----------------------------------------------------------------------------
 #                            PERTURBATIONS
 # -----------------------------------------------------------------------------
 
 set branches 3
-fuel 600 900 1200 1500
+fuel 600, 900 1200, 1500
 mod 500 600 700
 cool 600 500
 
 set histories 2
-nom 600 500 500
-pert 900 700 625
+nom 850 550 570
+pert 950 500 525
 
 set times nounits
-0 1 2 3 4 5 6 7 8
-9 11 18 19
-40 50
+0.0 0.1 1.0
 
 
 set data inf_flx 10.0E+6, 0.6025, 0.0
@@ -64,6 +63,10 @@ date April 09, 2022
 #-------------
 block micro
 #-------------
+nd
+1
+2
+3
 sig_sct
 11, 12, 21, 22  % isotope-1  
 11, 12, 21, 22  % isotope-2
@@ -96,6 +99,10 @@ block meta
 date April 09, 2022
 
 block micro
+nd
+1
+2
+3
 sig_sct
 11, 12, 21, 22  % isotope-1  
 11, 12, 21, 22  % isotope-2
@@ -127,6 +134,10 @@ block meta
 date April 09, 2022
 
 block micro
+nd
+1
+2
+3
 sig_sct
 11, 12, 21, 22  % isotope-1  
 11, 12, 21, 22  % isotope-2
@@ -158,6 +169,10 @@ block meta
 date April 09, 2022
 
 block micro
+nd
+1
+2
+3
 sig_sct
 11, 12, 21, 22  % isotope-1  
 11, 12, 21, 22  % isotope-2
