@@ -19,6 +19,8 @@ Set what?							Description
 :ref:`i_times`				Time units and values.
 --------------------- -------------------------------------------------------------------
 :ref:`i_data`					Define data to be added to a specific (branch, history, time) set.
+--------------------- -------------------------------------------------------------------
+:ref:`i_manipulate`		Data manipulation including energy condensation and math operations.
 ===================== ===================================================================
 
 
@@ -64,6 +66,7 @@ and, the list of **sub-cards** options is:
 	- ``kinetics`` names for the kinetics parameters (e.g., beta values)
 	- ``meta`` names for the metastable parameters
 	- ``isotopes`` a list of isotopes in a ZZAAAM (e.g., 922350). User has a flexibility to define their own format.
+	- ``nuclides`` name of the nuclide densities variable.
 
 **Notes:**
 	
@@ -76,7 +79,7 @@ and, the list of **sub-cards** options is:
 		macro nsf, kappa
 
 
-	* If the sub-card ``micro`` is defined then the sub-card ``isotopes`` will be expected as well.
+	* If the sub-card ``micro`` is defined then the sub-cards ``isotopes`` and the ``nuclides`` will be expected as well.
 
 
 
@@ -91,6 +94,7 @@ and, the list of **sub-cards** options is:
 	kinetics =  beta decay_const
 	meta =  time keff
 	isotopes = 531350, 541350
+	nuclides = nd
 
 
 .. _i_branches:
@@ -333,6 +337,10 @@ the **sub-cards** defined under the different blocks are described below.
 	#-------------
 	block micro
 	#-------------
+	nd
+	1
+	1
+	1
 	sig_sct
 	11, 12, 21, 22  % isotope-1  
 	11, 12, 21, 22  % isotope-2
@@ -341,3 +349,113 @@ the **sub-cards** defined under the different blocks are described below.
 	11, 12  % isotope-1  
 	11, 12  % isotope-2
 	11, 12  % isotope-3
+
+
+
+.. _i_manipulate:
+
+==========
+Manipulate
+==========
+
+**Macro and micro data manipulation including energy condensation and math operations.**
+
+*Optional Card*
+
+.. code::
+		
+   set manipulate <cutoffE>
+   <var> <var1> <var2> <operation>
+   ...
+  
+
+where in the **set** line,
+ - ``cutoffE`` energy cutoffs used for energy condensation.
+
+and, the following **lines** represent binary (between variable ``var1`` and ``var2``) mathematical operations to be performed.
+	- ``var`` name of the new variable to be created. 
+	- ``var1`` name of the first variable (e.g., ``inf_rabs``). Can only be of type ``macro`` or ``micro``.
+	- ``var2`` name of the second variable (e.g., ``sig_f``).	Can only be of type ``macro`` or ``micro``.
+	- ``operation`` mode of the mathematical operation with the following options only: ``add``, ``subtract``, ``multiply``, ``divide``.
+
+**Notes:**
+	
+	*	``cutoffE`` must contain at least one number (which will generate a 2-group or 1-group structure). ``cutoffE`` must be within the energy bounds <ENE> defined in the :ref:`i_data` card.
+		* ``cutoffE`` must be provided in descending order. To avoid energy condensation use the same cutoffs as defined in <ENE>.
+	* A new energy grid will be created based on the provided ``cutoffE`` and closest energy boundaries <ENE> defined in the :ref:`i_data` card.
+		* If <ENE> = ``10.0E+6, 0.6025, 0.0`` and <cutoffE> = ``0.005`` then a 1-group ``10.0E+6, 0.0`` will be created.
+		* If <ENE> = ``10.0E+6, 0.6025, 0.0`` and <cutoffE> = ``0.6025`` or above then 2-groups ``10.0E+6, 0.6025, 0.0`` will be created.
+		* For the provided <ENE> structure if <cutoffE> equals to the outermost left or right boundary a 1-group ``10.0E+6, 0.0`` will be utilized.
+		* <cutoffE> cannot create a finer grid than <ENE> regardless to how many ``cutoffE`` boundaries are provided (as no interpolation is used).
+
+	*	The number of lines that follow the set line represent the number of mathematical operations to be performed.
+	* ``var1`` (e.g., inf_nsf) and ``var2`` (e.g., sig_f)  must be defined under the ``macro`` or ``micro`` blocks in :ref:`i_data` card.
+
+	.. code::
+
+		set manipulate 0.0
+		reduced_nsf, inf_nsf, sig_f, subtract
+		
+	* The created ``var`` can also be used as ``var1`` or ``var2``. Note that if ``var`` already exists it will be overwritten with the newly created ``var``.
+
+	.. code::
+
+		...
+		reduced_nsf1, inf_nsf, reduced_nsf, add
+			
+	
+	
+	* The order at which ``var1`` and ``var2`` are provided is important for the mathematical operation. 
+
+	The following code:
+
+	.. code::
+
+		set manipulate 0.625
+		a a1 a2 subtract
+		b b1 b2 divide
+
+	Correspond to:
+
+	.. math::
+
+		a = a_1 - a_2
+		
+		b = b_1 : b_2
+
+
+	* ``var1`` and ``var2`` must be of either macro or micro types. The newly created variable ``var`` depends on the definitions of ``var1`` and ``var2``. 
+	* Let us use the following example to describe the possible outcomes:
+	
+	.. code::
+
+		set manipulate 0.625
+		a a1 a2 subtract
+	
+	* If both are macro then a new macro variable ``a`` is created.
+		
+		.. math::
+			a = a_1 - a_2
+		
+	* If ``var1`` macro and ``var2`` is micro then the new variable ``a`` is of type macro. Note that ``var1`` can be micro and ``var2`` macro as well. The :math:`N_j` represents the nuclide densities that are expected to be defined.
+		
+		.. math::
+			a = a_1 - \sum a_{2,j}N_j		
+		
+
+	* If ``var1`` and ``var2`` are both micro then the new variable ``a`` is of type micro.
+		
+		.. math::
+			a = a_1 - a_{2,j}	
+
+	* In all the cases the variable ``a`` will preserved the original size of the condensed (or original) energy structure.
+
+
+
+**Example**:
+
+.. code::
+
+	set manipulate 0.0
+	new_nsf, inf_nsf, sig_f, subtract
+	new_sct, inf_sp0, sig_sct, add
