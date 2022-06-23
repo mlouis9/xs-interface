@@ -24,12 +24,12 @@ from xsInterface.containers.singleset import SingleSet
 #                       Data Settings
 # -----------------------------------------------------------------------------
 rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                  meta=True, isotopes=[531350, 541350, 922350])
+                  meta=True, isotopes=[531350, 541350, 922350], nuclides="nd")
 rc.AddData("macro",
            ["inf_rabs", "inf_nsf", "kappa", "inf_flx"])
 rc.AddData("macro", ["inf_sp0"])
 rc.AddData("kinetics", ["beta", "decay"])
-rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
+rc.AddData("micro", ["sig_c", "sig_f", "nd"])
 rc.AddData("micro", ["sig_sct"])
 rc.AddData("meta", ["burnup", "keff"])
 rc.AddData("meta", ["date"])
@@ -79,20 +79,32 @@ ss.AddData("meta", burnup=[1, 1, 1, 1],
 # Add micro data
 # -----------------
 ss.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
+ss.AddData("micro", sig_f=[[1, 1], [2, 2], [3, 3]])
+ss.AddData("micro", nd=[[1], [1], [1]])
 ss.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
                              [11, 12, 21, 22]])
 
 # --------------------------------------------
 # check that all the data was properly defined
 # --------------------------------------------
-ss.ProofTest(micro=False, kinetics=False, meta=False)
+ss.ProofTest(micro=True, kinetics=False, meta=False)
 
 # --------------------------------------------
 # Get values
 # --------------------------------------------
 ss.GetValues(["inf_flx", "beta"])
 
+
 # --------------------------------------------
 # Energy condensation
 # --------------------------------------------
-ss1 = ss.Condense([0.6025])
+ss1 = ss.Condense([0.0])
+
+# --------------------------------------------
+# Data manipulation
+# --------------------------------------------
+ss2 = ss1.Manipulate("add", "new_nsf", "inf_nsf", "sig_f")
+ss2 = ss1.Manipulate("add", "new_sct", "inf_sp0", "sig_sct")
+
+ss3 = ss1.Manipulate(["subtract", "add"], ["new_nsf", "new_sct"],
+                     ["inf_nsf", "inf_sp0"], ["sig_f", "sig_sct"])

@@ -85,7 +85,7 @@ def test_proofTest():
     """Errors for the adddata method"""
 
     rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                      meta=False, isotopes=[92, 94, 95])
+                      meta=False, isotopes=[92, 94, 95], nuclides="nd")
     rc.AddData("kinetics", ["beta", "decay"])
     rc.AddData("macro", ["abs", "nsf", "sct"])
 

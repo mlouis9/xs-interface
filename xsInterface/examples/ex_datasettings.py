@@ -18,7 +18,7 @@ from xsInterface.containers.datasettings import DataSettings
 # Reset the container with expected values
 # -----------------------------------------------------------------------------
 rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                  meta=True, isotopes=[531350, 541350])
+                  meta=True, isotopes=[531350, 541350], nuclides="nd")
 
 # Feed in the required data
 # -----------------------------------------------------------------------------

@@ -29,6 +29,7 @@ DataTable - 05/05/2022 - DK
 Values - 05/05/2022 - DK
 
 """
+import copy
 
 from collections import namedtuple
 
@@ -250,8 +251,81 @@ class MultipleSets():
                            "be provided.")
         return self.sets[setIdx]
 
+
+    def Condense(self, cutoffE):
+        """Energy condensation method
+
+        Condensation is performed for a new energy structure and for all the
+        parameters in the macro and micro dictionaries over all existing states
+
+        Parameters
+        ----------
+        cutoffE : 1-dim array
+            energy cutoffs
+
+        Raises
+        ------
+        TypeError
+            If ``cutoffE`` is not array.
+        ValueError
+            If ``cutoffE`` is negative.
+
+        Examples
+        --------
+        >>> ss.Condense([0.0625, 1E+03])
+
+        """
+        condObj = copy.deepcopy(self)  # deep copy of for the condensed object
+        for iset, ss in self.sets.items():
+            condObj.sets[iset] = ss.Condense(cutoffE)
+        ng = len(ss.energygrid) - 1
+        return condObj, ng
+
+
+    def Manipulate(self, modes, attrs, attrs1, attrs2):
+        """Mathematical operation between two attributes or attribute-constant
+
+        Mathematical operation is performed between two macro/micro attributes
+        including:
+            - Multiplication, division, addition, and subtraction operations
+
+        Parameters
+        ----------
+        modes : string or list of strings
+            types of the mathematical relation
+            ["multiply", "divide", "add", "subtract"]
+        attrs : string or list of strings
+            name/ss of attribute/s where results will be written to.            
+        attrs1 : string or list of strings
+            names of attributes type-1 (can be macro or micro)
+        attrs2 : string or list of strings
+            names of attributes type-2 (can be macro or micro) 
+
+
+        Raises
+        ------
+        TypeError
+            If any of the ``modes``, ``attrs``, ``attrs1``, ``attrs2`` is
+            not string or list of strings.
+        ValueError
+            If the operations within ``modes`` are not defined.
+            If the dimensions of ``modes``, ``attrs1``, ``attrs2``
+            dot not correspond to the dimensions of ``attrs``
+
+
+        Examples
+        --------
+        >>> ss.BinaryOperation(substract, FISS_NEW,  FISS, sig_f)
+
+        """
+        newObj = copy.deepcopy(self)
+        for iset, ss in self.sets.items():
+            newObj.sets[iset] = ss.Manipulate(modes, attrs, attrs1, attrs2)
+        return newObj
+
+
     def __getitem__(self, setIdx):
-        """direct method to obtain set only if index is known"""
+        """direct method to obtain a set only if index is known"""
         return self.sets[setIdx]
 
     def DataTable(self, attrs=None, macroFlag=None, microFlag=None,
@@ -367,9 +441,9 @@ class MultipleSets():
                                            .format(stateId, detail))
                         vals = ss.GetValues(attrs)
                         df.loc[idx] = [history, time] + list(branchArr) +\
-                                list(vals.values())
+                            list(vals.values())
                         idx += 1
-                        
+
         self.pandasTable = df
         return df
 
@@ -419,14 +493,13 @@ class MultipleSets():
 
         if not hasattr(self, 'pandasTable'):
             raise AttributeError("No pandasTable attribute.\n Create using the"
-                             " DataTable method")
+                                 " DataTable method")
         # pandas table with all states and values
         pd = self.pandasTable
-        
+
         # Column index for the starting position of values
-        valsIdx0 = len(self.states._branchList) + 3  # 3 for (idx, hist., time)
+        valsIdx0 = len(self.states._branchList) + 2  # 2 for (hist., time)
         idx = [i for i in range(valsIdx0)]  # indices to be included
-        
 
         # Error checking for attributes
         if attrs is not None:
@@ -439,17 +512,70 @@ class MultipleSets():
                 idx0 = pd.columns.get_loc(attr)
                 if idx0 not in idx:  # only if the column has not been added
                     idx += [idx0]
-            
+
         # loop over all the dependencies
         for col, value in kwargs.items():
             if not pd[col].isnull().any():  # check: column contains no None
-                pd = pd[pd[col] == value]  # select the values of interest in col.
-        
+                # select the values of interest in col.
+                pd = pd[pd[col] == value]
+
         if attrs is not None:  # all attributes should be included
             pd = pd.iloc[:, idx]
-        
+
         return pd
-                
-                
-                
-                
+
+    def _IsCompleteTable(self):
+        """Check that Pandas table contains all states
+
+        Check whether all states were provided by user. Return a dictionary
+        with the missing states. This method can be executed only after the
+        pandas tables are generated.
+
+        Returns
+        -------
+        missingStates : dict
+            states names as keys and their correponding values
+
+        Raises
+        ------
+        AttributeError
+            If ``pandasTable`` is not an attribute on the object.
+
+        """
+
+        # store all the missing & existing states
+        missingStates = []
+        existingStates = []
+
+        if not hasattr(self, 'pandasTable'):
+            raise AttributeError("No pandasTable attribute.\n Create using the"
+                                 " DataTable method")
+
+        # histrorical branches
+        hstList = [None]
+        if not self.states._historyList == []:
+            hstList = self.states._historyList
+
+        # time points
+        timeVals = [None]
+        if not self.states.time == {}:
+            timeVals = self.states.time['values']
+
+        # loop over all histories, times, and branches
+        branches = list(self.states.branches.values())
+
+        # Loop and check is states exist or not
+        for history in hstList:
+            for time in timeVals:
+                for branch in itertools.product(*branches):
+                    branchArr = np.array(branch, dtype=float)
+                    stateId = StateDescrp(history, time, branch)
+                    ss = self.Get(branch=branchArr, time=time, history=history)
+
+                    # check is state exists
+                    if ss is None:
+                        missingStates.append(stateId)
+                    else:
+                        existingStates.append(stateId)
+
+        return missingStates, existingStates

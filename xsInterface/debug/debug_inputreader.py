@@ -16,6 +16,27 @@ from xsInterface.functions.readinput import ReadInput
 
 inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\debug\\inp_example2"
+        "xs-interface\\xsInterface\\debug\\u0"
 
-rc, states, msets = ReadInput(inputFile)
+# read the input file/s and collect all the universes
+universes = ReadInput(u0=inputFile)
+
+
+# # Get a specific universe
+# rc, states, msets = universes.Get("u0")
+
+
+
+# # Create a pandas table for selected properties
+# pdTable = msets.DataTable(
+#     ['inf_rabs', 'inf_nsf', 'inf_sp0', 'inf_flx', 'beta', 'sig_f'])
+
+# # Get specific values
+# msets.Values(attrs=["inf_nsf", 'inf_sp0'], fuel=900)
+
+
+# Get a specific universe
+universes.PandaTables()
+
+# # Get specific values
+universes.Values("u0", attrs=["inf_nsf", 'inf_sp0'], fuel=900)

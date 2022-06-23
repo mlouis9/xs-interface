@@ -1,0 +1,191 @@
+# -----------------------------------------------------------------------------
+#            INPUT EXAMPLE FOR A SINGLE CROSS SECTION TYPE
+# -----------------------------------------------------------------------------
+
+
+# -----------------------------------------------------------------------------
+#                            SETTINGS
+# -----------------------------------------------------------------------------
+
+
+set settings 2 7
+macro =  inf_flx, inf_nsf, inf_rabs, inf_sp0
+micro =  sig_f, sig_sct, nd
+kinetics =  beta, decay
+meta =  date
+isotopes = 531350, 541350, 922350
+nuclides = nd
+
+# -----------------------------------------------------------------------------
+#                            PERTURBATIONS
+# -----------------------------------------------------------------------------
+
+set branches 3
+fuel 600, 900 1200, 1500
+mod 500 600 700
+cool 600 500
+
+
+set histories 2
+nom 850 550 570
+pert 950 500 525
+
+set times nounits
+0.0 0.1 1.0
+
+
+set data inf_flx 10.0E+6, 0.6025, 0.0
+#-------------
+block state
+#----------
+branch 900.0, 600.0, 600.0
+history nom
+time 0.0
+
+#-------------
+block macro
+#----------
+inf_rabs 0.1, 0.2
+inf_nsf 0.3 0.4
+inf_flx 0.1 0.2
+inf_sp0 = 0.1  0.2 -0.05, 0.3
+
+#-------------
+block kinetics
+#-------------
+beta 1, 1, 1, 1, 1, 1, 1
+decay 1, 1, 1, 1, 1, 1, 1 
+
+#-------------
+block meta
+#-------------
+date April 09, 2022
+
+#-------------
+block micro
+#-------------
+nd
+1
+2
+3
+sig_sct
+11, 12, 21, 22  % isotope-1  
+11, 12, 21, 22  % isotope-2
+11, 12, 21, 22  % isotope-3
+sig_f
+11, 12  % isotope-1  
+11, 12  % isotope-2
+11, 12  % isotope-3
+
+
+
+# ------------------------------------------------
+set data inf_flx 10.0E+6, 0.6025, 0.0
+block state
+branch 900.0, 600.0, 500.0
+history nom
+time 0.0
+
+block macro
+inf_rabs 0.1, 0.2
+inf_nsf 0.3 0.4
+inf_flx 0.1 0.2
+inf_sp0 = 0.1  0.2 -0.05, 0.3
+
+block kinetics
+beta 1, 1, 1, 1, 1, 1, 1
+decay 1, 1, 1, 1, 1, 1, 1 
+
+block meta
+date April 09, 2022
+
+block micro
+nd
+1
+2
+3
+sig_sct
+11, 12, 21, 22  % isotope-1  
+11, 12, 21, 22  % isotope-2
+11, 12, 21, 22  % isotope-3
+sig_f
+11, 12  % isotope-1  
+11, 12  % isotope-2
+11, 12  % isotope-3
+
+
+# ------------------------------------------------
+set data inf_flx 10.0E+6, 0.6025, 0.0
+block state
+branch 1200.0, 600.0, 500.0
+history nom
+time 0.0
+
+block macro
+inf_rabs 0.1, 0.2
+inf_nsf 0.3 0.4
+inf_flx 0.1 0.2
+inf_sp0 = 0.1  0.2 -0.05, 0.3
+
+block kinetics
+beta 1, 1, 1, 1, 1, 1, 1
+decay 1, 1, 1, 1, 1, 1, 1 
+
+block meta
+date April 09, 2022
+
+block micro
+nd
+1
+2
+3
+sig_sct
+11, 12, 21, 22  % isotope-1  
+11, 12, 21, 22  % isotope-2
+11, 12, 21, 22  % isotope-3
+sig_f
+11, 12  % isotope-1  
+11, 12  % isotope-2
+11, 12  % isotope-3
+
+
+# ------------------------------------------------
+set data inf_flx 10.0E+6, 0.6025, 0.0
+block state
+branch 1500.0, 600.0, 500.0
+history nom
+time 0.0
+
+block macro
+inf_rabs 0.1, 0.2
+inf_nsf 0.3 0.4
+inf_flx 0.1 0.2
+inf_sp0 = 0.1  0.2 -0.05, 0.3
+
+block kinetics
+beta 1, 1, 1, 1, 1, 1, 1
+decay 1, 1, 1, 1, 1, 1, 1 
+
+block meta
+date April 09, 2022
+
+block micro
+nd
+1
+2
+3
+sig_sct
+11, 12, 21, 22  % isotope-1  
+11, 12, 21, 22  % isotope-2
+11, 12, 21, 22  % isotope-3
+sig_f
+11, 12  % isotope-1  
+11, 12  % isotope-2
+11, 12  % isotope-3
+
+# -----------------------------------------------------------------------------
+#                         DATA MANIPULATION
+# -----------------------------------------------------------------------------
+set manipulate 0.0
+new_nsf, inf_nsf, sig_f, subtract
+new_sct, inf_sp0, sig_sct, add

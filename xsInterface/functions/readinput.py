@@ -25,11 +25,12 @@ from re import compile, IGNORECASE
 import numpy as np
 
 from xsInterface.containers.container_header import DataSettingsCard,\
-    BranchCard, HistoryCard, TimeCard, DataCard
+    BranchCard, HistoryCard, TimeCard, DataCard, ManipulateCard
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.singleset import SingleSet
 from xsInterface.containers.multiplesets import MultipleSets
 from xsInterface.containers.perturbationparameters import Perturbations
+from xsInterface.containers.universes import Universes
 from xsInterface.errors.checkerrors import _isstr
 from xsInterface.errors.customerrors import NonInputError, InputGeneralError,\
     InputCardError
@@ -51,18 +52,20 @@ CARD_REGEX = {
     "branches": compile(r'\s*(set\s+)(branches)', IGNORECASE),
     "histories": compile(r'\s*(set\s+)(histories)', IGNORECASE),
     "times": compile(r'\s*(set\s+)(times)', IGNORECASE),
-    "data": compile(r'\s*(set\s+)(data)', IGNORECASE), }
+    "data": compile(r'\s*(set\s+)(data)', IGNORECASE),
+    "manipulate": compile(r'\s*(set\s+)(manipulate)', IGNORECASE),}
 
 INPUT_CARDS =\
     {'settings': DataSettingsCard,
      'branches': BranchCard,
      'histories': HistoryCard,
      'times': TimeCard,
-     'data': DataCard}
+     'data': DataCard,
+     'manipulate': ManipulateCard}
 
 
 
-def ReadInput(inputFile):
+def ReadInput(**kwargs):
     """Read the input file defined by the user
 
     This function reads the input defined by the user and populates the
@@ -70,8 +73,10 @@ def ReadInput(inputFile):
 
     Parameters
     ----------
-    inputFile : file path
-        the full directory + file name path
+    kwargs : named arguments
+        keys represent the universe Id and value represent the full
+        file directory path + file name.
+
 
     Raises
     ------
@@ -86,24 +91,36 @@ def ReadInput(inputFile):
 
     """
 
-    # check that `inputFile` variable is a string
-    _isstr(inputFile, "Input file")
+    univs = Universes()
 
-    # read the file and return its content
-    filePath = Path(inputFile)
-    if not filePath.is_file():
-        raise OSError("The file {} does not exist.".format(inputFile))
+    for univId, inputFile in kwargs.items():
 
-    with open(inputFile, 'r') as fObject:
-        dataFile = fObject.readlines()
+        print("... Reading universe <{}> ...".format(univId))        
+
+        # check that `inputFile` variable is a string
+        _isstr(inputFile, "Input file")
+    
+        # read the file and return its content
+        filePath = Path(inputFile)
+        if not filePath.is_file():
+            raise OSError("The file {} does not exist.".format(inputFile))
+    
+        with open(inputFile, 'r') as fObject:
+            dataFile = fObject.readlines()
+            
+        # strip comments and empty lines
+        data = _CleanFile(dataFile)    
         
-    # strip comments and empty lines
-    data = _CleanFile(dataFile)    
+        # Process all cards
+        rc, states, msets = _ProcessCards(data)
+        
+        # add the data to the universe containers
+        univs.Add(univId, rc, states, msets)
     
-    # Process all cards
-    setLineData, states, msets = _ProcessCards(data)
+    # Build Pandas Tables for all the universes
+    univs.PandaTables()
     
-    return setLineData, states, msets
+    return univs
 
 
 def _ProcessCards(data):
@@ -116,6 +133,8 @@ def _ProcessCards(data):
           "histories": None, "times": None, "units": None}
     singlesets = {}  # dictionary to store all the single sets
     iset = 0
+    cutoffE = None  # new wnergy condensation cutoff g
+    manipData = {}  # data to be manipulated
     # -------------------------------------------------------------------------    
 
     cardsList = list(INPUT_CARDS.keys())
@@ -151,6 +170,10 @@ def _ProcessCards(data):
                 setLine = cardKey[cFound['data'].span()[1]:]
                 singlesets[iset] = _ImportData(setLine, cardData)
                 iset += 1
+            elif cFound['manipulate'] is not None:
+                card = 'manipulate'
+                setLine = cardKey[cFound['manipulate'].span()[1]:]
+                cutoffE, manipData = _ImportManipulations(setLine, cardData) 
             else:
                 raise InputGeneralError("Card does not exist: <{}>"
                                         .format(cardKey))
@@ -177,6 +200,13 @@ def _ProcessCards(data):
         errmsg = "Data Sets"
         card = "data"
         multisets = _PopulateDataSets(rc, states, singlesets)
+        #                                                     `Manipulate` data
+        #----------------------------------------------------------------------
+        errmsg = "Energy condensation"
+        card = "Manipulate"
+        multisets, rc =\
+            _PopulateManipulations(rc, multisets, cutoffE, manipData)
+
     except TypeError as detail:
         raise InputGeneralError("{}\nInternal Error:{}\n"
                                 .format(errmsg, detail))         
@@ -236,6 +266,32 @@ def _PopulateDataSets(rc, states, sss):
         # add the single set to multi sets
         ms.Add(ss)
     return ms
+
+def _PopulateManipulations(rc, ms, cutoffE, manipData):
+    """"populate the multi sets container"""
+    
+    if cutoffE is not None:
+        ms, ng = ms.Condense(cutoffE)
+        rc.ng = ng
+    if manipData != {}:
+        attrs = list(manipData.keys())
+        attrN = len(attrs)
+        vals = list(manipData.values())  # [attr1, attr2, operation]
+        
+        # define empty lists
+        attrs1 = [None]*attrN
+        attrs2 = [None]*attrN
+        modes = [None]*attrN
+        
+        for idx in range(attrN):
+            attrs1[idx] = vals[idx][0]
+            attrs2[idx] = vals[idx][1]
+            modes[idx] = vals[idx][2]
+        
+        ms = ms.Manipulate(modes, attrs, attrs1, attrs2)
+        
+    return ms, rc
+
 # -----------------------------------------------------------------------------
 #                  Settings
 # -----------------------------------------------------------------------------
@@ -259,7 +315,7 @@ def _ImportSettings(setLine, tlines):
 
     # Process the set card values
     # -------------------------------------------------------------------------
-    expinputs = ['macro', 'micro', 'kinetics', 'meta', 'isotopes']
+    expinputs = ['macro', 'micro', 'kinetics', 'meta', 'isotopes', 'nuclides']
     errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
 
     # all cards and corresponding values are placed in a dictionary
@@ -284,8 +340,11 @@ def _ImportSettings(setLine, tlines):
     # Assign data to designated container
     # -------------------------------------------------------------------------
     try:
+        if dvals["nuclides"] is not None:
+            nuclides = dvals["nuclides"][0]
         rc = DataSettings(NG, DN, flags["macro"], flags["micro"],
-                          flags["kinetics"], flags["meta"], dvals["isotopes"])
+                          flags["kinetics"], flags["meta"], dvals["isotopes"],
+                          nuclides)
         if flags["macro"]:
             rc.AddData("macro", dvals["macro"])
         if flags["micro"]:
@@ -407,6 +466,42 @@ def _ImportTimes(setLine, tlines):
     data = np.array(data, dtype=float)
 
     return units, data
+
+
+def _ImportManipulations(setLine, tlines):
+    """import manipulation operation definitions from the input"""
+
+    # Requirements
+    # -------------------------------------------------------------------------
+    card = "manipulate" 
+    expinputs = ['<cond_E_cutoffs>']
+    expvals = [1, 100000]
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+
+    # Process the set line values
+    # -------------------------------------------------------------------------
+    setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
+    cutoffE = np.array(setValues, dtype=float)
+
+    # Process the set card values
+    # -------------------------------------------------------------------------
+    errmsg = "<set {}>.\n".format(card)
+    data = _CardDataDict(tlines, card, errmsg)
+
+    # Error Checking
+    # -------------------------------------------------------------------------
+    # N/A
+
+    # Data manipulation
+    # -------------------------------------------------------------------------       
+    if data != {}:  # manipulation is not mandatory
+        for item, value in data.items():
+            if len(value) != 3:
+                raise InputCardError("Three entries [attrIn1, attrIn2, operati"
+                                     "on] are expected for attrOut=<{}>.\n{}"
+                                     .format(item, errmsg), INPUT_CARDS, card)
+
+    return cutoffE, data
 
 
 def _ImportData(setLine, tlines):

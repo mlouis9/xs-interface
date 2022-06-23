@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
-"""multiplesets
+"""universes
 
-Container to collect and store ``SingleSet``s.
-It also includes processing of data, such as:
-    - Intersecting aspecific values over multiple single sets.
-    - Spatial homogenization.
-    - COMPLETE
+Container to collect and store ``MultipleSets``.
 
-
-
-Created on Thu Apr 14 05:45:00 2022 @author: Dan Kotlyar
-Last updated on Fri Apr 15 05:30:00 2022 @author: Dan Kotlyar
+Created on Mon June 13 21:20:00 2022 @author: Dan Kotlyar
+Last updated on Thu June 16 15:30:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -18,177 +12,198 @@ List changes or additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 __init__ capability - 04/14/2022 - DK
-addset - 04/14/2022 - DK
+Add - 06/16/2022 - DK
+Get - 06/16/2022 - DK
+PandaTables - 06/16/2022 - DK
+Values - 06/16/2022 - DK
+
+Need to add error checking!!!
 
 """
 
-from xsInterface.containers.singleset import SingleSet
-from xsInterface.errors.checkerrors import _islist, _isuniquelist, _isstr,\
-    _isobject, _inlist, _isbool
+from xsInterface.containers.datasettings import DataSettings
+from xsInterface.containers.perturbationparameters import Perturbations
+from xsInterface.containers.multiplesets import MultipleSets
+from xsInterface.errors.checkerrors import _isstr, _isobject
 
 
-class MultipleSets():
-    """A container to store the input data for all the data sets
+class Universes():
+    """A container to store unique universes having MultipleSets objects
+
+    Parameters
+    ----------
+    settings : DataSettings object
+        Complete container with all the data settings.
+    states: Perturbations object
+        Complete container with names and values of perturbation parameters
+    multisets : MultipleSets object
+        Complete container with data corresponding to all the states
 
     Attributes
     ----------
-    names : list of strings
-        complete list of strings for all the sets to be provided.
-
-    Attributes
-    ----------
-    setIds : list of strings
-        complete list of strings for all the sets to be provided.
-    macro : bool
-        flag to incdicate if all data in macro must be defined
-    micro : bool
-        flag to incdicate if all data in micro must be defined
-    kinetics : bool
-        flag to incdicate if all data in kinetics must be defined
-    meta : bool
-        flag to incdicate if all data in meta must be defined
+    settings : DataSettings object
+        Complete container with all the data settings.
+    states: Perturbations object
+        Complete container with names and values of perturbation parameters
+    multisets : MultipleSets object
+        Complete container with data corresponding to all the states
 
     Methods
     -------
-    AddSet : add new nodal object
-    GetSet : obtain the object for a specific node
-    GetValues : obtain values of a specific property
+    Add : add new multiset object
+    Get : obtain the object for a specific node
 
     """
 
-    def __init__(self, names, macro=False, micro=False, kinetics=False,
-                 meta=False):
+    def __init__(self):
         # Init to empty dictionary
-        _islist(names, "Complete list of sets' names")
-        _isuniquelist(names, "Complete list of sets' names")
-        _isbool(macro, "Macro flag")
-        _isbool(micro, "Micro flag")
-        _isbool(kinetics, "Kinetics flag")
-        _isbool(meta, "Meta flag")
+        
+        self.universeIds = []  # names of all the universes
+        self.universes = {}  # empty dictionary to store all universes
 
-        self._setsIds = names  # store names/Ids
-        self.sets = {}  # empty dictionary to store all sets
-        self._flags = {"macro": macro, "micro": micro, "kinetics": kinetics,
-                       "meta": meta}
-
-    def AddSet(self, setId, setData):
+    def Add(self, univId, rc, states, multisets):
         """Add new data for a specific set
 
-        The ``addset`` method allows to add  a ``SingleSet`` object
-        with all its attributes to the ``MultipleSets`` object.
-        The ``addset`` creates a new attribute with a name that
-        corresponds to the single set Id.
+        The ``Add`` method allows to add  ``MultipleSets`` object
+        ``Perturbations``, and ``DataSettings`` objects.
+        The ``Add`` creates a new key (that represents the universe Id), and
+        values that includes the settings, states description, and data sets.
 
         Parameters
         ----------
-        setId : string
-            identifier of the set
-        specific : SingleSet object
-            an object that contains all the attributes, e.g. ``macro``
+        settings : DataSettings object
+            Complete container with all the data settings.
+        states: Perturbations object
+            Complete container with names and values of perturbation parameters
+        multisets : MultipleSets object
+            Complete container with data corresponding to all the states
 
         Raises
         ------
         TypeError
-            If the ``setId`` is not str.
-            If ``setData`` is not a ``SingleSet`` object.
-        KeyError
-            If ``setId`` is not defined in the ``setIds`` list.
-            If ``setId`` already exists in the ``sets`` dict.
-        ValueError
-            If ``SingleSet`` is not fully populated with data.
+            If the ``univId`` is not str.
+            If ``rc`` is not a ``DataSettings`` object.
+            If ``states`` is not a ``Perturbations`` object.
+            If ``multisets`` is not a ``MultipleSets`` object.
 
         Examples
         --------
-        >>> ms = MultipleSets(["u0", "u1"])
-        >>> ms.AddSet("u0", ss0)
+        >>> univs = Universes()
+        >>> univs.Add("u0", rc0, states0, multisets0)
 
 
         """
 
-        # check variable type
-        _isstr(setId, "Set Identifier")
-        _inlist(setId, "Set Identifier", self._setsIds)
-        _isobject(setData, SingleSet, "Single Set Data")
-        # check if setId already exist
-        if setId in self.sets:
-            raise KeyError("Set Id {} already exists".format(setId))
-        # internal method to check that data was provided
-        setData.ProofTest(self._flags["macro"], self._flags["micro"],
-                          self._flags["kinetics"], self._flags["meta"])
+        # check variables types
+        _isstr(univId, "Universe")
+        # if univId in self.universeIds:
+        #     raise ValueError("Universe <{}> exists.".format(univId))
+            
+        _isobject(rc, DataSettings, "Data settings")
+        _isobject(states, Perturbations, "Perturbation states")
+        _isobject(multisets, MultipleSets, "Multiple Sets")
+
         # assign data
-        self.sets[setId] = setData
+        self.universes[univId] = (rc, states, multisets)
+        self.universeIds = self.universes.keys()  # names for all universes
 
-    def GetSet(self, setId):
-        """Obtains the SingleSet object for a specific set Id
+    def Get(self, univId):
+        """Obtains the MultipleSet object for a specific universe
 
         Parameters
         ----------
-        setId : string
-            identifier of the set
+        univId : string
+            identifier of the universe
 
         Returns
         -------
-        SingleSet object
+        A tuple with (rc, states, multisets)
 
         Raises
         ------
         TypeError
-            If the ``setId`` is not str.
+            If the ``univId`` is not str.
         KeyError
-            If ``setId`` is not in the ``sets`` dict.
+            If ``univId`` is not in the ``universes`` dict.
 
         Examples
         --------
-        >>> ms = MultipleSets(["u0", "u1"])
-        >>> ms.AddSet("u0", ss0)
-        >>> ms.AddSet("u0")
+        >>> univs = Universes()
+        >>> univs.Add("u0", rc0, states0, multisets0)
+        >>> ms.Get("u0")
 
         """
         # check variable type
-        _isstr(setId, "Set Identifier")
-        return self.sets[setId]
+        _isstr(univId, "Universe Identifier")
+        return self.universes[univId]
 
-    def __getitem__(self, setId):
-        return self.sets[setId]
+    def __getitem__(self, univId):
+        return self.universes[univId]
 
-    def getvalues(self, channel, layer, pty):
-        """Obtain the values of the specific property for a given node
 
-        The method obtains the values across all the radial regions for a
-        specific channel-layer set.
+    def PandaTables(self):
+        """Create tables with states and values for all attributes & universes
+
+       Raises
+        ------
+        TypeError
+            If ``attrs`` is not string, list, or None.
+
+        Examples
+        --------
+        >>> univs.PandaTables()
+
+        """
+        
+        for univId in self.universeIds:
+            rc, states, msets = self[univId]
+            msets.DataTable()
+            self.Add(univId, rc, states, msets)
+
+
+    def Values(self, univId, attrs=None, **kwargs):
+        """Obtain the values of the specific attribute across different states
+
+        The method obtains the values across all the provided states.
+        Specific attributes can be selected. The results are ouputted for a
+        specific universe.
+
 
         Parameters
         ----------
-        channel : str
-            identifier of the channel
-        layer : int
-            identifier of the axial layer
-        pty : str
-            name of the property
+        univId : string
+            name of the universe
+        attrs : string, list of strings
+            name of the attributes to be included in the returned table.
+            If None then all the attributes are returned
+        kwargs : named arguments
+            keys represent the data name and value represent the values.
+            The filtering of data is performed according to kwargs.
+            The use can filter according to a specific state, time, or history
 
         Returns
         -------
-        vals : float, str, list or ndarray
-            values for the property across multiple spatial regions
+        pd : Pandas Object (dataframe)
+            states and values across multiple states
 
         Raises
         ------
         TypeError
-            If ``channel`` is not str and ``layer`` is not int.
+            If ``univId`` is not str.
+            If ``attrs`` is not str, list of str, or None.
         KeyError
-            If the node (channel, layer) does not exist.
-        AttributeError
-            If the property ``pty`` does not exist.
+            If ``univId` does not exist.
 
         Examples
         --------
-        >>> inputs.getvalues('A1', 1, 'Q')
-        3000
+        >>> univs.Values("u0", attrs=None, dens=600)
+        ... history  time  ...                   beta                  decay
+        ... 0    None   2.5  ...  [1, 1, 1, 1, 1, 1, 1]  [1, 1, 1, 1, 1, 1, 1]
+        ... 1    None   2.5  ...  [2, 2, 2, 2, 2, 2, 2]  [1, 1, 1, 1, 1, 1, 1]
 
         """
 
-        self._checknode(channel, layer)
-
-        # Routine to collect results
-        node = NodeID(channel, layer)
-        return self._nodes[node].get(pty)
+        _isstr(univId, "Universe Identifier")
+        rc, states, msets = self[univId]
+        return msets.Values(attrs, **kwargs)
+        

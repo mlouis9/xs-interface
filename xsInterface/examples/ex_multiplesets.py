@@ -27,15 +27,14 @@ from xsInterface.containers.multiplesets import MultipleSets
 #                       Data Settings
 # -----------------------------------------------------------------------------
 rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                  meta=True, isotopes=[531350, 541350, 922350])
+                  meta=True, isotopes=[531350, 541350, 922350], nuclides="nd")
 rc.AddData("macro",
-           ["inf_rabs", "inf_nsf", "kappa", "inf_flx"],
-           [1, 1, 1, 1])
-rc.AddData("macro", ["inf_sp0"], [2])
+           ["inf_rabs", "inf_nsf", "kappa", "inf_flx"])
+rc.AddData("macro", ["inf_sp0"])
 rc.AddData("kinetics", ["beta", "decay"])
-rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
-rc.AddData("micro", ["sig_sct"], [2])
-rc.AddData("meta", ["burnup", "keff"], [1, 1])
+rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n", "nd"])
+rc.AddData("micro", ["sig_sct"])
+rc.AddData("meta", ["burnup", "keff"])
 rc.AddData("meta", ["date"])
 
 
@@ -58,7 +57,7 @@ states.AddHistories(nom=[900, 700, 550],
 ss0 = SingleSet(rc, states, fluxName="inf_flx",
                 energyStruct=[10.0E+6, 0.6025, 0.0])
 #ss0.AddState([600.001, 600, 500], "nom", timePoint=2.5)
-ss0.AddState([600.001, 600, 500], "nom", timePoint=2.5)
+ss0.AddState([600.001, 600, 500], "nom", time=2.5)
 # Add data
 # --------------
 ss0.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4],
@@ -70,6 +69,7 @@ ss0.AddData("kinetics", beta=[1, 1, 1, 1, 1, 1, 1],
 ss0.AddData("meta", burnup=[1, 1, 1, 1],
             keff=[1, 1, 1, 1], date="April 09, 2022")
 ss0.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
+ss0.AddData("micro", nd=[[1], [1], [1]])
 ss0.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
             [11, 12, 21, 22]])
 
@@ -78,7 +78,7 @@ ss0.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
 # -----------------------------------------------------------------------------
 ss1 = SingleSet(rc, states, fluxName="inf_flx",
                 energyStruct=[10.0E+6, 0.6025, 0.0])
-ss1.AddState([900, 600, 500], "nom", timePoint=2.5)
+ss1.AddState([900, 600, 500], "nom", time=2.5)
 # Add data
 # --------------
 ss1.AddData("macro", inf_rabs=[0.1, 0.2], inf_nsf=[0.3, 0.4],
@@ -90,7 +90,22 @@ ss1.AddData("macro", inf_sp0=[[0.1, 0.2], [-0.05, 0.3]])
 # -----------------------------------------------------------------------------
 ms = MultipleSets(states, macro=True, micro=False, kinetics=False, meta=False)
 ms.Add(ss0, ss1)
+
+# -----------------------------------------------------------------------------
+#                    Get data from a MultipleSets Container
+# -----------------------------------------------------------------------------
 ms.Get(branch=[600, 900, 900], time=2.5, history=[900, 700, 550])
 ms.Get(branch=[600, 900, 900], time=2.5, history="nom")
 ms.Get(branch=[600, 900, 900], time=2.5, history=[900, 700, 550.0001])
-ms[0]
+
+# Create a pandas table foe selected properties
+pdTable = ms.DataTable(['inf_nsf', 'inf_flx'])
+
+# Get specific values
+ms.Values(attrs=["inf_nsf"], fuel=900)
+
+# -----------------------------------------------------------------------------
+#                    Manipulate data
+# -----------------------------------------------------------------------------
+ss3 = ss0.Manipulate(["subtract"], ["new_cap"],
+                     ["inf_nsf"], ["sig_c"])
