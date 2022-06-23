@@ -49,3 +49,12 @@ DataCard = {
     "kinetics": "kinetic data block",
     "meta": "metadata/general data block",
     }
+
+ManipulateCard = {
+    "condEcutoffs": "condensed energy cutoffs in descending order",
+    "attrOut": " energy structure in descending order. with Upper, lower bounds",
+    "attrIn1": "state parameters (e.g., branch, time, history)",
+    "attrIn2": "macro data block",
+    "operation": "mode of the operation"
+    }
+

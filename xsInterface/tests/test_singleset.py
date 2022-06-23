@@ -31,7 +31,7 @@ from xsInterface.containers.singleset import SingleSet
 #                       Data Settings
 # -----------------------------------------------------------------------------
 rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                  meta=True, isotopes=[531350, 541350, 922350])
+                  meta=True, isotopes=[531350, 541350, 922350], nuclides="nd")
 rc.AddData("macro",
            ["inf_rabs", "inf_nsf", "kappa", "inf_sp0", "inf_flx"])
 rc.AddData("kinetics", ["beta", "decay"])

@@ -40,35 +40,40 @@ BAD_SETTINGS = {
     'micro =  abs, fiss, nsf   ',  
     'kinetics =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
-    'isotopes = 531350, 5141350'],
+    'isotopes = 531350, 5141350',
+    'nuclides=nd'],
 "DN": [
     'set settings NG 2 GR 7    ',  
     'macro =  abs, fiss, nsf   ',  
     'micro =  abs, fiss, nsf   ',  
     'kinetics =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
-    'isotopes = 531350, 5141350'],
+    'isotopes = 531350, 5141350',
+    'nuclides=nd'],
 "NG": [
     'set settings NG 2 DN 7 BAD_CARD',  
     'macro =  abs, fiss, nsf   ',  
     'micro =  abs, fiss, nsf   ',  
     'kinetics =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
-    'isotopes = 531350, 5141350'],
+    'isotopes = 531350, 5141350',
+    'nuclides=nd'],
 "dim": [
     'set settings NG 2 DN 7 BAD_CARD',  
     'macro =  abs, fiss, nsf   ',  
     'micro =  abs, fiss, nsf   ',  
     'kinetics =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
-    'isotopes = 531350, 5141350'],
+    'isotopes = 531350, 5141350',
+    'nuclides=nd'],
 "card": [
     'set settings NG 2 DN 7 BAD_CARD',  
     'macro =  abs, fiss, nsf   ',  
     'micro =  abs, fiss, nsf   ',  
     'bad_card =  abs, fiss, nsf',  
     'meta =  abs, fiss, nsf    ',  
-    'isotopes = 531350, 5141350'],
+    'isotopes = 531350, 5141350',
+    'nuclides=nd'],
 "isotopes": [
     'set settings NG 2 DN 7 BAD_CARD',  
     'macro =  abs, fiss, nsf   ',  
@@ -132,6 +137,7 @@ GOOD_TEMPLATE = [
     'macro =  inf_abs, inf_flx ',
     'micro = sig_f             ',
     'isotopes = 541350 531350  ',
+    'nuclides = nd',
     'set branches  3',
     'fuel 600 900 1200 1500',
     'mod 500 600 700',  
@@ -289,7 +295,7 @@ def test_setData(tmp_path):
         # the input writing is perforned using conftest
         with pytest.raises((InputCardError, NonInputError, InputGeneralError),
                            match="!!!*"):
-            ReadInput(filepath)
+            ReadInput(u0=filepath)
 
 
 @pytest.mark.parametrize("dict0", [BAD_SETTINGS, BAD_BRACNHES, BAD_HISTORY,
@@ -314,5 +320,5 @@ def test_setcard(tmp_path, dict0):
         # the input writing is perforned using conftest
         with pytest.raises((InputCardError, NonInputError, InputGeneralError),
                            match="!!!*"):
-            ReadInput(filepath)
+            ReadInput(u0=filepath)
 

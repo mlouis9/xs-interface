@@ -85,8 +85,8 @@ def EnergyCondensation(ndim, ng, boundsE, attr, flux, cutoffE):
         # energy value is within the bounds
         condIdx = np.argwhere(boundsE <= valE)
         idxE[idx] = condIdx[0, 0]
-    idxE = np.append(0, idxE)  # add the zeroth index
-    idxE = np.append(idxE, len(boundsE))  # add the last index
+    idxE = np.append(0, idxE)  # add the zeroth index        
+    idxE = np.append(idxE, len(boundsE)-1)  # add the last index
     # save only the unique indices
     idxE = np.unique(idxE)
 
@@ -101,7 +101,7 @@ def EnergyCondensation(ndim, ng, boundsE, attr, flux, cutoffE):
             i1 = idxE[ig+1]  # right bounding index
             condAttr[ig] = (attr[i0:i1]*flux[i0:i1]).sum()/(flux[i0:i1]).sum()
 
-    idxE[-1] -= 1
+    # idxE[-1] -= 1
     if ndim == 2:  # scattering matrices
         condAttr = np.zeros((condNG, condNG))
         for ig in range(condNG):

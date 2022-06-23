@@ -29,6 +29,7 @@ DataTable - 05/05/2022 - DK
 Values - 05/05/2022 - DK
 
 """
+import copy
 
 from collections import namedtuple
 
@@ -249,6 +250,79 @@ class MultipleSets():
             raise KeyError("Set index or the history-time-branch values must "
                            "be provided.")
         return self.sets[setIdx]
+
+
+    def Condense(self, cutoffE):
+        """Energy condensation method
+
+        Condensation is performed for a new energy structure and for all the
+        parameters in the macro and micro dictionaries over all existing states
+
+        Parameters
+        ----------
+        cutoffE : 1-dim array
+            energy cutoffs
+
+        Raises
+        ------
+        TypeError
+            If ``cutoffE`` is not array.
+        ValueError
+            If ``cutoffE`` is negative.
+
+        Examples
+        --------
+        >>> ss.Condense([0.0625, 1E+03])
+
+        """
+        condObj = copy.deepcopy(self)  # deep copy of for the condensed object
+        for iset, ss in self.sets.items():
+            condObj.sets[iset] = ss.Condense(cutoffE)
+        ng = len(ss.energygrid) - 1
+        return condObj, ng
+
+
+    def Manipulate(self, modes, attrs, attrs1, attrs2):
+        """Mathematical operation between two attributes or attribute-constant
+
+        Mathematical operation is performed between two macro/micro attributes
+        including:
+            - Multiplication, division, addition, and subtraction operations
+
+        Parameters
+        ----------
+        modes : string or list of strings
+            types of the mathematical relation
+            ["multiply", "divide", "add", "subtract"]
+        attrs : string or list of strings
+            name/ss of attribute/s where results will be written to.            
+        attrs1 : string or list of strings
+            names of attributes type-1 (can be macro or micro)
+        attrs2 : string or list of strings
+            names of attributes type-2 (can be macro or micro) 
+
+
+        Raises
+        ------
+        TypeError
+            If any of the ``modes``, ``attrs``, ``attrs1``, ``attrs2`` is
+            not string or list of strings.
+        ValueError
+            If the operations within ``modes`` are not defined.
+            If the dimensions of ``modes``, ``attrs1``, ``attrs2``
+            dot not correspond to the dimensions of ``attrs``
+
+
+        Examples
+        --------
+        >>> ss.BinaryOperation(substract, FISS_NEW,  FISS, sig_f)
+
+        """
+        newObj = copy.deepcopy(self)
+        for iset, ss in self.sets.items():
+            newObj.sets[iset] = ss.Manipulate(modes, attrs, attrs1, attrs2)
+        return newObj
+
 
     def __getitem__(self, setIdx):
         """direct method to obtain a set only if index is known"""

@@ -27,12 +27,12 @@ from xsInterface.containers.multiplesets import MultipleSets
 #                       Data Settings
 # -----------------------------------------------------------------------------
 rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                  meta=True, isotopes=[531350, 541350, 922350])
+                  meta=True, isotopes=[531350, 541350, 922350], nuclides="nd")
 rc.AddData("macro",
            ["inf_rabs", "inf_nsf", "kappa", "inf_flx"])
 rc.AddData("macro", ["inf_sp0"])
 rc.AddData("kinetics", ["beta", "decay"])
-rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
+rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n", "nd"])
 rc.AddData("micro", ["sig_sct"])
 rc.AddData("meta", ["burnup", "keff"])
 rc.AddData("meta", ["date"])
@@ -69,6 +69,7 @@ ss0.AddData("kinetics", beta=[1, 1, 1, 1, 1, 1, 1],
 ss0.AddData("meta", burnup=[1, 1, 1, 1],
             keff=[1, 1, 1, 1], date="April 09, 2022")
 ss0.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
+ss0.AddData("micro", nd=[[1], [1], [1]])
 ss0.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
             [11, 12, 21, 22]])
 
@@ -102,3 +103,9 @@ pdTable = ms.DataTable(['inf_nsf', 'inf_flx'])
 
 # Get specific values
 ms.Values(attrs=["inf_nsf"], fuel=900)
+
+# -----------------------------------------------------------------------------
+#                    Manipulate data
+# -----------------------------------------------------------------------------
+ss3 = ss0.Manipulate(["subtract"], ["new_cap"],
+                     ["inf_nsf"], ["sig_c"])

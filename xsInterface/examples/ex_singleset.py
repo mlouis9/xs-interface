@@ -98,10 +98,13 @@ ss.GetValues(["inf_flx", "beta"])
 # --------------------------------------------
 # Energy condensation
 # --------------------------------------------
-ss1 = ss.Condense([0.6025])
+ss1 = ss.Condense([0.0])
 
 # --------------------------------------------
 # Data manipulation
 # --------------------------------------------
 ss2 = ss1.Manipulate("add", "new_nsf", "inf_nsf", "sig_f")
 ss2 = ss1.Manipulate("add", "new_sct", "inf_sp0", "sig_sct")
+
+ss3 = ss1.Manipulate(["subtract", "add"], ["new_nsf", "new_sct"],
+                     ["inf_nsf", "inf_sp0"], ["sig_f", "sig_sct"])

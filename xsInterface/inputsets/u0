@@ -25,6 +25,7 @@ fuel 600, 900 1200, 1500
 mod 500 600 700
 cool 600 500
 
+
 set histories 2
 nom 850 550 570
 pert 950 500 525
@@ -181,3 +182,10 @@ sig_f
 11, 12  % isotope-1  
 11, 12  % isotope-2
 11, 12  % isotope-3
+
+# -----------------------------------------------------------------------------
+#                         DATA MANIPULATION
+# -----------------------------------------------------------------------------
+set manipulate 0.0
+new_nsf, inf_nsf, sig_f, subtract
+new_sct, inf_sp0, sig_sct, add
