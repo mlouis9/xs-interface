@@ -58,3 +58,9 @@ ManipulateCard = {
     "operation": "mode of the operation"
     }
 
+FilterCard = {
+    "branches": "Number of branches",
+    "histories": "Number of histories",
+    "times": "Boolean flag to indicate what time-points are included",
+    "attributes": "Attributes to be included"
+    }

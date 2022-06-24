@@ -189,3 +189,18 @@ sig_f
 set manipulate 0.0
 new_nsf, inf_nsf, sig_f, subtract
 new_sct, inf_sp0, sig_sct, add
+
+
+# -----------------------------------------------------------------------------
+#                         FILTER DATA & PRINT
+# -----------------------------------------------------------------------------
+
+
+set filter 3 1 1 1
+fuel 1500
+mod 600
+cool 500
+nom
+0.0
+inf_rabs inf_nsf sig_f nd
+
