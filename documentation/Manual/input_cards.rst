@@ -21,6 +21,8 @@ Set what?							Description
 :ref:`i_data`					Define data to be added to a specific (branch, history, time) set.
 --------------------- -------------------------------------------------------------------
 :ref:`i_manipulate`		Data manipulation including energy condensation and math operations.
+--------------------- -------------------------------------------------------------------
+:ref:`i_filter`				States and data names to be filtered/included.
 ===================== ===================================================================
 
 
@@ -459,3 +461,98 @@ and, the following **lines** represent binary (between variable ``var1`` and ``v
 	set manipulate 0.0
 	new_nsf, inf_nsf, sig_f, subtract
 	new_sct, inf_sp0, sig_sct, add
+
+
+
+.. _i_filter:
+
+======
+Filter
+======
+
+**States and data names to be filtered.**
+
+*Optional Card*
+
+.. code::
+		
+   set filter <N-branches> <history> <time> <attrs>
+   branch_card1 <val1> <val2> <val3> ...
+   ...
+   branch_cardN <val1> <val2> <val3> ...
+   history-1 history-2 ...
+   time-1 time-2 ...
+   attr-1 attr-2 ...
+   
+
+where in the **set** line,
+ - ``N-branches`` integer number of the filtered branches. 
+ - ``history`` a boolean flag to indicate if histories are to be filtered. 0 = no filtering; filtering is done for any number above zero.
+ - ``time`` a boolean flag to indicate if time is to be filtered. 0 = no filtering; filtering is done for any number above zero.
+ - ``attrs`` a boolean flag to indicate if attributes are to be filtered. 0 = no filtering; filtering is done for any number above zero.
+
+and, the list of **sub-cards** options is:
+	- ``branch_card`` name of the branch followed by values of that branch. Use new line for each branch. e.g., 
+
+	.. code::
+
+		fuel 900 1500
+		mod 600	
+	
+	- ``history-1 history-2 ...`` A single line that contains histories to be included. Can be defined only if <history> is above zero, otherwise omitted.
+	- ``time-1 time-2 ...`` A single line that contains time values to be included. Can be defined only if <time> is above zero, otherwise omitted.
+	- ``attr-1 attr-2 ...`` A single line that contains attribute names to be included. Can be defined only if <attrs> is above zero, otherwise omitted.
+
+**Notes:**
+	
+	*	If any of the branches is not provided but does exist in the :ref:`i_branches` it will be automatically included.
+		
+		* For example, if the following branches are defined:
+		
+		.. code::
+
+			set branches 3 Kelvin Kelvin kg/m3
+			fuel 600 900 1200 1500
+			mod 500 600 700
+			cool 500 600
+		
+		* Using the following definition, the ``cool`` branch (with 500 600 kg/m3) will be included when priniting.
+
+		.. code::
+		
+			set filter 2 0 0 0
+			fuel 1500
+			mod 600	
+
+	* Similarly, if any of the <history> <time> <attrs> is omitted, but included in the :ref:`i_histories`, :ref:`i_times` or :ref:`i_data` it will be automatically included.
+		* For example, if the following histories are defined:
+		
+		.. code::
+
+			set histories 2
+			nom 600 500 500
+			pert 900 700 625
+		
+		* Using the following definition, both the ``nom`` and ``pert`` histories are included when printing.
+
+		.. code::
+		
+			set filter 2 0 0 0
+			fuel 1500
+			mod 600	
+
+	* Values that are defined in the ``filter`` card must exist in the :ref:`i_branches`, :ref:`i_histories`, :ref:`i_times` and :ref:`i_data` .
+
+
+
+**Example**:
+
+.. code::
+
+	set filter 3 1 1 1
+	fuel 1500
+	mod 600
+	cool 500
+	nom
+	0.0
+	inf_rabs inf_nsf sig_f nd
