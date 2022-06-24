@@ -23,15 +23,16 @@ from pathlib import Path
 from re import compile, IGNORECASE
 
 import numpy as np
+import itertools
 
 from xsInterface.containers.container_header import DataSettingsCard,\
-    BranchCard, HistoryCard, TimeCard, DataCard, ManipulateCard
+    BranchCard, HistoryCard, TimeCard, DataCard, ManipulateCard, FilterCard
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.singleset import SingleSet
-from xsInterface.containers.multiplesets import MultipleSets
+from xsInterface.containers.multiplesets import MultipleSets, StateDescrp
 from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.containers.universes import Universes
-from xsInterface.errors.checkerrors import _isstr
+from xsInterface.errors.checkerrors import _isstr, _isnonNegativeArray
 from xsInterface.errors.customerrors import NonInputError, InputGeneralError,\
     InputCardError
 
@@ -53,7 +54,8 @@ CARD_REGEX = {
     "histories": compile(r'\s*(set\s+)(histories)', IGNORECASE),
     "times": compile(r'\s*(set\s+)(times)', IGNORECASE),
     "data": compile(r'\s*(set\s+)(data)', IGNORECASE),
-    "manipulate": compile(r'\s*(set\s+)(manipulate)', IGNORECASE),}
+    "manipulate": compile(r'\s*(set\s+)(manipulate)', IGNORECASE),
+    "filter": compile(r'\s*(set\s+)(filter)', IGNORECASE),}
 
 INPUT_CARDS =\
     {'settings': DataSettingsCard,
@@ -61,7 +63,8 @@ INPUT_CARDS =\
      'histories': HistoryCard,
      'times': TimeCard,
      'data': DataCard,
-     'manipulate': ManipulateCard}
+     'manipulate': ManipulateCard,
+     'filter': FilterCard}
 
 
 
@@ -135,6 +138,7 @@ def _ProcessCards(data):
     iset = 0
     cutoffE = None  # new wnergy condensation cutoff g
     manipData = {}  # data to be manipulated
+    filterData = {}  # filter data
     # -------------------------------------------------------------------------    
 
     cardsList = list(INPUT_CARDS.keys())
@@ -174,6 +178,10 @@ def _ProcessCards(data):
                 card = 'manipulate'
                 setLine = cardKey[cFound['manipulate'].span()[1]:]
                 cutoffE, manipData = _ImportManipulations(setLine, cardData) 
+            elif cFound['filter'] is not None:
+                card = 'filter'
+                setLine = cardKey[cFound['filter'].span()[1]:]
+                filterData = _ImportFilter(setLine, cardData) 
             else:
                 raise InputGeneralError("Card does not exist: <{}>"
                                         .format(cardKey))
@@ -202,10 +210,15 @@ def _ProcessCards(data):
         multisets = _PopulateDataSets(rc, states, singlesets)
         #                                                     `Manipulate` data
         #----------------------------------------------------------------------
-        errmsg = "Energy condensation"
+        errmsg = "Energy condensation and operations"
         card = "Manipulate"
         multisets, rc =\
             _PopulateManipulations(rc, multisets, cutoffE, manipData)
+        #                                                     `Manipulate` data
+        #----------------------------------------------------------------------
+        errmsg = "States and data filtering"
+        card = "filter"
+        _CheckFilters(multisets, filterData)
 
     except TypeError as detail:
         raise InputGeneralError("{}\nInternal Error:{}\n"
@@ -291,6 +304,48 @@ def _PopulateManipulations(rc, ms, cutoffE, manipData):
         ms = ms.Manipulate(modes, attrs, attrs1, attrs2)
         
     return ms, rc
+
+
+def _CheckFilters(ms, fltrData):
+    """"check that filter data is properly defined"""
+    
+    # check that all states are defined
+    attrs = None
+    if fltrData != {}:
+        attrs=fltrData["attrs"]
+    ms.DataTable(attrs=attrs)
+
+    missingStates, existingStates = ms._IsCompleteTable()
+    
+    # Filter data is not defined
+    if fltrData == {}:
+        if missingStates != []:
+            errmsg = "Missing states"
+            raise InputGeneralError("!!!\n{}\n!!!Error\n{}\n"
+                                    .format(missingStates, errmsg))  
+    
+    # histrorical branches
+    hstList = fltrData['histories']
+    timeVals = fltrData['times']
+    branches = list(fltrData['branches'].values())
+    
+    states = []
+    # loop over all histories, times, and branches
+    for history in hstList:
+        for time in timeVals:
+            for branch in itertools.product(*branches):
+                stateId = StateDescrp(history, time, branch)
+                states.append(stateId)
+    missingStates = []
+    for state in states:
+        if state not in existingStates:
+            missingStates.append(state)
+  
+    if missingStates != []:
+        errmsg = "Missing states"
+        raise InputGeneralError("!!!\n{}\n!!!Error\n{}\n"
+                                .format(missingStates, errmsg))        
+        
 
 # -----------------------------------------------------------------------------
 #                  Settings
@@ -502,6 +557,68 @@ def _ImportManipulations(setLine, tlines):
                                      .format(item, errmsg), INPUT_CARDS, card)
 
     return cutoffE, data
+
+
+def _ImportFilter(setLine, tlines):
+    """import filter definitions from the input"""
+
+    # Store data under a single dictionary
+    data = {'branches': None, 'histories': [None], 'times': [None],
+            'attrs': None}
+
+    # Requirements
+    # -------------------------------------------------------------------------
+    card = "filter" 
+    expinputs = ['<Nbranches>', '<historyFlag>', '<timeFlag>', '<attrsFlag>']
+    expvals = [4, 4]
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+
+    # Process the set line values
+    # -------------------------------------------------------------------------
+    setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
+    setValues = np.array(setValues, dtype=int)
+    _isnonNegativeArray(setValues, setLine)
+    
+    nBranches = setValues[0]
+    if nBranches == 0:
+        raise InputCardError(
+            "Number of branches cannot be zero.\n{}"
+            .format(setLine), INPUT_CARDS, card)          
+    historyFlag = 1 if setValues[1] > 0 else 0
+    timeFlag = 1 if setValues[2] > 0 else 0
+    attrsFlag = 1 if setValues[3] > 0 else 0
+    
+    if (len(tlines) != nBranches + historyFlag + timeFlag + attrsFlag):
+        raise InputCardError(
+            "Number of lines in \n{}\n is not alligned with the parameters "
+            "defined in: {}".format(tlines, setLine), INPUT_CARDS, card)  
+    
+    # Process the set card values
+    # -------------------------------------------------------------------------
+    errmsg = "<set {}>.\n".format(card)
+    dataBranches = _CardDataDict(tlines[0:nBranches], card, errmsg)
+    for key, vals in dataBranches.items():
+        dataBranches[key] = np.array(vals, dtype=float)
+    data['branches'] = dataBranches
+    if historyFlag:
+        idx0 = nBranches
+        data['histories'] = _CardDataList(tlines[idx0:idx0+1], card, errmsg)
+    if timeFlag:
+        idx0 = nBranches+historyFlag
+        dataTimes = _CardDataList(tlines[idx0:idx0+1], card, errmsg)
+        data['times'] = np.array(dataTimes, dtype=float)
+    if attrsFlag:
+        idx0 = nBranches+historyFlag+timeFlag
+        data['attrs'] = _CardDataList(tlines[idx0:idx0+1], card, errmsg)    
+
+    # Error Checking
+    # -------------------------------------------------------------------------
+    # N/A
+
+    # Data manipulation
+    # -------------------------------------------------------------------------
+
+    return data
 
 
 def _ImportData(setLine, tlines):
