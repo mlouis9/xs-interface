@@ -198,3 +198,42 @@ def test_Values():
         ms.Add(ss0, ss1)
         ms.DataTable()
         ms.Values(44444)  
+
+
+def test_Condense():
+    """Errors when trying to condense"""
+    
+    with pytest.raises(TypeError, match="Energy*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.Condense(2E+06)
+
+    with pytest.raises(ValueError, match="Energy*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.Condense([2E+10])    
+
+
+def test_Manipulate():
+    """Errors when trying to manipulate data"""
+    
+    with pytest.raises(KeyError, match="Attribute*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.Manipulate(["add"], ["new_rabs"], ["inf_rabs"], ["BAD_ATTR"])
+
+    with pytest.raises(KeyError, match="Mode*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.Manipulate("NOT_LIST", ["new_rabs"], ["inf_rabs"], ["BAD_ATTR"])
+        
+    with pytest.raises(ValueError, match="Mode*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.Manipulate(["add", "subtract"], ["new_rabs"], ["inf_rabs"],
+                      ["BAD_ATTR"])
+        
+    with pytest.raises(KeyError, match="Mode*"):
+        ms = MultipleSets(states, macro=True, micro=False)
+        ms.Add(ss0, ss1)
+        ms.Manipulate(["NO_MODE"], ["new_rabs"], ["inf_rabs"], ["BAD_ATTR"])
