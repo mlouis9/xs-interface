@@ -15,7 +15,7 @@ It also includes processing of data, such as:
 
 
 Created on Thu Apr 14 05:45:00 2022 @author: Dan Kotlyar
-Last updated on Thu May 05 12:30:00 2022 @author: Dan Kotlyar
+Last updated on Sat June 26 07:30:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -27,7 +27,9 @@ Add method - 04/14/2022 - DK
 Get method - 04/16/2022 - DK
 DataTable - 05/05/2022 - DK
 Values - 05/05/2022 - DK
-
+Condense - 06/20/2022 -  DK
+Manipulate - 06/20/2022 -  DK
+CheckFilters - 06/26/2022 - DK
 """
 import copy
 
@@ -283,7 +285,7 @@ class MultipleSets():
 
 
     def Manipulate(self, modes, attrs, attrs1, attrs2):
-        """Mathematical operation between two attributes or attribute-constant
+        """Mathematical operation between two attributes
 
         Mathematical operation is performed between two macro/micro attributes
         including:
@@ -527,7 +529,7 @@ class MultipleSets():
 
     def CheckFilters(self, branches=None, histories=None, times=None,
                      attrs=None):
-        """Check that data use to filter the multiset container is valid
+        """Check that data used to filter the multiset container is valid
 
         The method allows to filter what data will be used to print results.
         The MultipleSets container may store many state points with multiple
@@ -544,6 +546,8 @@ class MultipleSets():
             names of the histories. If not provided then 
         times : list or array of floats
             time points to be included
+        attrs : list of strings
+            attributes to be included
 
         Returns
         -------

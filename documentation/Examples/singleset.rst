@@ -44,13 +44,23 @@ Class Description
 
        AddState(branch, history=None, timeIdx=None, timePoint=None)
 
+*add data/attributes values*
+
+-  dtype : str a string from: [“macro”, “micro”, “kinetics”, “meta”]
+-  kwargs : named arguments keys represent the data name and value
+   represent the values.
+
+.. code:: python
+
+       AddState(branch, dtype, **kwargs)
+
 *describes the state (branch, time, history)*
 
 -  branch : array, set of values to describe a specific branch-off
    e.g. [Tf, Tm]=[900, 600]
 -  history : string, the name of the history
 -  timeIdx : int, time index
--  time : float, an existing time point. If ``timeIdx`` is defined
+-  timePoint : float, an existing time point. If ``timeIdx`` is defined
    then this is redundant
 
 .. code:: python
@@ -59,6 +69,21 @@ Class Description
 
 *get data for specific attribute/s* - attributes : str or list of
 strings, names of the attributes
+
+.. code:: python
+
+       Manipulate(modes, attrs, attrs1, attrs2)
+
+*Mathematical operation between two attributes*
+
+-  modes : string or list of strings types of the mathematical relation
+   [“multiply”, “divide”, “add”, “subtract”]
+-  attrs : string or list of strings name/ss of attribute/s where
+   results will be written to.
+-  attrs1 : string or list of strings names of attributes type-1 (can be
+   macro or micro)
+-  attrs2 : string or list of strings names of attributes type-2 (can be
+   macro or micro)
 
 .. code:: python
 
@@ -96,14 +121,13 @@ Define what data needs to be collected.
 
     # Reset the data
     rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                      meta=True, isotopes=[531350, 541350, 922350])
+                      meta=True, isotopes=[531350, 541350, 922350], nuclides='nd')
     # Add the variables names to be collected
     rc.AddData("macro",
-               ["inf_rabs", "inf_nsf", "kappa", "inf_flx"])
-    rc.AddData("macro", ["inf_sp0"])
+               ["inf_rabs", "inf_nsf", "kappa", "inf_flx", "inf_sp0"])
     rc.AddData("kinetics", ["beta", "decay"])
     rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
-    rc.AddData("micro", ["sig_sct"])
+    rc.AddData("micro", ["sig_sct", "nd"])
     rc.AddData("meta", ["burnup", "keff"])
     rc.AddData("meta", ["date"])
 
@@ -131,7 +155,7 @@ Reset and define operation state point
 
     ss = SingleSet(rc, states, fluxName="inf_flx",
                    energyStruct=[10.0E+6, 0.6025, 0.0])
-    ss.AddState([600.001, 600, 500], "nom", timePoint=2.5)
+    ss.AddState([600.001, 600, 500], "nom", time=2.5)
 
 Add macro data
 ^^^^^^^^^^^^^^
@@ -150,6 +174,7 @@ Add micro data
     ss.AddData("micro", sig_c=[[1, 1], [2, 2], [3, 3]])
     ss.AddData("micro", sig_sct=[[11, 12, 21, 22], [11, 12, 21, 22],
                                  [11, 12, 21, 22]])
+    ss.AddData("micro", nd=[[1], [1], [1]])
 
 Add kinetics data
 ^^^^^^^^^^^^^^^^^
@@ -196,4 +221,31 @@ Energy condensation
 .. code:: 
 
     ss1 = ss.Condense([0.6025])
+
+Manipulation
+^^^^^^^^^^^^
+
+.. code:: 
+
+    ss1 = ss.Manipulate(["subtract", "add"], ["new_nsf", "new_kappa"], ["inf_nsf", "inf_rabs"], ["kappa", "sig_c"])
+
+.. code:: 
+
+    ss1.macro
+
+
+
+
+.. parsed-literal::
+
+    {'inf_rabs': array([0.1, 0.2]),
+     'inf_nsf': array([0.3, 0.4]),
+     'kappa': array([0.3, 0.4]),
+     'inf_flx': array([0.3, 0.4]),
+     'inf_sp0': array([[ 0.1 ,  0.2 ],
+            [-0.05,  0.3 ]]),
+     'new_nsf': array([0., 0.]),
+     'new_kappa': array([6.1, 6.2])}
+
+
 
