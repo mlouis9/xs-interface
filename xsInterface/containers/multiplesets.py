@@ -15,7 +15,7 @@ It also includes processing of data, such as:
 
 
 Created on Thu Apr 14 05:45:00 2022 @author: Dan Kotlyar
-Last updated on Thu May 05 12:30:00 2022 @author: Dan Kotlyar
+Last updated on Sat June 26 07:30:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -27,7 +27,9 @@ Add method - 04/14/2022 - DK
 Get method - 04/16/2022 - DK
 DataTable - 05/05/2022 - DK
 Values - 05/05/2022 - DK
-
+Condense - 06/20/2022 -  DK
+Manipulate - 06/20/2022 -  DK
+CheckFilters - 06/26/2022 - DK
 """
 import copy
 
@@ -283,7 +285,7 @@ class MultipleSets():
 
 
     def Manipulate(self, modes, attrs, attrs1, attrs2):
-        """Mathematical operation between two attributes or attribute-constant
+        """Mathematical operation between two attributes
 
         Mathematical operation is performed between two macro/micro attributes
         including:
@@ -523,6 +525,89 @@ class MultipleSets():
             pd = pd.iloc[:, idx]
 
         return pd
+
+
+    def CheckFilters(self, branches=None, histories=None, times=None,
+                     attrs=None):
+        """Check that data used to filter the multiset container is valid
+
+        The method allows to filter what data will be used to print results.
+        The MultipleSets container may store many state points with multiple
+        branches, histories, times, and atributes. This method allows to verify
+        that specific points do exist on the MultipleSets container.
+
+
+        Parameters
+        ----------
+        branches : dictionary
+            keys represent the names of the branches and values correspond to
+            the branches values.
+        histories : list of strigs
+            names of the histories. If not provided then 
+        times : list or array of floats
+            time points to be included
+        attrs : list of strings
+            attributes to be included
+
+        Returns
+        -------
+        missingStates : list
+            list of missing states.
+
+        Returns
+        -------
+        missingStates : list
+            list of missing states.
+            
+        Raises
+        ------
+        ValueError
+            If ``branches`` is not defined pproperly.
+
+
+        Examples
+        --------
+        >>> ms.CheckFilters(branches={'fuel': [1200 1500], 'mod': [600]},
+                            histories=['nom'], times=[0.0, 5.0],
+                            attrs=['inf_nsf', 'inf_abs', 'inf_flx'])
+        ... [State(history='nom', time=0.0, branch=(600.0, 500.0, 600.0)),
+        ... State(history='nom', time=0.0, branch=(600.0, 500.0, 500.0)),]
+        """
+
+        # create pandas table with all the states and the filtered attributes
+        self.DataTable(attrs=attrs) 
+       # collect existing and missing states on the container
+        missingStates, existingStates = self._IsCompleteTable()
+
+        # If no state points are provided then ALL the states defined
+        # under the Perturbations container must exist
+        if (branches and histories and times and attrs) is None:
+            return missingStates
+        
+        if branches is None and not isinstance(branches, dict):
+            raise ValueError(
+                "branches variable must be a dict with keys as branch names "
+                "and values as branches values, e.g., branches={'mod': [600]")
+        if histories is None:
+            histories = [None]
+        if times is None:
+            times = [None]
+                
+        branches = list(branches.values())
+        
+        states = []
+        # loop over all histories, times, and branches
+        for history in histories:
+            for time in times:
+                for branch in itertools.product(*branches):
+                    stateId = StateDescrp(history, time, branch)
+                    states.append(stateId)
+        missingStates = []
+        for state in states:
+            if state not in existingStates:
+                missingStates.append(state)
+      
+        return missingStates
 
     def _IsCompleteTable(self):
         """Check that Pandas table contains all states

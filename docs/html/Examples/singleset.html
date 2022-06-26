@@ -72,13 +72,22 @@ close perturbation exists</p></li>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AddState</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeIdx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><em>add data/attributes values</em></p>
+<ul class="simple">
+<li><p>dtype : str a string from: [“macro”, “micro”, “kinetics”, “meta”]</p></li>
+<li><p>kwargs : named arguments keys represent the data name and value
+represent the values.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AddState</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
 <p><em>describes the state (branch, time, history)</em></p>
 <ul class="simple">
 <li><p>branch : array, set of values to describe a specific branch-off
 e.g. [Tf, Tm]=[900, 600]</p></li>
 <li><p>history : string, the name of the history</p></li>
 <li><p>timeIdx : int, time index</p></li>
-<li><p>time : float, an existing time point. If <code class="docutils literal notranslate"><span class="pre">timeIdx</span></code> is defined
+<li><p>timePoint : float, an existing time point. If <code class="docutils literal notranslate"><span class="pre">timeIdx</span></code> is defined
 then this is redundant</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GetValues</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
@@ -86,6 +95,20 @@ then this is redundant</p></li>
 </div>
 <p><em>get data for specific attribute/s</em> - attributes : str or list of
 strings, names of the attributes</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Manipulate</span><span class="p">(</span><span class="n">modes</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">attrs1</span><span class="p">,</span> <span class="n">attrs2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Mathematical operation between two attributes</em></p>
+<ul class="simple">
+<li><p>modes : string or list of strings types of the mathematical relation
+[“multiply”, “divide”, “add”, “subtract”]</p></li>
+<li><p>attrs : string or list of strings name/ss of attribute/s where
+results will be written to.</p></li>
+<li><p>attrs1 : string or list of strings names of attributes type-1 (can be
+macro or micro)</p></li>
+<li><p>attrs2 : string or list of strings names of attributes type-2 (can be
+macro or micro)</p></li>
+</ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Condense</span><span class="p">(</span><span class="n">cutoffE</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -113,14 +136,13 @@ incdicate if all data in meta must be defined</p>
 <p>Define what data needs to be collected.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset the data</span>
 <span class="n">rc</span> <span class="o">=</span> <span class="n">DataSettings</span><span class="p">(</span><span class="n">NG</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">DN</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                  <span class="n">meta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">isotopes</span><span class="o">=</span><span class="p">[</span><span class="mi">531350</span><span class="p">,</span> <span class="mi">541350</span><span class="p">,</span> <span class="mi">922350</span><span class="p">])</span>
+                  <span class="n">meta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">isotopes</span><span class="o">=</span><span class="p">[</span><span class="mi">531350</span><span class="p">,</span> <span class="mi">541350</span><span class="p">,</span> <span class="mi">922350</span><span class="p">],</span> <span class="n">nuclides</span><span class="o">=</span><span class="s1">&#39;nd&#39;</span><span class="p">)</span>
 <span class="c1"># Add the variables names to be collected</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span>
-           <span class="p">[</span><span class="s2">&quot;inf_rabs&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;kappa&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_flx&quot;</span><span class="p">])</span>
-<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;inf_sp0&quot;</span><span class="p">])</span>
+           <span class="p">[</span><span class="s2">&quot;inf_rabs&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;kappa&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_sp0&quot;</span><span class="p">])</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;kinetics&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;decay&quot;</span><span class="p">])</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;sig_c&quot;</span><span class="p">,</span> <span class="s2">&quot;sig_f&quot;</span><span class="p">,</span> <span class="s2">&quot;sig_n2n&quot;</span><span class="p">])</span>
-<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;sig_sct&quot;</span><span class="p">])</span>
+<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;sig_sct&quot;</span><span class="p">,</span> <span class="s2">&quot;nd&quot;</span><span class="p">])</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;burnup&quot;</span><span class="p">,</span> <span class="s2">&quot;keff&quot;</span><span class="p">])</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
 </pre></div>
@@ -145,7 +167,7 @@ incdicate if all data in meta must be defined</p>
 <h4>Reset and define operation state point<a class="headerlink" href="#reset-and-define-operation-state-point" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ss</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
                <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
-<span class="n">ss</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">600.001</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">600.001</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -162,6 +184,7 @@ incdicate if all data in meta must be defined</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ss</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="n">sig_c</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
 <span class="n">ss</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="n">sig_sct</span><span class="o">=</span><span class="p">[[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span>
                              <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">]])</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;micro&quot;</span><span class="p">,</span> <span class="n">nd</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
 </pre></div>
 </div>
 </section>
@@ -197,6 +220,25 @@ incdicate if all data in meta must be defined</p>
 <section id="energy-condensation">
 <h4>Energy condensation<a class="headerlink" href="#energy-condensation" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ss1</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">Condense</span><span class="p">([</span><span class="mf">0.6025</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="manipulation">
+<h4>Manipulation<a class="headerlink" href="#manipulation" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ss1</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">Manipulate</span><span class="p">([</span><span class="s2">&quot;subtract&quot;</span><span class="p">,</span> <span class="s2">&quot;add&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;new_nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;new_kappa&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_rabs&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;kappa&quot;</span><span class="p">,</span> <span class="s2">&quot;sig_c&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ss1</span><span class="o">.</span><span class="n">macro</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]),</span>
+ <span class="s1">&#39;inf_nsf&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]),</span>
+ <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]),</span>
+ <span class="s1">&#39;inf_flx&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]),</span>
+ <span class="s1">&#39;inf_sp0&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span> <span class="mf">0.1</span> <span class="p">,</span>  <span class="mf">0.2</span> <span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.3</span> <span class="p">]]),</span>
+ <span class="s1">&#39;new_nsf&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span>
+ <span class="s1">&#39;new_kappa&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">6.1</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])}</span>
 </pre></div>
 </div>
 </section>

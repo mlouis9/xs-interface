@@ -244,7 +244,7 @@ class SingleSet():
 
 
     def Manipulate(self, modes, attrs, attrs1, attrs2):
-        """Mathematical operation between two attributes or attribute-constant
+        """Mathematical operation between two attributes
 
         Mathematical operation is performed between two macro/micro attributes
         including:

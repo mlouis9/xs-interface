@@ -38,7 +38,7 @@
 <span id="multiplesets-example"></span><h1>MultipleSets<a class="headerlink" href="#multiplesets" title="Permalink to this headline">¶</a></h1>
 <p>Example on how to collect, store, and process data using the
 <code class="docutils literal notranslate"><span class="pre">MultipleSets</span></code> container.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span> <span class="o">=</span> <span class="n">MultipleSets</span><span class="p">(</span><span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span> <span class="o">=</span> <span class="p">(</span><span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="class-description">
@@ -79,7 +79,7 @@ and indices in the <code class="docutils literal notranslate"><span class="pre">
 <ul class="simple">
 <li><p>argv : non-named arguments non-keyworded variable length argument
 list. Each argument represents a <code class="docutils literal notranslate"><span class="pre">SingleSet</span></code> object that contains
-all the required attributes, e.g. <code class="docutils literal notranslate"><span class="pre">macro</span></code> and <code class="docutils literal notranslate"><span class="pre">meta</span></code>.</p></li>
+all the required attributes, e.g. <code class="docutils literal notranslate"><span class="pre">macro</span></code> and <code class="docutils literal notranslate"><span class="pre">meta</span></code>.</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
     <span class="n">Get</span><span class="p">(</span><span class="n">setIdx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">branch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -92,6 +92,26 @@ index/position of the set in the sets dictionary - history : array
 values that represent a history - time : float/number value of the time
 point - branch : array set of values for the specific branch - errFlag :
 boolean indicates whether error should be raised if state not found</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
+    <span class="n">Condense</span><span class="p">(</span><span class="n">cutoffE</span><span class="p">)</span>
+<span class="o">-----------------------------------------------------------</span>
+</pre></div>
+</div>
+<p><em>Energy condensation method</em> - cutoffE : 1-dim array energy cutoffs</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
+    <span class="n">Manipulate</span><span class="p">(</span><span class="n">modes</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">attrs1</span><span class="p">,</span> <span class="n">attrs2</span><span class="p">)</span>
+<span class="o">-----------------------------------------------------------</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><em>Mathematical operation between two attributes</em> - modes : string or
+list of strings types of the mathematical relation [“multiply”,
+“divide”, “add”, “subtract”] - attrs : string or list of strings
+name/ss of attribute/s where results will be written to.</div>
+<div class="line">- attrs1 : string or list of strings names of attributes type-1 (can
+be macro or micro) - attrs2 : string or list of strings names of
+attributes type-2 (can be macro or micro)</div>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
     <span class="n">DataTable</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">macroFlag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">microFlag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">kineticsFlag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metaFlag</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -120,39 +140,49 @@ kwargs : named arguments keys represent the data name and value
 represent the values. The filtering of data is performed according to
 kwargs. The use can filter according to a specific state, time, or
 history</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">-----------------------------------------------------------</span>
+    <span class="n">CheckFilters</span><span class="p">(</span><span class="n">branches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">histories</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="o">-----------------------------------------------------------</span>
+</pre></div>
+</div>
+<p><em>Check that data used to filter the multiset container is valid</em> -
+branches : dictionary keys represent the names of the branches and
+values correspond to the branches values. - histories : list of strigs
+names of the histories. If not provided then - times : list or array of
+floats time points to be included - attrs : list of strings attributes
+to be included</p>
 </section>
 <section id="execution-sequence">
 <h2>Execution Sequence<a class="headerlink" href="#execution-sequence" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.containers.datasettings</span> <span class="kn">import</span> <span class="n">DataSettings</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.containers.datasettings</span> <span class="kn">import</span> <span class="n">DataSettings</span>
 <span class="kn">from</span> <span class="nn">xsInterface.containers.perturbationparameters</span> <span class="kn">import</span> <span class="n">Perturbations</span>
 <span class="kn">from</span> <span class="nn">xsInterface.containers.singleset</span> <span class="kn">import</span> <span class="n">SingleSet</span>
-<span class="kn">from</span> <span class="nn">xsInterface.containers.multiplesets</span> <span class="kn">import</span> <span class="n">MultipleSets</span>
+<span class="kn">from</span> <span class="nn">xsInterface.containers.</span> <span class="kn">import</span>
 </pre></div>
 </div>
 <section id="data-settings">
 <h3><strong>Data Settings</strong><a class="headerlink" href="#data-settings" title="Permalink to this headline">¶</a></h3>
 <p>Define what data needs to be collected.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset the data</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset the data</span>
 <span class="n">rc</span> <span class="o">=</span> <span class="n">DataSettings</span><span class="p">(</span><span class="n">NG</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">DN</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isotopes</span><span class="o">=</span><span class="p">[</span><span class="mi">531350</span><span class="p">,</span> <span class="mi">541350</span><span class="p">,</span> <span class="mi">922350</span><span class="p">])</span>
+                  <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isotopes</span><span class="o">=</span><span class="p">[</span><span class="mi">531350</span><span class="p">,</span> <span class="mi">541350</span><span class="p">,</span> <span class="mi">922350</span><span class="p">],</span> <span class="n">nuclides</span><span class="o">=</span><span class="s2">&quot;nd&quot;</span><span class="p">)</span>
 <span class="c1"># Add the variables names to be collected</span>
 <span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span>
-           <span class="p">[</span><span class="s2">&quot;inf_rabs&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;kappa&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_flx&quot;</span><span class="p">],</span>
-           <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;inf_sp0&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+           <span class="p">[</span><span class="s2">&quot;inf_rabs&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_nsf&quot;</span><span class="p">,</span> <span class="s2">&quot;kappa&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_flx&quot;</span><span class="p">])</span>
+<span class="n">rc</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;inf_sp0&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">],</span>
- <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </section>
 <section id="define-perturbation-states">
 <h3>Define Perturbation States<a class="headerlink" href="#define-perturbation-states" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="n">Perturbations</span><span class="p">(</span><span class="n">branchN</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">branches</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;dens&quot;</span><span class="p">,</span> <span class="s2">&quot;cool&quot;</span><span class="p">],</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="n">Perturbations</span><span class="p">(</span><span class="n">branchN</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">branches</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fuel&quot;</span><span class="p">,</span> <span class="s2">&quot;dens&quot;</span><span class="p">,</span> <span class="s2">&quot;cool&quot;</span><span class="p">],</span>
                        <span class="n">histN</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">histories</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="s2">&quot;pert&quot;</span><span class="p">],</span>
                        <span class="n">timeValues</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">timeUnits</span><span class="o">=</span><span class="s1">&#39;MWd/kg&#39;</span><span class="p">)</span>
 <span class="n">states</span><span class="o">.</span><span class="n">AddBranches</span><span class="p">(</span><span class="n">fuel</span><span class="o">=</span><span class="p">[</span><span class="mi">600</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">1500</span><span class="p">],</span>
@@ -165,14 +195,13 @@ history</p>
 </section>
 <section id="multiple-sets">
 <h3>Multiple Sets<a class="headerlink" href="#multiple-sets" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span> <span class="o">=</span> <span class="n">MultipleSets</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span> <span class="o">=</span> <span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">macro</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">micro</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kinetics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">],</span>
- <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </section>
@@ -180,73 +209,71 @@ history</p>
 <h3>Data for Single States<a class="headerlink" href="#data-for-single-states" title="Permalink to this headline">¶</a></h3>
 <section id="state-0">
 <h4>State-0<a class="headerlink" href="#state-0" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset and define operation state point</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset and define operation state point</span>
 <span class="n">ss0</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
                <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
-<span class="n">ss0</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">600.0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">ss0</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">600.0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
 <span class="c1"># macro data</span>
 <span class="n">ss0</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">inf_nsf</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
            <span class="n">kappa</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">inf_flx</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
 <span class="n">ss0</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_sp0</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">],</span>
- <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ss0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ss0</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rc</span><span class="o">.</span><span class="n">macro</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">],</span>
- <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_sp0&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </section>
 <section id="state-1">
 <h4>State-1<a class="headerlink" href="#state-1" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset and define operation state point</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset and define operation state point</span>
 <span class="n">ss1</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
                <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
-<span class="n">ss1</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">900.0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">ss1</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">900.0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
 <span class="c1"># macro data</span>
 <span class="n">ss1</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">inf_nsf</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
            <span class="n">kappa</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">inf_flx</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
 <span class="n">ss1</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_sp0</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ss1</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ss1</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="state-2">
 <h4>State-2<a class="headerlink" href="#state-2" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset and define operation state point</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset and define operation state point</span>
 <span class="n">ss2</span> <span class="o">=</span> <span class="n">SingleSet</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">fluxName</span><span class="o">=</span><span class="s2">&quot;inf_flx&quot;</span><span class="p">,</span>
                <span class="n">energyStruct</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
-<span class="n">ss2</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">1200.0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">timePoint</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">ss2</span><span class="o">.</span><span class="n">AddState</span><span class="p">([</span><span class="mf">1200.0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
 <span class="c1"># macro data</span>
 <span class="n">ss2</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">inf_nsf</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
            <span class="n">kappa</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">inf_flx</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
 <span class="n">ss2</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="n">inf_sp0</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ss2</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ss2</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 </section>
-<section id="create-a-table-from-multiplesets-container">
-<h3>Create a table from MultipleSets Container<a class="headerlink" href="#create-a-table-from-multiplesets-container" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdTable</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">DataTable</span><span class="p">([</span><span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">])</span>
+<section id="create-a-table-from-container">
+<h3>Create a table from  Container<a class="headerlink" href="#create-a-table-from-container" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdTable</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">DataTable</span><span class="p">([</span><span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdTable</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdTable</span>
 </pre></div>
 </div>
 <div>
@@ -278,7 +305,7 @@ history</p>
   </thead>
   <tbody>
     <tr>
-      <td>0</td>
+      <th>0</th>
       <td>nom</td>
       <td>2.5</td>
       <td>600.0</td>
@@ -288,7 +315,7 @@ history</p>
       <td>[0.3, 0.4]</td>
     </tr>
     <tr>
-      <td>1</td>
+      <th>1</th>
       <td>nom</td>
       <td>2.5</td>
       <td>900.0</td>
@@ -298,7 +325,7 @@ history</p>
       <td>[0.3, 0.4]</td>
     </tr>
     <tr>
-      <td>2</td>
+      <th>2</th>
       <td>nom</td>
       <td>2.5</td>
       <td>1200.0</td>
@@ -310,9 +337,9 @@ history</p>
   </tbody>
 </table>
 </div></section>
-<section id="create-values-from-multiplesets-container">
-<h3>Create Values from MultipleSets Container<a class="headerlink" href="#create-values-from-multiplesets-container" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
+<section id="create-values-from-container">
+<h3>Create Values from  Container<a class="headerlink" href="#create-values-from-container" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
 </pre></div>
 </div>
 <div>
@@ -343,7 +370,7 @@ history</p>
   </thead>
   <tbody>
     <tr>
-      <td>1</td>
+      <th>1</th>
       <td>nom</td>
       <td>2.5</td>
       <td>900.0</td>
@@ -353,7 +380,7 @@ history</p>
     </tr>
   </tbody>
 </table>
-</div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">dens</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">cool</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">dens</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">cool</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
 <div>
@@ -384,7 +411,7 @@ history</p>
   </thead>
   <tbody>
     <tr>
-      <td>0</td>
+      <th>0</th>
       <td>nom</td>
       <td>2.5</td>
       <td>600.0</td>
@@ -393,7 +420,7 @@ history</p>
       <td>[0.3, 0.4]</td>
     </tr>
     <tr>
-      <td>1</td>
+      <th>1</th>
       <td>nom</td>
       <td>2.5</td>
       <td>900.0</td>
@@ -402,7 +429,7 @@ history</p>
       <td>[0.3, 0.4]</td>
     </tr>
     <tr>
-      <td>2</td>
+      <th>2</th>
       <td>nom</td>
       <td>2.5</td>
       <td>1200.0</td>
@@ -412,7 +439,7 @@ history</p>
     </tr>
   </tbody>
 </table>
-</div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">history</span><span class="o">=</span><span class="s2">&quot;nom&quot;</span><span class="p">)</span>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">history</span><span class="o">=</span><span class="s2">&quot;nom&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div>
@@ -443,7 +470,7 @@ history</p>
   </thead>
   <tbody>
     <tr>
-      <td>0</td>
+      <th>0</th>
       <td>nom</td>
       <td>2.5</td>
       <td>600.0</td>
@@ -452,7 +479,7 @@ history</p>
       <td>[0.3, 0.4]</td>
     </tr>
     <tr>
-      <td>1</td>
+      <th>1</th>
       <td>nom</td>
       <td>2.5</td>
       <td>900.0</td>
@@ -461,7 +488,7 @@ history</p>
       <td>[0.3, 0.4]</td>
     </tr>
     <tr>
-      <td>2</td>
+      <th>2</th>
       <td>nom</td>
       <td>2.5</td>
       <td>1200.0</td>
@@ -471,7 +498,7 @@ history</p>
     </tr>
   </tbody>
 </table>
-</div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
 </pre></div>
 </div>
 <div>
@@ -502,7 +529,7 @@ history</p>
   </thead>
   <tbody>
     <tr>
-      <td>0</td>
+      <th>0</th>
       <td>nom</td>
       <td>2.5</td>
       <td>600.0</td>
@@ -511,7 +538,7 @@ history</p>
       <td>[0.3, 0.4]</td>
     </tr>
     <tr>
-      <td>1</td>
+      <th>1</th>
       <td>nom</td>
       <td>2.5</td>
       <td>900.0</td>
@@ -520,7 +547,7 @@ history</p>
       <td>[0.3, 0.4]</td>
     </tr>
     <tr>
-      <td>2</td>
+      <th>2</th>
       <td>nom</td>
       <td>2.5</td>
       <td>1200.0</td>
@@ -530,7 +557,7 @@ history</p>
     </tr>
   </tbody>
 </table>
-</div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <div>
@@ -563,6 +590,169 @@ history</p>
   </tbody>
 </table>
 </div></section>
+<section id="condense-in-energy">
+<h3>Condense in energy<a class="headerlink" href="#condense-in-energy" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms1</span><span class="p">,</span> <span class="n">NG</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">Condense</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>  <span class="c1"># 1-group</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdTable</span> <span class="o">=</span> <span class="n">ms1</span><span class="o">.</span><span class="n">DataTable</span><span class="p">([</span><span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_flx&#39;</span><span class="p">])</span>
+<span class="n">ms1</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>history</th>
+      <th>time</th>
+      <th>fuel</th>
+      <th>dens</th>
+      <th>cool</th>
+      <th>inf_nsf</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>600.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.35714285714285715]</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>900.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.35714285714285715]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>1200.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.35714285714285715]</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">NG</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span>
+</pre></div>
+</div>
+</section>
+<section id="data-manipulation">
+<h3>Data manipulation<a class="headerlink" href="#data-manipulation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ms2</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">Manipulate</span><span class="p">([</span><span class="s2">&quot;add&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;new_add&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;inf_rabs&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdTable</span> <span class="o">=</span> <span class="n">ms2</span><span class="o">.</span><span class="n">DataTable</span><span class="p">([</span><span class="s1">&#39;new_add&#39;</span><span class="p">,</span> <span class="s1">&#39;inf_rabs&#39;</span><span class="p">])</span>
+<span class="n">ms2</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;new_add&quot;</span><span class="p">,</span> <span class="s2">&quot;inf_rabs&quot;</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>history</th>
+      <th>time</th>
+      <th>fuel</th>
+      <th>dens</th>
+      <th>cool</th>
+      <th>new_add</th>
+      <th>inf_rabs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>600.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.4, 0.6000000000000001]</td>
+      <td>[0.1, 0.2]</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>900.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.4, 0.6000000000000001]</td>
+      <td>[0.1, 0.2]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>nom</td>
+      <td>2.5</td>
+      <td>1200.0</td>
+      <td>600.0</td>
+      <td>500.0</td>
+      <td>[0.4, 0.6000000000000001]</td>
+      <td>[0.1, 0.2]</td>
+    </tr>
+  </tbody>
+</table>
+</div></section>
+<section id="checkfilters">
+<h3>CheckFilters<a class="headerlink" href="#checkfilters" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missingData</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">CheckFilters</span><span class="p">({</span><span class="s1">&#39;fuel&#39;</span><span class="p">:[</span><span class="mi">600</span><span class="p">,</span> <span class="mi">1200</span><span class="p">],</span> <span class="s1">&#39;mod&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">600</span><span class="p">],</span> <span class="s1">&#39;cool&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">500</span><span class="p">]},</span> <span class="p">[</span><span class="s2">&quot;nom&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missingData</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[]</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missingData</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">CheckFilters</span><span class="p">({</span><span class="s1">&#39;fuel&#39;</span><span class="p">:[</span><span class="mi">600</span><span class="p">,</span> <span class="mi">888</span><span class="p">],</span> <span class="s1">&#39;mod&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">600</span><span class="p">],</span> <span class="s1">&#39;cool&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">500</span><span class="p">]},</span> <span class="p">[</span><span class="s2">&quot;nom&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;inf_nsf&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missingData</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">State</span><span class="p">(</span><span class="n">history</span><span class="o">=</span><span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">branch</span><span class="o">=</span><span class="p">(</span><span class="mi">888</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">500</span><span class="p">))]</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 

@@ -309,38 +309,14 @@ def _PopulateManipulations(rc, ms, cutoffE, manipData):
 def _CheckFilters(ms, fltrData):
     """"check that filter data is properly defined"""
     
-    # check that all states are defined
-    attrs = None
-    if fltrData != {}:
-        attrs=fltrData["attrs"]
-    ms.DataTable(attrs=attrs)
-
-    missingStates, existingStates = ms._IsCompleteTable()
-    
-    # Filter data is not defined
+    # if no filter data is defined
     if fltrData == {}:
-        if missingStates != []:
-            errmsg = "Missing states"
-            raise InputGeneralError("!!!\n{}\n!!!Error\n{}\n"
-                                    .format(missingStates, errmsg))  
-    
-    # histrorical branches
-    hstList = fltrData['histories']
-    timeVals = fltrData['times']
-    branches = list(fltrData['branches'].values())
-    
-    states = []
-    # loop over all histories, times, and branches
-    for history in hstList:
-        for time in timeVals:
-            for branch in itertools.product(*branches):
-                stateId = StateDescrp(history, time, branch)
-                states.append(stateId)
-    missingStates = []
-    for state in states:
-        if state not in existingStates:
-            missingStates.append(state)
-  
+        missingStates = ms.CheckFilters()
+    else:
+        missingStates =\
+            ms.CheckFilters(fltrData['branches'], fltrData['histories'],
+                            fltrData['times'], fltrData['attrs'])
+ 
     if missingStates != []:
         errmsg = "Missing states"
         raise InputGeneralError("!!!\n{}\n!!!Error\n{}\n"
