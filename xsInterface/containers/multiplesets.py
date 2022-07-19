@@ -15,7 +15,7 @@ It also includes processing of data, such as:
 
 
 Created on Thu Apr 14 05:45:00 2022 @author: Dan Kotlyar
-Last updated on Sat June 26 07:30:00 2022 @author: Dan Kotlyar
+Last updated on Fri July 08 07:00:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -30,6 +30,7 @@ Values - 05/05/2022 - DK
 Condense - 06/20/2022 -  DK
 Manipulate - 06/20/2022 -  DK
 CheckFilters - 06/26/2022 - DK
+CheckFilters - 07/08/2022 - DK
 """
 import copy
 
@@ -122,6 +123,7 @@ class MultipleSets():
         self.states = states
         self.setsmap = {}  # dictionary to link between states and indices
         self.nsets = 0  # tracks the number of sets
+        self.filterstates = {}  # dict to store filtered states
 
     def Add(self, *argv):
         """Add new data for a specific set
@@ -549,10 +551,10 @@ class MultipleSets():
         attrs : list of strings
             attributes to be included
 
-        Returns
-        -------
-        missingStates : list
-            list of missing states.
+        Attributes
+        ----------
+        filterstates : dictionary
+            branches, histories, times, and attributes for data filtering
 
         Returns
         -------
@@ -562,7 +564,7 @@ class MultipleSets():
         Raises
         ------
         ValueError
-            If ``branches`` is not defined pproperly.
+            If ``branches`` is not defined properly.
 
 
         Examples
@@ -606,8 +608,15 @@ class MultipleSets():
         for state in states:
             if state not in existingStates:
                 missingStates.append(state)
-      
-        return missingStates
+        
+        # define filetered material only is there no missing states
+        if missingStates == []:
+            self.filterstates = {'branches': branches, 'histories':histories,
+                                 'times': times, 'attrs': attrs}
+        else:
+            raise ValueError("!!!\n{}\n!!!Error\nMissing states"
+                             .format(missingStates))         
+
 
     def _IsCompleteTable(self):
         """Check that Pandas table contains all states

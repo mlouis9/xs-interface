@@ -202,5 +202,5 @@ mod 600
 cool 500
 nom
 0.0
-inf_rabs inf_nsf sig_f nd
+inf_rabs inf_nsf sig_f nd beta
 

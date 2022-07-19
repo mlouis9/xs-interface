@@ -20,21 +20,9 @@ u4 file_name_u4
 # -----------------------------------------------------------------------------
 
 
-set signs state = /+ +/, attribute = /< >/ , varIn = /" "/ , varOut = /^ ^/
+#           state   attr   var
+set format {:4.3f} {:5.5e} {::5.3f}
 
-set format state 4.3f attr = 5.5e var = 3d
-
-set option 1
-
-
-set decorators time 3 0
-* ----------------------------------------------------------------
-* BURNUP  /" "/ 
-* ----------------------------------------------------------------
-
-
-set decorators energy 
-*   Group /" "/
 
 
 

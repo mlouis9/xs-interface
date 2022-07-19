@@ -1,11 +1,13 @@
+"vari"{idxB=-1}
 *      Mod Dens      Boron      Fuel Temp       Mod Temp
               3          0              3              0
-         640.00     700.00         760.00
+         "state"{fuel[0]}     700.00         760.00
          600.00     900.00        1200.00
 *
 "rep"{5
 * ----------------------------------------------------------------
-* BURNUP /s<time>s/
+"vari"{idxB=idxB+1}
+* BURNUP "state"{time["varo"{idxB}]}
 * ----------------------------------------------------------------
 * 
 * Transport XSEC Table

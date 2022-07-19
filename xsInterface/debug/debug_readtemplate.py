@@ -19,6 +19,6 @@ inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
         "xs-interface\\xsInterface\\otemplates\\dyn3d"
 
 
-dataFile = ReadTemplate(inputFile)
+dataFile = ReadTemplate(inputFile, 1, 2)
 
 a = 1

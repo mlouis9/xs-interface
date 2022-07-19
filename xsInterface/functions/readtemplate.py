@@ -5,14 +5,15 @@ This file contains certain regular-like expressions which are repeated
 and replaced.
 
 Created on Fri July 01 06:00:00 2022 @author: Dan Kotlyar
-Last updated on Fri July 01 06:00:00 2022 @author: Dan Kotlyar
+Last updated on Tue July 05 10:00:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 Repetition  - 07/01/2022 - DK
-
+ReadTemplate  - 07/05/2022 - DK
+_CleanDataCopy - 07/05/2022 - DK
 
 """
 
@@ -31,11 +32,18 @@ REP_START_REGEX = compile(r'"rep"{+', IGNORECASE)
 REP_END_REGEX = compile(r'"rep"}+', IGNORECASE)
 VARI_REGEX = compile(r'"vari"\{(.*?)\}')  # variable in
 VARO_REGEX = compile(r'"varo"\{(.*?)\}')  # variable out
+STATE_REGEX = compile(r'"state"\{(.*?)\}')  # state
+ATTR_REGEX = compile(r'"attr"\{(.*?)\}')  # attribute
 
 # print formats
-VAR_FORMAT = "{:d}"
+VAR_FMT = "{:d}"  # users' defined variables
+ATTR_FMT = "{:5.5e}"  # attributes values
+STATE_FMT = "{:5.3f}"  # state values
+MAX_N_ROW = 5  # maximum number of values printed in a row
 
-def ReadTemplate(templateFile, varFormat=VAR_FORMAT):
+
+def ReadTemplate(tmplFile, attrs, states, varFmt=VAR_FMT, attrFmt=ATTR_FMT,
+                 stateFmt=STATE_FMT, rowN=MAX_N_ROW):
     """Read the template input file defined by the user
 
     This function reads the template file and manipulates it to create
@@ -45,6 +53,8 @@ def ReadTemplate(templateFile, varFormat=VAR_FORMAT):
     ----------
     templateFile : str
         name of the input file
+    varFormat : str
+        format used to print/display the variable
 
     Raises
     ------
@@ -57,14 +67,14 @@ def ReadTemplate(templateFile, varFormat=VAR_FORMAT):
 
 
     # check that `templateFile` variable is a string
-    _isstr(templateFile, "Input file")
+    _isstr(tmplFile, "Input file")
 
     # read the file and return its content
-    filePath = Path(templateFile)
+    filePath = Path(tmplFile)
     if not filePath.is_file():
-        raise OSError("The file {} does not exist.".format(templateFile))
+        raise OSError("The file {} does not exist.".format(tmplFile))
 
-    with open(templateFile, 'r') as fObject:
+    with open(tmplFile, 'r') as fObject:
         dataRaw = fObject.readlines()
     
     # Identify locations within the file with text to be repeated
@@ -74,14 +84,31 @@ def ReadTemplate(templateFile, varFormat=VAR_FORMAT):
     dataDup = _DuplicateBlocks(dataRaw, pos)
     
     # Clean and replace variable text with values
-    dataClean = _CleanDataCopy(dataDup, varFormat)
+    dataClean = _CleanDataCopy(dataDup, varFmt)
         
     return dataClean
 
 
+def _PopulateValues(dataIn, states, attrs):
+    """Replace states and attrs with corresponding states and atrrs values"""
+    # all the local variables defined in this current function/method
+    
+    for tline in dataIn:
+        
+        # Identify and execute a state
+        state = STATE_REGEX.search(tline)
+        if state is not None:
+            pass
+
+
 def _CleanDataCopy(dataIn, fmt):
     """Create a new data copy with user's variables assessed and replaced"""
-    
+    # all the local variables defined in this current function/method
+    localVarsList = ['dataIn', 'fmt', 'localVarsList', 'msgExe', 'fmtCheck',
+                     'dataClean', 'tline', 'condRep0', 'condRep1', 'condVarI',
+                     'condVarO', 'locVariables', 'strsExe', 'strsComplete',
+                     'iexecInLine', 'tline1', 'istrExe', 'strExe', 
+                     'prevLocals', 'currLocals', 'varLocal'] 
     msgExe = 'Execution cannot be performed in line:\n'
     
     # check that the format variable is defined properly
@@ -107,9 +134,16 @@ def _CleanDataCopy(dataIn, fmt):
         if condVarI is not None:
             try:
                 exec(condVarI.group(1))
+                currLocals = locals()  # local variables after execution
+                varLocal = _LocalVariables(currLocals, localVarsList)
+
             except:
                 msg0 = msgExe + '{}\n'.format(tline) +\
-                    'exe commad: {}\n'.format(condVarI.group(1)) 
+                    'exe command: {}\n'.format(condVarI.group(1)) 
+                raise TemplateFileError(msg0)
+            if varLocal == []:
+                msg0 = 'The name for varibale {} is not allowed.\nPlease '\
+                    'select a different name.'.format(condVarI.group(0))
                 raise TemplateFileError(msg0)
             continue
         
@@ -140,11 +174,11 @@ def _CleanDataCopy(dataIn, fmt):
                                           fmt.format(eval(strExe)))
                 except:
                     msg0 = msgExe + '{}\n'.format(tline) +\
-                        'exe commad: {}\n'.format(strExe) 
+                        'exe command: {}\n'.format(strExe) 
                     raise TemplateFileError(msg0)
 
                 
-                # Copy (and if needed replace line) to a clean data list
+        # Copy (and if needed replace line) to a clean data list
         dataClean.append(tline)
     
     # a new clean data list is returned
@@ -256,6 +290,18 @@ def _RepetitiveBlocks(dataIn):
             
     return pos
     
-    
-    
-    
+
+# -----------------------------------------------------------------------------
+#                            Supplementary Functions
+# -----------------------------------------------------------------------------
+
+
+def _LocalVariables(currLocals, funcList):
+    """get the new local variable defined after the user's execution command"""
+
+    currList = []
+    for key in currLocals.keys():
+        if key not in funcList:
+            currList.append(key)
+
+    return currList

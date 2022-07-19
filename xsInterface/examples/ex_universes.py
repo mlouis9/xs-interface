@@ -26,6 +26,11 @@ inputFile1 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
 # -----------------------------------------------------------------------------
 universes = ReadInput(u0=inputFile0, u1=inputFile1)
 
+# read the input file/s and collect data for all the universes
+# -----------------------------------------------------------------------------
+#universes.PrintValues()
+
+
 # Build Pandas Tables for all the universes
 # -----------------------------------------------------------------------------
 # universes.PandaTables()
@@ -35,12 +40,17 @@ universes = ReadInput(u0=inputFile0, u1=inputFile1)
 rc0, states0, msets0 = universes.Get("u0")
 rc1, states1, msets1 = universes.Get("u1")
 
-# Get values for specific attributes and a specific universe
+# Get Table  values for specific attributes and a specific universe
 # -----------------------------------------------------------------------------
-universes.Values("u0", attrs=["inf_nsf", 'inf_sp0'], fuel=900)
+universes.TableValues("u0", attrs=["inf_nsf", 'inf_sp0'], fuel=900)
+
+# Get values
+# -----------------------------------------------------------------------------
+universes.Values("u0", attr="inf_nsf", fuel=900)
+
 # compare with using the direct container
 msets0.Values(attrs=["inf_nsf", 'inf_sp0'], fuel=900)
 
 # check that all states are defined
-missingStates, existingStates = msets0._IsCompleteTable()
+# missingStates, existingStates = msets0._IsCompleteTable()
 

@@ -4,7 +4,7 @@
 Container to collect and store ``MultipleSets``.
 
 Created on Mon June 13 21:20:00 2022 @author: Dan Kotlyar
-Last updated on Thu June 16 15:30:00 2022 @author: Dan Kotlyar
+Last updated on Mon July 18 12:30:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -16,10 +16,15 @@ Add - 06/16/2022 - DK
 Get - 06/16/2022 - DK
 PandaTables - 06/16/2022 - DK
 Values - 06/16/2022 - DK
+PrintValues - 07/18/2022 - DK
 
 Need to add error checking!!!
 
 """
+
+import numpy as np
+
+import itertools
 
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.perturbationparameters import Perturbations
@@ -60,6 +65,7 @@ class Universes():
         
         self.universeIds = []  # names of all the universes
         self.universes = {}  # empty dictionary to store all universes
+        self.filteredtates = {}  # empty dict to store states & data for print
 
     def Add(self, univId, rc, states, multisets):
         """Add new data for a specific set
@@ -105,7 +111,7 @@ class Universes():
 
         # assign data
         self.universes[univId] = (rc, states, multisets)
-        self.universeIds = self.universes.keys()  # names for all universes
+        self.universeIds = list(self.universes.keys())  # universes names
 
     def Get(self, univId):
         """Obtains the MultipleSet object for a specific universe
@@ -161,7 +167,7 @@ class Universes():
             self.Add(univId, rc, states, msets)
 
 
-    def Values(self, univId, attrs=None, **kwargs):
+    def TableValues(self, univId, attrs=None, **kwargs):
         """Obtain the values of the specific attribute across different states
 
         The method obtains the values across all the provided states.
@@ -206,4 +212,73 @@ class Universes():
         _isstr(univId, "Universe Identifier")
         rc, states, msets = self[univId]
         return msets.Values(attrs, **kwargs)
+        
+
+    def Values(self, univId, attr, **kwargs):
+        """Obtain the values of a single attribute and corresponding states
+
+        This method is similar to the ``TableValues``, but can only be applied
+        for a single attribute. This method returns a clean dictionary with
+        occurances of all the states and the specific attribute result.
+
+
+        Parameters
+        ----------
+        univId : string
+            name of the universe
+        attr : string
+            name of the attribute
+        kwargs : named arguments
+            keys represent the state name and value represent the values.
+            The filtering of data is performed according to kwargs.
+
+        Returns
+        -------
+        history : array
+            
+
+        Raises
+        ------
+        TypeError
+            If ``univId`` is not str.
+            If ``attrs`` is not str.
+        KeyError
+            If ``univId` does not exist.
+            If ``attr` does not exist.
+
+        Examples
+        --------
+        >>> univs.Values("u0", attrs='inf_nsf', dens=600, cool=500, fuel=900)
+        ... history  time  ...                   beta                  decay
+        ... 0    None   2.5  ...  [1, 1, 1, 1, 1, 1, 1]
+        ... 1    None   2.5  ...  [2, 2, 2, 2, 2, 2, 2]  [1, 1, 1, 1, 1, 1, 1]
+
+        """
+
+        _isstr(attr, "Attribute name")
+        pd = self.TableValues(univId, attr, **kwargs)
+        pdDict = pd.to_dict()
+        
+        results = {}  # returned dictionary with states and attribute values
+        
+        # handle the attribute results separately
+        attrDict = pdDict.pop(attr)
+        # dims = attrDict[0].shape  # attribute dimensions (vector, matrix)
+        arr = [None]*len(attrDict)
+        for index, val in attrDict.items():
+            arr[index] = val
+        results[attr] = arr   
+        
+        # handle the states(history, time, and branches)
+        for key, valsDict in pdDict.items():
+            arr = [None]*len(valsDict)
+            for index, val in valsDict.items():
+                arr[index] = val
+            results[key] = np.array(arr)
+
+        return results
+
+        
+            
+    
         
