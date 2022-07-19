@@ -21,7 +21,7 @@ u4 file_name_u4
 
 
 #           state   attr   var
-set format {:4.3f} {:5.5e} {::5.3f}
+set format {:4.3f} {:5.5e} {:5.3f}
 
 
 

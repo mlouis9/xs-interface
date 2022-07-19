@@ -24,8 +24,6 @@ Need to add error checking!!!
 
 import numpy as np
 
-import itertools
-
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.containers.multiplesets import MultipleSets
@@ -248,10 +246,13 @@ class Universes():
 
         Examples
         --------
-        >>> univs.Values("u0", attrs='inf_nsf', dens=600, cool=500, fuel=900)
-        ... history  time  ...                   beta                  decay
-        ... 0    None   2.5  ...  [1, 1, 1, 1, 1, 1, 1]
-        ... 1    None   2.5  ...  [2, 2, 2, 2, 2, 2, 2]  [1, 1, 1, 1, 1, 1, 1]
+        >>> universes.Values("u0", attr="inf_nsf", fuel=900)
+        ... {'inf_nsf': [array([0.36666667]), array([0.36666667])],
+        ...  'history': array(['nom', 'nom'], dtype='<U3'),
+        ...  'time': array([0., 0.]),
+        ...  'fuel': array([900., 900.]),
+        ...  'mod': array([600., 600.]),
+        ...  'cool': array([600., 500.])}
 
         """
 
