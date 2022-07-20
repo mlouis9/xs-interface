@@ -1,0 +1,73 @@
+"vari"{idxB=-1}
+*      Mod Dens      Boron      Fuel Temp       Mod Temp
+              3          0              3              0
+         600.00     700.00         760.00
+         600.00     900.00        1200.00
+*
+"rep"{5
+* ----------------------------------------------------------------
+"vari"{idxB=idxB+1}
+* BURNUP "attr"{time["varo"{idxB}]}
+* ----------------------------------------------------------------
+* 
+* Transport XSEC Table
+* 
+"vari"{idxE=0}
+"rep"{{2
+"vari"{idxE=idxE+1}
+*   Group "varo"{idxE}
+  "attr"{inf_transport["varo"{idxE}]@fuel=900}
+  "attr"{inf_transport["varo"{idxE}]@fuel=800}
+* 
+"rep"}}
+* 
+* Kappa-Fission XSEC Table
+* 
+"vari"{idxE=0}
+"rep"{{2
+"vari"{idxE=idxE+1}
+*   Group /vo"idxE"vo/
+  "attr"{inf_kfiss["varo"{idxE}]}
+* 
+"rep"}}
+* 
+* Scattering XSEC Table
+* 
+"vari"{idxE0=0}
+"rep"{{2
+"vari"{idxE0=idxE0+1}
+"vari"{idxE1=0}
+"rep"{{{2
+"vari"{idxE1=idxE1+1}
+*   Group "varo"{idxE0} --> "varo"{idxE1}
+	"attr"{inf_sp0["varo"{idxE0}, "varo"{idxE1}]}
+* 
+"rep"}}}
+"rep"}}
+*
+* 
+
+* 
+* Fission Spectrum
+* 
+             01              02
+  1.000000e+000   0.000000e+000
+* 
+* Inverse Velocity
+* 
+             01              02
+  1.000000e+000   1.000000e+000
+* 
+* Delay Neutron Decay Constant (Lambda) 
+*   
+* GROUP       1              2              3              4              5              6
+  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000
+*   
+* Delay Neutron Fraction (Beta)
+*   
+* GROUP       1              2              3              4              5              6
+  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000
+*
+"rep"}
+*
+End

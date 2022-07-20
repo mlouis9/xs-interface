@@ -311,17 +311,10 @@ def _CheckFilters(ms, fltrData):
     
     # if no filter data is defined
     if fltrData == {}:
-        missingStates = ms.CheckFilters()
+        ms.CheckFilters()
     else:
-        missingStates =\
-            ms.CheckFilters(fltrData['branches'], fltrData['histories'],
-                            fltrData['times'], fltrData['attrs'])
- 
-    if missingStates != []:
-        errmsg = "Missing states"
-        raise InputGeneralError("!!!\n{}\n!!!Error\n{}\n"
-                                .format(missingStates, errmsg))        
-        
+        ms.CheckFilters(fltrData['branches'], fltrData['histories'],
+                        fltrData['times'], fltrData['attrs'])
 
 # -----------------------------------------------------------------------------
 #                  Settings

@@ -46,3 +46,15 @@ class InputCardError(Exception):
         for istr in INPUT_CARDS[card].keys():
             str1 += istr + "\n\t{}\n".format(INPUT_CARDS[card][istr])
         super().__init__("!!!\n"+message+"\n"+str1)
+
+class TemplateFileError(Exception):
+    def __init__(self, message):
+        str1 = "Input Error with:\n"
+        str1 += "------------------------------------ "
+        super().__init__("!!!\n"+str1+"\n"+message)
+        
+class ControlFileError(Exception):
+    def __init__(self, message):
+        str1 = "Input Error with:\n"
+        str1 += "------------------------------------ "
+        super().__init__("!!!\n"+str1+"\n"+message)

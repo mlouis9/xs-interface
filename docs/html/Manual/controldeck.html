@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Control Deck &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="XSs Set Cards" href="input_cards.html" />
+    <link rel="prev" title="User’s Manual" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="control-deck">
+<span id="controldeck"></span><h1>Control Deck<a class="headerlink" href="#control-deck" title="Permalink to this headline">¶</a></h1>
+<p>This the main file that controls the flow of data and the corresponding output formatting.</p>
+<p>A list of all the input cards within this is descirbed in the table below.
+Description on the format, comments, and magic capabilities is provided in <a class="reference internal" href="input_cards.html#gen-comments"><span class="std std-ref">General comments</span></a>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 78%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Set what?</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#j-universes"><span class="std std-ref">universes</span></a></p></td>
+<td><p>Definition of universe Ids and correpsonding input files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#j-templates"><span class="std std-ref">templates</span></a></p></td>
+<td><p>Definition of template Ids and correpsonding template files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#j-outputs"><span class="std std-ref">outputs</span></a></p></td>
+<td><p>Definition of template Ids and correpsonding output file names.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#j-links"><span class="std std-ref">links</span></a></p></td>
+<td><p>Linking between template Ids and universe Ids..</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#j-formats"><span class="std std-ref">formats</span></a></p></td>
+<td><p>Formatting control parameters.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="universes">
+<span id="j-universes"></span><h2>universes<a class="headerlink" href="#universes" title="Permalink to this headline">¶</a></h2>
+<p><strong>Names/Ids of the universes and the full dir path of their corresponding input file.</strong></p>
+<p><em>Mandatory Card</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">universes</span>
+<span class="o">&lt;</span><span class="n">universe</span> <span class="n">name1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">corresponding</span> <span class="n">universe</span> <span class="n">file</span> <span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">universe</span> <span class="n">name2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">corresponding</span> <span class="n">universe</span> <span class="n">file</span> <span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name</span></code> is user defined name of that specific cross-section set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">file</span></code> is the path dir to the universe file.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Notes:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This card cannot be empty.</p></li>
+<li><p>Unique <code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name</span></code> must have unique <code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">file</span></code>.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">universes</span>
+<span class="n">u0</span> <span class="o">..</span>\<span class="n">inputsets</span>\<span class="n">u0</span>
+<span class="n">u1</span> <span class="o">..</span>\<span class="n">inputsets</span>\<span class="n">u1</span>
+<span class="n">u2</span> <span class="o">..</span>\<span class="n">inputsets</span>\<span class="n">u2</span>
+</pre></div>
+</div>
+</section>
+<section id="templates">
+<span id="j-templates"></span><h2>templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h2>
+<p><strong>Names/Ids of the templates and the full dir path of their corresponding template file.</strong></p>
+<p><em>Mandatory Card</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">templates</span>
+<span class="o">&lt;</span><span class="n">template</span> <span class="n">name1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">corresponding</span> <span class="n">template</span> <span class="n">file</span> <span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">template</span> <span class="n">name2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">corresponding</span> <span class="n">template</span> <span class="n">file</span> <span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> is user defined name/Id of that specific template.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">file</span></code> is the path dir to the template file.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Notes:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This card cannot be empty.</p></li>
+<li><p>Unique <code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> must have unique <code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">file</span></code>.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">templates</span>
+<span class="n">template1</span> <span class="o">..</span>\<span class="n">templates</span>\<span class="n">dyn3d</span>
+<span class="n">template2</span> <span class="o">..</span>\<span class="n">templates</span>\<span class="n">parcs</span>
+</pre></div>
+</div>
+</section>
+<section id="outputs">
+<span id="j-outputs"></span><h2>outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p><strong>Names/Ids of the templates and the full dir path of the output files that will be using that specific template.</strong></p>
+<p><em>Mandatory Card</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">outputs</span>
+<span class="o">&lt;</span><span class="n">template</span> <span class="n">name1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output</span> <span class="n">file</span> <span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">template</span> <span class="n">name2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output</span> <span class="n">file</span> <span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> is user defined name/Id of that specific template. Must correspond to the name defined under the <a class="reference internal" href="#j-templates"><span class="std std-ref">templates</span></a> card.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">file</span></code> is the path dir to where the cross sections will be written to.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Notes:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This card cannot be empty.</p></li>
+<li><p>Unique <code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> must have unique <code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">files</span></code>.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">outputs</span>
+<span class="n">template1</span> <span class="o">..</span>\<span class="n">junkfiles</span>\<span class="n">output1</span>
+<span class="n">template2</span> <span class="o">..</span>\<span class="n">junkfiles</span>\<span class="n">output2</span>
+</pre></div>
+</div>
+</section>
+<section id="links">
+<span id="j-links"></span><h2>links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<p><strong>Linkage between universes and templates Ids.</strong></p>
+<p>This card allow to apply the same template file for multiple universes without the need to define unique template file for each universe separately.</p>
+<p><em>Optional Card</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">links</span>
+<span class="o">&lt;</span><span class="n">template</span> <span class="n">name1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">universe</span> <span class="n">name11</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">universe</span> <span class="n">name12</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">&lt;</span><span class="n">template</span> <span class="n">name2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">universe</span> <span class="n">name21</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">universe</span> <span class="n">name22</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> is user defined name/Id of that specific template. Must correspond to the name defined under the <a class="reference internal" href="#j-templates"><span class="std std-ref">templates</span></a> card.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name1</span></code> is the user defined universe name/Id/</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Notes:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This card can be omitted.</p></li>
+<li><p>Each <code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> can have a single or multiple <code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name</span></code>.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">links</span>
+<span class="n">template1</span> <span class="n">u0</span> <span class="n">u1</span>
+<span class="n">template2</span> <span class="n">u2</span>
+</pre></div>
+</div>
+</section>
+<section id="formats">
+<span id="j-formats"></span><h2>formats<a class="headerlink" href="#formats" title="Permalink to this headline">¶</a></h2>
+<p><strong>Output formatting.</strong></p>
+<p>This card allows to control the formatting of the different output variables.</p>
+<p><em>Optional Card</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">formats</span> <span class="n">N</span>
+<span class="n">state</span> <span class="o">&lt;</span><span class="n">state_format</span><span class="o">&gt;</span>
+<span class="n">attr</span> <span class="o">&lt;</span><span class="n">attr_format</span><span class="o">&gt;</span>
+<span class="n">var</span> <span class="o">&lt;</span><span class="n">var_format</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> is the maximum number of values printed in each row.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state</span></code>, <code class="docutils literal notranslate"><span class="pre">attr</span></code>, and <code class="docutils literal notranslate"><span class="pre">var</span></code> are all preserved keywords.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state</span></code> denotes state perturbation parameter, such as time, history, or branch.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attr</span></code> denotes a macro or micro data, such as the fission cross section.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">var</span></code> denotes a user-defined variable used within the template file (more dtails can be found in …).</p></li>
+<li><p>The default values for <code class="docutils literal notranslate"><span class="pre">state_format</span></code>, <code class="docutils literal notranslate"><span class="pre">attr_format</span></code>, and <code class="docutils literal notranslate"><span class="pre">var_format</span></code> are: 5.3f, 5.5e, d</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Notes:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This card can be omitted.</p></li>
+<li><p>Only standard python formatting notation is allowed, e.g., 5.5f, 6.6e, 3d.</p></li>
+<li><p>The entries for <code class="docutils literal notranslate"><span class="pre">state</span></code>, <code class="docutils literal notranslate"><span class="pre">attr</span></code>, and <code class="docutils literal notranslate"><span class="pre">var</span></code> are optional and can provided in any order or partially/fully omitted.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">formats</span> <span class="mi">8</span>
+<span class="n">state</span> <span class="mf">5.5</span><span class="n">f</span>
+<span class="n">attr</span> <span class="mf">6.6</span><span class="n">e</span>
+<span class="n">var</span> <span class="mi">5</span><span class="n">d</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">formats</span> <span class="mi">4</span>
+<span class="n">attr</span> <span class="mf">6.6</span><span class="n">e</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">User’s Manual</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">User’s Manual</a></li>
+      <li>Next: <a href="input_cards.html" title="next chapter">XSs Set Cards</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/Manual/controldeck.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
