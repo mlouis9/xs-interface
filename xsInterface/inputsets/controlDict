@@ -18,7 +18,6 @@ u1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositor
 #                            TEMPLATE FILES
 # -----------------------------------------------------------------------------
 
-% for each template file there is a corresponding output file (multiple universes can exist in a single file)
 set templates
 template1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\otemplates\dyn3d
 template2 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\otemplates\dyn3d

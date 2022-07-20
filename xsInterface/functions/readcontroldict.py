@@ -41,7 +41,7 @@ OUTPT_REGX = compile(r'\s*(set\s+)(outputs)', IGNORECASE)
 LINKS_REGX = compile(r'\s*(set\s+)(links)', IGNORECASE)
 
 # default formats for outputting data
-STATE_FRMT = "{:3.3f}"
+STATE_FRMT = "{:5.3f}"
 VAR_FRMT = "{:d}"
 ATTR_FRMT = "{:5.5e}"
 ROW_VALS_N = 5  # maximum number of values printed in a line

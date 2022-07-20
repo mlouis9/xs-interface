@@ -1,8 +1,11 @@
-.. _inputcards:
+.. _universecards:
 
 
-Input Cards 
------------- 
+XSs Set Cards 
+------------- 
+
+For each unique cross-section set or universe a separate file is defined.
+It is up to the user to control the data flow.
 
 A list of all the input cards is descirbed in the table below.
 Description on the format, comments, and magic capabilities is provided in :ref:`gen_comments`.
@@ -37,7 +40,7 @@ General comments
 - Case insensitive (captial and lower cases are allowed)
 - ``=`` signs are allowed to be added (but not mandatory) when the card name is provided.
 - Empty lines are allowed between settings lines.
-- Special characters (``? $ & @ ~ < >``) are not allowed.
+- Special characters (``? $ & ~ < >``) are not allowed.
 
 
 
