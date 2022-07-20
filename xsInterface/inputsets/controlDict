@@ -9,25 +9,42 @@
 # -----------------------------------------------------------------------------
 
 
-set universes 4
-u1 file_name_u1
-u2 file_name_u2
-u3 file_name_u3
-u4 file_name_u4
-
-# -----------------------------------------------------------------------------
-#                            READING RULES
-# -----------------------------------------------------------------------------
-
-
-#           state   attr   var
-set format {:4.3f} {:5.5e} {:5.3f}
-
-
+set universes
+u0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\u0
+u1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\u1
 
 
 # -----------------------------------------------------------------------------
-#                            PRINTOUT
+#                            TEMPLATE FILES
 # -----------------------------------------------------------------------------
 
+% for each template file there is a corresponding output file (multiple universes can exist in a single file)
+set templates
+template1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\otemplates\dyn3d
+template2 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\otemplates\dyn3d
 
+# -----------------------------------------------------------------------------
+#                            OUTPUT FILES
+# -----------------------------------------------------------------------------
+
+set outputs
+template1 ..\junkfiles\output1
+template2 ..\junkfiles\output2
+
+# -----------------------------------------------------------------------------
+#                           UNIVERSE-TO-FILES LINKS 
+# -----------------------------------------------------------------------------
+
+set links
+template1 u1 u2
+template2 u2
+
+
+# -----------------------------------------------------------------------------
+#                            FORMAT
+# -----------------------------------------------------------------------------
+
+set formats 8
+state 5.5f
+attr 6.6e
+var 5d
