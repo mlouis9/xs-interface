@@ -7,7 +7,7 @@
 "rep"{5
 * ----------------------------------------------------------------
 "vari"{idxB=idxB+1}
-* BURNUP "attr"{time["varo"{idxB}]}
+* BURNUP 0.0
 * ----------------------------------------------------------------
 * 
 * Transport XSEC Table
@@ -16,8 +16,8 @@
 "rep"{{2
 "vari"{idxE=idxE+1}
 *   Group "varo"{idxE}
-  "attr"{inf_transport["varo"{idxE}]@fuel=900}
-  "attr"{inf_transport["varo"{idxE}]@fuel=800}
+  "values"{u0, inf_rabs, fuel=900 ["varo"{idxE}]}  
+  "values"{u0, inf_rabs, fuel=900 ["varo"{idxE}]}  
 * 
 "rep"}}
 * 
@@ -27,7 +27,7 @@
 "rep"{{2
 "vari"{idxE=idxE+1}
 *   Group /vo"idxE"vo/
-  "attr"{inf_kfiss["varo"{idxE}]}
+  "values"{u0, inf_rabs, fuel=900 ["varo"{idxE}]}  
 * 
 "rep"}}
 * 
@@ -40,7 +40,7 @@
 "rep"{{{2
 "vari"{idxE1=idxE1+1}
 *   Group "varo"{idxE0} --> "varo"{idxE1}
-	"attr"{inf_sp0["varo"{idxE0}, "varo"{idxE1}]}
+	"values"{u0, inf_rabs, fuel=900 ["varo"{idxE0}, "varo"{idxE1}]}
 * 
 "rep"}}}
 "rep"}}
@@ -66,7 +66,7 @@
 * Delay Neutron Fraction (Beta)
 *   
 * GROUP       1              2              3              4              5              6
-  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000  1.000000e+000
+  "values"{u0, inf_rabs, fuel=900}
 *
 "rep"}
 *

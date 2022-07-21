@@ -5,7 +5,7 @@ This file contains certain regular-like expressions which are repeated
 and replaced.
 
 Created on Fri July 01 06:00:00 2022 @author: Dan Kotlyar
-Last updated on Tue July 05 10:00:00 2022 @author: Dan Kotlyar
+Last updated on Tue July 21 06:00:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -14,6 +14,7 @@ List changes / additions:
 Repetition  - 07/01/2022 - DK
 ReadTemplate  - 07/05/2022 - DK
 _CleanDataCopy - 07/05/2022 - DK
+_PopulateValues - 07/21/2022 - DK
 
 """
 
@@ -33,7 +34,8 @@ REP_END_REGEX = compile(r'"rep"}+', IGNORECASE)
 VARI_REGEX = compile(r'"vari"\{(.*?)\}')  # variable in
 VARO_REGEX = compile(r'"varo"\{(.*?)\}')  # variable out
 STATE_REGEX = compile(r'"state"\{(.*?)\}')  # state
-ATTR_REGEX = compile(r'"attr"\{(.*?)\}')  # attribute
+VALS_REGEX = compile(r'"values"\{(.*?)\}')  # attribute
+IDX_REGEX = compile(r'\[(.*?)\]')  # index inside parentheses
 
 # print formats
 VAR_FMT = "{:d}"  # users' defined variables
@@ -42,8 +44,7 @@ STATE_FMT = "{:5.3f}"  # state values
 MAX_N_ROW = 5  # maximum number of values printed in a row
 
 
-def ReadTemplate(tmplFile, attrs, states, varFmt=VAR_FMT, attrFmt=ATTR_FMT,
-                 stateFmt=STATE_FMT, rowN=MAX_N_ROW):
+def ReadTemplate(tmplFile, universes, formats):
     """Read the template input file defined by the user
 
     This function reads the template file and manipulates it to create
@@ -51,17 +52,20 @@ def ReadTemplate(tmplFile, attrs, states, varFmt=VAR_FMT, attrFmt=ATTR_FMT,
 
     Parameters
     ----------
-    templateFile : str
-        name of the input file
-    varFormat : str
-        format used to print/display the variable
+    tmplFile : str
+        name of the template input file
+    universes : Universes object
+        a container that stores unique universes having MultipleSets objects
+    formats : dict
+        defines the formatting of different output parameters types    
+        {"state": "{:5.3f}", "var": "{:d}", "attr": "{:5.5e}", "nrow": 5}
 
     Raises
     ------
     TypeError
-        If ``inputFile`` is not str.
+        If ``tmplFile`` is not str.
     OSError
-        If the path ``inputFile`` does not exist.
+        If the path ``tmplFile`` does not exist.
 
     """
 
@@ -84,21 +88,96 @@ def ReadTemplate(tmplFile, attrs, states, varFmt=VAR_FMT, attrFmt=ATTR_FMT,
     dataDup = _DuplicateBlocks(dataRaw, pos)
     
     # Clean and replace variable text with values
-    dataClean = _CleanDataCopy(dataDup, varFmt)
-        
-    return dataClean
+    dataClean = _CleanDataCopy(dataDup, VAR_FMT)
+
+    # Populate data
+    dataPopulated = _PopulateValues(dataClean, universes, formats)
+
+    return dataPopulated
 
 
-def _PopulateValues(dataIn, states, attrs):
+def _PopulateValues(dataIn, universes, formats):
     """Replace states and attrs with corresponding states and atrrs values"""
-    # all the local variables defined in this current function/method
-    
+
+    # correct format message    
+    msg_exe = "<universe name>, <attr name>, <state name1>=<state val1>,..."\
+              "[indices]"
+
+    dataOut = []    
     for tline in dataIn:
         
-        # Identify and execute a state
-        state = STATE_REGEX.search(tline)
-        if state is not None:
-            pass
+        # Identify and execute an "values" line having an attribute
+        attrline0 = VALS_REGEX.search(tline)
+        if attrline0 is not None:
+            attrline = attrline0.group(1)
+            attrline = attrline.replace("\n", '')  # remove new line
+            attrline = attrline.replace("\t", ' ')  # remove tabs
+            attrline = attrline.replace(',', ' ')  # remove commas
+            attrline = attrline.replace('=', ' ')  # remove = signs
+            
+            idxcond = IDX_REGEX.search(attrline)
+            if idxcond is not None:
+                # the content included within [...]
+                idxmatch = idxcond.group(1)
+                try:
+                    # indices will be used to access the data
+                    indices = [int(idx) for idx in idxmatch.split()]
+                except:
+                    msg0 = 'The "values" command is not properly defined.\n{}'\
+                        'Indices format <{}> is not allowed. Use integers.'\
+                            'Follow the format:\n.'.format(tline, idxmatch)
+                    raise TemplateFileError(msg0+msg_exe)
+                # remove the indices from the line
+                attrline = attrline[0:idxcond.span()[0]].split()
+            else:
+                attrline = attrline.split()
+
+            # check that enough parameters are provided (at least univ & attr)
+            if len(attrline) % 2 != 0 or len(attrline) < 2:
+                msg0 = 'The "values" command is not properly defined.\n{}'\
+                    'Follow the format:\n.'.format(tline)
+                raise TemplateFileError(msg0+msg_exe)
+
+            # Assign values
+            univId = attrline[0]
+            attr = attrline[1]
+            states = {}
+            for j in range(2, len(attrline), 2):
+                if attrline[j] == 'history':
+                    # history is the only non-numeric value
+                    states[attrline[j]] = attrline[j+1]
+                    continue
+                try:
+                    # 1st is key and 2nd is val
+                    states[attrline[j]] = float(attrline[j+1])
+                except:
+                    msg0 = 'The "values" command is not properly defined.\n{}'\
+                        '<{}> cannot be coverted to a number.'\
+                        'Follow the format:\n.'.format(tline, attrline[j+1])
+                    raise TemplateFileError(msg0+msg_exe)                    
+            
+            # Get values
+            try:
+                vals =\
+                    universes.Values(univId, attr, **states)[attr]
+            except ValueError as detail:
+                msg0 = 'The "values" command is not properly defined.\n{}\n{}'\
+                        'Follow the format:\n.'.format(tline, detail)
+                raise TemplateFileError(msg0+msg_exe)            
+
+            if indices != []:
+                try:
+                    valsPrint = vals.take(indices)
+                except:
+                    pass
+
+            # Change the original tline by replacing "values" with print vals
+            attrline = attrline0.group(1)
+            tline = tline.replace(attrline0.group(0), valsPrint)
+                    
+        # Copy (and if needed replace line) to a clean data list
+        dataOut.append(tline)
+    return dataOut
 
 
 def _CleanDataCopy(dataIn, fmt):

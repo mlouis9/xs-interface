@@ -13,12 +13,28 @@ email: dan.kotlyar@me.gatech.edu
 """
 
 from xsInterface.functions.readtemplate import ReadTemplate
+from xsInterface.functions.readinput import ReadInput
+
 
 inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
         "xs-interface\\xsInterface\\otemplates\\dyn3d"
 
+univFile0 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
+    "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
+        "xs-interface\\xsInterface\\inputsets\\u0"
 
-dataFile = ReadTemplate(inputFile, 1, 2)
+univFile1 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
+    "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
+        "xs-interface\\xsInterface\\inputsets\\u1"
+
+
+# read the universe file/s and collect data for all the universes
+# -----------------------------------------------------------------------------
+universes = ReadInput(u0=univFile0, u1=univFile1)
+
+# read the template files
+# -----------------------------------------------------------------------------
+dataFile = ReadTemplate(inputFile, universes, 2)
 
 a = 1

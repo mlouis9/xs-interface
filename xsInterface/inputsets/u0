@@ -186,7 +186,7 @@ sig_f
 # -----------------------------------------------------------------------------
 #                         DATA MANIPULATION
 # -----------------------------------------------------------------------------
-set manipulate 0.0
+set manipulate 0.625
 new_nsf, inf_nsf, sig_f, subtract
 new_sct, inf_sp0, sig_sct, add
 
@@ -202,5 +202,5 @@ mod 600
 cool 500
 nom
 0.0
-inf_rabs inf_nsf sig_f nd beta
+inf_rabs inf_nsf sig_f nd beta inf_sp0
 
