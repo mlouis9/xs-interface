@@ -23,6 +23,8 @@ Need to add error checking!!!
 """
 
 import numpy as np
+import pandas as pd
+import itertools
 
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.perturbationparameters import Perturbations
@@ -63,7 +65,7 @@ class Universes():
         
         self.universeIds = []  # names of all the universes
         self.universes = {}  # empty dictionary to store all universes
-        self.filteredtates = {}  # empty dict to store states & data for print
+        self.filteredstates = {}  # empty dict to store states & data for print
 
     def Add(self, univId, rc, states, multisets):
         """Add new data for a specific set
@@ -161,7 +163,37 @@ class Universes():
         
         for univId in self.universeIds:
             rc, states, msets = self[univId]
-            msets.DataTable()
+            if msets.filterstates != {}:
+                flag = True
+                fltrs = msets.filterstates
+                histories = fltrs['histories']
+                times = fltrs['times']
+                branchesDict = fltrs['branches']
+                attrs = fltrs['attrs']
+                msets.DataTable(attrs)
+                # filter the data
+                brvals = list(branchesDict.values())
+                brkeys = list(branchesDict.keys())
+                for hist in histories:
+                    for time in times: 
+                        for branch in itertools.product(*brvals):
+                            brdict = {}
+                            for idx, key in enumerate(brkeys):
+                                brdict[key] = branch[idx]
+                            # append the current state to the pd table
+                            if flag:
+                                df =\
+                                msets.Values(None, history=hist, time=time,
+                                             **brdict)
+                                flag = False
+                            else:
+                                df.append(msets.Values(None, history=hist,
+                                                       time=time, **brdict),
+                                          ignore_index=True)
+                msets.pandasTable = df  # update the pandas table
+            else:
+                msets.DataTable()
+            
             self.Add(univId, rc, states, msets)
 
 
@@ -257,8 +289,8 @@ class Universes():
         """
 
         _isstr(attr, "Attribute name")
-        pd = self.TableValues(univId, attr, **kwargs)
-        pdDict = pd.to_dict()
+        pd0 = self.TableValues(univId, attr, **kwargs)
+        pdDict = pd0.to_dict()
         
         results = {}  # returned dictionary with states and attribute values
         

@@ -11,6 +11,7 @@ Last updated on Fri Sep 17 06:00:00 2020 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 """
 
+import copy
 import numbers
 import numpy as np
 
@@ -237,11 +238,13 @@ def _inlist(var, description, keyslist):
 
 def _compare2lists(list1, list2, description1, description2):
     """sort and compare two lists"""
-    _islist(list1, description1)
-    _islist(list2, description2)
-    list1.sort()
-    list2.sort()
-    if list1 != list2:
+    list01 = copy.deepcopy(list1)
+    list02 = copy.deepcopy(list2)
+    _islist(list01, description1)
+    _islist(list02, description2)
+    list01.sort()
+    list02.sort()
+    if list01 != list02:
         raise ValueError("{} {}\n is not equal to \n {} {}"
                          .format(description1, list1, description2, list2))
 

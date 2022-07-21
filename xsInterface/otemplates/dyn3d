@@ -12,31 +12,30 @@
 * 
 * Transport XSEC Table
 * 
-"vari"{idxE=0}
+"vari"{idxE=-1}
 "rep"{{2
 "vari"{idxE=idxE+1}
 *   Group "varo"{idxE}
-  "values"{u0, inf_rabs, fuel=900 ["varo"{idxE}]}  
   "values"{u0, inf_rabs, fuel=900 ["varo"{idxE}]}  
 * 
 "rep"}}
 * 
 * Kappa-Fission XSEC Table
 * 
-"vari"{idxE=0}
+"vari"{idxE=-1}
 "rep"{{2
 "vari"{idxE=idxE+1}
-*   Group /vo"idxE"vo/
+*   Group "varo"{idxE}
   "values"{u0, inf_rabs, fuel=900 ["varo"{idxE}]}  
 * 
 "rep"}}
 * 
 * Scattering XSEC Table
 * 
-"vari"{idxE0=0}
+"vari"{idxE0=-1}
 "rep"{{2
 "vari"{idxE0=idxE0+1}
-"vari"{idxE1=0}
+"vari"{idxE1=-1}
 "rep"{{{2
 "vari"{idxE1=idxE1+1}
 *   Group "varo"{idxE0} --> "varo"{idxE1}
@@ -66,7 +65,7 @@
 * Delay Neutron Fraction (Beta)
 *   
 * GROUP       1              2              3              4              5              6
-  "values"{u0, inf_rabs, fuel=900}
+  "values"{u0, beta, fuel=900}
 *
 "rep"}
 *

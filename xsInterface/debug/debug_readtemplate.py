@@ -35,6 +35,12 @@ universes = ReadInput(u0=univFile0, u1=univFile1)
 
 # read the template files
 # -----------------------------------------------------------------------------
-dataFile = ReadTemplate(inputFile, universes, 2)
+# default formats for outputting data
+STATE_FRMT = "{:5.3f}"
+VAR_FRMT = "{:d}"
+ATTR_FRMT = "{:5.5e}"
+ROW_VALS_N = 5  # maximum number of values printed in a line
+formats = {"state": "{:5.3f}", "var": "{:d}", "attr": "{:5.5e}", "nrow": 5}
+dataFile = ReadTemplate(inputFile, universes, formats)
 
 a = 1

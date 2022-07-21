@@ -23,13 +23,12 @@ from pathlib import Path
 from re import compile, IGNORECASE
 
 import numpy as np
-import itertools
 
 from xsInterface.containers.container_header import DataSettingsCard,\
     BranchCard, HistoryCard, TimeCard, DataCard, ManipulateCard, FilterCard
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.singleset import SingleSet
-from xsInterface.containers.multiplesets import MultipleSets, StateDescrp
+from xsInterface.containers.multiplesets import MultipleSets
 from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.containers.universes import Universes
 from xsInterface.errors.checkerrors import _isstr, _isnonNegativeArray

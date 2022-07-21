@@ -5,7 +5,7 @@ This file contains certain regular-like expressions which are repeated
 and replaced.
 
 Created on Fri July 01 06:00:00 2022 @author: Dan Kotlyar
-Last updated on Tue July 21 06:00:00 2022 @author: Dan Kotlyar
+Last updated on Tue July 21 11:00:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -38,10 +38,10 @@ VALS_REGEX = compile(r'"values"\{(.*?)\}')  # attribute
 IDX_REGEX = compile(r'\[(.*?)\]')  # index inside parentheses
 
 # print formats
-VAR_FMT = "{:d}"  # users' defined variables
-ATTR_FMT = "{:5.5e}"  # attributes values
-STATE_FMT = "{:5.3f}"  # state values
-MAX_N_ROW = 5  # maximum number of values printed in a row
+#VAR_FMT = "{:d}"  # users' defined variables
+#ATTR_FMT = "{:5.5e}"  # attributes values
+#STATE_FMT = "{:5.3f}"  # state values
+#MAX_N_ROW = 5  # maximum number of values printed in a row
 
 
 def ReadTemplate(tmplFile, universes, formats):
@@ -88,7 +88,7 @@ def ReadTemplate(tmplFile, universes, formats):
     dataDup = _DuplicateBlocks(dataRaw, pos)
     
     # Clean and replace variable text with values
-    dataClean = _CleanDataCopy(dataDup, VAR_FMT)
+    dataClean = _CleanDataCopy(dataDup, formats["var"])
 
     # Populate data
     dataPopulated = _PopulateValues(dataClean, universes, formats)
@@ -165,18 +165,38 @@ def _PopulateValues(dataIn, universes, formats):
                         'Follow the format:\n.'.format(tline, detail)
                 raise TemplateFileError(msg0+msg_exe)            
 
-            if indices != []:
-                try:
-                    valsPrint = vals.take(indices)
-                except:
-                    pass
+            try:
+                valsPrint = np.array([])  # array for printed values
+                for val in vals:
+                    if indices != []:
+                        valsPrint = np.append(valsPrint, val.take(indices))
+                    else:
+                        valsPrint = np.append(valsPrint, val)
+            except:
+                msg0 = 'The "values" command is not properly defined.\n{}'\
+                    '<{}> cannot be appended into an array.'\
+                    'Follow the format:\n.'.format(tline, vals)
+                raise TemplateFileError(msg0+msg_exe)
 
-            # Change the original tline by replacing "values" with print vals
-            attrline = attrline0.group(1)
-            tline = tline.replace(attrline0.group(0), valsPrint)
-                    
-        # Copy (and if needed replace line) to a clean data list
-        dataOut.append(tline)
+            # Need to understand if the attr is a state or a macro-micro xs
+            states = universes.universes[univId][1]
+            statesList = ['history', 'time'] + states._branchList
+            
+            if attr in statesList:
+                frmtPrnt = formats["state"]
+            else:
+                frmtPrnt = formats["attr"]
+            
+            # format the values to be printed
+            tlines = _Array2tlines(tline, attrline0.group(0), valsPrint,
+                                   formats["nrow"], frmtPrnt)
+            
+            for tline in tlines:
+                dataOut.append(tline)
+            
+        else:            
+            # Copy (and if needed replace line) to a clean data list
+            dataOut.append(tline)
     return dataOut
 
 
@@ -384,3 +404,43 @@ def _LocalVariables(currLocals, funcList):
             currList.append(key)
 
     return currList
+
+
+def _Array2tlines(tline, origstr, valsarray, nrow, frmt):
+    """Convert original string in a line to multiple lines given by an array"""
+    # tline: original line
+    # origstr: original string to be replaced/removed
+    # valsarray: values in an array
+    # nrow: maximum number of values in a row
+    # frmt: the format of the 
+
+    tlines = []
+    valsremain = copy.deepcopy(valsarray)
+    replaceFlag = True  # flag that indicates if the original line is replaced
+    while 1:
+        if len(valsremain) > nrow:
+            valsrow = valsremain[0:nrow]  # values to be printed a row
+            valsremain = valsremain[nrow:]  # remaining vals for following rows
+        else:
+            valsrow = valsremain
+            valsremain = []
+
+        str0 = ''  # empty string to be appended
+        for val in valsrow:
+            if isinstance(val, str):
+                str0 += ' {}'.format(val)
+            else:
+                str0 += ' ' + frmt.format(val)
+        
+        if replaceFlag:
+            tlines.append(tline.replace(origstr, str0))
+            replaceFlag = False
+        else:
+            str0 += '\n'
+            tlines.append(str0)
+
+        # all values are printed
+        if valsremain == []:
+            break  # the while loop
+
+    return tlines

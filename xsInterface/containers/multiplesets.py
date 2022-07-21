@@ -44,7 +44,7 @@ from xsInterface.containers.singleset import SingleSet
 from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.errors.checkerrors import _isobject, _isbool, _isint,\
     _isarray, _is1darray, _inlist, _isnumber, _inrange, _arriscloseInList,\
-    _islist
+    _islist, _compare2lists
 
 
 StateDescrp = namedtuple("State", ["history", "time", "branch"])
@@ -594,14 +594,20 @@ class MultipleSets():
             histories = [None]
         if times is None:
             times = [None]
-                
-        branches = list(branches.values())
         
+        # organize the branches according their appearance in the states
+        branchList = self.states._branchList
+        _compare2lists(list(branches.keys()), branchList, "Filter branches",
+                       "State branches")
+        branchesvals = []
+        for br in branchList:
+            branchesvals.append(branches[br])
+                    
         states = []
         # loop over all histories, times, and branches
         for history in histories:
             for time in times:
-                for branch in itertools.product(*branches):
+                for branch in itertools.product(*branchesvals):
                     stateId = StateDescrp(history, time, branch)
                     states.append(stateId)
         missingStates = []
