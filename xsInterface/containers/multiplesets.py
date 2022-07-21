@@ -583,7 +583,8 @@ class MultipleSets():
 
         # If no state points are provided then ALL the states defined
         # under the Perturbations container must exist
-        if (branches and histories and times and attrs) is None:
+        if branches is None and histories is None and times is None and\
+            attrs is None:
             return missingStates
         
         if branches is None and not isinstance(branches, dict):

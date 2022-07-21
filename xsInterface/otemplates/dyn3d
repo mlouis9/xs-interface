@@ -1,13 +1,14 @@
 "vari"{idxB=-1}
+"vari"{times=[0, 1]}
 *      Mod Dens      Boron      Fuel Temp       Mod Temp
               3          0              3              0
          600.00     700.00         760.00
          600.00     900.00        1200.00
 *
-"rep"{5
+"rep"{2
 * ----------------------------------------------------------------
 "vari"{idxB=idxB+1}
-* BURNUP 0.0
+* BURNUP  "varo"{times[idxB]} 
 * ----------------------------------------------------------------
 * 
 * Transport XSEC Table
@@ -16,17 +17,7 @@
 "rep"{{2
 "vari"{idxE=idxE+1}
 *   Group "varo"{idxE}
-  "values"{u0, inf_rabs, fuel=900 ["varo"{idxE}]}  
-* 
-"rep"}}
-* 
-* Kappa-Fission XSEC Table
-* 
-"vari"{idxE=-1}
-"rep"{{2
-"vari"{idxE=idxE+1}
-*   Group "varo"{idxE}
-  "values"{u0, inf_rabs, fuel=900 ["varo"{idxE}]}  
+  "values"{u0, inf_rabs, fuel=1500, time="varo"{times[idxB]}  ["varo"{idxE}]}  
 * 
 "rep"}}
 * 
@@ -39,7 +30,7 @@
 "rep"{{{2
 "vari"{idxE1=idxE1+1}
 *   Group "varo"{idxE0} --> "varo"{idxE1}
-	"values"{u0, inf_rabs, fuel=900 ["varo"{idxE0}, "varo"{idxE1}]}
+	"values"{u0, inf_sp0, fuel=1500, time="varo"{times[idxB]}  ["varo"{idxE0}, "varo"{idxE1}]}
 * 
 "rep"}}}
 "rep"}}
@@ -65,7 +56,7 @@
 * Delay Neutron Fraction (Beta)
 *   
 * GROUP       1              2              3              4              5              6
-  "values"{u0, beta, fuel=900}
+  "values"{u0, beta, time="varo"{times[idxB]}, fuel=1500}
 *
 "rep"}
 *

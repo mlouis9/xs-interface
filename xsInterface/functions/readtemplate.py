@@ -116,12 +116,14 @@ def _PopulateValues(dataIn, universes, formats):
             attrline = attrline.replace('=', ' ')  # remove = signs
             
             idxcond = IDX_REGEX.search(attrline)
+            indices = []
             if idxcond is not None:
                 # the content included within [...]
                 idxmatch = idxcond.group(1)
                 try:
                     # indices will be used to access the data
                     indices = [int(idx) for idx in idxmatch.split()]
+                    indices = tuple(indices)
                 except:
                     msg0 = 'The "values" command is not properly defined.\n{}'\
                         'Indices format <{}> is not allowed. Use integers.'\
@@ -159,17 +161,23 @@ def _PopulateValues(dataIn, universes, formats):
             # Get values
             try:
                 vals =\
-                    universes.Values(univId, attr, **states)[attr]
+                    universes.Values(univId, attr, **states)[attr]              
             except ValueError as detail:
                 msg0 = 'The "values" command is not properly defined.\n{}\n{}'\
                         'Follow the format:\n.'.format(tline, detail)
                 raise TemplateFileError(msg0+msg_exe)            
 
+            if vals == []:
+                msg0 = 'The "values" command is not properly defined.\n{}'\
+                        '\nThe evaluated states do not exist: {}\n'\
+                        .format(tline, states)
+                raise TemplateFileError(msg0)    
+
             try:
                 valsPrint = np.array([])  # array for printed values
                 for val in vals:
                     if indices != []:
-                        valsPrint = np.append(valsPrint, val.take(indices))
+                        valsPrint = np.append(valsPrint, val[indices])
                     else:
                         valsPrint = np.append(valsPrint, val)
             except:

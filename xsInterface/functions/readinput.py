@@ -537,8 +537,8 @@ def _ImportFilter(setLine, tlines):
     # Requirements
     # -------------------------------------------------------------------------
     card = "filter" 
-    expinputs = ['<Nbranches>', '<historyFlag>', '<timeFlag>', '<attrsFlag>']
-    expvals = [4, 4]
+    expinputs = ['<Nbranches>']
+    expvals = [1, 1]
     errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
 
     # Process the set line values
@@ -552,9 +552,9 @@ def _ImportFilter(setLine, tlines):
         raise InputCardError(
             "Number of branches cannot be zero.\n{}"
             .format(setLine), INPUT_CARDS, card)          
-    historyFlag = 1 if setValues[1] > 0 else 0
-    timeFlag = 1 if setValues[2] > 0 else 0
-    attrsFlag = 1 if setValues[3] > 0 else 0
+    historyFlag = 1
+    timeFlag = 1
+    attrsFlag = 1
     
     if (len(tlines) != nBranches + historyFlag + timeFlag + attrsFlag):
         raise InputCardError(

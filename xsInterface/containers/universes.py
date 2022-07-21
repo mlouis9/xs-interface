@@ -164,7 +164,7 @@ class Universes():
         for univId in self.universeIds:
             rc, states, msets = self[univId]
             if msets.filterstates != {}:
-                flag = True
+                df = pd.DataFrame()
                 fltrs = msets.filterstates
                 histories = fltrs['histories']
                 times = fltrs['times']
@@ -181,15 +181,10 @@ class Universes():
                             for idx, key in enumerate(brkeys):
                                 brdict[key] = branch[idx]
                             # append the current state to the pd table
-                            if flag:
-                                df =\
-                                msets.Values(None, history=hist, time=time,
-                                             **brdict)
-                                flag = False
-                            else:
-                                df.append(msets.Values(None, history=hist,
-                                                       time=time, **brdict),
-                                          ignore_index=True)
+                            df =\
+                            df.append(msets.Values(None, history=hist,
+                                                   time=time, **brdict),
+                                      ignore_index=True)
                 msets.pandasTable = df  # update the pandas table
             else:
                 msets.DataTable()
@@ -293,25 +288,16 @@ class Universes():
         pdDict = pd0.to_dict()
         
         results = {}  # returned dictionary with states and attribute values
-        
-        # handle the attribute results separately
-        attrDict = pdDict.pop(attr)
-        # dims = attrDict[0].shape  # attribute dimensions (vector, matrix)
-        arr = [None]*len(attrDict)
-        for index, val in attrDict.items():
-            arr[index] = val
-        results[attr] = arr   
-        
+               
         # handle the states(history, time, and branches)
         for key, valsDict in pdDict.items():
             arr = [None]*len(valsDict)
-            for index, val in valsDict.items():
-                arr[index] = val
-            results[key] = np.array(arr)
-
+            for index, keyval in enumerate(valsDict):
+                arr[index] = valsDict[keyval]
+            if key != attr:
+                results[key] = np.array(arr)
+            else:
+                results[key] = arr
         return results
 
-        
-            
-    
         
