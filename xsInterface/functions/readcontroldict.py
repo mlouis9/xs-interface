@@ -45,6 +45,7 @@ STATE_FRMT = "{:5.3f}"
 VAR_FRMT = "{:d}"
 ATTR_FRMT = "{:5.5e}"
 ROW_VALS_N = 5  # maximum number of values printed in a line
+POST_PRFX = ''
 
 def Read(inputFile):
     """Read the input file defined by the user
@@ -84,7 +85,7 @@ def Read(inputFile):
     """
 
 
-    print("... Reading control dict ...\n<{}>".format(inputFile))        
+    print("... Reading control dict ...\n<{}>\n".format(inputFile))        
 
     # check that `inputFile` variable is a string
     _isstr(inputFile, "Input file")
@@ -118,7 +119,7 @@ def _ProcessCards(data):
     outputs = {}
     univlinks = {}
     formats = {"state": STATE_FRMT, "var": VAR_FRMT, "attr": ATTR_FRMT,
-               "nrow": ROW_VALS_N, "postfix": ''}
+               "nrow": ROW_VALS_N, "postfix": POST_PRFX}
 
     # -------------------------------------------------------------------------   
     #                              Error messages
@@ -207,17 +208,19 @@ def _ImportFormats(setline, tlines, defltDict):
     values = []
     values = [val for val in setline.split()]
     
-    if values != [] and len(values) != 1:
+    if values != [] and len(values) > 2 :
         raise ControlFileError(
             "<set formats> is not defined properly.\Only a single integer "
             "value is allowed in set line, and not <{}>".format(values))
     else:
         try:
             frmtDict["nrow"] = int(values[0])
+            if len(values) == 2:
+                frmtDict["postfix"] = values[1]
         except:
             raise ControlFileError(
-                "<set formats> is not defined properly.\Only a single integer "
-                "value is allowed in set line, and not <{}>".format(values))
+                "<set formats> is not defined properly.\nCorrect format "
+                "<N> <postfox>, and not <{}>".format(values))
     if frmtDict["nrow"] < 1:
             raise ControlFileError(
                 "<set formats> is not defined properly.\Only a single integer "

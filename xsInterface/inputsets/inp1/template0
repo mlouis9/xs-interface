@@ -1,0 +1,31 @@
+This file shows a simple capability to create template files.
+
+Input variable assessed by the package internally can be specificed with the ``vari`` command.
+For example, the following command define a list ``times``.
+
+"vari"{times=[0, 1]}
+
+The following command resets an index to be used by the code:
+
+"vari"{idxB=-1}
+
+The following ``rep`` command indicates that the entire block will be replicated twice.
+	 
+"rep"{2
+* ----------------------------------------------------------------
+"vari"{idxB=idxB+1}
+* BURNUP  "varo"{times[idxB]<3.3f>} 
+* ----------------------------------------------------------------
+* 
+* Transport XSEC Table
+* 
+"vari"{idxE=-1}
+"rep"{{2
+"vari"{idxE=idxE+1}
+  
+  Group "varo"{idxE}
+  "values"{inf_rabs, fuel=1500, time="varo"{times[idxB]}  ["varo"{idxE}]} 
+
+"rep"}}
+"rep"}
+

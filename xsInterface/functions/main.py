@@ -5,7 +5,7 @@ Main class object that connects and executes all the reading, storing and
 printing cabalities.
 
 Created on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
-Last updated on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
+Last updated on Fri July 22 14:00:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -13,7 +13,10 @@ List changes or additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 __init__ capability - 04/14/2022 - DK
-func - 07/22/2022 - DK
+Read - 07/22/2022 - DK
+Write - 07/22/2022 - DK
+Table - 07/22/2022 - DK
+Values - 07/22/2022 - DK
 
 """
 
@@ -64,6 +67,8 @@ class Main():
         self.templates = templates
         self.links = links
         self.formats = formats
+        self.dataFiles = {}
+
 
     def Read(self):
         """Read universes cross-section data and associated templates
@@ -76,15 +81,10 @@ class Main():
             keys represent universes or dummy variables; values represent
             correponding files populated with data.
 
-        Raises
-        ------
-        TypeError
-            TBC
-
         """
 
         # Read the data for all the universes
-        self.universes = ReadInput(**self.universes)
+        self.universes = ReadInput(**self.univfiles)
         
         self.dataFiles = {}
         
@@ -103,61 +103,28 @@ class Main():
                 self.dataFiles[fileId] = ReadTemplate(tmplfile, self.universes,
                                                       self.formats)                
 
-                
 
-
-    def Write(self):
-        """Obtains the MultipleSet object for a specific universe
-
-        Parameters
-        ----------
-        univId : string
-            identifier of the universe
-
-        Returns
-        -------
-        A tuple with (rc, states, multisets)
-
-        Raises
-        ------
-        TypeError
-            If the ``univId`` is not str.
-        KeyError
-            If ``univId`` is not in the ``universes`` dict.
-
-        Examples
-        --------
-        >>> univs = Universes()
-        >>> univs.Add("u0", rc0, states0, multisets0)
-        >>> ms.Get("u0")
-
-        """
-        # check variable type
-        pass
-
-    def Tables(self):
-        """Create tables with states and values for all attributes & universes
-
-       Raises
-        ------
-        TypeError
-            If ``attrs`` is not string, list, or None.
-
-        Examples
-        --------
-        >>> univs.PandaTables()
-
-        """
+    def Write(self, writemode="w"):
+        """Write the data file structure into dedicated output files"""
         
-        pass
+        if self.dataFiles == {}:
+            raise ValueError("!!!No data exist. Execute the ``Read`` method.")
+        
+        print("\n")
+        for inpFile, dataFile in self.dataFiles.items():
+            print("... Writing to ...\n{}".format(inpFile))   
+            # write the output files
+            with open(inpFile, writemode) as txtFile:
+                txtFile.writelines(dataFile)
+        print("\n")
 
 
-    def Values(self, univId, attrs=None, **kwargs):
+    def Table(self, univId, attrs=None, **kwargs):
         """Obtain the values of the specific attribute across different states
 
         The method obtains the values across all the provided states.
         Specific attributes can be selected. The results are ouputted for a
-        specific universe.
+        specific universe in a table format.
 
 
         Parameters
@@ -177,13 +144,6 @@ class Main():
         pd : Pandas Object (dataframe)
             states and values across multiple states
 
-        Raises
-        ------
-        TypeError
-            If ``univId`` is not str.
-            If ``attrs`` is not str, list of str, or None.
-        KeyError
-            If ``univId` does not exist.
 
         Examples
         --------
@@ -193,6 +153,39 @@ class Main():
         ... 1    None   2.5  ...  [2, 2, 2, 2, 2, 2, 2]  [1, 1, 1, 1, 1, 1, 1]
 
         """
+        
+        return self.universes.TableValues(univId, attrs, **kwargs)
 
-        pass
+
+    def Values(self, univId, attr, **kwargs):
+        """Obtain the values of a single attribute and corresponding states
+
+        This method is similar to the ``Table``, but can only be applied
+        for a single attribute. This method returns a clean dictionary with
+        occurances of all the states and the specific attribute result.
+
+
+        Parameters
+        ----------
+        univId : string
+            name of the universe
+        attr : string
+            name of the attribute
+        kwargs : named arguments
+            keys represent the state name and value represent the values.
+            The filtering of data is performed according to kwargs.
+
+        Examples
+        --------
+        >>> universes.Values("u0", attr="inf_nsf", fuel=900)
+        ... {'inf_nsf': [array([0.36666667]), array([0.36666667])],
+        ...  'history': array(['nom', 'nom'], dtype='<U3'),
+        ...  'time': array([0., 0.]),
+        ...  'fuel': array([900., 900.]),
+        ...  'mod': array([600., 600.]),
+        ...  'cool': array([600., 500.])}
+
+        """
+
+        return self.universes.Values(univId, attr, **kwargs)
         
