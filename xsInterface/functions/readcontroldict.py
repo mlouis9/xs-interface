@@ -57,6 +57,18 @@ def Read(inputFile):
     inputFile : str
         file directory path + file name.
 
+    Returns
+    -------
+    universes : dict
+        keys represent universe Ids; values the correposnding input files.
+    templates: dict
+        keys represent template Ids; values the correposnding template files.
+    outputs: dict
+        keys represent template Ids; values the correposnding output files.
+    links: dict
+        keys represent template Ids; values the universes Ids linked to these.
+    formats: dict
+        formats used for printing variables, states, attributes.
 
     Raises
     ------
@@ -106,7 +118,7 @@ def _ProcessCards(data):
     outputs = {}
     univlinks = {}
     formats = {"state": STATE_FRMT, "var": VAR_FRMT, "attr": ATTR_FRMT,
-               "nrow": ROW_VALS_N}
+               "nrow": ROW_VALS_N, "postfix": ''}
 
     # -------------------------------------------------------------------------   
     #                              Error messages
@@ -231,13 +243,13 @@ def _ImportFormats(setline, tlines, defltDict):
                 raise ControlFileError(
                     "<set formats> is not defined properly.\Format {} is not "
                     "allowed.\nUse standard notation, such as: "\
-                    "\n<4.3f>, <d>, <5.5e>, <nrow>.".format(frmt)) 
+                    "\n<4.3f>, <d>, <5.5e>.".format(frmt)) 
                 
         else:
             raise ControlFileError(
                 "<set formats> is not defined properly.\nKeyword {} not "
                 "recognized.\nOnly the following keywords are allowed: "\
-                "\n<state>, <attr>, <var>, <nrow>.".format(key))
+                "\n<state>, <attr>, <var>, <nrow>, <postfix>.".format(key))
 
     return frmtDict
 

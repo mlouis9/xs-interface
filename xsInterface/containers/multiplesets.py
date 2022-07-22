@@ -7,7 +7,7 @@ The container incorporates methods to allow adding and retreiving data easily:
     - Get method (obtain a ``SingleSet``)
     - DataTable (obtain states and data values in an easy-to-read table format)
     - Values (obtain values for specific set of states)
-    - Condense (to be completed based on ``SingleSet``)
+    - Condense (energy condensation method for all sets)
 It also includes processing of data, such as:
     - Future: Intersecting a specific values over multiple single sets.
     - Interpolation
@@ -15,7 +15,7 @@ It also includes processing of data, such as:
 
 
 Created on Thu Apr 14 05:45:00 2022 @author: Dan Kotlyar
-Last updated on Fri July 08 07:00:00 2022 @author: Dan Kotlyar
+Last updated on Fri July 22 08:50:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -31,6 +31,7 @@ Condense - 06/20/2022 -  DK
 Manipulate - 06/20/2022 -  DK
 CheckFilters - 06/26/2022 - DK
 CheckFilters - 07/08/2022 - DK
+CheckFilters - 07/21/2022 - DK
 """
 import copy
 

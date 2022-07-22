@@ -28,7 +28,6 @@ from xsInterface.errors.checkerrors import _isstr
 from xsInterface.errors.customerrors import TemplateFileError
 
 # General regular expressions needed for processing data
-SPECIAL_CHAR = compile(r'[\?\$\&\@\~\<\>\`]')  # special character
 REP_START_REGEX = compile(r'"rep"{+', IGNORECASE)
 REP_END_REGEX = compile(r'"rep"}+', IGNORECASE)
 VARI_REGEX = compile(r'"vari"\{(.*?)\}')  # variable in
@@ -36,6 +35,9 @@ VARO_REGEX = compile(r'"varo"\{(.*?)\}')  # variable out
 STATE_REGEX = compile(r'"state"\{(.*?)\}')  # state
 VALS_REGEX = compile(r'"values"\{(.*?)\}')  # attribute
 IDX_REGEX = compile(r'\[(.*?)\]')  # index inside parentheses
+FRMT_REGEX = compile(r'\<(.*?)\>')  # index inside parentheses
+VALUES_REGEX = compile(r'"values"\{')  # used to identify "values"
+
 
 # print formats
 #VAR_FMT = "{:d}"  # users' defined variables
@@ -44,7 +46,7 @@ IDX_REGEX = compile(r'\[(.*?)\]')  # index inside parentheses
 #MAX_N_ROW = 5  # maximum number of values printed in a row
 
 
-def ReadTemplate(tmplFile, universes, formats):
+def ReadTemplate(tmplFile, universes, formats, univId=None):
     """Read the template input file defined by the user
 
     This function reads the template file and manipulates it to create
@@ -80,6 +82,11 @@ def ReadTemplate(tmplFile, universes, formats):
 
     with open(tmplFile, 'r') as fObject:
         dataRaw = fObject.readlines()
+
+    # If user provides the univ Id - need to feed the name into the file
+    if univId is not None:
+        _isstr(univId, "Universe Id")
+        dataRaw = _InsertUnivId(dataRaw, univId)
     
     # Identify locations within the file with text to be repeated
     pos = _RepetitiveBlocks(dataRaw)
@@ -95,6 +102,18 @@ def ReadTemplate(tmplFile, universes, formats):
 
     return dataPopulated
 
+
+def _InsertUnivId(dataIn, univId):
+    """Insert the name of the universe into the datafile"""
+
+    dataOut = []    
+    for tline in dataIn:
+        condvals = VALUES_REGEX.search(tline)
+        if condvals is not None:
+            tline = tline.replace(
+                condvals.group(0), condvals.group(0)+univId+', ')
+        dataOut.append(tline)
+    return dataOut
 
 def _PopulateValues(dataIn, universes, formats):
     """Replace states and attrs with corresponding states and atrrs values"""
@@ -208,23 +227,24 @@ def _PopulateValues(dataIn, universes, formats):
     return dataOut
 
 
-def _CleanDataCopy(dataIn, fmt):
+def _CleanDataCopy(dataIn, fmt0):
     """Create a new data copy with user's variables assessed and replaced"""
     # all the local variables defined in this current function/method
-    localVarsList = ['dataIn', 'fmt', 'localVarsList', 'msgExe', 'fmtCheck',
-                     'dataClean', 'tline', 'condRep0', 'condRep1', 'condVarI',
-                     'condVarO', 'locVariables', 'strsExe', 'strsComplete',
+    localVarsList = ['dataIn', 'fmt0', 'fmt', 'localVarsList', 'msgExe',
+                     'fmtCheck', 'dataClean', 'tline', 'condRep0', 'condRep1',
+                     'condVarI', 'condVarO', 'locVariables', 'strsExe',
+                     'strsComplete', 'msg0',
                      'iexecInLine', 'tline1', 'istrExe', 'strExe', 
                      'prevLocals', 'currLocals', 'varLocal'] 
     msgExe = 'Execution cannot be performed in line:\n'
     
     # check that the format variable is defined properly
-    _isstr(fmt, "Variable format")
+    _isstr(fmt0, "Variable format")
     try:
-        fmtCheck = fmt.format(444)
+        fmtCheck = fmt0.format(444)
     except:
         msg0 = 'Variable format <> is not properly defined.\nValid example: '\
-        '{:d}'.format(fmt)
+        '{:d}'.format(fmt0)
         raise TemplateFileError(msg0)            
     
     dataClean = []
@@ -275,6 +295,19 @@ def _CleanDataCopy(dataIn, fmt):
             
             # execute all the exe strings within the line
             for istrExe, strExe in enumerate(strsExe):
+                # check if format is provided
+                condFrmt = FRMT_REGEX.search(strExe)
+                if condFrmt is not None:
+                    fmt = "{:" + condFrmt.group(1) + "}"
+                    strExe = strExe[0:condFrmt.span()[0]]
+                    try:
+                        fmtCheck = fmt.format(444)
+                    except:
+                        msg0 = 'Provided format <{}> is not valid.\n{}'\
+                        .format(fmt, tline)
+                        raise TemplateFileError(msg0)  
+                else:
+                    fmt = fmt0  # default variable format
                 try:
                     # replace execution occurrences
                     tline = tline.replace('{}'.format(strsComplete[istrExe]),
