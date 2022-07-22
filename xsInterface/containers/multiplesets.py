@@ -7,7 +7,7 @@ The container incorporates methods to allow adding and retreiving data easily:
     - Get method (obtain a ``SingleSet``)
     - DataTable (obtain states and data values in an easy-to-read table format)
     - Values (obtain values for specific set of states)
-    - Condense (to be completed based on ``SingleSet``)
+    - Condense (energy condensation method for all sets)
 It also includes processing of data, such as:
     - Future: Intersecting a specific values over multiple single sets.
     - Interpolation
@@ -15,7 +15,7 @@ It also includes processing of data, such as:
 
 
 Created on Thu Apr 14 05:45:00 2022 @author: Dan Kotlyar
-Last updated on Fri July 08 07:00:00 2022 @author: Dan Kotlyar
+Last updated on Fri July 22 08:50:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -31,6 +31,7 @@ Condense - 06/20/2022 -  DK
 Manipulate - 06/20/2022 -  DK
 CheckFilters - 06/26/2022 - DK
 CheckFilters - 07/08/2022 - DK
+CheckFilters - 07/21/2022 - DK
 """
 import copy
 
@@ -44,7 +45,7 @@ from xsInterface.containers.singleset import SingleSet
 from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.errors.checkerrors import _isobject, _isbool, _isint,\
     _isarray, _is1darray, _inlist, _isnumber, _inrange, _arriscloseInList,\
-    _islist
+    _islist, _compare2lists
 
 
 StateDescrp = namedtuple("State", ["history", "time", "branch"])
@@ -583,7 +584,8 @@ class MultipleSets():
 
         # If no state points are provided then ALL the states defined
         # under the Perturbations container must exist
-        if (branches and histories and times and attrs) is None:
+        if branches is None and histories is None and times is None and\
+            attrs is None:
             return missingStates
         
         if branches is None and not isinstance(branches, dict):
@@ -594,14 +596,20 @@ class MultipleSets():
             histories = [None]
         if times is None:
             times = [None]
-                
-        branches = list(branches.values())
         
+        # organize the branches according their appearance in the states
+        branchList = self.states._branchList
+        _compare2lists(list(branches.keys()), branchList, "Filter branches",
+                       "State branches")
+        branchesvals = []
+        for br in branchList:
+            branchesvals.append(branches[br])
+                    
         states = []
         # loop over all histories, times, and branches
         for history in histories:
             for time in times:
-                for branch in itertools.product(*branches):
+                for branch in itertools.product(*branchesvals):
                     stateId = StateDescrp(history, time, branch)
                     states.append(stateId)
         missingStates = []

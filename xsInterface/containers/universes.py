@@ -4,7 +4,7 @@
 Container to collect and store ``MultipleSets``.
 
 Created on Mon June 13 21:20:00 2022 @author: Dan Kotlyar
-Last updated on Mon July 18 12:30:00 2022 @author: Dan Kotlyar
+Last updated on Thu July 21 16:30:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -17,12 +17,15 @@ Get - 06/16/2022 - DK
 PandaTables - 06/16/2022 - DK
 Values - 06/16/2022 - DK
 PrintValues - 07/18/2022 - DK
+PandaTables - 07/21/2022 - DK
 
 Need to add error checking!!!
 
 """
 
 import numpy as np
+import pandas as pd
+import itertools
 
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.perturbationparameters import Perturbations
@@ -63,7 +66,7 @@ class Universes():
         
         self.universeIds = []  # names of all the universes
         self.universes = {}  # empty dictionary to store all universes
-        self.filteredtates = {}  # empty dict to store states & data for print
+        self.filteredstates = {}  # empty dict to store states & data for print
 
     def Add(self, univId, rc, states, multisets):
         """Add new data for a specific set
@@ -161,7 +164,32 @@ class Universes():
         
         for univId in self.universeIds:
             rc, states, msets = self[univId]
-            msets.DataTable()
+            if msets.filterstates != {}:
+                df = pd.DataFrame()
+                fltrs = msets.filterstates
+                histories = fltrs['histories']
+                times = fltrs['times']
+                branchesDict = fltrs['branches']
+                attrs = fltrs['attrs']
+                msets.DataTable(attrs)
+                # filter the data
+                brvals = list(branchesDict.values())
+                brkeys = list(branchesDict.keys())
+                for hist in histories:
+                    for time in times: 
+                        for branch in itertools.product(*brvals):
+                            brdict = {}
+                            for idx, key in enumerate(brkeys):
+                                brdict[key] = branch[idx]
+                            # append the current state to the pd table
+                            df =\
+                            df.append(msets.Values(None, history=hist,
+                                                   time=time, **brdict),
+                                      ignore_index=True)
+                msets.pandasTable = df  # update the pandas table
+            else:
+                msets.DataTable()
+            
             self.Add(univId, rc, states, msets)
 
 
@@ -257,29 +285,20 @@ class Universes():
         """
 
         _isstr(attr, "Attribute name")
-        pd = self.TableValues(univId, attr, **kwargs)
-        pdDict = pd.to_dict()
+        pd0 = self.TableValues(univId, attr, **kwargs)
+        pdDict = pd0.to_dict()
         
         results = {}  # returned dictionary with states and attribute values
-        
-        # handle the attribute results separately
-        attrDict = pdDict.pop(attr)
-        # dims = attrDict[0].shape  # attribute dimensions (vector, matrix)
-        arr = [None]*len(attrDict)
-        for index, val in attrDict.items():
-            arr[index] = val
-        results[attr] = arr   
-        
+               
         # handle the states(history, time, and branches)
         for key, valsDict in pdDict.items():
             arr = [None]*len(valsDict)
-            for index, val in valsDict.items():
-                arr[index] = val
-            results[key] = np.array(arr)
-
+            for index, keyval in enumerate(valsDict):
+                arr[index] = valsDict[keyval]
+            if key != attr:
+                results[key] = np.array(arr)
+            else:
+                results[key] = arr
         return results
 
-        
-            
-    
         

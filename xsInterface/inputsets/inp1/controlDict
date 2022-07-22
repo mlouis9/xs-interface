@@ -10,8 +10,8 @@
 
 
 set universes
-u0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\u0
-u1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\u1
+u0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp1\u0
+u1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp1\u1
 
 
 # -----------------------------------------------------------------------------
@@ -19,32 +19,31 @@ u1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositor
 # -----------------------------------------------------------------------------
 
 set templates
-template1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\otemplates\dyn3d
-template2 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\otemplates\dyn3d
+template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp1\template0
+template1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp1\template1
 
 # -----------------------------------------------------------------------------
 #                            OUTPUT FILES
 # -----------------------------------------------------------------------------
 
 set outputs
-template1 ..\junkfiles\output1
-template2 ..\junkfiles\output2
+template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp1\output_
+template1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp1\output_
 
 # -----------------------------------------------------------------------------
 #                           UNIVERSE-TO-FILES LINKS 
 # -----------------------------------------------------------------------------
 
 set links
-template1 u1 u2
-template2 u2
+template0 u0
+template1 u1
 
 
 # -----------------------------------------------------------------------------
 #                            FORMAT
 # -----------------------------------------------------------------------------
 
-set formats 8
+set formats 8 .dat
 state 5.5f
 attr 6.6e
 var 5d
-postfix .txt

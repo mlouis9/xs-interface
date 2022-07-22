@@ -5,7 +5,7 @@ This file contains certain regular-like expressions which are repeated
 and replaced.
 
 Created on Fri July 01 06:00:00 2022 @author: Dan Kotlyar
-Last updated on Tue July 05 10:00:00 2022 @author: Dan Kotlyar
+Last updated on Tue July 21 11:00:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -14,6 +14,7 @@ List changes / additions:
 Repetition  - 07/01/2022 - DK
 ReadTemplate  - 07/05/2022 - DK
 _CleanDataCopy - 07/05/2022 - DK
+_PopulateValues - 07/21/2022 - DK
 
 """
 
@@ -27,23 +28,25 @@ from xsInterface.errors.checkerrors import _isstr
 from xsInterface.errors.customerrors import TemplateFileError
 
 # General regular expressions needed for processing data
-SPECIAL_CHAR = compile(r'[\?\$\&\@\~\<\>\`]')  # special character
 REP_START_REGEX = compile(r'"rep"{+', IGNORECASE)
 REP_END_REGEX = compile(r'"rep"}+', IGNORECASE)
 VARI_REGEX = compile(r'"vari"\{(.*?)\}')  # variable in
 VARO_REGEX = compile(r'"varo"\{(.*?)\}')  # variable out
 STATE_REGEX = compile(r'"state"\{(.*?)\}')  # state
-ATTR_REGEX = compile(r'"attr"\{(.*?)\}')  # attribute
+VALS_REGEX = compile(r'"values"\{(.*?)\}')  # attribute
+IDX_REGEX = compile(r'\[(.*?)\]')  # index inside parentheses
+FRMT_REGEX = compile(r'\<(.*?)\>')  # index inside parentheses
+VALUES_REGEX = compile(r'"values"\{')  # used to identify "values"
+
 
 # print formats
-VAR_FMT = "{:d}"  # users' defined variables
-ATTR_FMT = "{:5.5e}"  # attributes values
-STATE_FMT = "{:5.3f}"  # state values
-MAX_N_ROW = 5  # maximum number of values printed in a row
+#VAR_FMT = "{:d}"  # users' defined variables
+#ATTR_FMT = "{:5.5e}"  # attributes values
+#STATE_FMT = "{:5.3f}"  # state values
+#MAX_N_ROW = 5  # maximum number of values printed in a row
 
 
-def ReadTemplate(tmplFile, attrs, states, varFmt=VAR_FMT, attrFmt=ATTR_FMT,
-                 stateFmt=STATE_FMT, rowN=MAX_N_ROW):
+def ReadTemplate(tmplFile, universes, formats, univId=None):
     """Read the template input file defined by the user
 
     This function reads the template file and manipulates it to create
@@ -51,17 +54,20 @@ def ReadTemplate(tmplFile, attrs, states, varFmt=VAR_FMT, attrFmt=ATTR_FMT,
 
     Parameters
     ----------
-    templateFile : str
-        name of the input file
-    varFormat : str
-        format used to print/display the variable
+    tmplFile : str
+        name of the template input file
+    universes : Universes object
+        a container that stores unique universes having MultipleSets objects
+    formats : dict
+        defines the formatting of different output parameters types    
+        {"state": "{:5.3f}", "var": "{:d}", "attr": "{:5.5e}", "nrow": 5}
 
     Raises
     ------
     TypeError
-        If ``inputFile`` is not str.
+        If ``tmplFile`` is not str.
     OSError
-        If the path ``inputFile`` does not exist.
+        If the path ``tmplFile`` does not exist.
 
     """
 
@@ -76,6 +82,11 @@ def ReadTemplate(tmplFile, attrs, states, varFmt=VAR_FMT, attrFmt=ATTR_FMT,
 
     with open(tmplFile, 'r') as fObject:
         dataRaw = fObject.readlines()
+
+    # If user provides the univ Id - need to feed the name into the file
+    if univId is not None:
+        _isstr(univId, "Universe Id")
+        dataRaw = _InsertUnivId(dataRaw, univId)
     
     # Identify locations within the file with text to be repeated
     pos = _RepetitiveBlocks(dataRaw)
@@ -84,40 +95,156 @@ def ReadTemplate(tmplFile, attrs, states, varFmt=VAR_FMT, attrFmt=ATTR_FMT,
     dataDup = _DuplicateBlocks(dataRaw, pos)
     
     # Clean and replace variable text with values
-    dataClean = _CleanDataCopy(dataDup, varFmt)
-        
-    return dataClean
+    dataClean = _CleanDataCopy(dataDup, formats["var"])
+
+    # Populate data
+    dataPopulated = _PopulateValues(dataClean, universes, formats)
+
+    return dataPopulated
 
 
-def _PopulateValues(dataIn, states, attrs):
+def _InsertUnivId(dataIn, univId):
+    """Insert the name of the universe into the datafile"""
+
+    dataOut = []    
+    for tline in dataIn:
+        condvals = VALUES_REGEX.search(tline)
+        if condvals is not None:
+            tline = tline.replace(
+                condvals.group(0), condvals.group(0)+univId+', ')
+        dataOut.append(tline)
+    return dataOut
+
+def _PopulateValues(dataIn, universes, formats):
     """Replace states and attrs with corresponding states and atrrs values"""
-    # all the local variables defined in this current function/method
-    
+
+    # correct format message    
+    msg_exe = "<universe name>, <attr name>, <state name1>=<state val1>,..."\
+              "[indices]"
+
+    dataOut = []    
     for tline in dataIn:
         
-        # Identify and execute a state
-        state = STATE_REGEX.search(tline)
-        if state is not None:
-            pass
+        # Identify and execute an "values" line having an attribute
+        attrline0 = VALS_REGEX.search(tline)
+        if attrline0 is not None:
+            attrline = attrline0.group(1)
+            attrline = attrline.replace("\n", '')  # remove new line
+            attrline = attrline.replace("\t", ' ')  # remove tabs
+            attrline = attrline.replace(',', ' ')  # remove commas
+            attrline = attrline.replace('=', ' ')  # remove = signs
+            
+            idxcond = IDX_REGEX.search(attrline)
+            indices = []
+            if idxcond is not None:
+                # the content included within [...]
+                idxmatch = idxcond.group(1)
+                try:
+                    # indices will be used to access the data
+                    indices = [int(idx) for idx in idxmatch.split()]
+                    indices = tuple(indices)
+                except:
+                    msg0 = 'The "values" command is not properly defined.\n{}'\
+                        'Indices format <{}> is not allowed. Use integers.'\
+                            'Follow the format:\n.'.format(tline, idxmatch)
+                    raise TemplateFileError(msg0+msg_exe)
+                # remove the indices from the line
+                attrline = attrline[0:idxcond.span()[0]].split()
+            else:
+                attrline = attrline.split()
+
+            # check that enough parameters are provided (at least univ & attr)
+            if len(attrline) % 2 != 0 or len(attrline) < 2:
+                msg0 = 'The "values" command is not properly defined.\n{}'\
+                    'Follow the format:\n.'.format(tline)
+                raise TemplateFileError(msg0+msg_exe)
+
+            # Assign values
+            univId = attrline[0]
+            attr = attrline[1]
+            states = {}
+            for j in range(2, len(attrline), 2):
+                if attrline[j] == 'history':
+                    # history is the only non-numeric value
+                    states[attrline[j]] = attrline[j+1]
+                    continue
+                try:
+                    # 1st is key and 2nd is val
+                    states[attrline[j]] = float(attrline[j+1])
+                except:
+                    msg0 = 'The "values" command is not properly defined.\n{}'\
+                        '<{}> cannot be coverted to a number.'\
+                        'Follow the format:\n.'.format(tline, attrline[j+1])
+                    raise TemplateFileError(msg0+msg_exe)                    
+            
+            # Get values
+            try:
+                vals =\
+                    universes.Values(univId, attr, **states)[attr]              
+            except ValueError as detail:
+                msg0 = 'The "values" command is not properly defined.\n{}\n{}'\
+                        'Follow the format:\n.'.format(tline, detail)
+                raise TemplateFileError(msg0+msg_exe)            
+
+            if vals == []:
+                msg0 = 'The "values" command is not properly defined.\n{}'\
+                        '\nThe evaluated states do not exist: {}\n'\
+                        .format(tline, states)
+                raise TemplateFileError(msg0)    
+
+            try:
+                valsPrint = np.array([])  # array for printed values
+                for val in vals:
+                    if indices != []:
+                        valsPrint = np.append(valsPrint, val[indices])
+                    else:
+                        valsPrint = np.append(valsPrint, val)
+            except:
+                msg0 = 'The "values" command is not properly defined.\n{}'\
+                    '<{}> cannot be appended into an array.'\
+                    'Follow the format:\n.'.format(tline, vals)
+                raise TemplateFileError(msg0+msg_exe)
+
+            # Need to understand if the attr is a state or a macro-micro xs
+            states = universes.universes[univId][1]
+            statesList = ['history', 'time'] + states._branchList
+            
+            if attr in statesList:
+                frmtPrnt = formats["state"]
+            else:
+                frmtPrnt = formats["attr"]
+            
+            # format the values to be printed
+            tlines = _Array2tlines(tline, attrline0.group(0), valsPrint,
+                                   formats["nrow"], frmtPrnt)
+            
+            for tline in tlines:
+                dataOut.append(tline)
+            
+        else:            
+            # Copy (and if needed replace line) to a clean data list
+            dataOut.append(tline)
+    return dataOut
 
 
-def _CleanDataCopy(dataIn, fmt):
+def _CleanDataCopy(dataIn, fmt0):
     """Create a new data copy with user's variables assessed and replaced"""
     # all the local variables defined in this current function/method
-    localVarsList = ['dataIn', 'fmt', 'localVarsList', 'msgExe', 'fmtCheck',
-                     'dataClean', 'tline', 'condRep0', 'condRep1', 'condVarI',
-                     'condVarO', 'locVariables', 'strsExe', 'strsComplete',
+    localVarsList = ['dataIn', 'fmt0', 'fmt', 'localVarsList', 'msgExe',
+                     'fmtCheck', 'dataClean', 'tline', 'condRep0', 'condRep1',
+                     'condVarI', 'condVarO', 'locVariables', 'strsExe',
+                     'strsComplete', 'msg0',
                      'iexecInLine', 'tline1', 'istrExe', 'strExe', 
                      'prevLocals', 'currLocals', 'varLocal'] 
     msgExe = 'Execution cannot be performed in line:\n'
     
     # check that the format variable is defined properly
-    _isstr(fmt, "Variable format")
+    _isstr(fmt0, "Variable format")
     try:
-        fmtCheck = fmt.format(444)
+        fmtCheck = fmt0.format(444)
     except:
         msg0 = 'Variable format <> is not properly defined.\nValid example: '\
-        '{:d}'.format(fmt)
+        '{:d}'.format(fmt0)
         raise TemplateFileError(msg0)            
     
     dataClean = []
@@ -168,6 +295,19 @@ def _CleanDataCopy(dataIn, fmt):
             
             # execute all the exe strings within the line
             for istrExe, strExe in enumerate(strsExe):
+                # check if format is provided
+                condFrmt = FRMT_REGEX.search(strExe)
+                if condFrmt is not None:
+                    fmt = "{:" + condFrmt.group(1) + "}"
+                    strExe = strExe[0:condFrmt.span()[0]]
+                    try:
+                        fmtCheck = fmt.format(444)
+                    except:
+                        msg0 = 'Provided format <{}> is not valid.\n{}'\
+                        .format(fmt, tline)
+                        raise TemplateFileError(msg0)  
+                else:
+                    fmt = fmt0  # default variable format
                 try:
                     # replace execution occurrences
                     tline = tline.replace('{}'.format(strsComplete[istrExe]),
@@ -305,3 +445,43 @@ def _LocalVariables(currLocals, funcList):
             currList.append(key)
 
     return currList
+
+
+def _Array2tlines(tline, origstr, valsarray, nrow, frmt):
+    """Convert original string in a line to multiple lines given by an array"""
+    # tline: original line
+    # origstr: original string to be replaced/removed
+    # valsarray: values in an array
+    # nrow: maximum number of values in a row
+    # frmt: the format of the 
+
+    tlines = []
+    valsremain = copy.deepcopy(valsarray)
+    replaceFlag = True  # flag that indicates if the original line is replaced
+    while 1:
+        if len(valsremain) > nrow:
+            valsrow = valsremain[0:nrow]  # values to be printed a row
+            valsremain = valsremain[nrow:]  # remaining vals for following rows
+        else:
+            valsrow = valsremain
+            valsremain = []
+
+        str0 = ''  # empty string to be appended
+        for val in valsrow:
+            if isinstance(val, str):
+                str0 += ' {}'.format(val)
+            else:
+                str0 += ' ' + frmt.format(val)
+        
+        if replaceFlag:
+            tlines.append(tline.replace(origstr, str0))
+            replaceFlag = False
+        else:
+            str0 += '\n'
+            tlines.append(str0)
+
+        # all values are printed
+        if valsremain == []:
+            break  # the while loop
+
+    return tlines

@@ -49,8 +49,7 @@ class InputCardError(Exception):
 
 class TemplateFileError(Exception):
     def __init__(self, message):
-        str1 = "Input Error with:\n"
-        str1 += "------------------------------------ "
+        str1 = "------------------------------------ "
         super().__init__("!!!\n"+str1+"\n"+message)
         
 class ControlFileError(Exception):
