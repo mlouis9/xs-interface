@@ -36,8 +36,8 @@
             
   <section id="control-deck">
 <span id="controldeck"></span><h1>Control Deck<a class="headerlink" href="#control-deck" title="Permalink to this headline">¶</a></h1>
-<p>This the main file that controls the flow of data and the corresponding output formatting.</p>
-<p>A list of all the input cards within this is descirbed in the table below.
+<p>This is the main file that controls the flow of data and the corresponding output formatting.</p>
+<p>A list of all the input cards within this file is descirbed in the table below.
 Description on the format, comments, and magic capabilities is provided in <a class="reference internal" href="input_cards.html#gen-comments"><span class="std std-ref">General comments</span></a>.</p>
 <table class="docutils align-default">
 <colgroup>
@@ -80,8 +80,8 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <p>where,</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name</span></code> is user defined name of that specific cross-section set.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">file</span></code> is the path dir to the universe file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name</span></code> is a user defined name of that specific cross-section set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">file</span></code> is the full path dir + name to the universe file.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Notes:</strong></p>
@@ -112,8 +112,8 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <p>where,</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> is user defined name/Id of that specific template.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">file</span></code> is the path dir to the template file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> is a user defined name/Id of that specific template.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">file</span></code> is the path dir + file name to the template file.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Notes:</strong></p>
@@ -164,7 +164,9 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <section id="links">
 <span id="j-links"></span><h2>links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
 <p><strong>Linkage between universes and templates Ids.</strong></p>
-<p>This card allow to apply the same template file for multiple universes without the need to define unique template file for each universe separately.</p>
+<p>This card allows to apply the same template file for multiple universes without the need to define unique template file for each universe separately.
+This capability is convient when the use want to use the same template file for multiple universes.
+It must be pointed out that if this card is not provided, the explicit definition of universes must be provided within the template files themselves.</p>
 <p><em>Optional Card</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">links</span>
 <span class="o">&lt;</span><span class="n">template</span> <span class="n">name1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">universe</span> <span class="n">name11</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">universe</span> <span class="n">name12</span><span class="o">&gt;</span> <span class="o">...</span>
@@ -175,8 +177,8 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <p>where,</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> is user defined name/Id of that specific template. Must correspond to the name defined under the <a class="reference internal" href="#j-templates"><span class="std std-ref">templates</span></a> card.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name1</span></code> is the user defined universe name/Id/</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> is an user defined name/Id of that specific template. Must correspond to the name defined under the <a class="reference internal" href="#j-templates"><span class="std std-ref">templates</span></a> card.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name1</span></code> is the user defined universe name or Id.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Notes:</strong></p>
@@ -184,6 +186,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <div><ul class="simple">
 <li><p>This card can be omitted.</p></li>
 <li><p>Each <code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> can have a single or multiple <code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name</span></code>.</p></li>
+<li><p>If multiple universes are provided for a specific template then multiple ooutput files will be created. Their naming will differe by the postfix name of the specific universe, e.g. <code class="docutils literal notranslate"><span class="pre">output_u0</span></code>, <code class="docutils literal notranslate"><span class="pre">output_u1</span></code> and so on.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Example</strong>:</p>
@@ -198,7 +201,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <p><strong>Output formatting.</strong></p>
 <p>This card allows to control the formatting of the different output variables.</p>
 <p><em>Optional Card</em></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">formats</span> <span class="n">N</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">formats</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Postfix</span><span class="o">&gt;</span>
 <span class="n">state</span> <span class="o">&lt;</span><span class="n">state_format</span><span class="o">&gt;</span>
 <span class="n">attr</span> <span class="o">&lt;</span><span class="n">attr_format</span><span class="o">&gt;</span>
 <span class="n">var</span> <span class="o">&lt;</span><span class="n">var_format</span><span class="o">&gt;</span>
@@ -207,7 +210,8 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <p>where,</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> is the maximum number of values printed in each row.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> is the maximum number of values printed in each row. Provided as an integer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Postfix</span></code> is the postfix of the file name, e.g. .dat and .txt. If <code class="docutils literal notranslate"><span class="pre">Postfix</span></code> not provided no postfix will be used.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">state</span></code>, <code class="docutils literal notranslate"><span class="pre">attr</span></code>, and <code class="docutils literal notranslate"><span class="pre">var</span></code> are all preserved keywords.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">state</span></code> denotes state perturbation parameter, such as time, history, or branch.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">attr</span></code> denotes a macro or micro data, such as the fission cross section.</p></li>
@@ -231,7 +235,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">formats</span> <span class="mi">4</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">formats</span> <span class="mi">4</span> <span class="o">.</span><span class="n">txt</span>
 <span class="n">attr</span> <span class="mf">6.6</span><span class="n">e</span>
 </pre></div>
 </div>

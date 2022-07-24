@@ -1,8 +1,8 @@
 .. _universecards:
 
 
-XSs Set Cards 
-------------- 
+Universe data cards
+------------------- 
 
 For each unique cross-section set or universe a separate file is defined.
 It is up to the user to control the data flow.

@@ -4,9 +4,9 @@
 Control Deck
 ------------ 
 
-This the main file that controls the flow of data and the corresponding output formatting.
+This is the main file that controls the flow of data and the corresponding output formatting.
 
-A list of all the input cards within this is descirbed in the table below.
+A list of all the input cards within this file is descirbed in the table below.
 Description on the format, comments, and magic capabilities is provided in :ref:`gen_comments`.
 
 ===================== ===================================================================
@@ -43,8 +43,8 @@ universes
 
 where,
 
- - ``universe name`` is user defined name of that specific cross-section set.
- - ``universe file`` is the path dir to the universe file.
+ - ``universe name`` is a user defined name of that specific cross-section set.
+ - ``universe file`` is the full path dir + name to the universe file.
 
 
 **Notes:**
@@ -83,8 +83,8 @@ templates
 
 where,
 
- - ``template name`` is user defined name/Id of that specific template.
- - ``template file`` is the path dir to the template file.
+ - ``template name`` is a user defined name/Id of that specific template.
+ - ``template file`` is the path dir + file name to the template file.
 
 
 **Notes:**
@@ -147,8 +147,9 @@ links
 
 **Linkage between universes and templates Ids.**
 
-This card allow to apply the same template file for multiple universes without the need to define unique template file for each universe separately.
-
+This card allows to apply the same template file for multiple universes without the need to define unique template file for each universe separately.
+This capability is convient when the use want to use the same template file for multiple universes.
+It must be pointed out that if this card is not provided, the explicit definition of universes must be provided within the template files themselves.
 
 *Optional Card*
 
@@ -162,14 +163,15 @@ This card allow to apply the same template file for multiple universes without t
 
 where,
 
- - ``template name`` is user defined name/Id of that specific template. Must correspond to the name defined under the :ref:`j_templates` card.
- - ``universe name1`` is the user defined universe name/Id/
+ - ``template name`` is an user defined name/Id of that specific template. Must correspond to the name defined under the :ref:`j_templates` card.
+ - ``universe name1`` is the user defined universe name or Id.
 
 
 **Notes:**
 	
 	*	This card can be omitted.
 	*	Each ``template name`` can have a single or multiple ``universe name``.
+	* If multiple universes are provided for a specific template then multiple ooutput files will be created. Their naming will differe by the postfix name of the specific universe, e.g. ``output_u0``, ``output_u1`` and so on. 
 
 
 **Example**:
@@ -196,14 +198,15 @@ This card allows to control the formatting of the different output variables.
 
 .. code::
 		
-   set formats N
+   set formats <N> <Postfix>
    state <state_format>
    attr <attr_format>
    var <var_format>
  
 where,
 
- - ``N`` is the maximum number of values printed in each row.
+ - ``N`` is the maximum number of values printed in each row. Provided as an integer.
+ - ``Postfix`` is the postfix of the file name, e.g. .dat and .txt. If ``Postfix`` not provided no postfix will be used.
  - ``state``, ``attr``, and ``var`` are all preserved keywords.
  - ``state`` denotes state perturbation parameter, such as time, history, or branch.
  - ``attr`` denotes a macro or micro data, such as the fission cross section.
@@ -231,6 +234,6 @@ or
 
 .. code::
 
-	set formats 4
+	set formats 4 .txt
 	attr 6.6e
 	
