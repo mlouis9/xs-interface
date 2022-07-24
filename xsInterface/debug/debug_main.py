@@ -18,7 +18,7 @@ inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
         "xs-interface\\xsInterface\\inputsets\\inp1\\controlDict"
 
-# rRead the control dict
+# Read the control dict
 xs = Main(inputFile)
 
 # Read xs data and templates and populate data

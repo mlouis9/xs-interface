@@ -16,8 +16,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Post-process Results" href="process_results.html" />
-    <link rel="prev" title="Input Cards" href="input_cards.html" />
+    <link rel="next" title="Examples" href="../Examples/index.html" />
+    <link rel="prev" title="Universe data cards" href="input_cards.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -36,7 +36,70 @@
             
   <section id="code-execution">
 <span id="codeexe"></span><h1>Code Execution<a class="headerlink" href="#code-execution" title="Permalink to this headline">¶</a></h1>
-<p>WILL BE UPDATED SOON.</p>
+<p>Import the <code class="docutils literal notranslate"><span class="pre">Main</span></code> class from <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code> package.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.functions.main</span> <span class="kn">import</span> <span class="n">Main</span>
+</pre></div>
+</div>
+<p>Read the control deck file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="n">Main</span><span class="p">(</span><span class="s2">&quot;controlDeckFile&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Read universes’ data and templates files and populate data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Write the data to output files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">writemode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where, <code class="docutils literal notranslate"><span class="pre">writemode</span></code> defines the writing mode and can be ‘w’, ‘a’, and so on.</p>
+<p><code class="docutils literal notranslate"><span class="pre">writemode</span></code> can be omitted, in which case the default will be <cite>w</cite>. e.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">writemode</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="access-data-directly">
+<h1>Access Data Directly<a class="headerlink" href="#access-data-directly" title="Permalink to this headline">¶</a></h1>
+<p>After the execution of <code class="docutils literal notranslate"><span class="pre">xs.Read()</span></code>, the data can be directly obtained by using two methods.</p>
+<ol class="arabic">
+<li><p>Obtain values for a single universe and multiple parameters/attributes in a table format.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">univId</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where,</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">univId</span></code> is the universe name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attrs</span></code> is a list or string containing the parameters of interest.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kwargs</span></code> represent the different states for which data is obtained.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">],</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="s1">&#39;nom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Obtain values for a single universe and single attribute in a dictionary format.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">univId</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where, the parameters are identical to the ones used by the <code class="docutils literal notranslate"><span class="pre">Table</span></code> method, but the <code class="docutils literal notranslate"><span class="pre">attr</span></code> that can only be a single string describing a single attribute.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="s1">&#39;nom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
 </section>
 
 
@@ -75,8 +138,8 @@
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="index.html">User’s Manual</a><ul>
-      <li>Previous: <a href="input_cards.html" title="previous chapter">Input Cards</a></li>
-      <li>Next: <a href="process_results.html" title="next chapter">Post-process Results</a></li>
+      <li>Previous: <a href="input_cards.html" title="previous chapter">Universe data cards</a></li>
+      <li>Next: <a href="../Examples/index.html" title="next chapter">Examples</a></li>
   </ul></li>
   </ul></li>
 </ul>

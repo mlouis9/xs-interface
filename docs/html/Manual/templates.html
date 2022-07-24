@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Templates &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Code Execution" href="code_exe.html" />
+    <link rel="prev" title="Universe data cards" href="input_cards.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="templates">
+<span id="id1"></span><h1>Templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h1>
+<p>The template file makes the use of prescribed rules to efficiently define a template that can be used to output data.</p>
+<p>The text file provided by the user is format-free. The text contained within the template file is copied to the desired output.
+However, the simple rules provided by the user resemble codes’ snippets that allow to define variables dynamically rather than using fix values.</p>
+<p>A list of three basic rules are listed in the table below, and examples of how to use these are provided in the following sections.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#vari"><span class="std std-ref">Input Variable</span></a></p></td>
+<td><p>Definition of an input variable to be executed internally.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#varo"><span class="std std-ref">Output Variable</span></a></p></td>
+<td><p>Definition of an output variable to be printed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#values"><span class="std std-ref">Data Values</span></a></p></td>
+<td><p>Evaluation of parameters defined by the user in <a class="reference internal" href="input_cards.html#universecards"><span class="std std-ref">Universe data cards</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#repblocks"><span class="std std-ref">Repetitive Blocks</span></a></p></td>
+<td><p>Text blocks to be repeated.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="input-variable">
+<span id="vari"></span><h2>Input Variable<a class="headerlink" href="#input-variable" title="Permalink to this headline">¶</a></h2>
+<p><strong>Definition of a simple execution line.</strong></p>
+<p>The user has the ability to define a code snippet that will be executed internally within the code.
+Although weakly explained here, the code should be simple. For example, assigning value to a variable (scalar or vector), rather than implementing a while loop.
+The use of <code class="docutils literal notranslate"><span class="pre">for</span></code> loops is feasibile but not recommended.</p>
+<p>Only a <strong>single input variable</strong> can be defined in a single line. The format for defining an input variable is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">command</span> <span class="n">line</span><span class="o">&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;vari&quot;{...}</span></code> is preserved (including the curley brackets) keyword.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;command</span> <span class="pre">line&gt;</span></code> is the execution command sequence.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Notes:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The use of the command is primarily defined for defining indices and changing these dynamically.</p></li>
+<li><p>All the repetitions of <code class="docutils literal notranslate"><span class="pre">&quot;vari&quot;{...}</span></code> will not appear in the output files.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li><p>Index definition</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Index promotion</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=</span><span class="n">idxB</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Vector definition</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="output-variable">
+<span id="varo"></span><h2>Output Variable<a class="headerlink" href="#output-variable" title="Permalink to this headline">¶</a></h2>
+<p><strong>Output the values of a certain input variable.</strong></p>
+<p>Here the user has the ability to write the value/s of <a class="reference internal" href="#vari"><span class="std std-ref">Input Variable</span></a> directly to the output file.</p>
+<p><strong>Multiple output variable</strong> can be defined in a single line. The format for defining an output variable is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">evaluation</span> <span class="n">command</span><span class="o">&gt;&lt;&lt;</span><span class="nb">format</span><span class="o">&gt;&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;varo&quot;{...}</span></code> is preserved (including the curley brackets) keyword.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;evaluation</span> <span class="pre">command&gt;</span></code> is the execution sequence for evaluating an input variable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;format&gt;</span></code> a standard format notation, e.g., <code class="docutils literal notranslate"><span class="pre">3d</span></code>, <code class="docutils literal notranslate"><span class="pre">3.3f</span></code>, <code class="docutils literal notranslate"><span class="pre">5.5e</span></code> with which the input variable will be written in the output file. If provided, the format <strong>must</strong> be provided within <code class="docutils literal notranslate"><span class="pre">&lt;...&gt;</span></code> brackets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;format&gt;</span></code> can be omitted. In which case, the default value will be used according to the card defined in the control deck (<a class="reference internal" href="controldeck.html#j-formats"><span class="std std-ref">formats</span></a>).</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Notes:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;varo&quot;{...}</span></code> should not be used to execute a new command but rather to evaluate a certain input variable.</p></li>
+<li><p>The input variables to be evaluated and printed must be already defined in the template.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li><p>Output a simple variable</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="o">=</span><span class="n">idxE</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The outcome in the output file is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Compound evaluation (variable within a variable).</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=</span><span class="n">idxB</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="o">*</span> <span class="n">BURNUP</span>  <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The outcome in the output file is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">BURNUP</span>  <span class="mf">0.000</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Multiple output variables in a single line.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">=</span><span class="n">idxE0</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">=</span><span class="n">idxE1</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="o">*</span>   <span class="n">Group</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">&lt;</span><span class="mi">5</span><span class="n">d</span><span class="o">&gt;</span><span class="p">}</span> <span class="o">--&gt;</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">&lt;</span><span class="mi">5</span><span class="n">d</span><span class="o">&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The outcome in the output file is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span>   <span class="n">Group</span>     <span class="mi">0</span> <span class="o">--&gt;</span>     <span class="mi">0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Compound evaluation with multiple output variables.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">inf_sp0</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],[</span><span class="o">-</span><span class="mf">0.05</span> <span class="p">,</span> <span class="mf">0.3</span><span class="p">]]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">=</span><span class="n">idxE0</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">=</span><span class="n">idxE1</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="o">*</span>   <span class="n">sp0</span> <span class="n">value</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">inf_sp0</span><span class="p">[</span><span class="n">idxE0</span><span class="p">,</span><span class="n">indxE1</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">6.6</span><span class="n">e</span><span class="o">&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The outcome in the output file is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span>   <span class="n">sp0</span> <span class="n">value</span>       <span class="mf">1.000000e-01</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="data-values">
+<span id="values"></span><h2>Data Values<a class="headerlink" href="#data-values" title="Permalink to this headline">¶</a></h2>
+<p><strong>Evaluation and output of attrbutes/states.</strong></p>
+<p>This is the heart of the template capability as different parameters defined in the universes objects - <a class="reference internal" href="input_cards.html#universecards"><span class="std std-ref">Universe data cards</span></a> can be evaluated and written to output files.
+At the moment, only a single evaluation can be performed in a single line.</p>
+<p>The format for evaluating and printing an output attribute, e.g., cross sections or states:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">universe</span> <span class="n">Id</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">attribute</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">state1</span><span class="o">&gt;=&lt;</span><span class="n">value1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">state2</span><span class="o">&gt;=&lt;</span><span class="n">value2</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="o">...</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">stateN</span><span class="o">&gt;=&lt;</span><span class="n">valueN</span><span class="o">&gt;</span>  <span class="p">[</span><span class="o">&lt;</span><span class="n">indices</span><span class="o">&gt;</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;values&quot;{...}</span></code> is preserved (including the curley brackets) keyword.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;universe</span> <span class="pre">Id&gt;</span></code> is the name of the universe as defined in <a class="reference internal" href="input_cards.html#universecards"><span class="std std-ref">Universe data cards</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;attribute&gt;</span></code> is the name of the output variable. It can represent a state (e.g., fuel temperature) or an attribute (e.g., beta).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;state1&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;state2&gt;</span></code>, … represent the names of the various states (e.g., fuel, moderator, coolant temperatures).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;value1&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;value2&gt;</span></code>, … are the corresponding singular values for each of the various states.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;indices&gt;</span></code> are the indices provided to assess the data at specific index values. For example, if beta has six delayed neutron groups, a specific group can be accessed by applying the indices.</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt><strong>Notes:</strong></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;universe</span> <span class="pre">Id&gt;</span></code> can be provided or omitted. However, if it is omitted, the <code class="docutils literal notranslate"><span class="pre">links</span></code> card must be set in <a class="reference internal" href="controldeck.html#j-links"><span class="std std-ref">links</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;attribute&gt;</span></code> is mandatory and must exist in the definition of the universe (<a class="reference internal" href="input_cards.html#i-settings"><span class="std std-ref">settings</span></a>). Attribute can also include states’ names.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;state&gt;</span></code> must be defined in <a class="reference internal" href="input_cards.html#i-branches"><span class="std std-ref">Branches</span></a> or <a class="reference internal" href="input_cards.html#i-histories"><span class="std std-ref">Histories</span></a> or <a class="reference internal" href="input_cards.html#i-times"><span class="std std-ref">Times</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;state&gt;</span></code> can either be a branch name defined in <a class="reference internal" href="input_cards.html#i-branches"><span class="std std-ref">Branches</span></a>, or the preserved keyword <code class="docutils literal notranslate"><span class="pre">history</span></code> or the preserved keyword <code class="docutils literal notranslate"><span class="pre">time</span></code>. Not all the states must be provided.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code> must exist in the data definition provided in <a class="reference internal" href="input_cards.html#i-data"><span class="std std-ref">Data</span></a>.</p></li>
+<li><p>It must be pointed out that when executing the “values”{…} comand, not all states that exist in <a class="reference internal" href="input_cards.html#i-data"><span class="std std-ref">Data</span></a> must be provided. For example, if the states include multiple fuel and coolant temperatures, and the command is evaluated for a specific fuel temperature then all the existing coolant temperatures that correspond to this fuel temperatures will be evaluated and written.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;indices&gt;</span></code> must be provided in square brackets […]. However, indices can also be omitted, in which case no […] brackets are required.</p></li>
+<li><p>It is up to the user to know how to slice the data as the user was reponsible to feed the data in.</p></li>
+<li><p>The most important note is to understand that when the <code class="docutils literal notranslate"><span class="pre">values</span></code> command is provided, the program evaluates the values using the <code class="docutils literal notranslate"><span class="pre">universes.Values</span></code> method internally. The end result can yield a scalar, vector, or matrix.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li><p>Simple and direct evaluation.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">u0</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="n">nom</span>  <span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>Let’s assume that only a single state of fuel=1500 and time=0.0 was defined. The attribute <code class="docutils literal notranslate"><span class="pre">inf_rabs</span></code> has 2-group values. Therefore, the index <code class="docutils literal notranslate"><span class="pre">0</span></code> will evaluate only the first value in the array.</p>
+</div></blockquote>
+</li>
+<li><p>Compound evaluation.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">u0</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]}</span>  <span class="p">[</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="p">}]}</span>
+</pre></div>
+</div>
+<p>This example will yield exactly the same result as the previous one. However, the slicing of data is performed dynamically by using the “varo”{…} commands.</p>
+</div></blockquote>
+</li>
+<li><p>Compound evaluation without defining the universe explicitly in the file.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">inf_sp0</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]}</span>  <span class="p">[</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="p">},</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="p">}]}</span>
+</pre></div>
+</div>
+<p>This example shows the flexibility of the slicing method defined within the […] brackets as in this case the attribute <code class="docutils literal notranslate"><span class="pre">inf_sp0</span></code> is a 2-dim array. Note that the universe is not explicitly defined here. This means that the universe Ids and templates must be linked using the <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">links</span></code> card in <a class="reference internal" href="controldeck.html#j-links"><span class="std std-ref">links</span></a>.</p>
+</div></blockquote>
+</li>
+<li><p>Evaluation without slicing.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+<span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">inf_rabs</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Let’s still assume we only have a single state or data point. However, now we do not use the indices. Therefore, the written outcome will include both group values.</p>
+</div></blockquote>
+</li>
+<li><p>Evaluation of multiple states.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+<span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">inf_rabs</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Let’s now assume that we have one fuel temperature as a state and 10 coolant tempeatures. For similicity we will assume that there is a single energy group. The command above will return 10 values that correspond to all the coolant densities.</p>
+</div></blockquote>
+</li>
+</ul>
+<p>Please note that the format of the attribute or state values is defined in <a class="reference internal" href="controldeck.html#j-formats"><span class="std std-ref">formats</span></a>, which also defines the maximum number of values allowed to be printed in a single line. For our previous example, let’s assume that we defined that only 4 values can be printed in a single line. However, the previous command yields 10 values. These will be printed in order. First four in one line, next four values in the following line, and the last two values in a third line.</p>
+</section>
+<section id="repetitive-blocks">
+<span id="repblocks"></span><h2>Repetitive Blocks<a class="headerlink" href="#repetitive-blocks" title="Permalink to this headline">¶</a></h2>
+<p><strong>Repetitive text blocks that are duplicated.</strong></p>
+<p>This capability allows to duplicate blocks without the explicit need of the user to copy the data multiple times within the file.
+Sub-blocks can be defined within blocks, and these can also include dynamic commands for effective templating.</p>
+<p>The format for defining a repetitive block is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>where,</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;rep&quot;{...}</span></code> is preserved (including the curley brackets) keyword.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;N&gt;</span></code> represent the number of times the block will be replicated.</p></li>
+<li><p>The number of curley brackets indicates the hierarchy of the block. Nested blocks can be defined within blocks, but with structured hierarchy.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span>
+<span class="n">block</span><span class="o">-</span><span class="mi">1</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span>
+<span class="n">block</span><span class="o">-</span><span class="mi">2</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>In the application above, block-2 will be duplicated M times and then block-1 (including the duplicated block-2) will be duplicated N times.</p></li>
+<li><p>The hierarchy rules allow to have <code class="docutils literal notranslate"><span class="pre">{{</span></code>  blocks within <code class="docutils literal notranslate"><span class="pre">{</span></code>, <code class="docutils literal notranslate"><span class="pre">{{{</span></code> within <code class="docutils literal notranslate"><span class="pre">{{</span></code>, and so on. Several same-level blocks can appear in higer level blocks. For example:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">N1</span><span class="o">&gt;</span>
+<span class="n">Block</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">N1</span> <span class="n">times</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="o">&lt;</span><span class="n">M1</span><span class="o">&gt;</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M1</span> <span class="n">times</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="o">&lt;</span><span class="n">M2</span><span class="o">&gt;</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.2</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M2</span> <span class="n">times</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>The outcome of the above block results in outputting:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Block</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">N1</span> <span class="n">times</span><span class="o">.</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M1</span> <span class="n">times</span>
+<span class="o">...</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M1</span> <span class="n">times</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.2</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M2</span> <span class="n">times</span>
+<span class="o">...</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.2</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M2</span> <span class="n">times</span>
+<span class="n">Block</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">N1</span> <span class="n">times</span><span class="o">.</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M1</span> <span class="n">times</span>
+<span class="o">...</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M1</span> <span class="n">times</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.2</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M2</span> <span class="n">times</span>
+<span class="o">...</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.2</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M2</span> <span class="n">times</span>
+<span class="o">...</span>
+<span class="n">Block</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">N1</span> <span class="n">times</span><span class="o">.</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M1</span> <span class="n">times</span>
+<span class="o">...</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M1</span> <span class="n">times</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.2</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M2</span> <span class="n">times</span>
+<span class="o">...</span>
+<span class="n">Block</span><span class="o">-</span><span class="mf">2.2</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">M2</span> <span class="n">times</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<dl>
+<dt><strong>Notes:</strong></dt><dd><ul class="simple">
+<li><p>Several same-lebel blocks can exist.</p></li>
+<li><p>Lower-level blocks (e.g., <code class="docutils literal notranslate"><span class="pre">{{</span></code>) can not contain higher-level blocks (e.g., <code class="docutils literal notranslate"><span class="pre">{</span></code>). The following shows an example of an <em>erroneous</em> snippet:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span>
+<span class="n">block</span><span class="o">-</span><span class="mi">1</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span>
+<span class="n">block</span><span class="o">-</span><span class="mi">2</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>A higher-level (e.g., <code class="docutils literal notranslate"><span class="pre">{</span></code>) cannot end before all lower-level blocks are closed. An example of an <em>erroneous</em> snippet:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span>
+<span class="n">block</span><span class="o">-</span><span class="mi">1</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span>
+<span class="n">block</span><span class="o">-</span><span class="mi">2</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The real strength of the repetitive blocks is the ability to use dynamic commands that will assess the data/variables.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Examples</strong>:</p>
+<p>The examples below integrate the use of all the rules in conjuction with the “rep”{…} blocks.</p>
+<ul>
+<li><p>Two-tier hierarchy levels example</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="mi">2</span>
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=</span><span class="n">idxB</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="o">*</span> <span class="n">BURNUP</span>  <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">}</span>
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span>
+<span class="o">*</span> <span class="n">Transport</span> <span class="n">XSEC</span> <span class="n">Table</span>
+<span class="o">*</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="mi">2</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="o">=</span><span class="n">idxE</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+
+  <span class="n">Group</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="p">}</span>
+  <span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">inf_rabs</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]}</span>  <span class="p">[</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="p">}]}</span>
+
+<span class="s2">&quot;rep&quot;</span><span class="p">}}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The energy group values of the <code class="docutils literal notranslate"><span class="pre">inf_rabs</span></code> cross section are 0.1 and 0.2 respectively for both the 0.0 and 1.0 time points. The format chosen by the <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">formats</span></code> (<a class="reference internal" href="controldeck.html#j-formats"><span class="std std-ref">formats</span></a>) card is <code class="docutils literal notranslate"><span class="pre">6.6e</span></code>. The printed output is therefore:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span> <span class="n">BURNUP</span>  <span class="mf">0.000</span>
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span>
+<span class="o">*</span> <span class="n">Transport</span> <span class="n">XSEC</span> <span class="n">Table</span>
+<span class="o">*</span>
+
+  <span class="n">Group</span>     <span class="mi">0</span>
+   <span class="mf">1.000000e-01</span>
+
+
+  <span class="n">Group</span>     <span class="mi">1</span>
+   <span class="mf">2.000000e-01</span>
+
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span> <span class="n">BURNUP</span>  <span class="mf">1.000</span>
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span>
+<span class="o">*</span> <span class="n">Transport</span> <span class="n">XSEC</span> <span class="n">Table</span>
+<span class="o">*</span>
+
+  <span class="n">Group</span>     <span class="mi">0</span>
+   <span class="mf">1.000000e-01</span>
+
+
+  <span class="n">Group</span>     <span class="mi">1</span>
+   <span class="mf">2.000000e-01</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Three-tier hierarchy levels example</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="mi">2</span>
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=</span><span class="n">idxB</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="o">*</span> <span class="n">BURNUP</span>  <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">}</span>
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span>
+<span class="o">*</span> <span class="n">Scattering</span> <span class="n">XSEC</span> <span class="n">Table</span>
+<span class="o">*</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="mi">2</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">=</span><span class="n">idxE0</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{{</span><span class="mi">2</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">=</span><span class="n">idxE1</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="o">*</span>   <span class="n">Group</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="p">}</span> <span class="o">--&gt;</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="p">}</span>
+        <span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">inf_sp0</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]}</span>  <span class="p">[</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="p">},</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="p">}]}</span>
+<span class="o">*</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}</span>
+
+<span class="s2">&quot;rep&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The arbitrary defined scattering group-to-group matrix of <code class="docutils literal notranslate"><span class="pre">inf_sp0</span></code> is [[0.1, 0.2], [-0.05, 0.3]] for both the 0.0 and 1.0 time points. The format chosen by the <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">formats</span></code> (<a class="reference internal" href="controldeck.html#j-formats"><span class="std std-ref">formats</span></a>) card is <code class="docutils literal notranslate"><span class="pre">6.6e</span></code>. The printed output is therefore:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span> <span class="n">BURNUP</span>  <span class="mf">0.000</span>
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span>
+<span class="o">*</span> <span class="n">Scattering</span> <span class="n">XSEC</span> <span class="n">Table</span>
+<span class="o">*</span>
+<span class="o">*</span>   <span class="n">Group</span>     <span class="mi">0</span> <span class="o">--&gt;</span>     <span class="mi">0</span>
+         <span class="mf">1.000000e-01</span>
+<span class="o">*</span>
+<span class="o">*</span>   <span class="n">Group</span>     <span class="mi">0</span> <span class="o">--&gt;</span>     <span class="mi">1</span>
+         <span class="mf">2.000000e-01</span>
+<span class="o">*</span>
+<span class="o">*</span>   <span class="n">Group</span>     <span class="mi">1</span> <span class="o">--&gt;</span>     <span class="mi">0</span>
+         <span class="o">-</span><span class="mf">5.000000e-02</span>
+<span class="o">*</span>
+<span class="o">*</span>   <span class="n">Group</span>     <span class="mi">1</span> <span class="o">--&gt;</span>     <span class="mi">1</span>
+         <span class="mf">3.000000e-01</span>
+<span class="o">*</span>
+
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span> <span class="n">BURNUP</span>  <span class="mf">1.000</span>
+<span class="o">*</span> <span class="o">----------------------------------------------------------------</span>
+<span class="o">*</span>
+<span class="o">*</span> <span class="n">Scattering</span> <span class="n">XSEC</span> <span class="n">Table</span>
+<span class="o">*</span>
+<span class="o">*</span>   <span class="n">Group</span>     <span class="mi">0</span> <span class="o">--&gt;</span>     <span class="mi">0</span>
+         <span class="mf">1.000000e-01</span>
+<span class="o">*</span>
+<span class="o">*</span>   <span class="n">Group</span>     <span class="mi">0</span> <span class="o">--&gt;</span>     <span class="mi">1</span>
+         <span class="mf">2.000000e-01</span>
+<span class="o">*</span>
+<span class="o">*</span>   <span class="n">Group</span>     <span class="mi">1</span> <span class="o">--&gt;</span>     <span class="mi">0</span>
+         <span class="o">-</span><span class="mf">5.000000e-02</span>
+<span class="o">*</span>
+<span class="o">*</span>   <span class="n">Group</span>     <span class="mi">1</span> <span class="o">--&gt;</span>     <span class="mi">1</span>
+         <span class="mf">3.000000e-01</span>
+<span class="o">*</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">User’s Manual</a><ul>
+      <li>Previous: <a href="input_cards.html" title="previous chapter">Universe data cards</a></li>
+      <li>Next: <a href="code_exe.html" title="next chapter">Code Execution</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/Manual/templates.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

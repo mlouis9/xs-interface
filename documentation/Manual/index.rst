@@ -7,25 +7,22 @@ User's Manual
 The User\'s Manual for the ``xsInterface`` package describes the 
 various inputs required by the code and its various applications. 
 The User\'s Manual also describes the printed output options as well as the embedded post-processing capabilities. 
+
 Input examples are provided for the main applications to assist in the preparation of new problems.
 
-The following table describes all the components to understand how to set and handle:
+The following table describes all the components needed to read, write, and process data.
 
-- Control deck file.
-- Multiple files that define data definition for each unique cross-section set. These files include multiple input cards to define andd manipulate the data.
-- Template files.
-
-===================== ============================================
-Chapters							Description
-===================== ============================================
-:ref:`controldeck`		Modes of executions
---------------------- --------------------------------------------
-:ref:`universecards`	Inputs cards necessary to set an input file for a unique XS set.
---------------------- --------------------------------------------
-:ref:`codeexe`				Modes of executions
---------------------- --------------------------------------------
-:ref:`processres`		  Results post-processing features.
-===================== ============================================
+========================= ============================================
+Chapters							    Description
+========================= ============================================
+:ref:`universecards`	    Input cards necessary to define a universe/set
+------------------------- --------------------------------------------
+:ref:`templates`	        Setting rules-based user-defined template files 
+------------------------- --------------------------------------------
+:ref:`controldeck`		    Control the input-to-output data flow 
+------------------------- --------------------------------------------
+:ref:`codeexe`				    Execution and post-processing of the code
+========================= ============================================
 
 
 .. toctree::
@@ -35,17 +32,26 @@ Chapters							Description
 
    controldeck
    input_cards
+   templates
    code_exe
-   process_results
 
 
-Data Flow Sequence
-------------------
+Data Flow
+---------
 
-1. Define all the universe files with cross-section data.
-2. Define all the template
-3. Define the control deck with the universe- and template-files includes within.
-4. Read the deck file; the code will automatically proceed by reading all the templates and universes files.
+The figure below is provided for explaining the data flow sequence.
+
+1. Begin by defining all the universe files with cross-section data.
+2. Proceed with defining unique template files to be used to output the information.
+3. Conclude the process with the control deck file that ties between universe and template files.
+
+After these files are established, the code can be exectuted and data can be post-processed.
+
+
+.. image:: images/dataflow.png
+  :width: 500
+  :align: center
+
 
 
 .. role:: underline

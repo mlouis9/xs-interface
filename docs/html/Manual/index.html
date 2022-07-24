@@ -38,18 +38,13 @@
 <span id="user-manual"></span><h1>User’s Manual<a class="headerlink" href="#user-s-manual" title="Permalink to this headline">¶</a></h1>
 <p>The User's Manual for the <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code> package describes the
 various inputs required by the code and its various applications.
-The User's Manual also describes the printed output options as well as the embedded post-processing capabilities.
-Input examples are provided for the main applications to assist in the preparation of new problems.</p>
-<p>The following table describes all the components to understand how to set and handle:</p>
-<ul class="simple">
-<li><p>Control deck file.</p></li>
-<li><p>Multiple files that define data definition for each unique cross-section set. These files include multiple input cards to define andd manipulate the data.</p></li>
-<li><p>Template files.</p></li>
-</ul>
+The User's Manual also describes the printed output options as well as the embedded post-processing capabilities.</p>
+<p>Input examples are provided for the main applications to assist in the preparation of new problems.</p>
+<p>The following table describes all the components needed to read, write, and process data.</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 24%" />
-<col style="width: 76%" />
+<col style="width: 30%" />
+<col style="width: 70%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Chapters</p></th>
@@ -57,30 +52,32 @@ Input examples are provided for the main applications to assist in the preparati
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="input_cards.html#universecards"><span class="std std-ref">Universe data cards</span></a></p></td>
+<td><p>Input cards necessary to define a universe/set</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="templates.html#templates"><span class="std std-ref">Templates</span></a></p></td>
+<td><p>Setting rules-based user-defined template files</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="controldeck.html#controldeck"><span class="std std-ref">Control Deck</span></a></p></td>
-<td><p>Modes of executions</p></td>
+<td><p>Control the input-to-output data flow</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="input_cards.html#universecards"><span class="std std-ref">XSs Set Cards</span></a></p></td>
-<td><p>Inputs cards necessary to set an input file for a unique XS set.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="code_exe.html#codeexe"><span class="std std-ref">Code Execution</span></a></p></td>
-<td><p>Modes of executions</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="process_results.html#processres"><span class="std std-ref">Post-process Results</span></a></p></td>
-<td><p>Results post-processing features.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="code_exe.html#codeexe"><span class="std std-ref">Code Execution</span></a></p></td>
+<td><p>Execution and post-processing of the code</p></td>
 </tr>
 </tbody>
 </table>
 <div class="toctree-wrapper compound">
 </div>
-<section id="data-flow-sequence">
-<h2>Data Flow Sequence<a class="headerlink" href="#data-flow-sequence" title="Permalink to this headline">¶</a></h2>
+<section id="data-flow">
+<h2>Data Flow<a class="headerlink" href="#data-flow" title="Permalink to this headline">¶</a></h2>
+<p>The figure below is provided for explaining the data flow sequence.</p>
 <ol class="arabic simple">
-<li><p>Define all the universe files with cross-section data.</p></li>
-<li><p>Define all the template</p></li>
-<li><p>Define the control deck with the universe- and template-files includes within.</p></li>
-<li><p>Read the deck file; the code will automatically proceed by reading all the templates and universes files.</p></li>
+<li><p>Begin by defining all the universe files with cross-section data.</p></li>
+<li><p>Proceed with defining unique template files to be used to output the information.</p></li>
+<li><p>Conclude the process with the control deck file that ties between universe and template files.</p></li>
 </ol>
+<p>After these files are established, the code can be exectuted and data can be post-processed.</p>
+<a class="reference internal image-reference" href="../_images/dataflow.png"><img alt="../_images/dataflow.png" class="align-center" src="../_images/dataflow.png" style="width: 500px;" /></a>
 </section>
 </section>
 
