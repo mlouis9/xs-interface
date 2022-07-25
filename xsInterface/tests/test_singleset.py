@@ -11,14 +11,13 @@ Container to collect, store, and process data including:
 
 
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
-Last updated on Mon Apr 11 05:40:00 2022 @author: Dan Kotlyar
+Last updated on Mon July 25 05:55:00 2022 @author: Dan Kotlyar
 
 changed what?: reset and state testing
 
 
 email: dan.kotlyar@me.gatech.edu
 
-email: dan.kotlyar@me.gatech.edu
 """
 
 import pytest
@@ -97,31 +96,37 @@ def test_flags():
     # Data Setup
     with pytest.raises(ValueError, match="Data type*"):
         rc = DataSettings(NG=2, DN=7, macro=False, micro=True, kinetics=True,
-                          meta=True, isotopes=[531350, 541350, 922350])
+                          meta=True, isotopes=[531350, 541350, 922350],
+                          nuclides='nd')
         rc.AddData("macro", ["attr"])
 
     with pytest.raises(ValueError, match="Data type*"):
         rc = DataSettings(NG=2, DN=7, macro=True, micro=False, kinetics=True,
-                          meta=True, isotopes=[531350, 541350, 922350])
+                          meta=True, isotopes=[531350, 541350, 922350],
+                          nuclides='nd')
         rc.AddData("micro", ["attr"])
 
     with pytest.raises(ValueError, match="Data type*"):
         rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=False,
-                          meta=True, isotopes=[531350, 541350, 922350])
+                          meta=True, isotopes=[531350, 541350, 922350],
+                          nuclides='nd')
         rc.AddData("kinetics", ["attr"])
 
     with pytest.raises(ValueError, match="Data type*"):
         rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                          meta=False, isotopes=[531350, 541350, 922350])
+                          meta=False, isotopes=[531350, 541350, 922350],
+                          nuclides='nd')
         rc.AddData("meta", ["attr"])
 
     rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                      meta=True, isotopes=[531350, 541350, 922350])
+                      meta=True, isotopes=[531350, 541350, 922350],
+                      nuclides='nd')
 
     # Data insertion
     with pytest.raises(ValueError, match="Data type*"):
         rc = DataSettings(NG=2, DN=7, macro=False, micro=True, kinetics=True,
-                          meta=True, isotopes=[531350, 541350, 922350])
+                          meta=True, isotopes=[531350, 541350, 922350],
+                          nuclides='nd')
         # rc.AddData("macro", ["inf_sp0"], [2])
         rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
         rc.AddData("meta", ["burnup", "keff"])
@@ -133,7 +138,8 @@ def test_flags():
 
     with pytest.raises(ValueError, match="Data type*"):
         rc = DataSettings(NG=2, DN=7, macro=True, micro=False, kinetics=True,
-                          meta=True, isotopes=[531350, 541350, 922350])
+                          meta=True, isotopes=[531350, 541350, 922350],
+                          nuclides='nd')
         rc.AddData("macro", ["inf_abs"])
         # rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
         rc.AddData("meta", ["burnup", "keff"])
@@ -145,7 +151,8 @@ def test_flags():
 
     with pytest.raises(ValueError, match="Data type*"):
         rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=False,
-                          meta=True, isotopes=[531350, 541350, 922350])
+                          meta=True, isotopes=[531350, 541350, 922350],
+                          nuclides='nd')
         rc.AddData("macro", ["inf_abs"])
         rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
         rc.AddData("meta", ["burnup", "keff"])
@@ -157,7 +164,8 @@ def test_flags():
 
     with pytest.raises(ValueError, match="Data type*"):
         rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                          meta=False, isotopes=[531350, 541350, 922350])
+                          meta=False, isotopes=[531350, 541350, 922350],
+                          nuclides='nd')
         rc.AddData("macro", ["inf_abs"])
         rc.AddData("micro", ["sig_c", "sig_f", "sig_n2n"])
         # rc.AddData("meta", ["burnup", "keff"], [1, 1])
@@ -231,7 +239,8 @@ def test_condense():
     """Errors for the energy condensation method"""
 
     rc = DataSettings(NG=2, DN=7, macro=True, micro=True, kinetics=True,
-                      meta=True, isotopes=[531350, 541350, 922350])
+                      meta=True, isotopes=[531350, 541350, 922350],
+                      nuclides='nd')
     rc.AddData("macro",
                ["inf_rabs", "inf_nsf", "kappa", "inf_sp0", "inf_flx"])
     rc.AddData("kinetics", ["beta", "decay"])
