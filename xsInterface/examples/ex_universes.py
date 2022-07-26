@@ -46,10 +46,10 @@ universes.TableValues("u0", attrs=["inf_nsf", 'inf_sp0'], fuel=900)
 
 # Get values
 # -----------------------------------------------------------------------------
-universes.Values("u0", attr="inf_nsf", fuel=900)
+universes.Values("u0", attr="inf_nsf", fuel=1500)
 
 # compare with using the direct container
-msets0.Values(attrs=["inf_nsf", 'inf_sp0'], fuel=900)
+msets0.Values(attrs=["inf_nsf", 'inf_sp0'], fuel=1500)
 
 # check that all states are defined
 # missingStates, existingStates = msets0._IsCompleteTable()
