@@ -19,7 +19,7 @@ Error checking - 04/11/2022 - DK
 """
 
 import numpy as np
-from numpy.matlib import repmat
+# from numpy.matlib import repmat
 
 from xsInterface.errors.checkerrors import _isint, _isarray, _is1darray,\
     _is2darray, _inrange, _ispositive, _isequallength, _isnonNegativeArray,\
@@ -110,7 +110,8 @@ def EnergyCondensation(ndim, ng, boundsE, attr, flux, cutoffE):
             for jg in range(condNG):
                 gToL = idxE[jg]
                 gToR = idxE[jg+1]
-                fluxMtx = repmat(flux[gFromL:gFromR], gToR-gToL, 1)
+                # fluxMtx = repmat(flux[gFromL:gFromR], gToR-gToL, 1)
+                fluxMtx = np.tile(flux[gFromL:gFromR], (gToR-gToL, 1))
                 fluxMtx = fluxMtx.transpose()
                 sctRR = (attr[gFromL:gFromR, gToL:gToR]*fluxMtx).sum()
                 condAttr[ig, jg] = sctRR / (flux[gFromL:gFromR]).sum()
