@@ -310,9 +310,20 @@ def _CleanDataCopy(dataIn, fmt0):
                 else:
                     fmt = fmt0  # default variable format
                 try:
-                    # replace execution occurrences
-                    tline = tline.replace('{}'.format(strsComplete[istrExe]),
-                                          fmt.format(eval(strExe)))
+                    # evaluate expression
+                    evalexpr = eval(strExe)
+                    if isinstance(evalexpr, (np.ndarray, list)):
+                        fmt = (fmt+' ')*len(evalexpr)
+                        fmt = fmt.rstrip()
+                        # replace execution occurrences
+                        tline =\
+                            tline.replace('{}'.format(strsComplete[istrExe]),
+                                          fmt.format(*evalexpr))
+                    else:
+                        # replace execution occurrences
+                        tline =\
+                            tline.replace('{}'.format(strsComplete[istrExe]),
+                                          fmt.format(evalexpr))
                 except ValueError as detail:
                     msg0 = msgExe + '{}\n'.format(tline) +\
                         'exe command: {}\n{}\n'.format(strExe,detail)

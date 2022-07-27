@@ -19,13 +19,18 @@ u0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositor
 
 set templates
 template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp2\template0
+template1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp2\template1
+template2 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp2\template2
 
 # -----------------------------------------------------------------------------
 #                            OUTPUT FILES
 # -----------------------------------------------------------------------------
 
 set outputs
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp2\output_
+template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp2\output0_
+template1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp2\output1_
+template2 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp2\output2_
+
 
 # -----------------------------------------------------------------------------
 #                           UNIVERSE-TO-FILES LINKS 
@@ -33,7 +38,8 @@ template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Re
 
 set links
 template0 u0
-
+template1 u0
+template2 u0
 
 # -----------------------------------------------------------------------------
 #                            FORMAT
