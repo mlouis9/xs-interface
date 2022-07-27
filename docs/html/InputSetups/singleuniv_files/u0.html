@@ -1,0 +1,1885 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Universe Data &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Control Deck" href="controlDict.html" />
+    <link rel="prev" title="Single Universe" href="../singleuniv.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="universe-data">
+<span id="single-u0"></span><h1>Universe Data<a class="headerlink" href="#universe-data" title="Permalink to this headline">¶</a></h1>
+<p>The following data file defines a complete set for the following states:</p>
+<ul class="simple">
+<li><p>2 history points</p></li>
+<li><p>3 time points</p></li>
+<li><p>2 fuel branches</p></li>
+<li><p>2 mod branches</p></li>
+<li><p>2 cool branches</p></li>
+</ul>
+<p>This file does not use a <code class="docutils literal notranslate"><span class="pre">filter</span></code> card as all the states are defined here; resulting in a square/complete matrix.
+The order at which <code class="docutils literal notranslate"><span class="pre">branches</span></code> are defined is important when values are processed. Here the order follows the <code class="docutils literal notranslate"><span class="pre">fuel</span></code>, <code class="docutils literal notranslate"><span class="pre">mod</span></code>, and <code class="docutils literal notranslate"><span class="pre">cool</span></code>.</p>
+<p>The data covers all the macro, micro, kinetics, and meta variables defined in the <code class="docutils literal notranslate"><span class="pre">settings</span></code> card.</p>
+<p>The data values, which are provided using the <code class="docutils literal notranslate"><span class="pre">data</span></code> set card (and <code class="docutils literal notranslate"><span class="pre">block</span></code>) can be provided in any order. Please note that <code class="docutils literal notranslate"><span class="pre">macro</span></code> and <code class="docutils literal notranslate"><span class="pre">micro</span></code> data here rely on the 2-group energy structure.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#            INPUT EXAMPLE FOR A SINGLE CROSS SECTION TYPE</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                            SETTINGS</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+
+<span class="nb">set</span> <span class="n">settings</span> <span class="mi">2</span> <span class="mi">7</span>
+<span class="n">macro</span> <span class="o">=</span>  <span class="n">inf_flx</span><span class="p">,</span> <span class="n">inf_nsf</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="p">,</span> <span class="n">inf_sp0</span>
+<span class="n">micro</span> <span class="o">=</span>  <span class="n">sig_f</span><span class="p">,</span> <span class="n">sig_sct</span><span class="p">,</span> <span class="n">nd</span>
+<span class="n">kinetics</span> <span class="o">=</span>  <span class="n">beta</span><span class="p">,</span> <span class="n">decay</span>
+<span class="n">meta</span> <span class="o">=</span>  <span class="n">date</span>
+<span class="n">isotopes</span> <span class="o">=</span> <span class="mi">531350</span><span class="p">,</span> <span class="mi">541350</span><span class="p">,</span> <span class="mi">922350</span>
+<span class="n">nuclides</span> <span class="o">=</span> <span class="n">nd</span>
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                            STATES</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+<span class="nb">set</span> <span class="n">branches</span> <span class="mi">3</span>
+<span class="n">fuel</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">1200</span>
+<span class="n">mod</span> <span class="mi">650</span><span class="p">,</span> <span class="mi">700</span>
+<span class="n">cool</span> <span class="mi">550</span><span class="p">,</span> <span class="mi">600</span>
+
+
+<span class="nb">set</span> <span class="n">histories</span> <span class="mi">2</span>
+<span class="n">nom</span> <span class="mi">850</span> <span class="mi">550</span> <span class="mi">570</span>
+<span class="n">pert</span> <span class="mi">950</span> <span class="mi">500</span> <span class="mi">525</span>
+
+<span class="nb">set</span> <span class="n">times</span> <span class="n">nounits</span>
+<span class="mf">0.0</span> <span class="mf">0.5</span> <span class="mf">1.0</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                            DATA</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+
+
+<span class="c1"># ----------------------------------</span>
+<span class="c1"># All branches</span>
+<span class="c1"># time=0.0</span>
+<span class="c1"># ----------------------------------</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.2</span> <span class="mf">0.2</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.3</span> <span class="mf">0.3</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.5</span> <span class="mf">0.5</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.6</span> <span class="mf">0.6</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.7</span> <span class="mf">0.7</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.8</span> <span class="mf">0.8</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="c1"># ----------------------------------</span>
+<span class="c1"># All branches</span>
+<span class="c1"># time=0.5</span>
+<span class="c1"># history=nom</span>
+<span class="c1"># ----------------------------------</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.9</span> <span class="mf">0.9</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">1.1</span> <span class="mf">1.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">1.2</span> <span class="mf">1.2</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">1.3</span> <span class="mf">1.3</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="c1"># ----------------------------------</span>
+<span class="c1"># All branches</span>
+<span class="c1"># time=1.0</span>
+<span class="c1"># history=nom</span>
+<span class="c1"># ----------------------------------</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="c1"># *******************************</span>
+<span class="c1"># Perturbed main branch</span>
+<span class="c1"># *******************************</span>
+
+
+<span class="c1"># ----------------------------------</span>
+<span class="c1"># All branches</span>
+<span class="c1"># time=0.0</span>
+<span class="c1"># history=nom</span>
+<span class="c1"># ----------------------------------</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="c1"># ----------------------------------</span>
+<span class="c1"># All branches</span>
+<span class="c1"># time=0.5</span>
+<span class="c1"># history=nom</span>
+<span class="c1"># ----------------------------------</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">0.5</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="c1"># ----------------------------------</span>
+<span class="c1"># All branches</span>
+<span class="c1"># time=1.0</span>
+<span class="c1"># history=nom</span>
+<span class="c1"># ----------------------------------</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">900.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">650</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">550</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">inf_flx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="n">branch</span> <span class="mf">1200.0</span> <span class="mi">700</span> <span class="mi">600</span>
+<span class="n">history</span> <span class="n">pert</span>
+<span class="n">time</span> <span class="mf">1.0</span>
+
+<span class="n">block</span> <span class="n">macro</span>
+<span class="n">inf_rabs</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+<span class="n">inf_nsf</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_flx</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">inf_sp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.1</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">decay</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+<span class="n">block</span> <span class="n">meta</span>
+<span class="n">date</span> <span class="n">April</span> <span class="mi">09</span><span class="p">,</span> <span class="mi">2022</span>
+
+<span class="n">block</span> <span class="n">micro</span>
+<span class="n">nd</span>
+<span class="mf">0.01</span>
+<span class="mf">0.02</span>
+<span class="mf">0.03</span>
+<span class="n">sig_sct</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="n">sig_f</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+<span class="mf">0.1</span> <span class="mf">0.1</span>
+
+
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                         DATA MANIPULATION</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+<span class="c1"># n/a</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                         FILTER DATA &amp; PRINT</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+
+<span class="c1"># n/a</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Input-Setups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Input-Setups</a><ul>
+  <li><a href="../singleuniv.html">Single Universe</a><ul>
+      <li>Previous: <a href="../singleuniv.html" title="previous chapter">Single Universe</a></li>
+      <li>Next: <a href="controlDict.html" title="next chapter">Control Deck</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/InputSetups/singleuniv_files/u0.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

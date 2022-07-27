@@ -302,19 +302,35 @@ def _CleanDataCopy(dataIn, fmt0):
                     strExe = strExe[0:condFrmt.span()[0]]
                     try:
                         fmtCheck = fmt.format(444)
-                    except:
-                        msg0 = 'Provided format <{}> is not valid.\n{}'\
-                        .format(fmt, tline)
-                        raise TemplateFileError(msg0)  
+                    except ValueError as detail:
+                        if fmt != '{:s}':
+                            msg0 = 'Provided format <{}> is not valid.\n{}'\
+                            .format(fmt, tline)
+                            raise TemplateFileError(msg0+'\n'+detail)  
                 else:
                     fmt = fmt0  # default variable format
                 try:
-                    # replace execution occurrences
-                    tline = tline.replace('{}'.format(strsComplete[istrExe]),
-                                          fmt.format(eval(strExe)))
-                except:
+                    # evaluate expression
+                    evalexpr = eval(strExe)
+                    if isinstance(evalexpr, (np.ndarray, list)):
+                        fmt = (fmt+' ')*len(evalexpr)
+                        fmt = fmt.rstrip()
+                        # replace execution occurrences
+                        tline =\
+                            tline.replace('{}'.format(strsComplete[istrExe]),
+                                          fmt.format(*evalexpr))
+                    else:
+                        # replace execution occurrences
+                        tline =\
+                            tline.replace('{}'.format(strsComplete[istrExe]),
+                                          fmt.format(evalexpr))
+                except ValueError as detail:
                     msg0 = msgExe + '{}\n'.format(tline) +\
-                        'exe command: {}\n'.format(strExe) 
+                        'exe command: {}\n{}\n'.format(strExe,detail)
+                    raise TemplateFileError(msg0)
+                except TypeError as detail:
+                    msg0 = msgExe + '{}\n'.format(tline) +\
+                        'exe command: {}\n{}\n'.format(strExe,detail) 
                     raise TemplateFileError(msg0)
 
                 

@@ -20,6 +20,7 @@ Python package to interact with ....
    overview
    contributors
    Manual/index
+   InputSetups/index
    Examples/index
    Methodology/index
    develop/index

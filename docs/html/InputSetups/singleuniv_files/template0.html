@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Template 0 &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Template 1" href="template1.html" />
+    <link rel="prev" title="Control Deck" href="controlDict.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="template-0">
+<span id="single-template0"></span><h1>Template 0<a class="headerlink" href="#template-0" title="Permalink to this headline">¶</a></h1>
+<p>This template shows how every state point can be obtained individually.</p>
+<p>The first part (i.e., <code class="docutils literal notranslate"><span class="pre">&quot;vari&quot;{times=[0,</span> <span class="pre">0.5,</span> <span class="pre">1]}</span> <span class="pre">...</span></code>) defines lists/arrays (using “vari”) that represent the various states considered in this case.</p>
+<p>Please note that nested “rep” blocks used here represent nested <code class="docutils literal notranslate"><span class="pre">for</span></code> blocks. The analogous pprogramming language:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">idxH</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">idxB</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">idxF</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fuel</span><span class="p">)):</span>
+                        <span class="k">for</span> <span class="n">idxM</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mod</span><span class="p">)):</span>
+                                <span class="k">for</span> <span class="n">idxC</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cool</span><span class="p">)):</span>
+                                        <span class="n">Do</span> <span class="n">something</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>In this example, we make the use of “varo” to assess different input variables, such as time at specific state points.
+For example, <code class="docutils literal notranslate"><span class="pre">&quot;varo&quot;{times[idxB]&lt;3.3f&gt;}</span></code> will assess the value of the <code class="docutils literal notranslate"><span class="pre">times</span></code> vector for different <code class="docutils literal notranslate"><span class="pre">idxB</span></code> values that change as we apply the  <code class="docutils literal notranslate"><span class="pre">&quot;vari&quot;{idxB=idxB+1}</span></code> coomand.</p>
+<p>Plesae note that we directly specify the format at which the output variable should be printed with (i.e., <code class="docutils literal notranslate"><span class="pre">&lt;3.3f&gt;</span></code>), but in principle the default format of any output variable is defined in the control deck file (and in our case is <code class="docutils literal notranslate"><span class="pre">d</span></code>).
+There might be a conflict created between the data values type and format used to output the data, e.g. attempt to print string values using float format. In such a case, an error is expected to be raised, and the user will need to change the format type accordingly.</p>
+<p>The evaluation of data is handled here through the “values” card.
+In this example, the values are assessed using dynamic values for the <code class="docutils literal notranslate"><span class="pre">fuel</span></code>, <code class="docutils literal notranslate"><span class="pre">mod</span></code>, <code class="docutils literal notranslate"><span class="pre">cool</span></code>, <code class="docutils literal notranslate"><span class="pre">time</span></code>, <code class="docutils literal notranslate"><span class="pre">history</span></code>; where <code class="docutils literal notranslate"><span class="pre">time</span></code> and <code class="docutils literal notranslate"><span class="pre">history</span></code> are preserved keywords.
+The <code class="docutils literal notranslate"><span class="pre">[]</span></code> capability allows to obtain group-wise values. The term <code class="docutils literal notranslate"><span class="pre">group</span></code> is arbitrary chosen here and refers to the number of components defining the basic parameter, e.g. <code class="docutils literal notranslate"><span class="pre">group</span></code> for <code class="docutils literal notranslate"><span class="pre">macro</span></code> types’ variables refers to the energy group, and for <code class="docutils literal notranslate"><span class="pre">kinetics</span></code> types’ variables it refers to the delayed neutron group.</p>
+<p>The following parameters are used in this example:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">inf_nsf</span></code> with 2 energy groups</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inf_sp0</span></code> with 2-by-2 matrix-like structure</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sig_f</span></code> with 3-by-2 matrix (3 indicates the number of isotopes, and 2 the number of energy groups).</p></li>
+</ul>
+<p>Using this template, the <code class="docutils literal notranslate"><span class="pre">values</span></code> capability will be iterated (over the history, times, and branches) using the “rep” rules to output energy bins-wise values. The corresponding output file can be found in <a class="reference internal" href="output0_u0.html#single-output0"><span class="std std-ref">Output 0</span></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ===================================================================================================================================================</span>
+    <span class="n">Each</span> <span class="n">energy</span> <span class="n">group</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">written</span> <span class="n">separately</span> <span class="k">for</span> <span class="n">every</span> <span class="n">perturbation</span> <span class="n">state</span>
+    <span class="mi">2</span> <span class="n">histories</span> <span class="o">/</span> <span class="mi">3</span> <span class="n">time</span> <span class="n">points</span> <span class="o">/</span> <span class="mi">2</span> <span class="n">fuel</span> <span class="n">temp</span><span class="o">.</span> <span class="o">/</span> <span class="mi">2</span> <span class="n">mod</span><span class="o">.</span> <span class="n">dens</span><span class="o">.</span> <span class="o">/</span> <span class="mi">2</span> <span class="n">coolant</span> <span class="n">temp</span><span class="o">.</span> <span class="o">/</span> <span class="mi">2</span> <span class="n">energy</span> <span class="n">groups</span>
+<span class="c1"># ===================================================================================================================================================</span>
+
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">times</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">fuel</span><span class="o">=</span><span class="p">[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">1200</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">mod</span><span class="o">=</span><span class="p">[</span><span class="mi">650</span><span class="p">,</span> <span class="mi">700</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">cool</span><span class="o">=</span><span class="p">[</span><span class="mi">550</span><span class="p">,</span> <span class="mi">600</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">history</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="s2">&quot;pert&quot;</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">isotopes</span><span class="o">=</span><span class="p">[</span><span class="mi">531350</span><span class="p">,</span> <span class="mi">541350</span><span class="p">,</span> <span class="mi">922350</span><span class="p">]}</span>
+
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxH</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="mi">2</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="mi">3</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxF</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{{</span><span class="mi">2</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxM</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{{{</span><span class="mi">2</span>
+ <span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxC</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{{{{</span><span class="mi">2</span>
+<span class="o">*</span> <span class="o">---------------------------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">History</span> <span class="o">=</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">history</span><span class="p">[</span><span class="n">idxH</span><span class="p">]</span><span class="o">&lt;</span><span class="n">s</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">Time</span> <span class="o">=</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">Fuel</span> <span class="n">T</span><span class="o">.</span> <span class="o">=</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">fuel</span><span class="p">[</span><span class="n">idxF</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">Mod</span><span class="o">.</span> <span class="n">T</span><span class="o">.</span> <span class="o">=</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">mod</span><span class="p">[</span><span class="n">idxM</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">Cool</span><span class="o">.</span> <span class="n">T</span><span class="o">.</span> <span class="o">=</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">cool</span><span class="p">[</span><span class="n">idxC</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">}</span>
+<span class="o">*</span> <span class="o">---------------------------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="n">INF_NSF</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{{{{{</span><span class="mi">2</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="o">=</span><span class="n">idxE</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+  <span class="n">Group</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="p">}</span>
+  <span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">inf_nsf</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">fuel</span><span class="p">[</span><span class="n">idxF</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.1</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">mod</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">mod</span><span class="p">[</span><span class="n">idxM</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.1</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">cool</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">cool</span><span class="p">[</span><span class="n">idxC</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.1</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">history</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">history</span><span class="p">[</span><span class="n">idxH</span><span class="p">]</span><span class="o">&lt;</span><span class="n">s</span><span class="o">&gt;</span><span class="p">}</span>  <span class="p">[</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="p">}]}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}}}}}</span>
+
+<span class="n">INF_SP0</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{{{{{</span><span class="mi">2</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="o">=</span><span class="n">idxE0</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{{{{{{</span><span class="mi">2</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="o">=</span><span class="n">idxE1</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+  <span class="n">Group</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="p">}</span> <span class="o">--&gt;</span> <span class="n">Group</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="p">}</span>
+  <span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">inf_sp0</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">fuel</span><span class="p">[</span><span class="n">idxF</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.1</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">mod</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">mod</span><span class="p">[</span><span class="n">idxM</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.1</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">cool</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">cool</span><span class="p">[</span><span class="n">idxC</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.1</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">history</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">history</span><span class="p">[</span><span class="n">idxH</span><span class="p">]</span><span class="o">&lt;</span><span class="n">s</span><span class="o">&gt;</span><span class="p">}</span>  <span class="p">[</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE0</span><span class="p">},</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE1</span><span class="p">}]}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}}}}}}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}}}}}</span>
+
+<span class="n">Microscopic</span> <span class="n">Fission</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxS</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{{{{{</span><span class="mi">3</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxS</span><span class="o">=</span><span class="n">idxS</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="n">Isotope</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">isotopes</span><span class="p">[</span><span class="n">idxS</span><span class="p">]}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="o">=-</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">{{{{{{{</span><span class="mi">2</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="o">=</span><span class="n">idxE</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+  <span class="n">Group</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="p">}</span>
+  <span class="s2">&quot;values&quot;</span><span class="p">{</span><span class="n">sig_f</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">fuel</span><span class="p">[</span><span class="n">idxF</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.1</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">mod</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">mod</span><span class="p">[</span><span class="n">idxM</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.1</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">cool</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">cool</span><span class="p">[</span><span class="n">idxC</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.1</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">times</span><span class="p">[</span><span class="n">idxB</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">3.3</span><span class="n">f</span><span class="o">&gt;</span><span class="p">},</span> <span class="n">history</span><span class="o">=</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">history</span><span class="p">[</span><span class="n">idxH</span><span class="p">]</span><span class="o">&lt;</span><span class="n">s</span><span class="o">&gt;</span><span class="p">}</span>  <span class="p">[</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxS</span><span class="p">},</span> <span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">idxE</span><span class="p">}]}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}}}}}}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}}}}}</span>
+
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxC</span><span class="o">=</span><span class="n">idxC</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}}}}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxM</span><span class="o">=</span><span class="n">idxM</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}}}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxF</span><span class="o">=</span><span class="n">idxF</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxB</span><span class="o">=</span><span class="n">idxB</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}}</span>
+<span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="n">idxH</span><span class="o">=</span><span class="n">idxH</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<span class="s2">&quot;rep&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Input-Setups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Input-Setups</a><ul>
+  <li><a href="../singleuniv.html">Single Universe</a><ul>
+      <li>Previous: <a href="controlDict.html" title="previous chapter">Control Deck</a></li>
+      <li>Next: <a href="template1.html" title="next chapter">Template 1</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/InputSetups/singleuniv_files/template0.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
