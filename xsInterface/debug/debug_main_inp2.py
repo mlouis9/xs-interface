@@ -38,7 +38,7 @@ xs.Table("u0", ['inf_nsf'], time=0.0, history='nom', fuel=900, mod=650,
          cool=600)
 
 # obtain results:
-xs.Values("u0", 'inf_nsf', time=0.0, history='nom', fuel=900, mod=650,
+xs.Values("u0", 'inf_nsf', time=0.0, history='nom',
           cool=600)
 xs.Values("u0", 'inf_nsf', time=0.0, history='nom', mod=650, cool=550)
 xs.Values("u0", 'inf_nsf', fuel=900, mod=650, cool=600,time=0.0, history='nom')

@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Single Universe &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Universe Data" href="singleuniv_files/u0.html" />
+    <link rel="prev" title="Input-Setups" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="single-universe">
+<span id="singleuniv"></span><h1>Single Universe<a class="headerlink" href="#single-universe" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>To execute the problem, the user is required to prepare the following files:</p>
+<ol class="arabic simple">
+<li><p>A single control deck (<a class="reference internal" href="singleuniv_files/controlDict.html#single-controldeck"><span class="std std-ref">Control Deck</span></a>) file - defining universe and template files to be read.</p></li>
+<li><p>Universe file/s (<a class="reference internal" href="singleuniv_files/u0.html#single-u0"><span class="std std-ref">Universe Data</span></a>) - a single universe file is defined here.</p></li>
+<li><p>Template file/s (<a class="reference internal" href="singleuniv_files/template0.html#single-template0"><span class="std std-ref">Template 0</span></a>, <a class="reference internal" href="singleuniv_files/template1.html#single-template1"><span class="std std-ref">Template 1</span></a>, <a class="reference internal" href="singleuniv_files/template2.html#single-template2"><span class="std std-ref">Template 2</span></a>) - three template files are defined here to demonestrate multiple ways to write the same information.</p></li>
+</ol>
+<p>Each file referenced above provides description of the states, data, and the template used for outputting data.</p>
+</section>
+<section id="application-of-xsinterface">
+<h2>Application of <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code>:<a class="headerlink" href="#application-of-xsinterface" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ---------------------------------------------------------------------</span>
+<span class="c1"># Import xsInterface</span>
+<span class="c1"># ---------------------------------------------------------------------</span>
+<span class="kn">from</span> <span class="nn">xsInterface.functions.main</span> <span class="kn">import</span> <span class="n">Main</span>
+
+<span class="c1"># ---------------------------------------------------------------------</span>
+<span class="c1"># Define the Input Control File</span>
+<span class="c1"># ---------------------------------------------------------------------</span>
+<span class="n">inpFile</span> <span class="o">=</span> <span class="s1">&#39;.</span><span class="se">\\</span><span class="s1">controlDict&#39;</span>
+
+<span class="c1"># ---------------------------------------------------------------------</span>
+<span class="c1"># Read Input File</span>
+<span class="c1"># ---------------------------------------------------------------------</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">Main</span><span class="p">(</span><span class="n">inputFile</span><span class="p">)</span>  <span class="c1"># Read the control dict</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>   <span class="c1"># Read xs data and templates and populate data</span>
+
+<span class="c1"># ---------------------------------------------------------------------</span>
+<span class="c1"># Write to output files</span>
+<span class="c1"># ---------------------------------------------------------------------</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+
+<span class="c1"># ---------------------------------------------------------------------</span>
+<span class="c1"># Basic capablity to obtain results</span>
+<span class="c1"># ---------------------------------------------------------------------</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;inf_nsf&#39;</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">650</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;inf_nsf&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">650</span><span class="p">,</span> <span class="n">cool</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="s1">&#39;nom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="outputs-generated-by-xsinterface">
+<h2>Outputs generated by <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code>:<a class="headerlink" href="#outputs-generated-by-xsinterface" title="Permalink to this headline">¶</a></h2>
+<p>After executing the <code class="docutils literal notranslate"><span class="pre">xs.Write()</span></code> command in the code snippet provided above, the following files are created.</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="singleuniv_files/output0_u0.html#single-output0"><span class="std std-ref">Output 0</span></a> corresponding the template provided in <a class="reference internal" href="singleuniv_files/template0.html#single-template0"><span class="std std-ref">Template 0</span></a>.</p></li>
+<li><p><a class="reference internal" href="singleuniv_files/output1_u0.html#single-output1"><span class="std std-ref">Output 1</span></a> corresponding the template provided in <a class="reference internal" href="singleuniv_files/template1.html#single-template1"><span class="std std-ref">Template 1</span></a>.</p></li>
+<li><p><a class="reference internal" href="singleuniv_files/output2_u0.html#single-output2"><span class="std std-ref">Output 2</span></a> corresponding the template provided in <a class="reference internal" href="singleuniv_files/template2.html#single-template2"><span class="std std-ref">Template 2</span></a>.</p></li>
+</ol>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Input-Setups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Input-Setups</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Input-Setups</a></li>
+      <li>Next: <a href="singleuniv_files/u0.html" title="next chapter">Universe Data</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/InputSetups/singleuniv.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
