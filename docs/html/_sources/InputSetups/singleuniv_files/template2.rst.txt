@@ -3,7 +3,7 @@
 Template 2
 ----------
 
-This template shows present a mix of :ref:`single_template0` and  :ref:`single_template1`. The template also demonestrates how to change the order of writing data.
+This template presents a mix of :ref:`single_template0` and  :ref:`single_template1`. The template also demonestrates how to change the order of writing data.
 
 Please note that every time the "values" rule is used all the variables are dynamically defined excluding the ``fuel`` parameter. This results in obtaining 2 values for the parameter of interest (e.g., ``inf_nsf``) corresponding to the 2 fuel state points of 900K and 1200K.
 The following iterative sequence is implemented here via the use of the "rep" rules.
