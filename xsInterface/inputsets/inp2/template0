@@ -1,0 +1,44 @@
+# ---------------------------------------------------------------------
+
+    The main purpose of this file is to:
+    	Demonestrate various approach to obtain and print data values.
+    
+# ---------------------------------------------------------------------
+
+"vari"{times=[0, 0.5, 1]}
+"vari"{fuel=[900, 1200]}
+"vari"{mod=[650, 700]}
+"vari"{coolant=[550, 600]}
+"vari"{history=["nom", "pert"]}
+
+"vari"{idxB=0}
+"vari"{idxF=0}
+"vari"{idxM=0}
+"vari"{idxC=0}
+"vari"{idxH=0}
+
+	 
+"rep"{3
+* ----------------------------------------------------------------
+  History = "varo"{history[idxH]<s>}
+  Time = "varo"{times[idxB]<3.3f>}
+  Fuel T. = "varo"{fuel[idxF]<3.3f>}
+  Mod. T. = "varo"{mod[idxM]<3.3f>}
+  Cool. T. = "varo"{coolant[idxC]<3.3f>} 
+* ----------------------------------------------------------------
+
+
+"vari"{idxE=-1}
+"rep"{{2
+"vari"{idxE=idxE+1}
+  Group "varo"{idxE}
+  Only coolant T is changing: "values"{inf_nsf, fuel="varo"{fuel[idxF]<3.1f>}, mod="varo"{mod[idxF]<3.1f>}, time="varo"{times[idxB]<3.3f>}, history="varo"{history[idxH]<s>}  ["varo"{idxE}]} 
+  Fuel T and Cool T are changing: "values"{inf_nsf, mod="varo"{mod[idxF]<3.1f>}, time="varo"{times[idxB]<3.3f>}, history="varo"{history[idxH]<s>}  ["varo"{idxE}]} 
+	Fuel, mod., and cool, are printed: "values"{inf_nsf, time="varo"{times[idxB]<3.3f>}, history="varo"{history[idxH]<s>}  ["varo"{idxE}]} 
+
+"rep"}}
+
+
+"vari"{idxB=idxB+1}
+"rep"}
+
