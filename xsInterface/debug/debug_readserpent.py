@@ -6,7 +6,7 @@ Debug:
 Read the data using the ``serpentTools`` package.
 
 Created on Sat July 30 05:00:00 2022 @author: Dan Kotlyar
-Last updated on Sat July 30 05:00:00 2022 @author: Dan Kotlyar
+Last updated on Wed Aug 04 16:00:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 

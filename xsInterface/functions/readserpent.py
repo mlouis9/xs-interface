@@ -1,6 +1,8 @@
 """readserpent.py
 
-Read the data using the ``serpentTools`` package.
+Read the data in multiple .coe branch files using the ``serpentTools`` package.
+This method allows to read multiple history files with multiple universes.
+It also allows to filter the data/attributes of interest.
 
 Created on Sat July 30 05:00:00 2022 @author: Dan Kotlyar
 Last updated on Wed Aug 04 16:00:00 2022 @author: Dan Kotlyar
@@ -74,6 +76,7 @@ def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
     """
 
     # Error checking
+    _errorscheck(fnames, strLabels, numLabels, attrs, times, burnups)
 
     # Read all the .coe file
     dataStrBranches = _ReadHistoryFiles(fnames)
@@ -266,8 +269,9 @@ def _ReLabelStates(dataIn, strLabels, numLabels):
                         dataOut[univId][histId][timeIdx][numIds[idxId]] =\
                             branchData
                     else:
-                        raise SerpentFileError("No branch <{}>"
-                                                   .format(branchId))
+                        raise SerpentFileError(
+                            "Branch <{}> not provided\nfor univ=<{}>; "
+                            "history=<{}>".format(branchId, univId, histId))
                     
     return dataOut
 
@@ -449,7 +453,7 @@ def _errorscheck(fnames, strLabels, numLabels, attrs, times, burnups):
             numLabels[key] = np.array(numvals, dtype=float)
         except (ValueError, TypeError) as detail:
             raise SerpentFileError("Values <{}> for <{}>\n{}"
-                                   .format(strvals, key, detail))
+                                   .format(numvals, key, detail))
 
 
     # -------------------------------------------------------------------------    
@@ -477,5 +481,7 @@ def _errorscheck(fnames, strLabels, numLabels, attrs, times, burnups):
         except (TypeError, ValueError) as detail:   
             raise SerpentFileError("{}".format(detail))
     if attrs is not None:
-        _isarray(attrs, "Attributes")
-    
+        try:
+            _isarray(attrs, "Attributes")
+        except (TypeError, ValueError) as detail:   
+            raise SerpentFileError("{}".format(detail))    
