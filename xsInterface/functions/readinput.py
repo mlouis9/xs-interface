@@ -5,7 +5,7 @@ Read the user-based input file.
 All the input data are provided via the use of input cards.
 
 Created on Mon May 06 12:10:00 2022 @author: Dan Kotlyar
-Last updated on Tue May 24 17:00:00 2022 @author: Dan Kotlyar
+Last updated on Fri Aug 05 13:00:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -15,7 +15,7 @@ Clean the inpit file from comments  - 05/06/2022 - DK
 Import Settings, States - 05/12/2022 - DK
 Import single data set - 05/22/2022 - DK
 Import & populate multiple data set - 05/24/2022 - DK
-
+Import & populate serpent data - 08/05/2022 - DK
 
 """
 
@@ -25,7 +25,8 @@ from re import compile, IGNORECASE
 import numpy as np
 
 from xsInterface.containers.container_header import DataSettingsCard,\
-    BranchCard, HistoryCard, TimeCard, DataCard, ManipulateCard, FilterCard
+    BranchCard, HistoryCard, TimeCard, DataCard, ManipulateCard, FilterCard,\
+        SerpentCard
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.singleset import SingleSet
 from xsInterface.containers.multiplesets import MultipleSets
@@ -54,7 +55,8 @@ CARD_REGEX = {
     "times": compile(r'\s*(set\s+)(times)', IGNORECASE),
     "data": compile(r'\s*(set\s+)(data)', IGNORECASE),
     "manipulate": compile(r'\s*(set\s+)(manipulate)', IGNORECASE),
-    "filter": compile(r'\s*(set\s+)(filter)', IGNORECASE),}
+    "filter": compile(r'\s*(set\s+)(filter)', IGNORECASE),
+    "serpent": compile(r'\s*(set\s+)(serpent)', IGNORECASE),}
 
 INPUT_CARDS =\
     {'settings': DataSettingsCard,
@@ -63,7 +65,8 @@ INPUT_CARDS =\
      'times': TimeCard,
      'data': DataCard,
      'manipulate': ManipulateCard,
-     'filter': FilterCard}
+     'filter': FilterCard,
+     'serpent': SerpentCard, }
 
 
 
@@ -420,6 +423,61 @@ def _ImportBranches(setLine, tlines):
                                  .format(item, errmsg), INPUT_CARDS, card)
 
     return N, data
+
+
+def _ImportSerpentFiles(setLine, tlines):
+    """import names of Serpent .coe files"""
+
+    # Requirements
+    # -------------------------------------------------------------------------
+    card = "serpent" 
+    expinputs = ['<N>']
+    expvals = [1, 1]
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+
+    # Process the set line values
+    # -------------------------------------------------------------------------
+    setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
+    setValues = np.array(setValues, dtype=int)
+    N = int(setValues[0])
+
+    # Process the set card values
+    # -------------------------------------------------------------------------
+    errmsg = "<set {}>.\n".format(card)
+    
+    data = {}  # dictionary to store history .coe files
+    # loop over all the data lines (with file names)
+    for tline in tlines:
+        tline = tline.replace('=', '')  # remove "=" signs
+        
+        idx = FIRSTWORD_REGEX.search(tline).span()
+        name = tline[idx[0]:idx[1]]
+        coefile = tline[idx[1]:]
+
+        # remove redundant spaces at both ends of the file string
+        coefile = coefile.rstrip()
+        coefile = coefile.lstrip()
+        
+        data[name] = coefile
+           
+
+    # Error Checking
+    # -------------------------------------------------------------------------
+    # N/A
+
+    # Data manipulation
+    # -------------------------------------------------------------------------       
+    for item, value in data.items():
+        if value == '' or value == None:
+            raise InputCardError("No data provided for serpent <{}>.\n{}"
+                                 .format(item, errmsg), INPUT_CARDS, card)
+            
+    if N != len(data):
+        raise InputCardError("Expected num. of files=<{}>; provided=<{}>.\n{}"
+                             .format(N, len(data), errmsg), INPUT_CARDS, card)        
+
+    return N, data
+
 
 
 def _ImportHistories(setLine, tlines):

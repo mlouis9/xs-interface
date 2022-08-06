@@ -64,3 +64,9 @@ FilterCard = {
     "times": "Boolean flag to indicate what time-points are included",
     "attributes": "Attributes to be included"
     }
+
+SerpentCard = {
+    "N": "number of branches",
+    "history name": "corresponding .coe file"
+    }
+

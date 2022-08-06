@@ -5,15 +5,13 @@ should be read. It also specifies the format that wil be used to output
 the required information.
 
 Created on Tue July 19 13:35:00 2022 @author: Dan Kotlyar
-Last updated on Tue July 19 16:30:00 2022 @author: Dan Kotlyar
+Last updated on Fri Aug 05 13:30:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 Read - 07/19/2022 - DK
-
-
 
 """
 
