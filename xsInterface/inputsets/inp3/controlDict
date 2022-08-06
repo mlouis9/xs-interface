@@ -10,8 +10,8 @@
 
 
 set universes
-fuel_0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\fuel
-ref_0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\fuel
+fuel C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\fuel
+ref C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\fuel
 
 
 # -----------------------------------------------------------------------------
@@ -34,7 +34,7 @@ template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Re
 # -----------------------------------------------------------------------------
 
 set links
-template0 fuel_0 ref_0
+template0 fuel ref
 
 # -----------------------------------------------------------------------------
 #                            FORMAT

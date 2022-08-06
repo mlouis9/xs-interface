@@ -26,7 +26,7 @@ import numpy as np
 
 from xsInterface.containers.container_header import DataSettingsCard,\
     BranchCard, HistoryCard, TimeCard, DataCard, ManipulateCard, FilterCard,\
-        SerpentCard
+        SerpentCard, LabelCard
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.singleset import SingleSet
 from xsInterface.containers.multiplesets import MultipleSets
@@ -56,7 +56,8 @@ CARD_REGEX = {
     "data": compile(r'\s*(set\s+)(data)', IGNORECASE),
     "manipulate": compile(r'\s*(set\s+)(manipulate)', IGNORECASE),
     "filter": compile(r'\s*(set\s+)(filter)', IGNORECASE),
-    "serpent": compile(r'\s*(set\s+)(serpent)', IGNORECASE),}
+    "serpent": compile(r'\s*(set\s+)(serpent)', IGNORECASE),
+    "labels": compile(r'\s*(set\s+)(labels)', IGNORECASE),}
 
 INPUT_CARDS =\
     {'settings': DataSettingsCard,
@@ -66,7 +67,8 @@ INPUT_CARDS =\
      'data': DataCard,
      'manipulate': ManipulateCard,
      'filter': FilterCard,
-     'serpent': SerpentCard, }
+     'serpent': SerpentCard, 
+     'labels': LabelCard, }
 
 
 
@@ -138,9 +140,11 @@ def _ProcessCards(data):
           "histories": None, "times": None, "units": None}
     singlesets = {}  # dictionary to store all the single sets
     iset = 0
-    cutoffE = None  # new wnergy condensation cutoff g
+    cutoffE = None  # new wnergy condensation cutoff groups
     manipData = {}  # data to be manipulated
     filterData = {}  # filter data
+    labels = {}  # labels for reading serpent .coe files
+    serpent = {}  # dict to store serpent files
     # -------------------------------------------------------------------------    
 
     cardsList = list(INPUT_CARDS.keys())
@@ -184,6 +188,10 @@ def _ProcessCards(data):
                 card = 'filter'
                 setLine = cardKey[cFound['filter'].span()[1]:]
                 filterData = _ImportFilter(setLine, cardData) 
+            elif cFound['serpent'] is not None:
+                card = 'serpent'
+                setLine = cardKey[cFound['serpent'].span()[1]:]
+                serpent = _ImportSerpentFiles(setLine, cardData) 
             else:
                 raise InputGeneralError("Card does not exist: <{}>"
                                         .format(cardKey))
@@ -368,6 +376,8 @@ def _ImportSettings(setLine, tlines):
     try:
         if dvals["nuclides"] is not None:
             nuclides = dvals["nuclides"][0]
+        else:
+            nuclides = None
         rc = DataSettings(NG, DN, flags["macro"], flags["micro"],
                           flags["kinetics"], flags["meta"], dvals["isotopes"],
                           nuclides)

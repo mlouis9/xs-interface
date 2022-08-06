@@ -70,3 +70,7 @@ SerpentCard = {
     "history name": "corresponding .coe file"
     }
 
+
+LabelCard = {
+    "N": "number of branches to relabel",
+    }
