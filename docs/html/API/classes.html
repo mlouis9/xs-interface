@@ -464,7 +464,7 @@ lowest energy bound.</p></li>
 <span id="api-multisets"></span><h1>MultiSets<a class="headerlink" href="#multisets" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="xsInterface.containers.multiplesets.MultipleSets">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">xsInterface.containers.multiplesets.</span></span><span class="sig-name descname"><span class="pre">MultipleSets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">macro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">micro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kinetics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">xsInterface.containers.multiplesets.</span></span><span class="sig-name descname"><span class="pre">MultipleSets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">macro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">micro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kinetics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overWrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets" title="Permalink to this definition">¶</a></dt>
 <dd><p>A container to store the data for all the perturbation states</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -475,6 +475,7 @@ and time parameters.</p></li>
 <li><p><strong>micro</strong> (<em>bool</em>) – flag to incdicate if all data in micro must be defined</p></li>
 <li><p><strong>kinetics</strong> (<em>bool</em>) – flag to incdicate if all data in kinetics must be defined</p></li>
 <li><p><strong>meta</strong> (<em>bool</em>) – flag to incdicate if all data in meta must be defined</p></li>
+<li><p><strong>overWrite</strong> (<em>bool</em>) – flag to incdicate if data can be overwritten</p></li>
 </ul>
 </dd>
 </dl>
@@ -526,6 +527,17 @@ and time parameters.</p></li>
 <dt class="sig sig-object py" id="xsInterface.containers.multiplesets.MultipleSets.meta">
 <span class="sig-name descname"><span class="pre">meta</span></span><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.meta" title="Permalink to this definition">¶</a></dt>
 <dd><p>flag to incdicate if all data in meta must be defined</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xsInterface.containers.multiplesets.MultipleSets.overWrite">
+<span class="sig-name descname"><span class="pre">overWrite</span></span><a class="headerlink" href="#xsInterface.containers.multiplesets.MultipleSets.overWrite" title="Permalink to this definition">¶</a></dt>
+<dd><p>flag to incdicate if data can be overwritten</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>bool</p>

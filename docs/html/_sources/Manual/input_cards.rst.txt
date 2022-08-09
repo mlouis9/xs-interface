@@ -23,6 +23,10 @@ Set what?							Description
 --------------------- -------------------------------------------------------------------
 :ref:`i_data`					Define data to be added to a specific (branch, history, time) set.
 --------------------- -------------------------------------------------------------------
+:ref:`i_serpent`			Serpent branch .coe file from which data is read.
+--------------------- -------------------------------------------------------------------
+:ref:`i_labels`				Branch labels as they appear in Serpent branch .coe file.
+--------------------- -------------------------------------------------------------------
 :ref:`i_manipulate`		Data manipulation including energy condensation and math operations.
 --------------------- -------------------------------------------------------------------
 :ref:`i_filter`				States and data names to be filtered/included.
@@ -241,6 +245,8 @@ and, the time/burnup  values are provided in the following lines.
 	9 11 18 19
 	40 50
 
+
+
 .. _i_data:
 
 ======
@@ -354,6 +360,116 @@ the **sub-cards** defined under the different blocks are described below.
 	11, 12  % isotope-1  
 	11, 12  % isotope-2
 	11, 12  % isotope-3
+
+
+
+.. _i_serpent:
+
+=======
+Serpent
+=======
+
+
+**Serpent branch .coe files.**
+
+*Optional Card*. Must be provided together with :ref:`i_labels`.
+
+.. code::
+		
+   set serpent <N> <TIME> <FLUX>, <ENE>
+   <history-1> <.coe file 1>
+   <history-2> <.coe file 2>
+   ...
+  
+
+where in the **set** line,
+ - ``N`` describe the number of .coe files to be provided in the following rows.
+ - ``TIME`` is an indicator whether the time- (positive entires) or burnup-points (negative entries) are to be collected for the values provided in :ref:`i_times`.
+ - ``FLUX`` is the name of the flux variable used in serpent, similarly defined in :ref:`i_data`.
+ - ``ENE`` energy structure in descending order similarly used in :ref:`i_data`. Must include upper and lower boundaries, e.g., for a 2-group structure:  
+
+	.. code::
+
+		set data infflx 10.0E+6, 0.6025, 0.0
+		
+
+and, the names of the history branches along with their .coe files are provided in the following lines.
+	- ``history`` must correspond to the history names provided in :ref:`i_histories`.
+	- It must be pointed out that the history branches are read from separate .coe files as currently `Serpent <https://serpent.vtt.fi/mediawiki/index.php/Automated_burnup_sequence>`_ cannot produce multiple histories in a single .coe file. 
+	- Each .coe file can include a single or multiple universes.
+
+
+**Notes:**	
+	*	`serpentTools-1 <https://serpent-tools.readthedocs.io/en/master/index.html>`_ is used to read all the .coe files provided under this card.
+	* `serpentTools-2 <https://serpent-tools.readthedocs.io/en/master/variableGroups.html>`_ convert the original ``SERPENT_STYLE_VARIABLES`` variable to ``mixedCaseNames``. For example, ``INF_FLX`` is converted to ``infFlx``.
+	* Number of histories defined here must allign with the number and names of histories defined in :ref:`i_histories`.
+	
+**Examples**:
+
+.. code::
+		
+	set serpent 2 +1 infFlx 10.0E+6, 0.6025, 0.0
+	nom  .\inp\fuel_nom.coe
+	pert  .\inp\fuel_nom.coe
+
+
+or, if burnup points are to be collected:
+
+.. code::
+		
+	set serpent 2 -1 infFlx 10.0E+6, 0.6025, 0.0
+	nom  .\inp\fuel_nom.coe
+	pert  .\inp\fuel_nom.coe
+
+.. _i_labels:
+
+============
+Labels
+============
+
+
+**Branch labels defined in Serpent .coe files.** 
+
+*Optional Card*. But, must be provided if :ref:`i_serpent` is provided.
+
+.. code::
+		
+   set labels <N>
+   <branch-1> <val1> <val2> <val3> ...
+   <branch-2> <val1> <val2> <val3> ...
+   ...
+  
+
+where in the **set** line,
+ - ``N`` number of branch types (mandatory).
+
+and, in the **<branch> sub-cards**,
+	- number of sub-cards must be equal to ``N``.
+	- ``branch-N`` is the user-defined name (e.g., fuel) that must correspond to the branch names provided in :ref:`i_branches`.
+	- Values correspond to the names that appear in the serpent branch .coe files. In addition, the order at which the values are provided must follow the same order as given in :ref:`i_branches`. 
+
+	.. code::
+
+		set branches 1
+		fuel 600.0 900.0 1200.0 1500.0 1800.0
+		
+		set labels 1
+		fuel f600 nom f1200 f1500 f1800
+
+
+**Notes:**	
+	*	This card must be provided together with :ref:`i_serpent`.
+	* The .coe branch files may contain more bracnhes than are required by the user, and yet the user must provide ALL the branches that appear in the file. Some of these points can then be filtered using :ref:`i_filter`.
+
+**Examples**:
+
+.. code::
+
+	set labels 3
+	fuel f600, nom, f1200, f1500
+	boron b0, nom, b2250 
+	dens dens630, nom, dens780 
+
 
 
 
