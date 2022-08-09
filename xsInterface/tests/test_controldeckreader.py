@@ -48,6 +48,17 @@ GOOD_LINKS = [
     'tmpl0 u0 \n',
     'tmpl1 u1 \n',]
 
+GOOD_SERP = [
+    'set universes\n',
+    'fuel .\\inp1\\u0 \n',
+    'ref .\\inp1\\u1 \n',
+    'set links\n',
+    'tmpl0 fuel0 \n',
+    'tmpl1 ref1 \n',
+    'set serpent\n',
+    'fuel 0 \n',
+    'ref 1 \n',
+    ]
 
 GOOD_FORMATS = [
     'set formats 8 .dat\n',
@@ -90,7 +101,17 @@ BAD_FORMATS2 = [
     'attr 6.6e         \n',
     'var 5d            \n',]
 
-
+BAD_SERP = [
+    'set universes\n',
+    'fuel .\\inp1\\u0 \n',
+    'ref .\\inp1\\u1 \n',
+    'set links\n',
+    'tmpl0 fuel0 \n',
+    'tmpl1 ref1 \n',
+    'set serpent\n',
+    'fuel 0 \n',
+    'ref 0 \n',
+    ]
 
 
 
@@ -184,6 +205,26 @@ def test_links(tmp_path):
         #f.writelines(GOOD_LINKS)
         f.writelines(BAD_LINKS) 
         f.writelines(GOOD_FORMATS)
+
+    # the input writing is perforned using conftest
+    with pytest.raises(ControlFileError, match="!!!*"):
+        Read(filepath)
+
+
+def test_serpent(tmp_path):
+    """Errors when reseting the settings"""
+
+    d = tmp_path / "temp"
+    d.mkdir()
+    p = d / "inp.txt"
+    filepath = str(p)
+    
+
+    with open(filepath, 'w') as f:
+        f.writelines(BAD_SERP)
+        f.writelines(GOOD_TEMPLATES)
+        f.writelines(GOOD_OUTPUTS)
+
 
     # the input writing is perforned using conftest
     with pytest.raises(ControlFileError, match="!!!*"):

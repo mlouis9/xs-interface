@@ -18,7 +18,9 @@ Set what?							Description
 --------------------- -------------------------------------------------------------------
 :ref:`j_outputs`		  Definition of template Ids and correpsonding output file names.
 --------------------- -------------------------------------------------------------------
-:ref:`j_links`				Linking between template Ids and universe Ids..
+:ref:`j_links`				Linking between template Ids and universe Ids.
+--------------------- -------------------------------------------------------------------
+:ref:`j_serpent`			Linking between user-defined universe Ids and serpent-defined universe Ids.
 --------------------- -------------------------------------------------------------------
 :ref:`j_formats`			Formatting control parameters.
 ===================== ===================================================================
@@ -171,7 +173,7 @@ where,
 	
 	*	This card can be omitted.
 	*	Each ``template name`` can have a single or multiple ``universe name``.
-	* If multiple universes are provided for a specific template then multiple ooutput files will be created. Their naming will differe by the postfix name of the specific universe, e.g. ``output_u0``, ``output_u1`` and so on. 
+	* If multiple universes are provided for a specific template then multiple ouutput files will be created. Their naming will differ by the postfix name of the specific universe, e.g. ``output_u0``, ``output_u1`` and so on. 
 
 
 **Example**:
@@ -181,6 +183,77 @@ where,
 	set links
 	template1 u0 u1
 	template2 u2
+
+
+.. _j_serpent:
+
+=======
+serpent
+=======
+
+**Linkage between user-defined universes and serpent universe Ids defined within the .coe files.**
+
+*Optional Card*
+
+
+The card allows to specify which universes defined within the serpent files must be read. These Ids are linked to the universe Ids provided by the user.
+
+This card does not have to be provided, in which case the data is expected to be provided directly by the user. Even if the card provided, it can only be specified for selected universes.
+
+The ``serpent`` card can be defined for selected user-defined universes with matching serpent-defined universe Ids. For these original universes the Id will be renamed according to the following rule:
+
+
+.. code::
+
+	"original univId"+"serpent Id", e.g.,
+	"fuel"+"0" will result in "fuel0".
+	
+There is no need to use the "" marks. 
+
+
+.. code::
+		
+   set serpent
+   <univ Id1> <serpent universe Id11> <serpent universe Id12> ...
+   <univ Id2> <serpent universe Id21> <serpent universe Id22> ...
+   ...
+  
+
+where,
+
+ - ``univ Id`` is an user defined universe Id, which must be defined in the :ref:`j_universes` card.
+ - ``serpent universe Id`` is the serpent defined universes Ids within the .coe files.
+
+
+**Notes:**
+	
+	*	This card can be omitted, in which case all the data would be expected to be provided directly by the user.
+	*	Each ``univ Id`` can have a single or multiple ``serpent universe Id``.
+
+
+**Example**:
+
+.. code::
+
+	set universes
+	fuel ..\inputsets\fuel
+	ref ..\inputsets\reflector
+
+	set serpent
+	fuel 0, 1, 2, 3, 4, 5
+
+
+*	In the example above, it is important to note that the universes ``0``, ..., ``5`` must exist in the .coe files provided within ``..\inputsets\fuel``
+* As the ``serpent`` card is defined, the universe Ids for the original ``fuel`` will become ``fuel0``, ..., ``fuel5``
+* As the ``serpent`` card does not include the ``ref`` universe, its name still remains ``ref`` universe.
+* The definition in the ``links`` card must be consistent with the ``serpent`` one, such that:
+	
+.. code::
+
+	set links
+	template1 fuel0, fuel1, fuel2, fuel3, fuel4, fuel5
+	template2 ref
+
 
 
 .. _j_formats:
