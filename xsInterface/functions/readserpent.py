@@ -126,8 +126,8 @@ def _ReadHistoryFiles(fnames):
         
         for historyId, coeFile in fnames[univUsrId].items():
 
-            print("... Reading coe file for univ= <{}>, hisotry <{}> ..."
-                  .format(univUsrId, historyId))
+            print("... Reading coe file for hisotry <{}> ..."
+                  .format(historyId))
             coedata = _ReadCoefFile(coeFile)
         
             for univ in coedata:
@@ -359,28 +359,27 @@ def _FilterAttrs(dataIn, attrs, times, burnups):
                             # remove the data for the current time point
                             dataOut[univId][histId].pop(timeIdx)
                             break  # from the branch loop                        
+
+                    serpentDict = {}  # store all the data from serpent
+                    for attr, values in branchData.infExp.items():
+                        serpentDict[attr.lower()] = values
+                    for attr, values in branchData.b1Exp.items():
+                        serpentDict[attr.lower()] = values
+                    for attr, values in branchData.gc.items():
+                        serpentDict[attr.lower()] = values
                     # ---------------------------------------------------------
                     # filter specific attributes 
-                    # ---------------------------------------------------------                       
+                    # ---------------------------------------------------------
                     attrsDict = {}  # store all attributes
                     if attrs is not None:
                         for attr in attrs:
-                            if attr in branchData.infExp:
-                                attrsDict[attr] = branchData.infExp[attr]
-                            elif attr in branchData.b1Exp:
-                                attrsDict[attr] = branchData.b1Exp[attr]
-                            elif attr in branchData.gc:
-                                attrsDict[attr] = branchData.gc[attr]
+                            if attr in serpentDict:
+                                attrsDict[attr] = serpentDict[attr]
                             else:
                                 raise SerpentFileError("No attribute <{}>"
                                                            .format(attr))
                     else:
-                        for attr, values in branchData.infExp.items():
-                            attrsDict[attr] = values
-                        for attr, values in branchData.b1Exp.items():
-                            attrsDict[attr] = values
-                        for attr, values in branchData.gc.items():
-                            attrsDict[attr] = values
+                        attrsDict = serpentDict
 
                     # remove the existing homogeneous universe data
                     dataOut[univId][histId][timeIdx].pop(branchId)

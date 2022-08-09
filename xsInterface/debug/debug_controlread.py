@@ -19,4 +19,4 @@ inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
         "xs-interface\\xsInterface\\inputsets\\controlDict"
 
 # read the input file/s and collect all the universes
-universes, outputs, templates, links, formats = Read(inputFile)
+universes, outputs, templates, links, formats, serpent = Read(inputFile)

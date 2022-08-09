@@ -5,15 +5,13 @@ should be read. It also specifies the format that wil be used to output
 the required information.
 
 Created on Tue July 19 13:35:00 2022 @author: Dan Kotlyar
-Last updated on Tue July 19 16:30:00 2022 @author: Dan Kotlyar
+Last updated on Fri Aug 05 13:30:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 Read - 07/19/2022 - DK
-
-
 
 """
 
@@ -39,6 +37,7 @@ TMPLT_REGX = compile(r'\s*(set\s+)(templates)', IGNORECASE)
 FORMT_REGX = compile(r'\s*(set\s+)(formats)', IGNORECASE)
 OUTPT_REGX = compile(r'\s*(set\s+)(outputs)', IGNORECASE)
 LINKS_REGX = compile(r'\s*(set\s+)(links)', IGNORECASE)
+SERPT_REGX = compile(r'\s*(set\s+)(serpent)', IGNORECASE)
 
 # default formats for outputting data
 STATE_FRMT = "{:5.3f}"
@@ -62,14 +61,18 @@ def Read(inputFile):
     -------
     universes : dict
         keys represent universe Ids; values the correposnding input files.
-    templates: dict
+    templates : dict
         keys represent template Ids; values the correposnding template files.
-    outputs: dict
+    outputs : dict
         keys represent template Ids; values the correposnding output files.
-    links: dict
+    links : dict
         keys represent template Ids; values the universes Ids linked to these.
     formats: dict
         formats used for printing variables, states, attributes.
+    serpent : dict
+        keys are the names of the universes Ids and values are the Ids in the
+        serpent files. None values are used for universes for which data is not
+        read from serpent.
 
     Raises
     ------
@@ -102,9 +105,10 @@ def Read(inputFile):
     data = _CleanFile(dataFile)
     
     # Process data
-    universes, outputs, templates, links, formats = _ProcessCards(data)
+    universes, outputs, templates, links, formats, serpent =\
+        _ProcessCards(data)
     
-    return universes, outputs, templates, links, formats
+    return universes, outputs, templates, links, formats, serpent
     
     
 
@@ -114,6 +118,7 @@ def _ProcessCards(data):
     # -------------------------------------------------------------------------  
     # Reset all dictionaries to store data
     # -------------------------------------------------------------------------    
+    serpent = {}
     universes = {}
     templates = {}
     outputs = {}
@@ -124,14 +129,16 @@ def _ProcessCards(data):
     # -------------------------------------------------------------------------   
     #                              Error messages
     # -------------------------------------------------------------------------
-    erruniv = "<set universes> is not properly defined.\nSubsequent lines must"
-    " contain:\n<univ name> <corresponding universe file input>"
-    errtmpl = "<set templates> is not defined properly.\nSubsequent lines must"
-    " contain:\n<template name> <corresponding template file input>"
-    erroutp = "<set outputs> is not defined properly.\nSubsequent lines must"
-    " contain:\n<template name> <corresponding output file>"
-    errlink = "<set links> is not defined properly.\nSubsequent lines must"
+    erruniv = "<set universes> is not properly defined.\nSubsequent lines "\
+    "must contain:\n<univ name> <corresponding universe file input>"
+    errtmpl = "<set templates> is not defined properly.\nSubsequent lines "\
+    "must contain:\n<template name> <corresponding template file input>"
+    erroutp = "<set outputs> is not defined properly.\nSubsequent lines "\
+    "must contain:\n<template name> <corresponding output file>"
+    errlink = "<set links> is not defined properly.\nSubsequent lines must"\
     " contain:\n<template name> <corresponding universes Ids>"
+    errserp = "<set serpent> is not defined properly.\nSubsequent lines must"\
+    " contain:\n<univ name> <universe Ids in the serpent file>"
 
     # -------------------------------------------------------------------------   
     #                              Universes
@@ -140,8 +147,9 @@ def _ProcessCards(data):
         if UNIVS_REGX.search(cardKey):
             universes = _ImportFiles(cardData, erruniv)
     if universes == {}:
-        raise ControlFileError("<set universes> was not defined.")
+        raise ControlFileError("<set universes> was not properly defined.")
 
+       
     # -------------------------------------------------------------------------   
     #                              Templates
     # -------------------------------------------------------------------------   
@@ -192,7 +200,43 @@ def _ProcessCards(data):
     if formats == {}:
         raise ControlFileError("<set formats> is not defined properly.")
 
-    return universes, outputs, templates, univlinks, formats
+
+    # -------------------------------------------------------------------------   
+    #                           Serpent Files
+    # -------------------------------------------------------------------------   
+    for cardKey, cardData in data.items():
+        if SERPT_REGX.search(cardKey):
+            serpent = _CardDict(cardData)
+    if serpent != {}:
+        for serpId in serpent:
+            if serpId not in universes:
+                raise ControlFileError(
+                    "{}\nUniverses names must be consistent with <set "
+                    "universes> card".format(errserp))
+    for key in universes:
+        if key not in serpent:
+            serpent[key] = [None]
+
+    univIds = []  # list to store all the Ids after joining the serpent Id    
+    for univId, serpIds in serpent.items():
+        for serpId in serpIds:
+            if serpId is None:
+                univIds.append(univId)
+            else:
+                univIds.append(univId+serpId)
+    if univlinks != {}:
+        for key in univlinks:
+            for univId in univlinks[key]:
+                if univId not in univIds:
+                    raise ControlFileError(
+                        "Universe <{}> in <set links> card is not consistent "
+                        "with the allowed universes:\n{}"
+                        .format(univId, univIds))                
+    
+    
+    # Return values
+    return universes, outputs, templates, univlinks, formats, serpent
+
 
 
 # -----------------------------------------------------------------------------
@@ -318,7 +362,7 @@ def _CleanFile(dataFile):
 
 
 
-def _ProcessSetLine(tline, expvals, errmsg):
+def _ProcessSetLine(tline):
     """process the line and obtain the cards names and values"""
     # tline:: is the text line to be processed
     # expvals:: number of expected values
@@ -328,13 +372,7 @@ def _ProcessSetLine(tline, expvals, errmsg):
     
     values = []
     values = [val for val in tline]
-    
-    if int(expvals) == len(tline):
-        values = [val for val in tline]
-    else:
-        raise ControlFileError(
-            "{} values are expected.\nNot {}\n".format(expvals, tline))        
-    
+         
     return values
 
 
@@ -356,6 +394,25 @@ def _CardDataDict(tlines):
         idx = FIRSTWORD_REGEX.search(tline).span()
         name = tline[idx[0]:idx[1]]
         vals = tline[idx[1]:]
+        cardData[name] = vals
+        
+    return cardData
+
+
+def _CardDict(tlines):
+    """first word as key and corresponding values"""
+    
+    cardData = {}  # reset the dictionary with all expected keys
+   
+    # loop over all the data lines
+    for tline in tlines:
+        tline = tline.replace('=', '')  # remove "=" signs
+        strList = tline.split()
+        if len(strList) < 2:
+            raise ControlFileError("\nAt least two values must be inputted in"
+                                   " line:\n{}".format(tline))            
+        name = strList[0]
+        vals = strList[1:]
         cardData[name] = vals
         
     return cardData

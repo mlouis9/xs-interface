@@ -64,3 +64,15 @@ FilterCard = {
     "times": "Boolean flag to indicate what time-points are included",
     "attributes": "Attributes to be included"
     }
+
+SerpentCard = {
+    "N": "number of .coe files",
+    "FLUX": "name of the flux variable",
+    "ENE": " energy structure in descending order. with Upper, lower bounds",
+    "history name": "corresponding .coe file"
+    }
+
+
+LabelCard = {
+    "N": "number of branches to relabel",
+    }
