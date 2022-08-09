@@ -47,7 +47,8 @@ class Main():
     formats: dict
         formats used for printing variables, states, attributes.
         {"state": "{:5.3f}", "var": "{:d}", "attr": "{:5.5e}", "nrow": 5}
-        
+    serpentIds: dict
+        keys represent universe Ids; values the serpent Ids linked to these.        
 
     Methods
     -------
@@ -61,12 +62,14 @@ class Main():
     def __init__(self, inputFile):
         
         # read the main 
-        universes, outputs, templates, links, formats = Read(inputFile)
+        universes, outputs, templates, links, formats, serpentIds =\
+            Read(inputFile)
         self.univfiles = universes
         self.outputs = outputs
         self.templates = templates
         self.links = links
         self.formats = formats
+        self.serpentIds = serpentIds
         self.dataFiles = {}
 
 
@@ -84,7 +87,7 @@ class Main():
         """
 
         # Read the data for all the universes
-        self.universes = ReadInput(**self.univfiles)
+        self.universes = ReadInput(self.serpentIds, **self.univfiles)
         
         self.dataFiles = {}
         

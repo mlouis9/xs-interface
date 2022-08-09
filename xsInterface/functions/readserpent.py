@@ -85,9 +85,9 @@ def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
     dataNumBranches = _ReLabelStates(dataStrBranches, strLabels, numLabels)
     
     # Filter specific time points and attributes
-    dataOut, timepoints = _FilterAttrs(dataNumBranches, attrs, times, burnups)
+    dataOut = _FilterAttrs(dataNumBranches, attrs, times, burnups)
 
-    return dataOut, timepoints
+    return dataOut
 
 
 def _ReadHistoryFiles(fnames):
@@ -359,28 +359,27 @@ def _FilterAttrs(dataIn, attrs, times, burnups):
                             # remove the data for the current time point
                             dataOut[univId][histId].pop(timeIdx)
                             break  # from the branch loop                        
+
+                    serpentDict = {}  # store all the data from serpent
+                    for attr, values in branchData.infExp.items():
+                        serpentDict[attr.lower()] = values
+                    for attr, values in branchData.b1Exp.items():
+                        serpentDict[attr.lower()] = values
+                    for attr, values in branchData.gc.items():
+                        serpentDict[attr.lower()] = values
                     # ---------------------------------------------------------
                     # filter specific attributes 
-                    # ---------------------------------------------------------                       
+                    # ---------------------------------------------------------
                     attrsDict = {}  # store all attributes
                     if attrs is not None:
                         for attr in attrs:
-                            if attr in branchData.infExp:
-                                attrsDict[attr] = branchData.infExp[attr]
-                            elif attr in branchData.b1Exp:
-                                attrsDict[attr] = branchData.b1Exp[attr]
-                            elif attr in branchData.gc:
-                                attrsDict[attr] = branchData.gc[attr]
+                            if attr in serpentDict:
+                                attrsDict[attr] = serpentDict[attr]
                             else:
                                 raise SerpentFileError("No attribute <{}>"
                                                            .format(attr))
                     else:
-                        for attr, values in branchData.infExp.items():
-                            attrsDict[attr] = values
-                        for attr, values in branchData.b1Exp.items():
-                            attrsDict[attr] = values
-                        for attr, values in branchData.gc.items():
-                            attrsDict[attr] = values
+                        attrsDict = serpentDict
 
                     # remove the existing homogeneous universe data
                     dataOut[univId][histId][timeIdx].pop(branchId)
@@ -397,7 +396,7 @@ def _FilterAttrs(dataIn, attrs, times, burnups):
             "burnups <{}>\nprovided do not match burnups read by Serpent\n<{}>"
             .format(burnups, timepoints))
                                 
-    return dataOut, timepoints
+    return dataOut
 
 
 def _errorscheck(fnames, strLabels, numLabels, attrs, times, burnups):

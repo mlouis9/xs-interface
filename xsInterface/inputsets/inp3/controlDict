@@ -15,6 +15,17 @@ ref C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Reposito
 
 
 # -----------------------------------------------------------------------------
+#                            Serpent output files
+# -----------------------------------------------------------------------------
+
+
+set serpent
+fuel 0 
+ref 0
+# univId serpId1, serpId2, serpId3, ...
+
+
+# -----------------------------------------------------------------------------
 #                            TEMPLATE FILES
 # -----------------------------------------------------------------------------
 
@@ -34,7 +45,7 @@ template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Re
 # -----------------------------------------------------------------------------
 
 set links
-template0 fuel ref
+template0 fuel0 ref0
 
 # -----------------------------------------------------------------------------
 #                            FORMAT

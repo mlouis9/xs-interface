@@ -5,12 +5,13 @@
     Here, the order of the states is as follows: coolant temp., mod. temp., fuel temp., times, histories
 # ===================================================================================================================================================
 
-"vari"{times=[0, 0.5, 1]}
-"vari"{fuel=[900, 1200]}
-"vari"{mod=[650, 700]}
-"vari"{cool=[550, 600]}
+
+
+"vari"{times=[0]}
+"vari"{fuel=[600, 900, 1200, 1500]}
+"vari"{boron=[0.0, 500.0, 2250.0 ]}
+"vari"{dens=[630.0, 700.0, 780.0 ]}
 "vari"{history=["nom", "pert"]}
-"vari"{isotopes=[531350, 541350, 922350]}
 
 
 * ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -21,14 +22,14 @@
 "vari"{idxH=0}
 "rep"{2
 "vari"{idxB=0}
-"rep"{{3
+"rep"{{1
 "vari"{idxF=0}
-"rep"{{{2
+"rep"{{{4
 "vari"{idxM=0}
-"rep"{{{{2	
+"rep"{{{{3	
  "vari"{idxC=0}
-"rep"{{{{{2
-History = "varo"{history[idxH]<s>}, Time = "varo"{times[idxB]<3.3f>}, Fuel T. = "varo"{fuel[idxF]<3.3f>}, Mod. T. = "varo"{mod[idxM]<3.3f>}, Cool. T. = "varo"{cool[idxC]<3.3f>} 
+"rep"{{{{{3
+History = "varo"{history[idxH]<s>}, Time = "varo"{times[idxB]<3.3f>}, Fuel T. = "varo"{fuel[idxF]<3.3f>}, Boron = "varo"{boron[idxM]<3.3f>}, Dens = "varo"{dens[idxC]<3.3f>} 
 "vari"{idxC=idxC+1}
 "rep"}}}}}
 "vari"{idxM=idxM+1}
@@ -43,14 +44,14 @@ History = "varo"{history[idxH]<s>}, Time = "varo"{times[idxB]<3.3f>}, Fuel T. = 
 
 
 * ---------------------------------------------------------------------------------------------------------------------------------------------------
-  INF_NSF
+  INF_KAPPA
 * ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 "vari"{idxE=-1}
 "rep"{2
 "vari"{idxE=idxE+1}
   Group "varo"{idxE}
-  "values"{inf_nsf,  ["varo"{idxE}]} 
+  "values"{infkappa,  ["varo"{idxE}]} 
 "rep"}
 
 * ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -64,28 +65,11 @@ History = "varo"{history[idxH]<s>}, Time = "varo"{times[idxB]<3.3f>}, Fuel T. = 
 "rep"{{2
 "vari"{idxE1=idxE1+1}
   Group "varo"{idxE0} --> Group "varo"{idxE1}
-  "values"{inf_sp0,  ["varo"{idxE0}, "varo"{idxE1}]} 
+  "values"{infsp0,  ["varo"{idxE0}, "varo"{idxE1}]} 
 "rep"}}
 "rep"}
 
-* ---------------------------------------------------------------------------------------------------------------------------------------------------
-  MICROSCOPIC FISSION XS
-* ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-"vari"{idxS=-1}
-"rep"{3
-"vari"{idxS=idxS+1}
-* ----------------------------
-Isotope "varo"{isotopes[idxS]}
-* ----------------------------
-"vari"{idxE=-1}
-"rep"{{2
-"vari"{idxE=idxE+1}
-  Group "varo"{idxE}
-  "values"{sig_f, ["varo"{idxS}, "varo"{idxE}]} 
-"rep"}}
-
-"rep"}
 
 
 

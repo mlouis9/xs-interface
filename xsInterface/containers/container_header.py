@@ -66,7 +66,9 @@ FilterCard = {
     }
 
 SerpentCard = {
-    "N": "number of branches",
+    "N": "number of .coe files",
+    "FLUX": "name of the flux variable",
+    "ENE": " energy structure in descending order. with Upper, lower bounds",
     "history name": "corresponding .coe file"
     }
 

@@ -67,6 +67,8 @@ class MultipleSets():
         flag to incdicate if all data in kinetics must be defined
     meta : bool
         flag to incdicate if all data in meta must be defined
+    overWrite : bool
+        flag to incdicate if data can be overwritten
 
     Attributes
     ----------
@@ -80,6 +82,8 @@ class MultipleSets():
         flag to incdicate if all data in kinetics must be defined
     meta : bool
         flag to incdicate if all data in meta must be defined
+    overWrite : bool
+        flag to incdicate if data can be overwritten
     sets : dict
         keys are indices and values are ``SingleSet`` objects.
     nsets : int
@@ -110,20 +114,22 @@ class MultipleSets():
     """
 
     def __init__(self, states, macro=False, micro=False, kinetics=False,
-                 meta=False):
+                 meta=False, overWrite=False):
 
         _isobject(states, Perturbations, "States data")
         _isbool(macro, "Macro flag")
         _isbool(micro, "Micro flag")
         _isbool(kinetics, "Kinetics flag")
         _isbool(meta, "Meta flag")
-
+        _isbool(overWrite, "Over Write flag")
+        
         self.sets = {}  # empty dictionary to store all sets
         self._flags = {"macro": macro, "micro": micro, "kinetics": kinetics,
                        "meta": meta}
         self.states = states
         self.setsmap = {}  # dictionary to link between states and indices
         self.nsets = 0  # tracks the number of sets
+        self.overWrite = overWrite 
         self.filterstates = {}  # dict to store filtered states
 
     def Add(self, *argv):
@@ -169,13 +175,19 @@ class MultipleSets():
             # State nametuple
             stateId = StateDescrp(history, time, branch)
             # check if already exists
-            if str(stateId) in self.setsmap:
+            if str(stateId) in self.setsmap and not self.overWrite:
                 raise KeyError("<{}> already exists in sets.".format(stateId))
-
-            # assign data and index
-            self.sets[self.nsets] = arg
-            self.setsmap[str(stateId)] = self.nsets
-            self.nsets += 1
+            elif str(stateId) in self.setsmap and self.overWrite:
+                print("<{}> is overwritten.".format(stateId))
+                existIdx = list(self.setsmap.keys()).index(str(stateId))
+                # assign data and index
+                self.sets[existIdx] = arg
+                self.setsmap[str(stateId)] = existIdx
+            else:
+                # assign data and index
+                self.sets[self.nsets] = arg
+                self.setsmap[str(stateId)] = self.nsets
+                self.nsets += 1
 
     def Get(self, setIdx=None, branch=None, time=None, history=None,
             errFlag=False):

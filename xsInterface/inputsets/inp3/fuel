@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------------------
 
 
-set settings 2 7
+set settings 2 9
 macro =  infKappa, infSp0, cmmTranspxs, infFlx
 kinetics =  lambda
 
@@ -36,20 +36,46 @@ set times nounits
 
 # READ BY: SERPENT FILES
 
-set labels
+set labels 3
 fuel f600, nom, f1200, f1500
 boron b0, nom, b2250 
 dens dens630, nom, dens780 
 
 
 # -----------------------------------------------------------------------------
+#                            PERTURBATIONS
+# -----------------------------------------------------------------------------
+
+
+set data infFlx 10.0E+6, 0.6025, 0.0
+#-------------
+block state
+#----------
+branch 900.0, 500.0, 630.0
+history nom
+time 0.0
+#-------------
+block macro
+#----------
+infKappa 0.1, 0.2
+cmmTranspxs 0.3 0.4
+infFlx 0.1 0.2
+infSp0 = 0.1  0.2 -0.05, 0.3
+
+#-------------
+block kinetics
+#-------------
+lambda 1, 1, 1, 1, 1, 1, 1, 1, 1
+
+
+
+# -----------------------------------------------------------------------------
 #                         .COE SERPENT FILES
 # -----------------------------------------------------------------------------
 
-set serpent
-fuel_ nom  C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\u0.coe
-fuel_ pert  C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\u0.coe
-ref_ nom  C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\u0.coe
+set serpent 2 +1 infFlx 10.0E+6, 0.6025, 0.0
+nom  C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\u0.coe
+pert  C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\u0.coe
 
 
 # -----------------------------------------------------------------------------
