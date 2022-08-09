@@ -15,7 +15,7 @@ It also includes processing of data, such as:
 
 
 Created on Thu Apr 14 05:45:00 2022 @author: Dan Kotlyar
-Last updated on Fri July 22 08:50:00 2022 @author: Dan Kotlyar
+Last updated on Tue Aug 09 09:40:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -32,6 +32,7 @@ Manipulate - 06/20/2022 -  DK
 CheckFilters - 06/26/2022 - DK
 CheckFilters - 07/08/2022 - DK
 CheckFilters - 07/21/2022 - DK
+``overWrite`` flag in MultipleSets  - 08/09/2022 - DK
 """
 import copy
 

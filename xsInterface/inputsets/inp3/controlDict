@@ -20,7 +20,7 @@ ref C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Reposito
 
 
 set serpent
-fuel 0 
+fuel 0
 ref 0
 # univId serpId1, serpId2, serpId3, ...
 

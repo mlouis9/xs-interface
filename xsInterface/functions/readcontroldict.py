@@ -129,16 +129,16 @@ def _ProcessCards(data):
     # -------------------------------------------------------------------------   
     #                              Error messages
     # -------------------------------------------------------------------------
-    erruniv = "<set universes> is not properly defined.\nSubsequent lines must"
-    " contain:\n<univ name> <corresponding universe file input>"
-    errtmpl = "<set templates> is not defined properly.\nSubsequent lines must"
-    " contain:\n<template name> <corresponding template file input>"
-    erroutp = "<set outputs> is not defined properly.\nSubsequent lines must"
-    " contain:\n<template name> <corresponding output file>"
-    errlink = "<set links> is not defined properly.\nSubsequent lines must"
+    erruniv = "<set universes> is not properly defined.\nSubsequent lines "\
+    "must contain:\n<univ name> <corresponding universe file input>"
+    errtmpl = "<set templates> is not defined properly.\nSubsequent lines "\
+    "must contain:\n<template name> <corresponding template file input>"
+    erroutp = "<set outputs> is not defined properly.\nSubsequent lines "\
+    "must contain:\n<template name> <corresponding output file>"
+    errlink = "<set links> is not defined properly.\nSubsequent lines must"\
     " contain:\n<template name> <corresponding universes Ids>"
-    errserp = "<set serpent> is not defined properly.\nSubsequent lines must"
-    " contain:\n<univ name> <universe Id in the serpent file>"
+    errserp = "<set serpent> is not defined properly.\nSubsequent lines must"\
+    " contain:\n<univ name> <universe Ids in the serpent file>"
 
     # -------------------------------------------------------------------------   
     #                              Universes
@@ -217,6 +217,23 @@ def _ProcessCards(data):
         if key not in serpent:
             serpent[key] = [None]
 
+    univIds = []  # list to store all the Ids after joining the serpent Id    
+    for univId, serpIds in serpent.items():
+        for serpId in serpIds:
+            if serpId is None:
+                univIds.append(univId)
+            else:
+                univIds.append(univId+serpId)
+    if univlinks != {}:
+        for key in univlinks:
+            for univId in univlinks[key]:
+                if univId not in univIds:
+                    raise ControlFileError(
+                        "Universe <{}> in <set links> card is not consistent "
+                        "with the allowed universes:\n{}"
+                        .format(univId, univIds))                
+    
+    
     # Return values
     return universes, outputs, templates, univlinks, formats, serpent
 

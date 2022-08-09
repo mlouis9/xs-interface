@@ -85,9 +85,9 @@ def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
     dataNumBranches = _ReLabelStates(dataStrBranches, strLabels, numLabels)
     
     # Filter specific time points and attributes
-    dataOut = _FilterAttrs(dataNumBranches, attrs, times, burnups)
+    dataOut, timepoints = _FilterAttrs(dataNumBranches, attrs, times, burnups)
 
-    return dataOut
+    return dataOut, timepoints
 
 
 def _ReadHistoryFiles(fnames):
@@ -126,8 +126,8 @@ def _ReadHistoryFiles(fnames):
         
         for historyId, coeFile in fnames[univUsrId].items():
 
-            print("... Reading coe file for univ= <{}>, hisotry <{}> ..."
-                  .format(univUsrId, historyId))
+            print("... Reading coe file for hisotry <{}> ..."
+                  .format(historyId))
             coedata = _ReadCoefFile(coeFile)
         
             for univ in coedata:
@@ -396,7 +396,7 @@ def _FilterAttrs(dataIn, attrs, times, burnups):
             "burnups <{}>\nprovided do not match burnups read by Serpent\n<{}>"
             .format(burnups, timepoints))
                                 
-    return dataOut
+    return dataOut, timepoints
 
 
 def _errorscheck(fnames, strLabels, numLabels, attrs, times, burnups):

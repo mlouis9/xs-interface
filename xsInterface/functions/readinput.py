@@ -5,7 +5,7 @@ Read the user-based input file.
 All the input data are provided via the use of input cards.
 
 Created on Mon May 06 12:10:00 2022 @author: Dan Kotlyar
-Last updated on Fri Aug 05 13:00:00 2022 @author: Dan Kotlyar
+Last updated on Tue Aug 09 11:50:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -15,7 +15,7 @@ Clean the inpit file from comments  - 05/06/2022 - DK
 Import Settings, States - 05/12/2022 - DK
 Import single data set - 05/22/2022 - DK
 Import & populate multiple data set - 05/24/2022 - DK
-Import & populate serpent data - 08/05/2022 - DK
+Import & populate serpent data - 08/09/2022 - DK
 
 """
 
@@ -35,7 +35,7 @@ from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.containers.universes import Universes
 from xsInterface.errors.checkerrors import _isstr, _isnonNegativeArray
 from xsInterface.errors.customerrors import NonInputError, InputGeneralError,\
-    InputCardError
+    InputCardError, ControlFileError
 
 # General regular expressions needed for processing data
 SPECIAL_CHAR = compile(r'[\?\$\&\@\~\<\>\`]')  # special character
@@ -339,21 +339,24 @@ def _PopulateSerpentSets(rc, states, serpent, labels, serpId, serpentData):
         attrs = rc.macro + rc.micro + rc.meta + rc.kinetics
     
         if serpent['time']:
-            serpentData = ReadSerpent(fnames, labels, states.branches, attrs,
-                                      times=states.time['values'])
+            serpentData, timepoints =\
+                ReadSerpent(fnames, labels, states.branches, attrs,
+                            times=states.time['values'])
         else:
-            serpentData = ReadSerpent(fnames, labels, states.branches, attrs,
-                                      burnup=states.time['values'])
+            serpentData, timepoints =\
+                ReadSerpent(fnames, labels, states.branches, attrs,
+                            burnup=states.time['values'])
 
     
-    card = 'serpent'
-    errmsg = "<set {}>.\n".format(card)
     try:
         data = serpentData[serpId]
     
-    except KeyError as detail:
-        raise InputCardError("{}\n{}\n".format(detail, errmsg),
-                             INPUT_CARDS, card) 
+    except KeyError:
+        errserp = "<set serpent> is not defined properly.\nSubsequent lines "\
+        "must contain:\n<univ name> <universe Ids in the serpent file>"
+        raise ControlFileError(
+            "Serpent universe=<{}> does not exist\n{}."
+            .format(serpId, errserp)) 
     
     # populate the single container
     ms = MultipleSets(states, **rc.dataFlags, overWrite=True)
@@ -364,7 +367,7 @@ def _PopulateSerpentSets(rc, states, serpent, labels, serpId, serpentData):
                 ss = SingleSet(rc, states, fluxName=serpent['flx'],
                                energyStruct=serpent['energy'])
                 ss.AddState(branch=np.array(branchId), history=histId,
-                            time=timeId)
+                            time=timepoints[timeId])
                 for attr in data[histId][timeId][branchId]:
                     key = None
                     if attr in rc.macro:

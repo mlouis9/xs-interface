@@ -88,32 +88,17 @@ def ReadTemplate(tmplFile, universes, formats, univId=None):
         _isstr(univId, "Universe Id")
         dataRaw = _InsertUnivId(dataRaw, univId)
     
-    try:
-        # Identify locations within the file with text to be repeated
-        msgerr = "Error related to manipulating Repetitive Blocks"
-        pos = _RepetitiveBlocks(dataRaw)
-        
-        # Repeat blocks that should be repetitive
-        dataDup = _DuplicateBlocks(dataRaw, pos)
-        
-        # Clean and replace variable text with values
-        msgerr = "Error related to populating data and variables"
-        dataClean = _CleanDataCopy(dataDup, formats["var"])
+    # Identify locations within the file with text to be repeated
+    pos = _RepetitiveBlocks(dataRaw)
     
-        # Populate data
-        dataPopulated = _PopulateValues(dataClean, universes, formats)
-    except ValueError as detail:
-        raise TemplateFileError("{}\n{}".format(msgerr, detail))
-    except NameError as detail:
-        raise TemplateFileError("{}\n{}".format(msgerr, detail))
-    except IndexError as detail:
-        msg0 = "Possible error with variable/attribute assessed with "\
-            "unsuitable index.\nCheck validity indices/variables or "\
-                "repetition blocks. "
-        raise TemplateFileError("{}\n{}\nError Details:\n{}".format(msgerr, msg0, detail))
-    except KeyError as detail:
-        msg0 = "Possible error with variable or attribute not defined\n"
-        raise TemplateFileError("{}\n{}\nError Details:\n{}".format(msgerr, msg0, detail)) 
+    # Repeat blocks that should be repetitive
+    dataDup = _DuplicateBlocks(dataRaw, pos)
+    
+    # Clean and replace variable text with values
+    dataClean = _CleanDataCopy(dataDup, formats["var"])
+
+    # Populate data
+    dataPopulated = _PopulateValues(dataClean, universes, formats)
 
     return dataPopulated
 
@@ -347,7 +332,10 @@ def _CleanDataCopy(dataIn, fmt0):
                     msg0 = msgExe + '{}\n'.format(tline) +\
                         'exe command: {}\n{}\n'.format(strExe,detail) 
                     raise TemplateFileError(msg0)
-
+                except IndexError as detail:
+                    msg0 = msgExe + '{}\n'.format(tline) +\
+                        'exe command: {}\n{}\n'.format(strExe,detail) 
+                    raise TemplateFileError(msg0)
                 
         # Copy (and if needed replace line) to a clean data list
         dataClean.append(tline)
@@ -512,7 +500,7 @@ def _Array2tlines(tline, origstr, valsarray, nrow, frmt):
             tlines.append(str0)
 
         # all values are printed
-        if valsremain == []:
+        if len(valsremain) == 0:
             break  # the while loop
 
     return tlines

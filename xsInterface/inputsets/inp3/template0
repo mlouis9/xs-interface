@@ -29,7 +29,7 @@
 "rep"{{{{3	
  "vari"{idxC=0}
 "rep"{{{{{3
-History = "varo"{history[idxH]<s>}, Time = "varo"{times[idxB]<3.3f>}, Fuel T. = "varo"{fuel[idxF]<3.3f>}, Boron = "varo"{boron[idxM]<3.3f>}, Dens = "varo"{dens[idxC]<3.3f>} 
+History = "varo"{history[idxH]<s>}, Time = "varo"{times[idxB]<3.3f>}, Fuel T. = "varo"{fuel[idxF]<3.3f>}, Boron= "varo"{boron[idxM]<3.3f>}, Dens = "varo"{dens[idxC]<3.3f>} 
 "vari"{idxC=idxC+1}
 "rep"}}}}}
 "vari"{idxM=idxM+1}
