@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Fuel Universe Data &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Reflector Universe Data" href="reflector.html" />
+    <link rel="prev" title="Output Ref0" href="output_ref0.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="fuel-universe-data">
+<span id="serpent-fuel0"></span><h1>Fuel Universe Data<a class="headerlink" href="#fuel-universe-data" title="Permalink to this headline">¶</a></h1>
+<p>The following data file defines a complete set for the following states:</p>
+<ul class="simple">
+<li><p>2 history points</p></li>
+<li><p>1 time points</p></li>
+<li><p>4 fuel branches</p></li>
+<li><p>3 boron branches</p></li>
+<li><p>3 dens branches</p></li>
+</ul>
+<p>Some <strong>important notes</strong>:</p>
+<ul class="simple">
+<li><p>Only macro and kinetics data attributes are defined in the <code class="docutils literal notranslate"><span class="pre">settings</span></code> card.</p></li>
+<li><p>Data is read from Serpent branch files for two history branches (i.e., <code class="docutils literal notranslate"><span class="pre">nom</span></code>, <code class="docutils literal notranslate"><span class="pre">pert</span></code>) defined both in the &lt;set serpent&gt; and &lt;set histories&gt; cards.</p></li>
+<li><p>Branch labels that describe how the branches appear in the .coe files is provided by the &lt;set labels&gt; card. The order and number of entries for each branch is consistent with the <code class="docutils literal notranslate"><span class="pre">branches</span></code> card.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">serpent</span></code> card also defines the time points defined in &lt;set times&gt; to act as time points (not burnup) because of the positive (+1) entry. Negative value would indicate burnup points.</p></li>
+<li><p>A separate data point for a specif state (defined by the single <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">data</span> <span class="pre">infFlx</span> <span class="pre">10.0E+6,</span> <span class="pre">0.6025,</span> <span class="pre">0.0</span></code> overwrites a state read by Serpent. This is done here to demonestrate a capability of mixing Serpent- and user-defined states.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#            INPUT EXAMPLE FOR A SINGLE CROSS SECTION TYPE</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                            SETTINGS</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+
+<span class="nb">set</span> <span class="n">settings</span> <span class="mi">2</span> <span class="mi">9</span>
+<span class="n">macro</span> <span class="o">=</span>  <span class="n">infKappa</span><span class="p">,</span> <span class="n">infSp0</span><span class="p">,</span> <span class="n">cmmTranspxs</span><span class="p">,</span> <span class="n">infFlx</span>
+<span class="n">kinetics</span> <span class="o">=</span>  <span class="k">lambda</span>
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                            STATES</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+<span class="nb">set</span> <span class="n">branches</span> <span class="mi">3</span>
+<span class="n">fuel</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">1500</span>
+<span class="n">boron</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">,</span> <span class="mf">2250.0</span>
+<span class="n">dens</span> <span class="mf">630.0</span><span class="p">,</span> <span class="mf">700.0</span><span class="p">,</span> <span class="mf">780.0</span>
+
+
+<span class="nb">set</span> <span class="n">histories</span> <span class="mi">2</span>
+<span class="n">nom</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">750</span><span class="p">,</span> <span class="mi">710</span>
+<span class="n">pert</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">650</span>
+
+<span class="nb">set</span> <span class="n">times</span> <span class="n">nounits</span>
+<span class="mf">0.0</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                            DATA</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+<span class="c1"># READ BY: SERPENT FILES</span>
+
+<span class="nb">set</span> <span class="n">labels</span> <span class="mi">3</span>
+<span class="n">fuel</span> <span class="n">f600</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">f1200</span><span class="p">,</span> <span class="n">f1500</span>
+<span class="n">boron</span> <span class="n">b0</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">b2250</span>
+<span class="n">dens</span> <span class="n">dens630</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">dens780</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                            PERTURBATIONS</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+
+<span class="nb">set</span> <span class="n">data</span> <span class="n">infFlx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="c1">#-------------</span>
+<span class="n">block</span> <span class="n">state</span>
+<span class="c1">#----------</span>
+<span class="n">branch</span> <span class="mf">900.0</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">,</span> <span class="mf">630.0</span>
+<span class="n">history</span> <span class="n">nom</span>
+<span class="n">time</span> <span class="mf">0.0</span>
+<span class="c1">#-------------</span>
+<span class="n">block</span> <span class="n">macro</span>
+<span class="c1">#----------</span>
+<span class="n">infKappa</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span>
+<span class="n">cmmTranspxs</span> <span class="mf">0.3</span> <span class="mf">0.4</span>
+<span class="n">infFlx</span> <span class="mf">0.1</span> <span class="mf">0.2</span>
+<span class="n">infSp0</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="mf">0.2</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.3</span>
+
+<span class="c1">#-------------</span>
+<span class="n">block</span> <span class="n">kinetics</span>
+<span class="c1">#-------------</span>
+<span class="k">lambda</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                         .COE SERPENT FILES</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+<span class="nb">set</span> <span class="n">serpent</span> <span class="mi">2</span> <span class="o">+</span><span class="mi">1</span> <span class="n">infFlx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">nom</span>  <span class="o">.</span>\<span class="n">inp3</span>\<span class="n">fuel_nom</span><span class="o">.</span><span class="n">coe</span>
+<span class="n">pert</span> <span class="o">.</span>\<span class="n">inp3</span>\<span class="n">fuel_pert</span><span class="o">.</span><span class="n">coe</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                         DATA MANIPULATION</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+<span class="c1"># n/a</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1">#                         FILTER DATA &amp; PRINT</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+
+<span class="c1"># n/a</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Input-Setups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Input-Setups</a><ul>
+  <li><a href="../serpentdata.html">Serpent Data</a><ul>
+      <li>Previous: <a href="output_ref0.html" title="previous chapter">Output Ref0</a></li>
+      <li>Next: <a href="reflector.html" title="next chapter">Reflector Universe Data</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/InputSetups/serpent_files/fuel.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -67,6 +67,12 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <tr class="row-even"><td><p><a class="reference internal" href="#i-data"><span class="std std-ref">Data</span></a></p></td>
 <td><p>Define data to be added to a specific (branch, history, time) set.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#i-serpent"><span class="std std-ref">Serpent</span></a></p></td>
+<td><p>Serpent branch .coe file from which data is read.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#i-labels"><span class="std std-ref">Labels</span></a></p></td>
+<td><p>Branch labels as they appear in Serpent branch .coe file.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#i-manipulate"><span class="std std-ref">Manipulate</span></a></p></td>
 <td><p>Data manipulation including energy condensation and math operations.</p></td>
 </tr>
@@ -363,6 +369,98 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">1</span>
 <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">2</span>
 <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">3</span>
+</pre></div>
+</div>
+</section>
+<section id="serpent">
+<span id="i-serpent"></span><h2>Serpent<a class="headerlink" href="#serpent" title="Permalink to this headline">¶</a></h2>
+<p><strong>Serpent branch .coe files.</strong></p>
+<p><em>Optional Card</em>. Must be provided together with <a class="reference internal" href="#i-labels"><span class="std std-ref">Labels</span></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">serpent</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">TIME</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">FLUX</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">ENE</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">history</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;.</span><span class="n">coe</span> <span class="n">file</span> <span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">history</span><span class="o">-</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;.</span><span class="n">coe</span> <span class="n">file</span> <span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<dl>
+<dt>where in the <strong>set</strong> line,</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> describe the number of .coe files to be provided in the following rows.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code> is an indicator whether the time- (positive entires) or burnup-points (negative entries) are to be collected for the values provided in <a class="reference internal" href="#i-times"><span class="std std-ref">Times</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FLUX</span></code> is the name of the flux variable used in serpent, similarly defined in <a class="reference internal" href="#i-data"><span class="std std-ref">Data</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ENE</span></code> energy structure in descending order similarly used in <a class="reference internal" href="#i-data"><span class="std std-ref">Data</span></a>. Must include upper and lower boundaries, e.g., for a 2-group structure:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">data</span> <span class="n">infflx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+<dt>and, the names of the history branches along with their .coe files are provided in the following lines.</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">history</span></code> must correspond to the history names provided in <a class="reference internal" href="#i-histories"><span class="std std-ref">Histories</span></a>.</p></li>
+<li><p>It must be pointed out that the history branches are read from separate .coe files as currently <a class="reference external" href="https://serpent.vtt.fi/mediawiki/index.php/Automated_burnup_sequence">Serpent</a> cannot produce multiple histories in a single .coe file.</p></li>
+<li><p>Each .coe file can include a single or multiple universes.</p></li>
+</ul>
+</dd>
+<dt><strong>Notes:</strong></dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://serpent-tools.readthedocs.io/en/master/index.html">serpentTools-1</a> is used to read all the .coe files provided under this card.</p></li>
+<li><p><a class="reference external" href="https://serpent-tools.readthedocs.io/en/master/variableGroups.html">serpentTools-2</a> convert the original <code class="docutils literal notranslate"><span class="pre">SERPENT_STYLE_VARIABLES</span></code> variable to <code class="docutils literal notranslate"><span class="pre">mixedCaseNames</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">INF_FLX</span></code> is converted to <code class="docutils literal notranslate"><span class="pre">infFlx</span></code>.</p></li>
+<li><p>Number of histories defined here must allign with the number and names of histories defined in <a class="reference internal" href="#i-histories"><span class="std std-ref">Histories</span></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Examples</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">serpent</span> <span class="mi">2</span> <span class="o">+</span><span class="mi">1</span> <span class="n">infFlx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">nom</span>  <span class="o">.</span>\<span class="n">inp</span>\<span class="n">fuel_nom</span><span class="o">.</span><span class="n">coe</span>
+<span class="n">pert</span>  <span class="o">.</span>\<span class="n">inp</span>\<span class="n">fuel_nom</span><span class="o">.</span><span class="n">coe</span>
+</pre></div>
+</div>
+<p>or, if burnup points are to be collected:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">serpent</span> <span class="mi">2</span> <span class="o">-</span><span class="mi">1</span> <span class="n">infFlx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">nom</span>  <span class="o">.</span>\<span class="n">inp</span>\<span class="n">fuel_nom</span><span class="o">.</span><span class="n">coe</span>
+<span class="n">pert</span>  <span class="o">.</span>\<span class="n">inp</span>\<span class="n">fuel_nom</span><span class="o">.</span><span class="n">coe</span>
+</pre></div>
+</div>
+</section>
+<section id="labels">
+<span id="i-labels"></span><h2>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h2>
+<p><strong>Branch labels defined in Serpent .coe files.</strong></p>
+<p><em>Optional Card</em>. But, must be provided if <a class="reference internal" href="#i-serpent"><span class="std std-ref">Serpent</span></a> is provided.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">labels</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">branch</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val3</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">&lt;</span><span class="n">branch</span><span class="o">-</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val3</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<dl>
+<dt>where in the <strong>set</strong> line,</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> number of branch types (mandatory).</p></li>
+</ul>
+</dd>
+<dt>and, in the <strong>&lt;branch&gt; sub-cards</strong>,</dt><dd><ul class="simple">
+<li><p>number of sub-cards must be equal to <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">branch-N</span></code> is the user-defined name (e.g., fuel) that must correspond to the branch names provided in <a class="reference internal" href="#i-branches"><span class="std std-ref">Branches</span></a>.</p></li>
+<li><p>Values correspond to the names that appear in the serpent branch .coe files. In addition, the order at which the values are provided must follow the same order as given in <a class="reference internal" href="#i-branches"><span class="std std-ref">Branches</span></a>.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">branches</span> <span class="mi">1</span>
+<span class="n">fuel</span> <span class="mf">600.0</span> <span class="mf">900.0</span> <span class="mf">1200.0</span> <span class="mf">1500.0</span> <span class="mf">1800.0</span>
+
+<span class="nb">set</span> <span class="n">labels</span> <span class="mi">1</span>
+<span class="n">fuel</span> <span class="n">f600</span> <span class="n">nom</span> <span class="n">f1200</span> <span class="n">f1500</span> <span class="n">f1800</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>Notes:</strong></dt><dd><ul class="simple">
+<li><p>This card must be provided together with <a class="reference internal" href="#i-serpent"><span class="std std-ref">Serpent</span></a>.</p></li>
+<li><p>The .coe branch files may contain more bracnhes than are required by the user, and yet the user must provide ALL the branches that appear in the file. Some of these points can then be filtered using <a class="reference internal" href="#i-filter"><span class="std std-ref">Filter</span></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Examples</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">labels</span> <span class="mi">3</span>
+<span class="n">fuel</span> <span class="n">f600</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">f1200</span><span class="p">,</span> <span class="n">f1500</span>
+<span class="n">boron</span> <span class="n">b0</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">b2250</span>
+<span class="n">dens</span> <span class="n">dens630</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">dens780</span>
 </pre></div>
 </div>
 </section>
