@@ -295,7 +295,7 @@ def test_setData(tmp_path):
         # the input writing is perforned using conftest
         with pytest.raises((InputCardError, NonInputError, InputGeneralError),
                            match="!!!*"):
-            ReadInput(u0=filepath)
+            ReadInput({}, u0=filepath)
 
 
 @pytest.mark.parametrize("dict0", [BAD_SETTINGS, BAD_BRACNHES, BAD_HISTORY,
@@ -320,5 +320,5 @@ def test_setcard(tmp_path, dict0):
         # the input writing is perforned using conftest
         with pytest.raises((InputCardError, NonInputError, InputGeneralError),
                            match="!!!*"):
-            ReadInput(u0=filepath)
+            ReadInput({}, u0=filepath)
 

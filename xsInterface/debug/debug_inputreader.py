@@ -19,7 +19,7 @@ inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
         "xs-interface\\xsInterface\\debug\\u0"
 
 # read the input file/s and collect all the universes
-universes = ReadInput(u0=inputFile)
+universes = ReadInput({}, u0=inputFile)
 
 
 # # Get a specific universe
@@ -39,4 +39,4 @@ universes = ReadInput(u0=inputFile)
 universes.PandaTables()
 
 # # Get specific values
-universes.Values("u0", attrs=["inf_nsf", 'inf_sp0'], fuel=900)
+universes.Values("u0", attr="inf_nsf", fuel=900)

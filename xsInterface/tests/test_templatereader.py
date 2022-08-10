@@ -31,7 +31,7 @@ from xsInterface.functions.readinput import ReadInput
 univFile0 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
         "xs-interface\\xsInterface\\inputsets\\u0"
-UNIVERSES = ReadInput(u0=univFile0)
+UNIVERSES = ReadInput({}, u0=univFile0)
 
 # -----------------------------------------------------------------------------
 # default formats for outputting data

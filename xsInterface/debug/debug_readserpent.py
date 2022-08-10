@@ -37,9 +37,9 @@ modLables = {'fuel': np.array([600, 1200.0, 900.0, 1500.0]),
 
 dataOut, timepoints =\
     ReadSerpent(fnames, origLables, modLables,
-                attrs=['infKappa', 'infSp0', 'cmmTranspxs', 'lambda', 'infFlx'],
+                attrs=['infkappa', 'infSp0', 'cmmtranspxs', 'lambda', 'infflx'],
                 times=None,
                 burnups=[0.0])
     
-sp0 = dataOut['fuel_0']['nom'][0.0][(1500.0, 2250.0, 780.0)]['infSp0']
+sp0 = dataOut['fuel_0']['nom'][0.0][(1500.0, 2250.0, 780.0)]['infsp0']
 

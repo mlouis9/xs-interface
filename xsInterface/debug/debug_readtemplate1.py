@@ -18,7 +18,7 @@ from xsInterface.functions.readinput import ReadInput
 
 inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\otemplates\\dyn3d"
+        "xs-interface\\xsInterface\\debug\\debugfiles\\bad_template"
 
 univFile0 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\

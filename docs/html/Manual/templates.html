@@ -36,8 +36,8 @@
             
   <section id="templates">
 <span id="id1"></span><h1>Templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h1>
-<p>The template file makes the use of prescribed rules to efficiently define a template that can be used to output data.</p>
-<p>The text file provided by the user is format-free. The text contained within the template file is copied to the desired output.
+<p>The template file makes the use of prescribed rules to efficiently define a template that can be used to output data in the most general possible way.</p>
+<p>The text file provided by the user is a format-free. The text contained within the template file is copied to the desired output.
 However, the simple rules provided by the user resemble codes’ snippets that allow to define variables dynamically rather than using fix values.</p>
 <p>A list of three basic rules are listed in the table below, and examples of how to use these are provided in the following sections.</p>
 <table class="docutils align-default">
@@ -69,7 +69,7 @@ However, the simple rules provided by the user resemble codes’ snippets that a
 <span id="vari"></span><h2>Input Variable<a class="headerlink" href="#input-variable" title="Permalink to this headline">¶</a></h2>
 <p><strong>Definition of a simple execution line.</strong></p>
 <p>The user has the ability to define a code snippet that will be executed internally within the code.
-Although weakly explained here, the code should be simple. For example, assigning value to a variable (scalar or vector), rather than implementing a while loop.
+The code provided by the user should be as simple as possible. For example, assigning value to a variable (scalar or vector), rather than implementing a while loop.
 The use of <code class="docutils literal notranslate"><span class="pre">for</span></code> loops is feasibile but not recommended.</p>
 <p>Only a <strong>single input variable</strong> can be defined in a single line. The format for defining an input variable is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;vari&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">command</span> <span class="n">line</span><span class="o">&gt;</span><span class="p">}</span>
@@ -85,8 +85,8 @@ The use of <code class="docutils literal notranslate"><span class="pre">for</spa
 <p><strong>Notes:</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p>The use of the command is primarily defined for defining indices and changing these dynamically.</p></li>
-<li><p>All the repetitions of <code class="docutils literal notranslate"><span class="pre">&quot;vari&quot;{...}</span></code> will not appear in the output files.</p></li>
+<li><p>The use of the command is primarily intended for defining indices and changing these dynamically.</p></li>
+<li><p>All the occurrences of <code class="docutils literal notranslate"><span class="pre">&quot;vari&quot;{...}</span></code> will not appear in the output files.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Examples</strong>:</p>
@@ -128,7 +128,7 @@ The use of <code class="docutils literal notranslate"><span class="pre">for</spa
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;varo&quot;{...}</span></code> is preserved (including the curley brackets) keyword.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;evaluation</span> <span class="pre">command&gt;</span></code> is the execution sequence for evaluating an input variable.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;format&gt;</span></code> a standard format notation, e.g., <code class="docutils literal notranslate"><span class="pre">3d</span></code>, <code class="docutils literal notranslate"><span class="pre">3.3f</span></code>, <code class="docutils literal notranslate"><span class="pre">5.5e</span></code> with which the input variable will be written in the output file. If provided, the format <strong>must</strong> be provided within <code class="docutils literal notranslate"><span class="pre">&lt;...&gt;</span></code> brackets.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;format&gt;</span></code> can be omitted. In which case, the default value will be used according to the card defined in the control deck (<a class="reference internal" href="controldeck.html#j-formats"><span class="std std-ref">formats</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;format&gt;</span></code> can be omitted along with the <code class="docutils literal notranslate"><span class="pre">&lt;...&gt;</span></code> brackets. In which case, the default value will be used according to the format defined in the control deck (<a class="reference internal" href="controldeck.html#j-formats"><span class="std std-ref">formats</span></a>).</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Notes:</strong></p>
@@ -202,7 +202,7 @@ The use of <code class="docutils literal notranslate"><span class="pre">for</spa
 </section>
 <section id="data-values">
 <span id="values"></span><h2>Data Values<a class="headerlink" href="#data-values" title="Permalink to this headline">¶</a></h2>
-<p><strong>Evaluation and output of attrbutes/states.</strong></p>
+<p><strong>Evaluation and output of attributes/states.</strong></p>
 <p>This is the heart of the template capability as different parameters defined in the universes objects - <a class="reference internal" href="input_cards.html#universecards"><span class="std std-ref">Universe data cards</span></a> can be evaluated and written to output files.
 At the moment, only a single evaluation can be performed in a single line.</p>
 <p>The format for evaluating and printing an output attribute, e.g., cross sections or states:</p>
@@ -216,14 +216,14 @@ At the moment, only a single evaluation can be performed in a single line.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;values&quot;{...}</span></code> is preserved (including the curley brackets) keyword.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;universe</span> <span class="pre">Id&gt;</span></code> is the name of the universe as defined in <a class="reference internal" href="input_cards.html#universecards"><span class="std std-ref">Universe data cards</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;attribute&gt;</span></code> is the name of the output variable. It can represent a state (e.g., fuel temperature) or an attribute (e.g., beta).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;state1&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;state2&gt;</span></code>, … represent the names of the various states (e.g., fuel, moderator, coolant temperatures).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;state1&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;state2&gt;</span></code>, … represent the names of the various states (e.g., fuel, moderator, coolant temperatures). The latter are defined in the <a class="reference internal" href="input_cards.html#i-branches"><span class="std std-ref">Branches</span></a>, <a class="reference internal" href="input_cards.html#i-histories"><span class="std std-ref">Histories</span></a>, and <a class="reference internal" href="input_cards.html#i-times"><span class="std std-ref">Times</span></a>     cards.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;value1&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;value2&gt;</span></code>, … are the corresponding singular values for each of the various states.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;indices&gt;</span></code> are the indices provided to assess the data at specific index values. For example, if beta has six delayed neutron groups, a specific group can be accessed by applying the indices.</p></li>
 </ul>
 </div></blockquote>
 <dl class="simple">
 <dt><strong>Notes:</strong></dt><dd><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;universe</span> <span class="pre">Id&gt;</span></code> can be provided or omitted. However, if it is omitted, the <code class="docutils literal notranslate"><span class="pre">links</span></code> card must be set in <a class="reference internal" href="controldeck.html#j-links"><span class="std std-ref">links</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;universe</span> <span class="pre">Id&gt;</span></code> can be provided or omitted. However, if it is omitted, the <a class="reference internal" href="controldeck.html#j-links"><span class="std std-ref">links</span></a> card must be set under the <a class="reference internal" href="controldeck.html#controldeck"><span class="std std-ref">Control Deck</span></a> file.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;attribute&gt;</span></code> is mandatory and must exist in the definition of the universe (<a class="reference internal" href="input_cards.html#i-settings"><span class="std std-ref">settings</span></a>). Attribute can also include states’ names.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;state&gt;</span></code> must be defined in <a class="reference internal" href="input_cards.html#i-branches"><span class="std std-ref">Branches</span></a> or <a class="reference internal" href="input_cards.html#i-histories"><span class="std std-ref">Histories</span></a> or <a class="reference internal" href="input_cards.html#i-times"><span class="std std-ref">Times</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;state&gt;</span></code> can either be a branch name defined in <a class="reference internal" href="input_cards.html#i-branches"><span class="std std-ref">Branches</span></a>, or the preserved keyword <code class="docutils literal notranslate"><span class="pre">history</span></code> or the preserved keyword <code class="docutils literal notranslate"><span class="pre">time</span></code>. Not all the states must be provided.</p></li>
@@ -231,7 +231,7 @@ At the moment, only a single evaluation can be performed in a single line.</p>
 <li><p>It must be pointed out that when executing the “values”{…} comand, not all states that exist in <a class="reference internal" href="input_cards.html#i-data"><span class="std std-ref">Data</span></a> must be provided. For example, if the states include multiple fuel and coolant temperatures, and the command is evaluated for a specific fuel temperature then all the existing coolant temperatures that correspond to this fuel temperatures will be evaluated and written.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;indices&gt;</span></code> must be provided in square brackets […]. However, indices can also be omitted, in which case no […] brackets are required.</p></li>
 <li><p>It is up to the user to know how to slice the data as the user was reponsible to feed the data in.</p></li>
-<li><p>The most important note is to understand that when the <code class="docutils literal notranslate"><span class="pre">values</span></code> command is provided, the program evaluates the values using the <code class="docutils literal notranslate"><span class="pre">universes.Values</span></code> method internally. The end result can yield a scalar, vector, or matrix.</p></li>
+<li><p>The most important note is to understand that when the <code class="docutils literal notranslate"><span class="pre">values</span></code> command is provided, the program evaluates the values using the <code class="docutils literal notranslate"><span class="pre">universes.Values</span></code> method internally. The end result can yield a scalar, vector, or a matrix.</p></li>
 </ul>
 </dd>
 </dl>
@@ -287,7 +287,7 @@ At the moment, only a single evaluation can be performed in a single line.</p>
 </div></blockquote>
 </li>
 </ul>
-<p>Please note that the format of the attribute or state values is defined in <a class="reference internal" href="controldeck.html#j-formats"><span class="std std-ref">formats</span></a>, which also defines the maximum number of values allowed to be printed in a single line. For our previous example, let’s assume that we defined that only 4 values can be printed in a single line. However, the previous command yields 10 values. These will be printed in order. First four in one line, next four values in the following line, and the last two values in a third line.</p>
+<p>Please note that the format of the attribute or state values is defined in <a class="reference internal" href="controldeck.html#j-formats"><span class="std std-ref">formats</span></a>, which also defines the maximum number of values allowed to be printed in a single line. For our previous example, let’s assume that we defined that only 4 values can be printed in a single line. However, the previous command yields 10 values. These will be printed in order. First four in one line, next four values in the following line, and the remaining two values in the third line.</p>
 </section>
 <section id="repetitive-blocks">
 <span id="repblocks"></span><h2>Repetitive Blocks<a class="headerlink" href="#repetitive-blocks" title="Permalink to this headline">¶</a></h2>
@@ -319,7 +319,7 @@ Sub-blocks can be defined within blocks, and these can also include dynamic comm
 </div></blockquote>
 </li>
 <li><p>In the application above, block-2 will be duplicated M times and then block-1 (including the duplicated block-2) will be duplicated N times.</p></li>
-<li><p>The hierarchy rules allow to have <code class="docutils literal notranslate"><span class="pre">{{</span></code>  blocks within <code class="docutils literal notranslate"><span class="pre">{</span></code>, <code class="docutils literal notranslate"><span class="pre">{{{</span></code> within <code class="docutils literal notranslate"><span class="pre">{{</span></code>, and so on. Several same-level blocks can appear in higer level blocks. For example:</p>
+<li><p>The hierarchy rules allow to have <code class="docutils literal notranslate"><span class="pre">{{</span></code>  blocks within <code class="docutils literal notranslate"><span class="pre">{</span></code>, <code class="docutils literal notranslate"><span class="pre">{{{</span></code> within <code class="docutils literal notranslate"><span class="pre">{{</span></code>, and so on. Several same-level blocks can appear in higher level blocks. For example:</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">N1</span><span class="o">&gt;</span>
 <span class="n">Block</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span> <span class="n">repreated</span> <span class="n">N1</span> <span class="n">times</span>
@@ -366,7 +366,7 @@ Sub-blocks can be defined within blocks, and these can also include dynamic comm
 </div></blockquote>
 <dl>
 <dt><strong>Notes:</strong></dt><dd><ul class="simple">
-<li><p>Several same-lebel blocks can exist.</p></li>
+<li><p>Several same-level blocks can exist.</p></li>
 <li><p>Lower-level blocks (e.g., <code class="docutils literal notranslate"><span class="pre">{{</span></code>) can not contain higher-level blocks (e.g., <code class="docutils literal notranslate"><span class="pre">{</span></code>). The following shows an example of an <em>erroneous</em> snippet:</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;rep&quot;</span><span class="p">{{</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span>

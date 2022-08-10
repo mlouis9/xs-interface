@@ -4,10 +4,8 @@
 Spatial Homogenization
 ---------------------- 
 
-Place methods here.
+To be completed in the future.
 
 
-.. math::
 
-   Q_{sys} = \dot{m}_{sys}\left(h_c-h_{tank} \right) \quad \textrm{Eq.(1)}
 	

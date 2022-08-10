@@ -25,24 +25,22 @@ After reading and processing the homogenized data, the following multi-group sol
 Description
 ============
 
-The package is designed as a general tool. The idea is to avoid the need to dive into the internals of the package.
-The ``xsInterface`` includes the following capabilities:
+The package is designed as a general tool. The idea is to allow the user with the flexibility to define what/how to read and write, as well as ways to manipulate data.
+The ``xsInterface`` includes the following **capabilities**:
 
 1. User-defined definitions for input parameters.
 2. User-defined perturbations.
 3. Energy condensation techniques.
-4. Spatial homogenization techniques.
-5. General templates to write the output files.  
+4. General templating to write the output files.  
 
-The setup of the problem can be performed via:
+The **setup** of the problem can be performed via:
 
-1. Memory-based Interface (recommended for coupled codes)
-2. Input file-based Interface. 
+1. Input file-based Interface. The latter is well established.
+2. Memory-based Interface (recommended for coupled codes). The later still requires polishing to be fully executable.
 
-The package allows to perform the following important operations:
+**Future** capabilities will implement the following important capabilities:
 
-- Energy condensation.
-- Spatial homogenization.
+- Spatial homogenization techniques.
 - Multivariate interpolation.
 - Generation of spatial transfer functions.
 

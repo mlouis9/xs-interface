@@ -39,8 +39,9 @@
 <span id="universecards"></span><h1>Universe data cards<a class="headerlink" href="#universe-data-cards" title="Permalink to this headline">¶</a></h1>
 <p>For each unique cross-section set or universe a separate file is defined.
 It is up to the user to control the data flow.</p>
+<p>The only exception in defining a single universe in each file is when multiple universes are read via the the <a class="reference internal" href="#i-serpent"><span class="std std-ref">Serpent</span></a>  card. In the latter case, one file can contain multiple universes.</p>
 <p>A list of all the input cards is descirbed in the table below.
-Description on the format, comments, and magic capabilities is provided in <a class="reference internal" href="#gen-comments"><span class="std std-ref">General comments</span></a>.</p>
+Description on the format, comments, and general instructions is provided in <a class="reference internal" href="#gen-comments"><span class="std std-ref">General comments</span></a>.</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 19%" />
@@ -53,7 +54,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference internal" href="#i-settings"><span class="std std-ref">settings</span></a></p></td>
-<td><p>Names and dimensions of variables to be defined.</p></td>
+<td><p>Variables’ names to be defined.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#i-branches"><span class="std std-ref">Branches</span></a></p></td>
 <td><p>Branch-off names and values.</p></td>
@@ -62,7 +63,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <td><p>Histories names and values.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#i-times"><span class="std std-ref">Times</span></a></p></td>
-<td><p>Time units and values.</p></td>
+<td><p>Time values.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#i-data"><span class="std std-ref">Data</span></a></p></td>
 <td><p>Define data to be added to a specific (branch, history, time) set.</p></td>
@@ -74,7 +75,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <td><p>Branch labels as they appear in Serpent branch .coe file.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#i-manipulate"><span class="std std-ref">Manipulate</span></a></p></td>
-<td><p>Data manipulation including energy condensation and math operations.</p></td>
+<td><p>Data manipulation including energy condensation operations.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#i-filter"><span class="std std-ref">Filter</span></a></p></td>
 <td><p>States and data names to be filtered/included.</p></td>
@@ -83,18 +84,64 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </table>
 <section id="general-comments">
 <span id="gen-comments"></span><h2>General comments<a class="headerlink" href="#general-comments" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Comments are denoted as <code class="docutils literal notranslate"><span class="pre">#</span></code> and <code class="docutils literal notranslate"><span class="pre">%</span></code>. Inputs following these signs are ignored.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">settings</span> <span class="o">&lt;</span><span class="n">NG</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">DN</span><span class="o">&gt;</span>
+<span class="c1"># --------------------------------------------------------</span>
+<span class="c1">#            INPUT EXAMPLE FOR A SINGLE CROSS SECTION TYPE</span>
+<span class="c1"># --------------------------------------------------------</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">branches</span> <span class="mi">3</span>
+<span class="n">fuel</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">900</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">1500</span>  <span class="o">%</span> <span class="mi">4</span> <span class="n">fuel</span> <span class="n">branches</span> <span class="n">are</span> <span class="n">provided</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Commas are allowed when assigning parameters.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>is the same as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Case insensitive (captial and lower cases) are allowed, but all variables will be converted to lower case.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">macro</span> <span class="o">=</span>  <span class="n">infFlx</span><span class="p">,</span> <span class="n">infNsf</span>
+</pre></div>
+</div>
 <ul class="simple">
-<li><p>Comments are denoted as <code class="docutils literal notranslate"><span class="pre">#</span></code> and <code class="docutils literal notranslate"><span class="pre">%</span></code>. Inputs following these signs are ignored.</p></li>
-<li><p>Commas are allowed.</p></li>
-<li><p>Case insensitive (captial and lower cases are allowed)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">=</span></code> signs are allowed to be added (but not mandatory) when the card name is provided.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">infFlx</span></code> and <code class="docutils literal notranslate"><span class="pre">infNsf</span></code> will be converted to <code class="docutils literal notranslate"><span class="pre">infflx</span></code> and <code class="docutils literal notranslate"><span class="pre">infnsf</span></code>.</p></li>
+<li><p>When post-processing the data only lower case strings will be recognized (e.g., <code class="docutils literal notranslate"><span class="pre">infflx</span></code> and <code class="docutils literal notranslate"><span class="pre">infnsf</span></code>)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">=</span></code> signs are allowed to be added (but not mandatory) when assigning data to different variables or sub-cards.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">settings</span> <span class="mi">2</span> <span class="mi">7</span>
+<span class="n">macro</span> <span class="o">=</span>  <span class="n">inf_flx</span><span class="p">,</span> <span class="n">inf_nsf</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="p">,</span> <span class="n">inf_sp0</span>
+</pre></div>
+</div>
+<p>is the same as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">settings</span> <span class="mi">2</span> <span class="mi">7</span>
+<span class="n">macro</span> <span class="n">inf_flx</span><span class="p">,</span> <span class="n">inf_nsf</span><span class="p">,</span> <span class="n">inf_rabs</span><span class="p">,</span> <span class="n">inf_sp0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
 <li><p>Empty lines are allowed between settings lines.</p></li>
 <li><p>Special characters (<code class="docutils literal notranslate"><span class="pre">?</span> <span class="pre">$</span> <span class="pre">&amp;</span> <span class="pre">~</span> <span class="pre">&lt;</span> <span class="pre">&gt;</span></code>) are not allowed.</p></li>
 </ul>
 </section>
 <section id="settings">
 <span id="i-settings"></span><h2>settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
-<p><strong>Names and dimensions of variables to be provided.</strong></p>
+<p><strong>User-defined variables’ names.</strong></p>
 <p><em>Mandatory Card</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">settings</span> <span class="o">&lt;</span><span class="n">NG</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">DN</span><span class="o">&gt;</span>
 <span class="n">sub_card</span> <span class="o">&lt;</span><span class="n">val1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val3</span><span class="o">&gt;</span> <span class="o">...</span>
@@ -107,7 +154,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <li><p><code class="docutils literal notranslate"><span class="pre">DN</span></code> number of delayed neutrons</p></li>
 </ul>
 </dd>
-<dt>and, the list of <strong>sub-cards</strong> options is:</dt><dd><ul class="simple">
+<dt>and, the list of <strong>sub-cards</strong> options include:</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">macro</span></code> names for the macroscopic parameters</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">micro</span></code> names for the microscopic parameters</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">kinetics</span></code> names for the kinetics parameters (e.g., beta values)</p></li>
@@ -121,7 +168,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <blockquote>
 <div><ul class="simple">
 <li><p>At least one of the following should be provided: <cite>macro</cite>, <cite>micro</cite>, <cite>kinetics</cite>, <cite>meta</cite>. User can omit specific entries (e.g., <code class="docutils literal notranslate"><span class="pre">meta</span></code>).</p></li>
-<li><p>The sub-cards can be defined multiple times, e.g.,</p></li>
+<li><p>Each sub-card can be defined multiple times, e.g.,</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">macro</span> <span class="n">fiss</span>
 <span class="n">macro</span> <span class="n">nsf</span><span class="p">,</span> <span class="n">kappa</span>
@@ -142,10 +189,16 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <span class="n">nuclides</span> <span class="o">=</span> <span class="n">nd</span>
 </pre></div>
 </div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">settings</span> <span class="n">NG</span> <span class="mi">2</span> <span class="n">DN</span> <span class="mi">7</span>
+<span class="n">macro</span> <span class="o">=</span>  <span class="nb">abs</span><span class="p">,</span> <span class="n">fiss</span><span class="p">,</span> <span class="n">nsf</span><span class="p">,</span> <span class="n">sct</span>
+<span class="n">kinetics</span> <span class="o">=</span>  <span class="n">beta</span> <span class="n">decay_const</span>
+</pre></div>
+</div>
 </section>
 <section id="branches">
 <span id="i-branches"></span><h2>Branches<a class="headerlink" href="#branches" title="Permalink to this headline">¶</a></h2>
-<p><strong>Branchoff names and values.</strong></p>
+<p><strong>Branchoff (from nominal) names and values.</strong></p>
 <p><em>Mandatory Card</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">branches</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">UNIT</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">...</span> <span class="o">&lt;</span><span class="n">UNIT</span><span class="o">-</span><span class="n">N</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">branch</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val3</span><span class="o">&gt;</span> <span class="o">...</span>
@@ -161,7 +214,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </dd>
 <dt>and, in the <strong>&lt;branch&gt; sub-cards</strong>,</dt><dd><ul class="simple">
 <li><p>number of sub-cards must be equal to <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">branch-N</span></code> is the user-defined name (e.g., fuel) that will be assigned the N-th branch.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">branch-N</span></code> is the user-defined name (e.g., fuel) that will be assigned with the N-th branch.</p></li>
 <li><p>arbitrary number of numeric values can be provided for each branch.</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fuel</span> <span class="mf">600.0</span> <span class="mf">900.0</span> <span class="mf">1200.0</span> <span class="mf">1500.0</span> <span class="mf">1800.0</span>
@@ -171,6 +224,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <dt><strong>Notes:</strong></dt><dd><ul class="simple">
 <li><p>At least one branch must be provided.</p></li>
 <li><p>If only a partial <code class="docutils literal notranslate"><span class="pre">units</span></code> list is provided, the remaining unprovided units are set to <code class="docutils literal notranslate"><span class="pre">n/a</span></code></p></li>
+<li><p>At the moment, these units are not used for anything.</p></li>
 </ul>
 </dd>
 </dl>
@@ -206,9 +260,9 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </dd>
 <dt>and, in the <strong>&lt;history&gt; sub-cards</strong>,</dt><dd><ul class="simple">
 <li><p>number of sub-cards must be equal to <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">history-N</span></code> is the user-defined name (e.g., nominal) that will be assigned the N-th history.</p></li>
-<li><p>For each history, the number of values must be identical to the number of branches provided in the <a class="reference internal" href="#i-branches"><span class="std std-ref">Branches</span></a> card. The order of these entries also corresponds the order the branches are provided.</p></li>
-<li><p>In the example below, three branches were provide in the <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">branches</span></code> card ordering fuel temperature, moderator temperature, and coolant density. The card below describes a history named as nominal, in which the values correspond the branches in a respective order.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">history-N</span></code> is the user-defined name (e.g., nominal) that will be assigned with the N-th history.</p></li>
+<li><p>For each history, the number of values must be identical to the number of branches provided in the <a class="reference internal" href="#i-branches"><span class="std std-ref">Branches</span></a> card. The order of these entries must also correspond to the order these branches are provided in the branch card.</p></li>
+<li><p>In the example below, three branches were provide in the <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">branches</span></code> card with the following order: fuel temperature, moderator temperature, and coolant density. The card below describes a history named as <em>nominal</em>, in which the fuel, moderator, and coolant values are 900.0, 550.0, and 750.0 respectively.</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nominal</span> <span class="mf">900.0</span><span class="p">,</span> <span class="mf">550.0</span><span class="p">,</span> <span class="mf">750.0</span>
 </pre></div>
@@ -242,11 +296,11 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </dd>
 <dt>and, the time/burnup  values are provided in the following lines.</dt><dd><ul class="simple">
 <li><p>The values can be provided in a single or multiple lines.</p></li>
-<li><p>Values must be given in ascending order.</p></li>
+<li><p>Values must be given in <strong>ascending order</strong>.</p></li>
 </ul>
 </dd>
 <dt><strong>Notes:</strong></dt><dd><ul class="simple">
-<li><p>At least one time/burnup value must be provided.</p></li>
+<li><p>At least one time/burnup value must be provided if the card is defined.</p></li>
 </ul>
 </dd>
 </dl>
@@ -285,7 +339,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </li>
 </ul>
 </dd>
-<dt>the  <strong>BLOCK</strong> options must include one of the following options to indicate what information comes next:</dt><dd><ul class="simple">
+<dt>the  <strong>BLOCK</strong> must include one of the following options to indicate what information comes next:</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">state</span></code> state parameters (e.g., branch, time, history)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">macro</span></code> macroscopic parameters (e.g., energy groups dependent cross sections)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">micro</span></code> microscopic parameters (e.g., energy groups dependent cross sections)</p></li>
@@ -306,7 +360,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </dd>
 <dt><strong>block</strong> <code class="docutils literal notranslate"><span class="pre">micro</span></code>:</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> of the microscopic properties followed by numeric values.</p></li>
-<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the property must be defined in a new line. Values must also be provided in new lines, where represents a specific isotope. e.g.,</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the property must be defined in a new line. Values must also be provided in new lines; each line represents a specific isotope. e.g.,</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sig_f</span>
 <span class="n">val11</span><span class="p">,</span> <span class="n">val2</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">1</span>
@@ -371,12 +425,18 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span>  <span class="o">%</span> <span class="n">isotope</span><span class="o">-</span><span class="mi">3</span>
 </pre></div>
 </div>
+<ul class="simple">
+<li><p>Please note that in the example above, the name <code class="docutils literal notranslate"><span class="pre">nd</span></code> specified as a sub-card in the <code class="docutils literal notranslate"><span class="pre">micro</span></code>-block is declared under the <a class="reference internal" href="#i-settings"><span class="std std-ref">settings</span></a> card.</p></li>
+<li><p>The values provided for each row under the <code class="docutils literal notranslate"><span class="pre">nd</span></code> variable represent the nuclide density for each isotope provided under the <a class="reference internal" href="#i-settings"><span class="std std-ref">settings</span></a> card.</p></li>
+<li><p>All the other values provided under the <code class="docutils literal notranslate"><span class="pre">micro</span></code> block  are energy-dependent values.</p></li>
+<li><p>For scattering matrices, the data is expected to be provided in descending energy order (e.g., scattering from high-to-lower energy groups).</p></li>
+</ul>
 </section>
 <section id="serpent">
 <span id="i-serpent"></span><h2>Serpent<a class="headerlink" href="#serpent" title="Permalink to this headline">¶</a></h2>
 <p><strong>Serpent branch .coe files.</strong></p>
-<p><em>Optional Card</em>. Must be provided together with <a class="reference internal" href="#i-labels"><span class="std std-ref">Labels</span></a>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">serpent</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">TIME</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">FLUX</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">ENE</span><span class="o">&gt;</span>
+<p><em>Optional Card</em>. Must be provided together with the <a class="reference internal" href="#i-labels"><span class="std std-ref">Labels</span></a> card.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">serpent</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">TIME</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">FLUX</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">ENE</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">history</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;.</span><span class="n">coe</span> <span class="n">file</span> <span class="mi">1</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">history</span><span class="o">-</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;.</span><span class="n">coe</span> <span class="n">file</span> <span class="mi">2</span><span class="o">&gt;</span>
 <span class="o">...</span>
@@ -384,8 +444,8 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </div>
 <dl>
 <dt>where in the <strong>set</strong> line,</dt><dd><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> describe the number of .coe files to be provided in the following rows.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code> is an indicator whether the time- (positive entires) or burnup-points (negative entries) are to be collected for the values provided in <a class="reference internal" href="#i-times"><span class="std std-ref">Times</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> describe the number of .coe history files to be provided in the following rows.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code> is a numeric indicator whether the time- (positive entires) or burnup-points (negative entries) are to be collected for the values provided in <a class="reference internal" href="#i-times"><span class="std std-ref">Times</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FLUX</span></code> is the name of the flux variable used in serpent, similarly defined in <a class="reference internal" href="#i-data"><span class="std std-ref">Data</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ENE</span></code> energy structure in descending order similarly used in <a class="reference internal" href="#i-data"><span class="std std-ref">Data</span></a>. Must include upper and lower boundaries, e.g., for a 2-group structure:</p>
 <blockquote>
@@ -398,8 +458,8 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </dd>
 <dt>and, the names of the history branches along with their .coe files are provided in the following lines.</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">history</span></code> must correspond to the history names provided in <a class="reference internal" href="#i-histories"><span class="std std-ref">Histories</span></a>.</p></li>
-<li><p>It must be pointed out that the history branches are read from separate .coe files as currently <a class="reference external" href="https://serpent.vtt.fi/mediawiki/index.php/Automated_burnup_sequence">Serpent</a> cannot produce multiple histories in a single .coe file.</p></li>
-<li><p>Each .coe file can include a single or multiple universes.</p></li>
+<li><p>It must be pointed out that the history branches are read from separate serpent files; under the assumption that <a class="reference external" href="https://serpent.vtt.fi/mediawiki/index.php/Input_syntax_manual#coef_.28coefficient_matrix_definition.29">coefficient matrix definition</a> is used to produce separate .coe files for each history.</p></li>
+<li><p>Each .coe file can include either a single or multiple universes.</p></li>
 </ul>
 </dd>
 <dt><strong>Notes:</strong></dt><dd><ul class="simple">
@@ -425,7 +485,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <section id="labels">
 <span id="i-labels"></span><h2>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h2>
 <p><strong>Branch labels defined in Serpent .coe files.</strong></p>
-<p><em>Optional Card</em>. But, must be provided if <a class="reference internal" href="#i-serpent"><span class="std std-ref">Serpent</span></a> is provided.</p>
+<p><em>Optional Card</em>. But, must be provided if <a class="reference internal" href="#i-serpent"><span class="std std-ref">Serpent</span></a> card is provided.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">labels</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">branch</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val3</span><span class="o">&gt;</span> <span class="o">...</span>
 <span class="o">&lt;</span><span class="n">branch</span><span class="o">-</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">val3</span><span class="o">&gt;</span> <span class="o">...</span>
@@ -451,8 +511,8 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </div>
 </dd>
 <dt><strong>Notes:</strong></dt><dd><ul class="simple">
-<li><p>This card must be provided together with <a class="reference internal" href="#i-serpent"><span class="std std-ref">Serpent</span></a>.</p></li>
-<li><p>The .coe branch files may contain more bracnhes than are required by the user, and yet the user must provide ALL the branches that appear in the file. Some of these points can then be filtered using <a class="reference internal" href="#i-filter"><span class="std std-ref">Filter</span></a>.</p></li>
+<li><p>This card must be provided together with the <a class="reference internal" href="#i-serpent"><span class="std std-ref">Serpent</span></a> card.</p></li>
+<li><p>The .coe branch files may contain more bracnhes than are required by the user, and yet the user must provide ALL the branches that appear in the file. Some of these points can then be filtered using the <a class="reference internal" href="#i-filter"><span class="std std-ref">Filter</span></a> card.</p></li>
 </ul>
 </dd>
 </dl>

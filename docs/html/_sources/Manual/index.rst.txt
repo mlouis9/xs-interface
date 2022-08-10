@@ -41,7 +41,7 @@ Data Flow
 
 The figure below is provided for explaining the data flow sequence.
 
-1. Begin by defining all the universe files with cross-section data.
+1. Begin by defining all the universe files with cross-section data - including data read from external sources (e.g., Serpent).
 2. Proceed with defining unique template files to be used to output the information.
 3. Conclude the process with the control deck file that ties between universe and template files.
 

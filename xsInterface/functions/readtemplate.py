@@ -336,7 +336,10 @@ def _CleanDataCopy(dataIn, fmt0):
                     msg0 = msgExe + '{}\n'.format(tline) +\
                         'exe command: {}\n{}\n'.format(strExe,detail) 
                     raise TemplateFileError(msg0)
-                
+                except NameError as detail:
+                    msg0 = msgExe + '{}\n'.format(tline) +\
+                        'exe command: {}\n{}\n'.format(strExe,detail)
+                    raise TemplateFileError(msg0)                
         # Copy (and if needed replace line) to a clean data list
         dataClean.append(tline)
     
