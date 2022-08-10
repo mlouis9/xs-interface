@@ -24,7 +24,7 @@ inputFile1 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
 
 # read the input file/s and collect data for all the universes
 # -----------------------------------------------------------------------------
-universes = ReadInput(u0=inputFile0, u1=inputFile1)
+universes = ReadInput({}, u0=inputFile0, u1=inputFile1)
 
 # read the input file/s and collect data for all the universes
 # -----------------------------------------------------------------------------
