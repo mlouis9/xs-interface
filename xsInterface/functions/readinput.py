@@ -83,7 +83,8 @@ def ReadInput(serpentIds, **kwargs):
     Parameters
     ----------
     SerpentIds : dict
-        TBC
+        Link between user-defined and serpent-defined Ids, e.g.
+        {'fuel':['0', '1']}. The dict can be empty is serpent Ids are not used
     kwargs : named arguments
         keys represent the universe Id and value represent the full
         file directory path + file name.
@@ -105,6 +106,10 @@ def ReadInput(serpentIds, **kwargs):
 
 
     univs = Universes()
+
+    if serpentIds == {}:
+        for univId, inputFile in kwargs.items():
+            serpentIds[univId] = [None]
 
     for univId, inputFile in kwargs.items():
 
