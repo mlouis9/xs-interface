@@ -5,21 +5,23 @@ Universe data cards
 ------------------- 
 
 For each unique cross-section set or universe a separate file is defined.
-It is up to the user to control the data flow.
+It is up to the user to control the data flow. 
+
+The only exception in defining a single universe in each file is when multiple universes are read via the the :ref:`i_serpent`	card. In the latter case, one file can contain multiple universes.
 
 A list of all the input cards is descirbed in the table below.
-Description on the format, comments, and magic capabilities is provided in :ref:`gen_comments`.
+Description on the format, comments, and general instructions is provided in :ref:`gen_comments`.
 
 ===================== ===================================================================
 Set what?							Description
 ===================== ===================================================================
-:ref:`i_settings`			Names and dimensions of variables to be defined.
+:ref:`i_settings`			Variables' names to be defined.
 --------------------- -------------------------------------------------------------------
 :ref:`i_branches`			Branch-off names and values.
 --------------------- -------------------------------------------------------------------
 :ref:`i_histories`		Histories names and values.
 --------------------- -------------------------------------------------------------------
-:ref:`i_times`				Time units and values.
+:ref:`i_times`				Time values.
 --------------------- -------------------------------------------------------------------
 :ref:`i_data`					Define data to be added to a specific (branch, history, time) set.
 --------------------- -------------------------------------------------------------------
@@ -27,7 +29,7 @@ Set what?							Description
 --------------------- -------------------------------------------------------------------
 :ref:`i_labels`				Branch labels as they appear in Serpent branch .coe file.
 --------------------- -------------------------------------------------------------------
-:ref:`i_manipulate`		Data manipulation including energy condensation and math operations.
+:ref:`i_manipulate`		Data manipulation including energy condensation operations.
 --------------------- -------------------------------------------------------------------
 :ref:`i_filter`				States and data names to be filtered/included.
 ===================== ===================================================================
@@ -40,9 +42,59 @@ Set what?							Description
 General comments
 =================
 - Comments are denoted as ``#`` and ``%``. Inputs following these signs are ignored.
-- Commas are allowed.
-- Case insensitive (captial and lower cases are allowed)
-- ``=`` signs are allowed to be added (but not mandatory) when the card name is provided.
+	
+	.. code::
+	
+	   set settings <NG> <DN>
+	   # --------------------------------------------------------
+	   #            INPUT EXAMPLE FOR A SINGLE CROSS SECTION TYPE
+	   # --------------------------------------------------------
+	
+	
+	or
+		
+	.. code::
+			
+	   set branches 3
+	   fuel 600, 900 1200, 1500  % 4 fuel branches are provided
+
+
+- Commas are allowed when assigning parameters.
+
+	.. code::
+			
+	   beta 1, 1, 1, 1, 1, 1, 1
+
+	is the same as:
+
+	.. code::
+			
+	   beta 1 1 1 1 1 1 1
+
+- Case insensitive (captial and lower cases) are allowed, but all variables will be converted to lower case.
+
+	.. code::
+			
+	   macro =  infFlx, infNsf
+
+	- ``infFlx`` and ``infNsf`` will be converted to ``infflx`` and ``infnsf``.
+	- When post-processing the data only lower case strings will be recognized (e.g., ``infflx`` and ``infnsf``)
+
+- ``=`` signs are allowed to be added (but not mandatory) when assigning data to different variables or sub-cards.
+
+	.. code::
+		
+	 set settings 2 7
+	 macro =  inf_flx, inf_nsf, inf_rabs, inf_sp0
+	
+	is the same as:
+	
+	.. code::
+		
+	 set settings 2 7
+	 macro inf_flx, inf_nsf, inf_rabs, inf_sp0
+
+
 - Empty lines are allowed between settings lines.
 - Special characters (``? $ & ~ < >``) are not allowed.
 
@@ -54,7 +106,7 @@ General comments
 settings
 =========
 
-**Names and dimensions of variables to be provided.**
+**User-defined variables' names.**
 
 *Mandatory Card*
 
@@ -69,7 +121,7 @@ where in the **set** line,
  - ``NG`` number of energy groups
  - ``DN`` number of delayed neutrons
 
-and, the list of **sub-cards** options is:
+and, the list of **sub-cards** options include:
 	- ``macro`` names for the macroscopic parameters
 	- ``micro`` names for the microscopic parameters
 	- ``kinetics`` names for the kinetics parameters (e.g., beta values)
@@ -80,7 +132,7 @@ and, the list of **sub-cards** options is:
 **Notes:**
 	
 	*	At least one of the following should be provided: `macro`, `micro`, `kinetics`, `meta`. User can omit specific entries (e.g., ``meta``).
-	*	The sub-cards can be defined multiple times, e.g., 
+	*	Each sub-card can be defined multiple times, e.g., 
 
 	.. code::
 
@@ -105,6 +157,15 @@ and, the list of **sub-cards** options is:
 	isotopes = 531350, 541350
 	nuclides = nd
 
+or
+
+.. code::
+
+	set settings NG 2 DN 7
+	macro =  abs, fiss, nsf, sct
+	kinetics =  beta decay_const
+
+
 
 .. _i_branches:
 
@@ -113,7 +174,7 @@ Branches
 ============
 
 
-**Branchoff names and values.** 
+**Branchoff (from nominal) names and values.** 
 
 *Mandatory Card*
 
@@ -127,11 +188,11 @@ Branches
 
 where in the **set** line,
  - ``N`` number of branch types (mandatory)
- - ``UNIT-N`` units corresponding to branch ``N``. Units are optional, but if provided must be given in the order the branches are provided.
+ - ``UNIT-N`` units corresponding to branch ``N``. Units are optional, but if provided must be given in the order the branches are provided. 
 
 and, in the **<branch> sub-cards**,
 	- number of sub-cards must be equal to ``N``.
-	- ``branch-N`` is the user-defined name (e.g., fuel) that will be assigned the N-th branch.
+	- ``branch-N`` is the user-defined name (e.g., fuel) that will be assigned with the N-th branch.
 	- arbitrary number of numeric values can be provided for each branch.
 
 	.. code::
@@ -142,6 +203,7 @@ and, in the **<branch> sub-cards**,
 **Notes:**	
 	*	At least one branch must be provided.
 	* If only a partial ``units`` list is provided, the remaining unprovided units are set to ``n/a``
+	* At the moment, these units are not used for anything.
 
 **Examples**:
 
@@ -186,9 +248,9 @@ where in the **set** line,
 
 and, in the **<history> sub-cards**,
 	- number of sub-cards must be equal to ``N``.
-	- ``history-N`` is the user-defined name (e.g., nominal) that will be assigned the N-th history.
-	- For each history, the number of values must be identical to the number of branches provided in the :ref:`i_branches` card. The order of these entries also corresponds the order the branches are provided. 
-	- In the example below, three branches were provide in the ``set branches`` card ordering fuel temperature, moderator temperature, and coolant density. The card below describes a history named as nominal, in which the values correspond the branches in a respective order. 
+	- ``history-N`` is the user-defined name (e.g., nominal) that will be assigned with the N-th history.
+	- For each history, the number of values must be identical to the number of branches provided in the :ref:`i_branches` card. The order of these entries must also correspond to the order these branches are provided in the branch card. 
+	- In the example below, three branches were provide in the ``set branches`` card with the following order: fuel temperature, moderator temperature, and coolant density. The card below describes a history named as *nominal*, in which the fuel, moderator, and coolant values are 900.0, 550.0, and 750.0 respectively. 
 
 	.. code::
 
@@ -230,11 +292,11 @@ where in the **set** line,
 
 and, the time/burnup  values are provided in the following lines.
 	- The values can be provided in a single or multiple lines.
-	- Values must be given in ascending order.
+	- Values must be given in **ascending order**.
 
 
 **Notes:**	
-	*	At least one time/burnup value must be provided.
+	*	At least one time/burnup value must be provided if the card is defined.
 
 **Examples**:
 
@@ -280,7 +342,7 @@ where in the **set** line,
 		set data inf_flx 10.0E+6, 0.6025, 0.0
 
 
-the  **BLOCK** options must include one of the following options to indicate what information comes next:
+the  **BLOCK** must include one of the following options to indicate what information comes next:
 	- ``state`` state parameters (e.g., branch, time, history)
 	- ``macro`` macroscopic parameters (e.g., energy groups dependent cross sections)
 	- ``micro`` microscopic parameters (e.g., energy groups dependent cross sections)
@@ -298,7 +360,7 @@ the **sub-cards** defined under the different blocks are described below.
 		- ``<block_card>`` is name corresponding to existing parameters provided under the :ref:`i_settings` card.
 	**block** ``micro``:
 		- ``name`` of the microscopic properties followed by numeric values.
-		- the ``name`` of the property must be defined in a new line. Values must also be provided in new lines, where represents a specific isotope. e.g.,
+		- the ``name`` of the property must be defined in a new line. Values must also be provided in new lines; each line represents a specific isotope. e.g.,
 
 		.. code::
 
@@ -362,6 +424,10 @@ the **sub-cards** defined under the different blocks are described below.
 	11, 12  % isotope-3
 
 
+* Please note that in the example above, the name ``nd`` specified as a sub-card in the ``micro``-block is declared under the :ref:`i_settings` card.
+* The values provided for each row under the ``nd`` variable represent the nuclide density for each isotope provided under the :ref:`i_settings` card.
+* All the other values provided under the ``micro`` block  are energy-dependent values. 
+* For scattering matrices, the data is expected to be provided in descending energy order (e.g., scattering from high-to-lower energy groups). 
 
 .. _i_serpent:
 
@@ -372,19 +438,19 @@ Serpent
 
 **Serpent branch .coe files.**
 
-*Optional Card*. Must be provided together with :ref:`i_labels`.
+*Optional Card*. Must be provided together with the :ref:`i_labels` card.
 
 .. code::
 		
-   set serpent <N> <TIME> <FLUX>, <ENE>
+   set serpent <N> <TIME> <FLUX> <ENE>
    <history-1> <.coe file 1>
    <history-2> <.coe file 2>
    ...
   
 
 where in the **set** line,
- - ``N`` describe the number of .coe files to be provided in the following rows.
- - ``TIME`` is an indicator whether the time- (positive entires) or burnup-points (negative entries) are to be collected for the values provided in :ref:`i_times`.
+ - ``N`` describe the number of .coe history files to be provided in the following rows.
+ - ``TIME`` is a numeric indicator whether the time- (positive entires) or burnup-points (negative entries) are to be collected for the values provided in :ref:`i_times`.
  - ``FLUX`` is the name of the flux variable used in serpent, similarly defined in :ref:`i_data`.
  - ``ENE`` energy structure in descending order similarly used in :ref:`i_data`. Must include upper and lower boundaries, e.g., for a 2-group structure:  
 
@@ -395,8 +461,8 @@ where in the **set** line,
 
 and, the names of the history branches along with their .coe files are provided in the following lines.
 	- ``history`` must correspond to the history names provided in :ref:`i_histories`.
-	- It must be pointed out that the history branches are read from separate .coe files as currently `Serpent <https://serpent.vtt.fi/mediawiki/index.php/Automated_burnup_sequence>`_ cannot produce multiple histories in a single .coe file. 
-	- Each .coe file can include a single or multiple universes.
+	- It must be pointed out that the history branches are read from separate serpent files; under the assumption that `coefficient matrix definition <https://serpent.vtt.fi/mediawiki/index.php/Input_syntax_manual#coef_.28coefficient_matrix_definition.29>`_ is used to produce separate .coe files for each history. 
+	- Each .coe file can include either a single or multiple universes.
 
 
 **Notes:**	
@@ -430,7 +496,7 @@ Labels
 
 **Branch labels defined in Serpent .coe files.** 
 
-*Optional Card*. But, must be provided if :ref:`i_serpent` is provided.
+*Optional Card*. But, must be provided if :ref:`i_serpent` card is provided.
 
 .. code::
 		
@@ -458,8 +524,8 @@ and, in the **<branch> sub-cards**,
 
 
 **Notes:**	
-	*	This card must be provided together with :ref:`i_serpent`.
-	* The .coe branch files may contain more bracnhes than are required by the user, and yet the user must provide ALL the branches that appear in the file. Some of these points can then be filtered using :ref:`i_filter`.
+	*	This card must be provided together with the :ref:`i_serpent` card.
+	* The .coe branch files may contain more bracnhes than are required by the user, and yet the user must provide ALL the branches that appear in the file. Some of these points can then be filtered using the :ref:`i_filter` card.
 
 **Examples**:
 

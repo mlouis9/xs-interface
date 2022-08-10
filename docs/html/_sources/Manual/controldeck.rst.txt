@@ -6,8 +6,7 @@ Control Deck
 
 This is the main file that controls the flow of data and the corresponding output formatting.
 
-A list of all the input cards within this file is descirbed in the table below.
-Description on the format, comments, and magic capabilities is provided in :ref:`gen_comments`.
+A list of all the input cards within this file is provided in the table below.
 
 ===================== ===================================================================
 Set what?							Description
@@ -31,7 +30,7 @@ Set what?							Description
 universes
 =========
 
-**Names/Ids of the universes and the full dir path of their corresponding input file.**
+**Names/Ids of the universes and their corresponding input files.**
 
 *Mandatory Card*
 
@@ -71,7 +70,7 @@ where,
 templates
 =========
 
-**Names/Ids of the templates and the full dir path of their corresponding template file.**
+**Names/Ids of the templates and their corresponding template files.**
 
 *Mandatory Card*
 
@@ -109,7 +108,7 @@ where,
 outputs
 =======
 
-**Names/Ids of the templates and the full dir path of the output files that will be using that specific template.**
+**Names/Ids of the templates and and the corresponding output files that will use these templates.**
 
 *Mandatory Card*
 
@@ -124,7 +123,7 @@ outputs
 where,
 
  - ``template name`` is user defined name/Id of that specific template. Must correspond to the name defined under the :ref:`j_templates` card.
- - ``output file`` is the path dir to where the cross sections will be written to.
+ - ``output file`` is the path dir + file name to where the cross sections will be written to.
 
 
 **Notes:**
@@ -150,7 +149,7 @@ links
 **Linkage between universes and templates Ids.**
 
 This card allows to apply the same template file for multiple universes without the need to define unique template file for each universe separately.
-This capability is convient when the use want to use the same template file for multiple universes.
+This capability is convenient when the user wishes to apply the same template file for multiple universes.
 It must be pointed out that if this card is not provided, the explicit definition of universes must be provided within the template files themselves.
 
 *Optional Card*
@@ -166,14 +165,14 @@ It must be pointed out that if this card is not provided, the explicit definitio
 where,
 
  - ``template name`` is an user defined name/Id of that specific template. Must correspond to the name defined under the :ref:`j_templates` card.
- - ``universe name1`` is the user defined universe name or Id.
+ - ``universe name`` is the user defined universe name or Id.
 
 
 **Notes:**
 	
 	*	This card can be omitted.
 	*	Each ``template name`` can have a single or multiple ``universe name``.
-	* If multiple universes are provided for a specific template then multiple ouutput files will be created. Their naming will differ by the postfix name of the specific universe, e.g. ``output_u0``, ``output_u1`` and so on. 
+	* If multiple universes are provided for a specific template then multiple output files will be created. Their naming will differ by the postfix name of the specific universe, e.g. ``output_u0``, ``output_u1`` and so on. 
 
 
 **Example**:
@@ -221,7 +220,7 @@ There is no need to use the "" marks.
 
 where,
 
- - ``univ Id`` is an user defined universe Id, which must be defined in the :ref:`j_universes` card.
+ - ``univ Id`` is a user defined universe Id, which must be defined in the :ref:`j_universes` card.
  - ``serpent universe Id`` is the serpent defined universes Ids within the .coe files.
 
 
@@ -283,7 +282,7 @@ where,
  - ``state``, ``attr``, and ``var`` are all preserved keywords.
  - ``state`` denotes state perturbation parameter, such as time, history, or branch.
  - ``attr`` denotes a macro or micro data, such as the fission cross section.
- - ``var`` denotes a user-defined variable used within the template file (more dtails can be found in ...).
+ - ``var`` denotes a user-defined variable used within the template file, but this can be over-written if the format is specified directly in the template file using  :ref:`varo`.
  - The default values for ``state_format``, ``attr_format``, and ``var_format`` are: 5.3f, 5.5e, d
 
 

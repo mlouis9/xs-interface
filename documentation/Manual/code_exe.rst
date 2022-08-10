@@ -31,11 +31,11 @@ Write the data to output files.
 	
 where, ``writemode`` defines the writing mode and can be 'w', 'a', and so on.
 
-``writemode`` can be omitted, in which case the default will be `w`. e.g.,
+``writemode`` can be omitted, in which case the default will be 'w'. e.g.,
 
 .. code::
 
-	xs.Write(writemode)
+	xs.Write(writemode='w')
 
 
 Access Data Directly
@@ -51,9 +51,9 @@ After the execution of ``xs.Read()``, the data can be directly obtained by using
 		
 	where,
 	
-	- ``univId`` is the universe name.
+	- ``univId`` is the universe name. Only a single universe string is allowed to be used.
 	- ``attrs`` is a list or string containing the parameters of interest.
-	- ``kwargs`` represent the different states for which data is obtained.
+	- ``kwargs`` represent the different states (i.e., branches, histories, times) for which data is obtained.
 	
 	Example:
 	

@@ -37,8 +37,7 @@
   <section id="control-deck">
 <span id="controldeck"></span><h1>Control Deck<a class="headerlink" href="#control-deck" title="Permalink to this headline">¶</a></h1>
 <p>This is the main file that controls the flow of data and the corresponding output formatting.</p>
-<p>A list of all the input cards within this file is descirbed in the table below.
-Description on the format, comments, and magic capabilities is provided in <a class="reference internal" href="input_cards.html#gen-comments"><span class="std std-ref">General comments</span></a>.</p>
+<p>A list of all the input cards within this file is provided in the table below.</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 18%" />
@@ -72,7 +71,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </table>
 <section id="universes">
 <span id="j-universes"></span><h2>universes<a class="headerlink" href="#universes" title="Permalink to this headline">¶</a></h2>
-<p><strong>Names/Ids of the universes and the full dir path of their corresponding input file.</strong></p>
+<p><strong>Names/Ids of the universes and their corresponding input files.</strong></p>
 <p><em>Mandatory Card</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">universes</span>
 <span class="o">&lt;</span><span class="n">universe</span> <span class="n">name1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">corresponding</span> <span class="n">universe</span> <span class="n">file</span> <span class="mi">1</span><span class="o">&gt;</span>
@@ -104,7 +103,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </section>
 <section id="templates">
 <span id="j-templates"></span><h2>templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h2>
-<p><strong>Names/Ids of the templates and the full dir path of their corresponding template file.</strong></p>
+<p><strong>Names/Ids of the templates and their corresponding template files.</strong></p>
 <p><em>Mandatory Card</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">templates</span>
 <span class="o">&lt;</span><span class="n">template</span> <span class="n">name1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">corresponding</span> <span class="n">template</span> <span class="n">file</span> <span class="mi">1</span><span class="o">&gt;</span>
@@ -135,7 +134,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 </section>
 <section id="outputs">
 <span id="j-outputs"></span><h2>outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p><strong>Names/Ids of the templates and the full dir path of the output files that will be using that specific template.</strong></p>
+<p><strong>Names/Ids of the templates and and the corresponding output files that will use these templates.</strong></p>
 <p><em>Mandatory Card</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">outputs</span>
 <span class="o">&lt;</span><span class="n">template</span> <span class="n">name1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output</span> <span class="n">file</span> <span class="mi">1</span><span class="o">&gt;</span>
@@ -147,7 +146,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> is user defined name/Id of that specific template. Must correspond to the name defined under the <a class="reference internal" href="#j-templates"><span class="std std-ref">templates</span></a> card.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">file</span></code> is the path dir to where the cross sections will be written to.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">file</span></code> is the path dir + file name to where the cross sections will be written to.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Notes:</strong></p>
@@ -168,7 +167,7 @@ Description on the format, comments, and magic capabilities is provided in <a cl
 <span id="j-links"></span><h2>links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
 <p><strong>Linkage between universes and templates Ids.</strong></p>
 <p>This card allows to apply the same template file for multiple universes without the need to define unique template file for each universe separately.
-This capability is convient when the use want to use the same template file for multiple universes.
+This capability is convenient when the user wishes to apply the same template file for multiple universes.
 It must be pointed out that if this card is not provided, the explicit definition of universes must be provided within the template files themselves.</p>
 <p><em>Optional Card</em></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">links</span>
@@ -181,7 +180,7 @@ It must be pointed out that if this card is not provided, the explicit definitio
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> is an user defined name/Id of that specific template. Must correspond to the name defined under the <a class="reference internal" href="#j-templates"><span class="std std-ref">templates</span></a> card.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name1</span></code> is the user defined universe name or Id.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name</span></code> is the user defined universe name or Id.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Notes:</strong></p>
@@ -189,7 +188,7 @@ It must be pointed out that if this card is not provided, the explicit definitio
 <div><ul class="simple">
 <li><p>This card can be omitted.</p></li>
 <li><p>Each <code class="docutils literal notranslate"><span class="pre">template</span> <span class="pre">name</span></code> can have a single or multiple <code class="docutils literal notranslate"><span class="pre">universe</span> <span class="pre">name</span></code>.</p></li>
-<li><p>If multiple universes are provided for a specific template then multiple ouutput files will be created. Their naming will differ by the postfix name of the specific universe, e.g. <code class="docutils literal notranslate"><span class="pre">output_u0</span></code>, <code class="docutils literal notranslate"><span class="pre">output_u1</span></code> and so on.</p></li>
+<li><p>If multiple universes are provided for a specific template then multiple output files will be created. Their naming will differ by the postfix name of the specific universe, e.g. <code class="docutils literal notranslate"><span class="pre">output_u0</span></code>, <code class="docutils literal notranslate"><span class="pre">output_u1</span></code> and so on.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Example</strong>:</p>
@@ -220,7 +219,7 @@ It must be pointed out that if this card is not provided, the explicit definitio
 <p>where,</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">univ</span> <span class="pre">Id</span></code> is an user defined universe Id, which must be defined in the <a class="reference internal" href="#j-universes"><span class="std std-ref">universes</span></a> card.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">univ</span> <span class="pre">Id</span></code> is a user defined universe Id, which must be defined in the <a class="reference internal" href="#j-universes"><span class="std std-ref">universes</span></a> card.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">serpent</span> <span class="pre">universe</span> <span class="pre">Id</span></code> is the serpent defined universes Ids within the .coe files.</p></li>
 </ul>
 </div></blockquote>
@@ -271,7 +270,7 @@ It must be pointed out that if this card is not provided, the explicit definitio
 <li><p><code class="docutils literal notranslate"><span class="pre">state</span></code>, <code class="docutils literal notranslate"><span class="pre">attr</span></code>, and <code class="docutils literal notranslate"><span class="pre">var</span></code> are all preserved keywords.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">state</span></code> denotes state perturbation parameter, such as time, history, or branch.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">attr</span></code> denotes a macro or micro data, such as the fission cross section.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">var</span></code> denotes a user-defined variable used within the template file (more dtails can be found in …).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">var</span></code> denotes a user-defined variable used within the template file, but this can be over-written if the format is specified directly in the template file using  <a class="reference internal" href="templates.html#varo"><span class="std std-ref">Output Variable</span></a>.</p></li>
 <li><p>The default values for <code class="docutils literal notranslate"><span class="pre">state_format</span></code>, <code class="docutils literal notranslate"><span class="pre">attr_format</span></code>, and <code class="docutils literal notranslate"><span class="pre">var_format</span></code> are: 5.3f, 5.5e, d</p></li>
 </ul>
 </div></blockquote>

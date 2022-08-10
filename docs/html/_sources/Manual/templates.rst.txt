@@ -4,9 +4,9 @@
 Templates
 --------- 
 
-The template file makes the use of prescribed rules to efficiently define a template that can be used to output data.
+The template file makes the use of prescribed rules to efficiently define a template that can be used to output data in the most general possible way.
 
-The text file provided by the user is format-free. The text contained within the template file is copied to the desired output.
+The text file provided by the user is a format-free. The text contained within the template file is copied to the desired output.
 However, the simple rules provided by the user resemble codes' snippets that allow to define variables dynamically rather than using fix values.
 
 A list of three basic rules are listed in the table below, and examples of how to use these are provided in the following sections.
@@ -33,7 +33,7 @@ Input Variable
 **Definition of a simple execution line.**
 
 The user has the ability to define a code snippet that will be executed internally within the code.
-Although weakly explained here, the code should be simple. For example, assigning value to a variable (scalar or vector), rather than implementing a while loop. 
+The code provided by the user should be as simple as possible. For example, assigning value to a variable (scalar or vector), rather than implementing a while loop. 
 The use of ``for`` loops is feasibile but not recommended.
 
 Only a **single input variable** can be defined in a single line. The format for defining an input variable is: 
@@ -49,8 +49,8 @@ where,
 
 **Notes:**
 	
-	*	The use of the command is primarily defined for defining indices and changing these dynamically.
-	* All the repetitions of ``"vari"{...}`` will not appear in the output files.
+	*	The use of the command is primarily intended for defining indices and changing these dynamically.
+	* All the occurrences of ``"vari"{...}`` will not appear in the output files.
 
 **Examples**:
 
@@ -98,7 +98,7 @@ where,
  - ``"varo"{...}`` is preserved (including the curley brackets) keyword.
  - ``<evaluation command>`` is the execution sequence for evaluating an input variable.
  - ``<format>`` a standard format notation, e.g., ``3d``, ``3.3f``, ``5.5e`` with which the input variable will be written in the output file. If provided, the format **must** be provided within ``<...>`` brackets.
- - ``<format>`` can be omitted. In which case, the default value will be used according to the card defined in the control deck (:ref:`j_formats`).
+ - ``<format>`` can be omitted along with the ``<...>`` brackets. In which case, the default value will be used according to the format defined in the control deck (:ref:`j_formats`).
 
 **Notes:**
 	
@@ -178,7 +178,7 @@ where,
 Data Values
 ===========
 
-**Evaluation and output of attrbutes/states.**
+**Evaluation and output of attributes/states.**
 
 This is the heart of the template capability as different parameters defined in the universes objects - :ref:`universecards` can be evaluated and written to output files.
 At the moment, only a single evaluation can be performed in a single line.
@@ -195,12 +195,12 @@ where,
  - ``"values"{...}`` is preserved (including the curley brackets) keyword.
  - ``<universe Id>`` is the name of the universe as defined in :ref:`universecards`.
  - ``<attribute>`` is the name of the output variable. It can represent a state (e.g., fuel temperature) or an attribute (e.g., beta).
- - ``<state1>``, ``<state2>``, ... represent the names of the various states (e.g., fuel, moderator, coolant temperatures).
+ - ``<state1>``, ``<state2>``, ... represent the names of the various states (e.g., fuel, moderator, coolant temperatures). The latter are defined in the :ref:`i_branches`, :ref:`i_histories`, and :ref:`i_times`	cards.
  - ``<value1>``, ``<value2>``, ... are the corresponding singular values for each of the various states.
  - ``<indices>`` are the indices provided to assess the data at specific index values. For example, if beta has six delayed neutron groups, a specific group can be accessed by applying the indices.
  
 **Notes:**
-	* ``<universe Id>`` can be provided or omitted. However, if it is omitted, the ``links`` card must be set in :ref:`j_links`.
+	* ``<universe Id>`` can be provided or omitted. However, if it is omitted, the :ref:`j_links` card must be set under the :ref:`controldeck` file.
 	* ``<attribute>`` is mandatory and must exist in the definition of the universe (:ref:`i_settings`). Attribute can also include states' names.
 	* ``<state>`` must be defined in :ref:`i_branches` or :ref:`i_histories` or :ref:`i_times`.
 	* ``<state>`` can either be a branch name defined in :ref:`i_branches`, or the preserved keyword ``history`` or the preserved keyword ``time``. Not all the states must be provided.
@@ -208,7 +208,7 @@ where,
 	* It must be pointed out that when executing the "values"{...} comand, not all states that exist in :ref:`i_data` must be provided. For example, if the states include multiple fuel and coolant temperatures, and the command is evaluated for a specific fuel temperature then all the existing coolant temperatures that correspond to this fuel temperatures will be evaluated and written.
 	* ``<indices>`` must be provided in square brackets [...]. However, indices can also be omitted, in which case no [...] brackets are required.
 	* It is up to the user to know how to slice the data as the user was reponsible to feed the data in.
-	* The most important note is to understand that when the ``values`` command is provided, the program evaluates the values using the ``universes.Values`` method internally. The end result can yield a scalar, vector, or matrix.
+	* The most important note is to understand that when the ``values`` command is provided, the program evaluates the values using the ``universes.Values`` method internally. The end result can yield a scalar, vector, or a matrix.
 
 **Examples**:
 
@@ -274,7 +274,7 @@ where,
 	Let's now assume that we have one fuel temperature as a state and 10 coolant tempeatures. For similicity we will assume that there is a single energy group. The command above will return 10 values that correspond to all the coolant densities.
 	
 
-Please note that the format of the attribute or state values is defined in :ref:`j_formats`, which also defines the maximum number of values allowed to be printed in a single line. For our previous example, let's assume that we defined that only 4 values can be printed in a single line. However, the previous command yields 10 values. These will be printed in order. First four in one line, next four values in the following line, and the last two values in a third line. 
+Please note that the format of the attribute or state values is defined in :ref:`j_formats`, which also defines the maximum number of values allowed to be printed in a single line. For our previous example, let's assume that we defined that only 4 values can be printed in a single line. However, the previous command yields 10 values. These will be printed in order. First four in one line, next four values in the following line, and the remaining two values in the third line. 
 
 
 .. _repblocks:
@@ -315,7 +315,7 @@ where,
 
  - In the application above, block-2 will be duplicated M times and then block-1 (including the duplicated block-2) will be duplicated N times.
 
- - The hierarchy rules allow to have ``{{``  blocks within ``{``, ``{{{`` within ``{{``, and so on. Several same-level blocks can appear in higer level blocks. For example:
+ - The hierarchy rules allow to have ``{{``  blocks within ``{``, ``{{{`` within ``{{``, and so on. Several same-level blocks can appear in higher level blocks. For example:
  
 	.. code::
 			
@@ -357,7 +357,7 @@ where,
 	   Block-2.2- repreated M2 times
 
 **Notes:**
-	* Several same-lebel blocks can exist.
+	* Several same-level blocks can exist.
 	* Lower-level blocks (e.g., ``{{``) can not contain higher-level blocks (e.g., ``{``). The following shows an example of an *erroneous* snippet:
 
 	.. code::
