@@ -77,6 +77,9 @@ def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
 
     # Error checking
     _errorscheck(fnames, strLabels, numLabels, attrs, times, burnups)
+    # convert to lower case
+    if attrs is not None:
+        attrs = [attr.lower() for attr in attrs]
 
     # Read all the .coe file
     dataStrBranches = _ReadHistoryFiles(fnames)

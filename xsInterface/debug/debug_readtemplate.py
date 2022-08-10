@@ -31,7 +31,7 @@ univFile1 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
 
 # read the universe file/s and collect data for all the universes
 # -----------------------------------------------------------------------------
-universes = ReadInput(u0=univFile0, u1=univFile1)
+universes = ReadInput({}, u0=univFile0, u1=univFile1)
 
 # read the template files
 # -----------------------------------------------------------------------------
