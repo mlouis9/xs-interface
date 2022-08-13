@@ -541,7 +541,7 @@ Description on the format, comments, and general instructions is provided in <a 
 <dt>and, the following <strong>lines</strong> represent binary (between variable <code class="docutils literal notranslate"><span class="pre">var1</span></code> and <code class="docutils literal notranslate"><span class="pre">var2</span></code>) mathematical operations to be performed.</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">var</span></code> name of the new variable to be created.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">var1</span></code> name of the first variable (e.g., <code class="docutils literal notranslate"><span class="pre">inf_rabs</span></code>). Can only be of type <code class="docutils literal notranslate"><span class="pre">macro</span></code> or <code class="docutils literal notranslate"><span class="pre">micro</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">var2</span></code> name of the second variable (e.g., <code class="docutils literal notranslate"><span class="pre">sig_f</span></code>).       Can only be of type <code class="docutils literal notranslate"><span class="pre">macro</span></code> or <code class="docutils literal notranslate"><span class="pre">micro</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">var2</span></code> name of the second variable (e.g., <code class="docutils literal notranslate"><span class="pre">sig_f</span></code>).       Can be either of type <code class="docutils literal notranslate"><span class="pre">macro</span></code> or <code class="docutils literal notranslate"><span class="pre">micro</span></code> or a number.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">operation</span></code> mode of the mathematical operation with the following options only: <code class="docutils literal notranslate"><span class="pre">add</span></code>, <code class="docutils literal notranslate"><span class="pre">subtract</span></code>, <code class="docutils literal notranslate"><span class="pre">multiply</span></code>, <code class="docutils literal notranslate"><span class="pre">divide</span></code>.</p></li>
 </ul>
 </dd>
@@ -617,10 +617,33 @@ Description on the format, comments, and general instructions is provided in <a 
 <li><p>In all the cases the variable <code class="docutils literal notranslate"><span class="pre">a</span></code> will preserved the original size of the condensed (or original) energy structure.</p></li>
 </ul>
 </div></blockquote>
-<p><strong>Example</strong>:</p>
+<p><strong>Example-1</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">manipulate</span> <span class="mf">0.0</span>
 <span class="n">new_nsf</span><span class="p">,</span> <span class="n">inf_nsf</span><span class="p">,</span> <span class="n">sig_f</span><span class="p">,</span> <span class="n">subtract</span>
 <span class="n">new_sct</span><span class="p">,</span> <span class="n">inf_sp0</span><span class="p">,</span> <span class="n">sig_sct</span><span class="p">,</span> <span class="n">add</span>
+</pre></div>
+</div>
+<p><strong>Finally</strong>,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">manipulate</span></code> method allows to perform mathematical operations between a macro/micro variable and a constant. The constant number must always be only <code class="docutils literal notranslate"><span class="pre">var2</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">manipulate</span></code> method can also be used to create new variables sequentially. In order to define multiple new variables, you must define the variables in the following order:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">manipulate</span> <span class="o">&lt;</span><span class="n">ene</span><span class="o">&gt;</span>
+<span class="n">new_var1</span><span class="p">,</span> <span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="n">multiply</span>
+<span class="n">new_var2</span><span class="p">,</span> <span class="n">new_var1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">multiply</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>In the above example, the variable <code class="docutils literal notranslate"><span class="pre">new_var1</span></code> will be created using exiting variables and then an additional variable <code class="docutils literal notranslate"><span class="pre">new_var2</span></code> is created by taking the product between <code class="docutils literal notranslate"><span class="pre">new_var1</span></code> and 100.0</p></li>
+<li><p>It must be pointed out that the line with <code class="docutils literal notranslate"><span class="pre">new_var2</span></code> must be provided only after defining the line <code class="docutils literal notranslate"><span class="pre">new_var1</span></code>.</p></li>
+<li><p>The below example demonestates how to create fiss energy release in Joules.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Example-2</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">manipulate</span> <span class="mf">0.0</span>
+<span class="n">fissmev</span><span class="p">,</span> <span class="n">inf_fiss</span><span class="p">,</span> <span class="n">inf_kappa</span><span class="p">,</span> <span class="n">multiply</span>
+<span class="n">fissjoule</span><span class="p">,</span> <span class="n">fissmev</span><span class="p">,</span> <span class="mf">1.60218e-13</span><span class="p">,</span> <span class="n">multiply</span>
 </pre></div>
 </div>
 </section>

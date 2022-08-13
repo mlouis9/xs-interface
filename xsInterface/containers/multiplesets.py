@@ -338,8 +338,9 @@ class MultipleSets():
         """
         newObj = copy.deepcopy(self)
         for iset, ss in self.sets.items():
-            newObj.sets[iset] = ss.Manipulate(modes, attrs, attrs1, attrs2)
-        return newObj
+            newObj.sets[iset], macroFlags =\
+                ss.Manipulate(modes, attrs, attrs1, attrs2)
+        return newObj, macroFlags
 
 
     def __getitem__(self, setIdx):

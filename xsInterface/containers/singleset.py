@@ -281,7 +281,7 @@ class SingleSet():
         """
         # deep copy for the self object
         selfCopy = copy.deepcopy(self)
-        ng = self._dSetup.ng
+        ng = selfCopy._dSetup.ng
         
         # if only single strings are provided - convert to lists
         if isinstance(attrs, str):
@@ -304,7 +304,9 @@ class SingleSet():
         _isequallength(attrs2, attrN, "Attributes 2")
         _isequallength(modes, attrN, "Modes of operation")
         
+        typeMacros = []
         for idx, attr in enumerate(attrs):
+            constFlag = False
             attr1 = attrs1[idx]
             attr2 = attrs2[idx]
             mode = modes[idx]
@@ -314,34 +316,38 @@ class SingleSet():
             _isstr(attr2, "Attribute 2")
             _inlist(mode, "Mode of operation", OPERATION_MODES)
 
-            # Attribute 1        
-            if attr1 in self.macro:
-                microFlag1 = False
-                val1 = self.macro[attr1]
-            elif attr1 in self.micro:
+            # Attribute 1 
+            microFlag1 = False
+            if attr1 in selfCopy.macro:
+                val1 = selfCopy.macro[attr1]
+            elif attr1 in selfCopy.micro:
                 microFlag1 = True
-                val1 = self.micro[attr1]
+                val1 = selfCopy.micro[attr1]
                 colN = val1.shape[1]
-                nd1 = self.micro[self._dSetup.nuclides]
+                nd1 = selfCopy.micro[selfCopy._dSetup.nuclides]
                 nd1 = np.tile(nd1, (1, colN))
                 # val1 = sum(val1*nd1)
             else:
                 raise KeyError("Attribute 1 <{}> does not exist in macro or micro"
                                .format(attr1))            
             # Attribute 2
-            if attr2 in self.macro:
-                microFlag2 = False
-                val2 = self.macro[attr2]
-            elif attr2 in self.micro:
+            microFlag2 = False
+            if attr2 in selfCopy.macro:
+                val2 = selfCopy.macro[attr2]
+            elif attr2 in selfCopy.micro:
                 microFlag2 = True
-                val2 = self.micro[attr2]
+                val2 = selfCopy.micro[attr2]
                 colN = val2.shape[1]
-                nd2 = self.micro[self._dSetup.nuclides]
+                nd2 = selfCopy.micro[selfCopy._dSetup.nuclides]
                 nd2 = np.tile(nd2, (1, colN))
                 # val2 = sum(val2*nd2)
             else:
-                raise KeyError("Attribute 2 <{}> does not exist in macro or micro"
-                               .format(attr2))
+                try:
+                    constFlag = True
+                    val2 = float(attr2)  # if a constant is provided
+                except:
+                    raise KeyError("Attribute 2 <{}> does not exist in macro "
+                                   "or micro".format(attr2))
     
             if (microFlag1 and microFlag2):  # both are micro parameters
                 pass
@@ -359,7 +365,7 @@ class SingleSet():
             ndim1 = np.size(val1)
             ndim2 = np.size(val2)
     
-            if ndim1 != ndim2:
+            if ndim1 != ndim2 and not constFlag:
                 raise ValueError("Attr1=<{}> with length=<{}> does not match "
                                  "Attr2=<{}> with length=<{}>"
                                  .format(attr1, ndim1, attr2, ndim2)) 
@@ -374,12 +380,21 @@ class SingleSet():
             else: # mode == "subtract"
                 val = val1 - val2
             
+            
             if (microFlag1 and microFlag2):
                 selfCopy.micro[attr] = val
+                typeMacros.append(False)
+                # update the micro attributes
+                if attr not in selfCopy._dSetup.micro:
+                    selfCopy._dSetup.micro.append(attr)
             else:
                 selfCopy.macro[attr] = val
-            
-        return selfCopy
+                typeMacros.append(True)
+                # update the macro attributes
+                if attr not in selfCopy._dSetup.macro:
+                    selfCopy._dSetup.macro.append(attr)
+              
+        return selfCopy, typeMacros
         
 
     def Condense(self, cutoffE):

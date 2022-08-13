@@ -188,7 +188,7 @@ The format for evaluating and printing an output attribute, e.g., cross sections
 .. code::
 		
    "values"{<universe Id>, <attribute>, <state1>=<value1>, <state2>=<value2>, 
-   	   ..., <stateN>=<valueN>  [<indices>]} 
+   	   ..., <stateN>=<valueN>  [<indices>] <<format>><N>} 
  
 where,
 
@@ -198,7 +198,11 @@ where,
  - ``<state1>``, ``<state2>``, ... represent the names of the various states (e.g., fuel, moderator, coolant temperatures). The latter are defined in the :ref:`i_branches`, :ref:`i_histories`, and :ref:`i_times`	cards.
  - ``<value1>``, ``<value2>``, ... are the corresponding singular values for each of the various states.
  - ``<indices>`` are the indices provided to assess the data at specific index values. For example, if beta has six delayed neutron groups, a specific group can be accessed by applying the indices.
- 
+ - ``<format>`` a standard format notation, e.g., ``3d``, ``3.3f``, ``5.5e`` with which the input variable will be written in the output file. If provided, the format **must** be provided within ``<...>`` brackets.
+ - ``<format>`` can be omitted along with the ``<...>`` brackets. In which case, the default value will be used according to the format defined in the control deck (:ref:`j_formats`).
+ - ``<N>`` is max number of values that can be printed in a single line. It can be provided only if the ``format`` is provided. It can also be omitted, even if ``format`` is provided.
+ - Default values for ``<format>`` and ``<N>`` are defined in :ref:`j_formats`.
+
 **Notes:**
 	* ``<universe Id>`` can be provided or omitted. However, if it is omitted, the :ref:`j_links` card must be set under the :ref:`controldeck` file.
 	* ``<attribute>`` is mandatory and must exist in the definition of the universe (:ref:`i_settings`). Attribute can also include states' names.
@@ -217,7 +221,7 @@ where,
 
 	.. code::
 	
-		"values"{u0, inf_rabs, fuel=1500, time=0.0, history=nom  [0]} 
+		"values"{u0, inf_rabs, fuel=1500, time=0.0, history=nom  [0] <5.5e>4} 
 
 		
 	Let's assume that only a single state of fuel=1500 and time=0.0 was defined. The attribute ``inf_rabs`` has 2-group values. Therefore, the index ``0`` will evaluate only the first value in the array.
@@ -268,13 +272,13 @@ where,
 	.. code::
 	
 		"vari"{times=[0, 1]}
-		"values"{inf_rabs, fuel=1500 }
+		"values"{inf_rabs, fuel=1500 <5.5e>4}
 
 		
 	Let's now assume that we have one fuel temperature as a state and 10 coolant tempeatures. For similicity we will assume that there is a single energy group. The command above will return 10 values that correspond to all the coolant densities.
 	
 
-Please note that the format of the attribute or state values is defined in :ref:`j_formats`, which also defines the maximum number of values allowed to be printed in a single line. For our previous example, let's assume that we defined that only 4 values can be printed in a single line. However, the previous command yields 10 values. These will be printed in order. First four in one line, next four values in the following line, and the remaining two values in the third line. 
+Please note that according to the above example the maximum number of values allowed to be printed in a single line is 4. However, the previous command yields 10 values. These will be printed in the following order. First four in one line, next four values in the following line, and the remaining two values in the third line. 
 
 
 .. _repblocks:
