@@ -562,7 +562,7 @@ where in the **set** line,
 and, the following **lines** represent binary (between variable ``var1`` and ``var2``) mathematical operations to be performed.
 	- ``var`` name of the new variable to be created. 
 	- ``var1`` name of the first variable (e.g., ``inf_rabs``). Can only be of type ``macro`` or ``micro``.
-	- ``var2`` name of the second variable (e.g., ``sig_f``).	Can only be of type ``macro`` or ``micro``.
+	- ``var2`` name of the second variable (e.g., ``sig_f``).	Can be either of type ``macro`` or ``micro`` or a number.
 	- ``operation`` mode of the mathematical operation with the following options only: ``add``, ``subtract``, ``multiply``, ``divide``.
 
 **Notes:**
@@ -576,7 +576,7 @@ and, the following **lines** represent binary (between variable ``var1`` and ``v
 		* <cutoffE> cannot create a finer grid than <ENE> regardless to how many ``cutoffE`` boundaries are provided (as no interpolation is used).
 
 	*	The number of lines that follow the set line represent the number of mathematical operations to be performed.
-	* ``var1`` (e.g., inf_nsf) and ``var2`` (e.g., sig_f)  must be defined under the ``macro`` or ``micro`` blocks in :ref:`i_data` card.
+	* ``var1`` (e.g., inf_nsf) and ``var2`` (e.g., sig_f)  must be defined under the ``macro`` or ``micro`` blocks in :ref:`i_data` card. 
 
 	.. code::
 
@@ -639,13 +639,39 @@ and, the following **lines** represent binary (between variable ``var1`` and ``v
 
 
 
-**Example**:
+**Example-1**:
 
 .. code::
 
 	set manipulate 0.0
 	new_nsf, inf_nsf, sig_f, subtract
 	new_sct, inf_sp0, sig_sct, add
+
+
+**Finally**, 
+
+	* The ``manipulate`` method allows to perform mathematical operations between a macro/micro variable and a constant. The constant number must always be only ``var2``.
+	* The ``manipulate`` method can also be used to create new variables sequentially. In order to define multiple new variables, you must define the variables in the following order:
+	
+
+	.. code::
+	
+		set manipulate <ene>
+		new_var1, var1, var2, multiply
+		new_var2, new_var1, 100, multiply	
+		
+	* In the above example, the variable ``new_var1`` will be created using exiting variables and then an additional variable ``new_var2`` is created by taking the product between ``new_var1`` and 100.0
+	* It must be pointed out that the line with ``new_var2`` must be provided only after defining the line ``new_var1``.
+	* The below example demonestates how to create fiss energy release in Joules.
+	
+
+**Example-2**:
+
+.. code::
+
+	set manipulate 0.0
+	fissmev, inf_fiss, inf_kappa, multiply
+	fissjoule, fissmev, 1.60218e-13, multiply
 
 
 

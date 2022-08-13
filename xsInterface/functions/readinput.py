@@ -413,7 +413,14 @@ def _PopulateManipulations(rc, ms, cutoffE, manipData):
             attrs2[idx] = vals[idx][1]
             modes[idx] = vals[idx][2]
         
-        ms = ms.Manipulate(modes, attrs, attrs1, attrs2)
+        ms, macroFlags = ms.Manipulate(modes, attrs, attrs1, attrs2)
+        
+        # Add the new variable into the macro or micro settings
+        for idx, macroFlag in enumerate(macroFlags):
+            if macroFlag and attrs[idx] not in rc.macro:
+                rc.macro.append(attrs[idx])
+            if not macroFlag and attrs[idx] not in rc.micro:
+                rc.micro.append(attrs[idx])
         
     return ms, rc
 

@@ -5,7 +5,7 @@ This file contains certain regular-like expressions which are repeated
 and replaced.
 
 Created on Fri July 01 06:00:00 2022 @author: Dan Kotlyar
-Last updated on Tue July 21 11:00:00 2022 @author: Dan Kotlyar
+Last updated on Sat Aug 13 07:00:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -15,7 +15,7 @@ Repetition  - 07/01/2022 - DK
 ReadTemplate  - 07/05/2022 - DK
 _CleanDataCopy - 07/05/2022 - DK
 _PopulateValues - 07/21/2022 - DK
-
+_PopulateValues - 08/13/2022 - DK
 """
 
 from pathlib import Path
@@ -35,7 +35,8 @@ VARO_REGEX = compile(r'"varo"\{(.*?)\}')  # variable out
 STATE_REGEX = compile(r'"state"\{(.*?)\}')  # state
 VALS_REGEX = compile(r'"values"\{(.*?)\}')  # attribute
 IDX_REGEX = compile(r'\[(.*?)\]')  # index inside parentheses
-FRMT_REGEX = compile(r'\<(.*?)\>')  # index inside parentheses
+FRMT_REGEX = compile(r'\<(.*?)\>')  # format inside <> parentheses
+FRMT_N_REGEX = compile(r'\<(.*?)\>\s*\d+')  # format inside <> parentheses and N
 VALUES_REGEX = compile(r'"values"\{')  # used to identify "values"
 
 
@@ -120,11 +121,14 @@ def _PopulateValues(dataIn, universes, formats):
 
     # correct format message    
     msg_exe = "<universe name>, <attr name>, <state name1>=<state val1>,..."\
-              "[indices]"
+              "[indices] <format>N"
 
     dataOut = []    
     for tline in dataIn:
-        
+
+        frmtPrnt = None
+        nrowPrnt = None
+
         # Identify and execute an "values" line having an attribute
         attrline0 = VALS_REGEX.search(tline)
         if attrline0 is not None:
@@ -134,6 +138,40 @@ def _PopulateValues(dataIn, universes, formats):
             attrline = attrline.replace(',', ' ')  # remove commas
             attrline = attrline.replace('=', ' ')  # remove = signs
             
+            # -----------------------------------------------------------------
+            # Obtain formatting requirements
+            # -----------------------------------------------------------------
+            indices = []
+            if FRMT_N_REGEX.search(attrline) is not None:
+                # the format included within <...>&nrow
+                condFrmt = FRMT_N_REGEX.search(attrline)
+                frmtPrnt = "{:" + condFrmt.group(1) + "}"
+                nrowPrnt = condFrmt.group(0).split('>')[-1]
+                attrline = attrline.replace(condFrmt.group(0), '')
+            elif FRMT_REGEX.search(attrline) is not None:
+                # the format included within <...> only
+                condFrmt = FRMT_N_REGEX.search(attrline)
+                frmtPrnt = "{:" + condFrmt.group(1) + "}"
+                attrline = attrline.replace(condFrmt.group(0), '')
+            if frmtPrnt is not None:
+                try:
+                    fmtCheck = frmtPrnt.format(444)
+                except ValueError as detail:
+                    if frmtPrnt != '{:s}':
+                        msg0 = 'Provided format <{}> is not valid.\n{}'\
+                        .format(frmtPrnt, tline)
+                        raise TemplateFileError(msg0+'\n'+detail)
+            if nrowPrnt is not None:
+                try:
+                    nrowPrnt = int(nrowPrnt)
+                except ValueError as detail:
+                    msg0 = 'Provided format <{}> is not valid.\n{}'\
+                    .format(nrowPrnt, tline)
+                    raise TemplateFileError(msg0+'\n'+detail)           
+
+            # -----------------------------------------------------------------
+            # Obtain indices
+            # -----------------------------------------------------------------
             idxcond = IDX_REGEX.search(attrline)
             indices = []
             if idxcond is not None:
@@ -196,27 +234,34 @@ def _PopulateValues(dataIn, universes, formats):
                 valsPrint = np.array([])  # array for printed values
                 for val in vals:
                     if indices != []:
-                        valsPrint = np.append(valsPrint, val[indices])
+                        try:
+                            valsPrint = np.append(valsPrint, val[indices])   
+                        except:
+                             
+                             valsPrint = np.append(valsPrint,
+                                                   val[list(indices)])
                     else:
                         valsPrint = np.append(valsPrint, val)
             except:
                 msg0 = 'The "values" command is not properly defined.\n{}'\
                     '<{}> cannot be appended into an array.'\
-                    'Follow the format:\n.'.format(tline, vals)
+                    '\nFollow the format:\n.'.format(tline, vals)
                 raise TemplateFileError(msg0+msg_exe)
 
-            # Need to understand if the attr is a state or a macro-micro xs
-            states = universes.universes[univId][1]
-            statesList = ['history', 'time'] + states._branchList
-            
-            if attr in statesList:
-                frmtPrnt = formats["state"]
-            else:
-                frmtPrnt = formats["attr"]
-            
+            if frmtPrnt is None:
+                # Need to determine if the attr is a state or anything else
+                states = universes.universes[univId][1]
+                statesList = ['history', 'time'] + states._branchList
+                if attr in statesList:
+                    frmtPrnt = formats["state"]
+                else:
+                    frmtPrnt = formats["attr"]
+            if nrowPrnt is None:
+                nrowPrnt = formats["nrow"]  # default val of max number in row 
+          
             # format the values to be printed
             tlines = _Array2tlines(tline, attrline0.group(0), valsPrint,
-                                   formats["nrow"], frmtPrnt)
+                                   nrowPrnt, frmtPrnt)
             
             for tline in tlines:
                 dataOut.append(tline)
@@ -491,9 +536,9 @@ def _Array2tlines(tline, origstr, valsarray, nrow, frmt):
         str0 = ''  # empty string to be appended
         for val in valsrow:
             if isinstance(val, str):
-                str0 += ' {}'.format(val)
+                str0 += '{} '.format(val)
             else:
-                str0 += ' ' + frmt.format(val)
+                str0 += frmt.format(val) + ' '
         
         if replaceFlag:
             tlines.append(tline.replace(origstr, str0))
