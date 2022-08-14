@@ -1,0 +1,8 @@
+
+"vari"{idxE=0}
+"rep"{2
+* GROUP "varo"{idxE+1<d>}
+"values"{infnsf,  ["varo"{idxE}]} 
+"vari"{idxE=idxE+1}
+"rep"}
+
