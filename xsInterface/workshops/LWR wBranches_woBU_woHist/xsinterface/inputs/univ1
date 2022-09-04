@@ -22,7 +22,7 @@ boron 0.0  1000
 set histories 1
 nom 0.0
 
-set times daysUnits
+set times 
 0.0
 
 

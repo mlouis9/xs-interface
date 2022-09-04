@@ -515,7 +515,7 @@ def _ImportBranches(setLine, tlines):
     # -------------------------------------------------------------------------
     card = "branches" 
     expinputs = ['<N>']
-    expvals = [1, 1]
+    expvals = [1, 100000]
     errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
 
     # Process the set line values
@@ -523,6 +523,10 @@ def _ImportBranches(setLine, tlines):
     setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
     setValues = np.array(setValues, dtype=int)
     N = int(setValues[0])
+    
+    if len(setValues) > 1:
+        pass
+        # branchUnits = setValues[1:]  # units of different branches (not used)
 
     # Process the set card values
     # -------------------------------------------------------------------------
@@ -595,7 +599,7 @@ def _ImportTimes(setLine, tlines):
     if setValues != []:
         units = setValues[0]
     else:
-        units = None
+        units = 'n/a'
 
     # Process the set card values
     # -------------------------------------------------------------------------
