@@ -59,10 +59,10 @@ ManipulateCard = {
     }
 
 FilterCard = {
-    "branches": "Number of branches",
-    "histories": "Number of histories",
-    "times": "Boolean flag to indicate what time-points are included",
-    "attributes": "Attributes to be included"
+    "branches": "number (set line) and corresponding branches (sub-lines)",
+    "histories": "0/1 (set line) and histories names (in a single sub-line)",
+    "times": "0/1 (set line) and time-points (in a single sub-line)",
+    "attributes": "0/1 (set line) and attributes names (in a single sub-line)",
     }
 
 SerpentCard = {

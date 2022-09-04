@@ -515,7 +515,7 @@ def _ImportBranches(setLine, tlines):
     # -------------------------------------------------------------------------
     card = "branches" 
     expinputs = ['<N>']
-    expvals = [1, 1]
+    expvals = [1, 100000]
     errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
 
     # Process the set line values
@@ -523,6 +523,10 @@ def _ImportBranches(setLine, tlines):
     setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
     setValues = np.array(setValues, dtype=int)
     N = int(setValues[0])
+    
+    if len(setValues) > 1:
+        pass
+        # branchUnits = setValues[1:]  # units of different branches (not used)
 
     # Process the set card values
     # -------------------------------------------------------------------------
@@ -595,7 +599,7 @@ def _ImportTimes(setLine, tlines):
     if setValues != []:
         units = setValues[0]
     else:
-        units = None
+        units = 'n/a'
 
     # Process the set card values
     # -------------------------------------------------------------------------
@@ -697,8 +701,8 @@ def _ImportFilter(setLine, tlines):
     # Requirements
     # -------------------------------------------------------------------------
     card = "filter" 
-    expinputs = ['<Nbranches>']
-    expvals = [1, 1]
+    expinputs = ['<N-branches>', '<history>', '<time>', '<attrs>']
+    expvals = [4, 4]
     errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
 
     # Process the set line values
@@ -712,9 +716,9 @@ def _ImportFilter(setLine, tlines):
         raise InputCardError(
             "Number of branches cannot be zero.\n{}"
             .format(setLine), INPUT_CARDS, card)          
-    historyFlag = 1
-    timeFlag = 1
-    attrsFlag = 1
+    historyFlag = 1 if setValues[1] > 0 else 0
+    timeFlag = 1 if setValues[2] > 0 else 0
+    attrsFlag = 1 if setValues[3] > 0 else 0
     
     if (len(tlines) != nBranches + historyFlag + timeFlag + attrsFlag):
         raise InputCardError(
