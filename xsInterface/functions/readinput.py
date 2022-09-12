@@ -5,7 +5,7 @@ Read the user-based input file.
 All the input data are provided via the use of input cards.
 
 Created on Mon May 06 12:10:00 2022 @author: Dan Kotlyar
-Last updated on Tue Aug 09 11:50:00 2022 @author: Dan Kotlyar
+Last updated on Mon Sep 12 16:40:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -16,6 +16,8 @@ Import Settings, States - 05/12/2022 - DK
 Import single data set - 05/22/2022 - DK
 Import & populate multiple data set - 05/24/2022 - DK
 Import & populate serpent data - 08/09/2022 - DK
+Shift Card - 09/11/2022 - DK
+Populate Shift data - 09/12/2022 - DK
 
 """
 
@@ -26,8 +28,9 @@ import numpy as np
 
 from xsInterface.containers.container_header import DataSettingsCard,\
     BranchCard, HistoryCard, TimeCard, DataCard, ManipulateCard, FilterCard,\
-        SerpentCard, LabelCard
+        SerpentCard, ShiftCard, LabelCard
 from xsInterface.functions.readserpent import ReadSerpent
+from xsInterface.functions.readshift import ReadShiftFiles
 from xsInterface.containers.datasettings import DataSettings
 from xsInterface.containers.singleset import SingleSet
 from xsInterface.containers.multiplesets import MultipleSets
@@ -58,6 +61,7 @@ CARD_REGEX = {
     "manipulate": compile(r'\s*(set\s+)(manipulate)', IGNORECASE),
     "filter": compile(r'\s*(set\s+)(filter)', IGNORECASE),
     "serpent": compile(r'\s*(set\s+)(serpent)', IGNORECASE),
+    "shift": compile(r'\s*(set\s+)(shift)', IGNORECASE),
     "labels": compile(r'\s*(set\s+)(labels)', IGNORECASE),}
 
 INPUT_CARDS =\
@@ -68,12 +72,13 @@ INPUT_CARDS =\
      'data': DataCard,
      'manipulate': ManipulateCard,
      'filter': FilterCard,
-     'serpent': SerpentCard, 
+     'serpent': SerpentCard,
+     'shift': ShiftCard,
      'labels': LabelCard, }
 
 
 
-def ReadInput(serpentIds, **kwargs):
+def ReadInput(externalIds, **kwargs):
     """Read the input file defined by the user
 
     This function reads the input defined by the user and populates the
@@ -82,7 +87,7 @@ def ReadInput(serpentIds, **kwargs):
 
     Parameters
     ----------
-    SerpentIds : dict
+    externalIds : dict
         Link between user-defined and serpent-defined Ids, e.g.
         {'fuel':['0', '1']}. The dict can be empty is serpent Ids are not used
     kwargs : named arguments
@@ -100,20 +105,20 @@ def ReadInput(serpentIds, **kwargs):
         If ``set element`` has no entries in the line.
         If ``material.temperatures`` and ``material.pressures`` are both None.
         If there are no properties for the material.
-        If the number of items in ``serpentIds`` and ``kwargs`` not the same.
+        If the number of items in ``externalIds`` and ``kwargs`` not the same.
 
     """
 
 
     univs = Universes()
 
-    if serpentIds == {}:
+    if externalIds == {}:
         for univId, inputFile in kwargs.items():
-            serpentIds[univId] = [None]
+            externalIds[univId] = [None]
 
     for univId, inputFile in kwargs.items():
 
-        serpSets = {} # dict to store serpent data
+        externalSets = {} # dict to store external (e.g., serpent) data
         print("... Reading universe <{}> ...".format(univId))
         # check that `inputFile` variable is a string
         _isstr(inputFile, "Input file")
@@ -129,12 +134,13 @@ def ReadInput(serpentIds, **kwargs):
         # strip comments and empty lines
         data = _CleanFile(dataFile)    
         
-        for serpId in serpentIds[univId]:  
+        for extrnalId in externalIds[univId]:  
             # Process all cards
-            rc, states, msets, serpSets = _ProcessCards(data, serpId, serpSets)
+            rc, states, msets, externalSets =\
+                _ProcessCards(data, extrnalId, externalSets)
             
-            if serpId is not None:
-                univId = univId + serpId
+            if extrnalId is not None:
+                univId = univId + extrnalId
             # add the data to the universe containers
             univs.Add(univId, rc, states, msets)
         
@@ -145,7 +151,7 @@ def ReadInput(serpentIds, **kwargs):
     return univs
 
 
-def _ProcessCards(data, serpentId, serpentSets):
+def _ProcessCards(data, externalId, externalSets):
     """Process the set lines and corresponding data"""
 
     # Reset all values
@@ -161,6 +167,7 @@ def _ProcessCards(data, serpentId, serpentSets):
     labels = {}  # labels for reading serpent .coe files
     # dict to store serpent files
     serpent = {"files": None, "time": True, "flx": None, "energy": None}
+    shift = {"files": None, "flx": None, "energy": None}
     multisets = None
     # -------------------------------------------------------------------------    
 
@@ -209,7 +216,12 @@ def _ProcessCards(data, serpentId, serpentSets):
                 card = 'serpent'
                 setLine = cardKey[cFound['serpent'].span()[1]:]
                 serpent["files"], serpent["timeFlag"], serpent["flx"],\
-                    serpent["energy"] = _ImportSerpentFiles(setLine, cardData) 
+                    serpent["energy"] = _ImportSerpentFiles(setLine, cardData)
+            elif cFound['shift'] is not None:
+                card = 'shift'
+                setLine = cardKey[cFound['shift'].span()[1]:]
+                shift["files"], shift["flx"], shift["energy"] =\
+                    _ImportShiftFiles(setLine, cardData)
             elif cFound['labels'] is not None:
                 card = 'labels'
                 setLine = cardKey[cFound['labels'].span()[1]:]
@@ -239,9 +251,15 @@ def _ProcessCards(data, serpentId, serpentSets):
         #----------------------------------------------------------------------
         errmsg = "Serpent .coe data"
         card = "serpent"
-        multisets, serpentSets =\
-            _PopulateSerpentSets(rc, states, serpent, labels, serpentId,
-                                 serpentSets)
+        multisets, externalSets =\
+            _PopulateSerpentSets(rc, states, serpent, labels, externalId,
+                                 externalSets)
+        #                                                      `Shift` .h5 data
+        #----------------------------------------------------------------------
+        errmsg = "Serpent .coe data"
+        card = "serpent"
+        multisets, externalSets =\
+            _PopulateShiftSets(rc, states, shift, externalSets, externalId)
         #                                                           `Data` sets
         #----------------------------------------------------------------------
         errmsg = "Data Sets"
@@ -269,7 +287,7 @@ def _ProcessCards(data, serpentId, serpentSets):
         raise InputGeneralError("{}\nInternal Error:{}\n"
                                 .format(errmsg, detail))  
         
-    return rc, states, multisets, serpentSets
+    return rc, states, multisets, externalSets
 
 
 # -----------------------------------------------------------------------------
@@ -391,6 +409,60 @@ def _PopulateSerpentSets(rc, states, serpent, labels, serpId, serpentData):
         
     return ms, serpentData
     
+
+def _PopulateShiftSets(rc, states, shift, shiftData, shiftId):
+    """"populate the multi sets container by reading shift h5 files"""
+    
+    if shift["files"] is None:
+        raise InputCardError("Name of shift files not provided \n<{}>."
+                             .format(shift["files"]), INPUT_CARDS, "serpent")
+
+    # read shift h5 only once
+    if shiftData == {}:
+        attrs = rc.macro + rc.micro + rc.meta + rc.kinetics
+        # read all shift files
+        shiftData = ReadShiftFiles(shift['files'], attrs=attrs)
+    # read the data for a specific universe
+    data = shiftData[int(shiftId)]
+        
+        
+    # populate the single container
+    ms = MultipleSets(states, **rc.dataFlags, overWrite=True)
+    
+
+
+    # shiftData = ReadShiftFiles(shift['files'], attrs=None, mgxsName = 'mg_xs/tallies',
+    #                    tallies = ['scattering_matrix0', 'scattering_matrix1'],
+    #                    sct_neutrons=4, transfer='transfer_{:d}n', flux='flux',
+    #                    scattering='scattering_matrix')
+
+          
+    for histId in data:
+        for timeId in data[histId]:
+            for branchId in data[histId][timeId]:
+                # store data for this specific state
+                ss = SingleSet(rc, states, fluxName=shift['flx'],
+                               energyStruct=shift['energy'])
+                ss.AddState(
+                    branch=np.array(branchId), history=histId, time=timeId)
+                for attr in data[histId][timeId][branchId]:
+                    key = None
+                    if attr in rc.macro:
+                        key='macro'
+                    elif attr in rc.micro:
+                        key='micro'
+                    elif attr in rc.kinetics:
+                        key='kinetics'
+                    else:
+                        key='meta'
+                    ss.AddData(key, **{attr:
+                                       data[histId][timeId][branchId][attr]})
+
+                # add the single set to multi sets
+                ms.Add(ss)
+        
+    return ms, serpentData
+
 
 def _PopulateManipulations(rc, ms, cutoffE, manipData):
     """"populate the multi sets container"""
@@ -865,6 +937,79 @@ def _ImportSerpentFiles(setLine, tlines):
                              .format(N, len(data), errmsg), INPUT_CARDS, card)        
 
     return data, timeFlag, flxName, eneStruct
+
+
+
+def _ImportShiftFiles(setLine, tlines):
+    """import names of Shift .h5 files"""
+
+    # Requirements
+    # -------------------------------------------------------------------------
+    card = "shift" 
+    expinputs = ['<N-files>', '<N-states>', '<FLUX>', '<ENE>']
+    expvals = [4, 100000]  # at least three values must be provided
+    errmsg = "{} must be provided in <set {}>.\n".format(expinputs, card)
+
+    # Process the set line values
+    # -------------------------------------------------------------------------
+    setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
+    filesN = int(setValues[0])
+    statesN = int(setValues[1])  # number of states + history + time
+    flxName = setValues[2]
+    eneStruct = np.array(setValues[3:], dtype=float)  # in descending order
+
+    # Process the set card values
+    # -------------------------------------------------------------------------
+    errmsg = "<set {}>.\n".format(card)
+    
+    data = {}  # dictionary to store history .coe files
+    # loop over all the data lines (with file names)
+    for tline in tlines:
+        tline = tline.replace('=', '')  # remove "=" signs
+        
+        tline_vec = tline.split()  # decompose to states and file names
+
+        if len(tline_vec) < 4:
+            raise ValueError("Number of values should be at least 4, and not "
+                             "{}.\nProvide History, time, branch, and file"
+                             .format(len(tline_vec)))
+        
+        if len(tline_vec) < statesN + 1:
+            raise ValueError("Number of values should be at least {}, and not "
+                             "{}".format(statesN + 1, len(tline_vec)))
+        
+        # ``states`` includes history and time if these exist
+        states = tline_vec[0:statesN]
+        for statename in states:
+            # remove all states and leave just the file name
+            tline = tline.replace(statename, '')
+        
+        # Name of the shift file
+        shiftFile = tline
+        # remove redundant spaces at both ends of the file string
+        shiftFile = shiftFile.rstrip()
+        shiftFile = shiftFile.lstrip()
+        
+        data[tuple(states)] = shiftFile
+           
+
+    # Error Checking
+    # -------------------------------------------------------------------------
+    # N/A
+
+    # Data manipulation
+    # -------------------------------------------------------------------------       
+    for item, value in data.items():
+        if value == '' or value == None:
+            raise InputCardError("No data provided for shift <{}>.\n{}"
+                                 .format(item, errmsg), INPUT_CARDS, card)
+            
+    if filesN != len(data):
+        raise InputCardError("Expected num. of files=<{}>; provided=<{}>.\n{}"
+                             .format(filesN, len(data), errmsg), INPUT_CARDS,
+                             card)        
+
+    return data, flxName, eneStruct
 
 
 # -----------------------------------------------------------------------------
