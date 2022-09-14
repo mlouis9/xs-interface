@@ -64,7 +64,10 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#j-serpent"><span class="std std-ref">serpent</span></a></p></td>
 <td><p>Linking between user-defined universe Ids and serpent-defined universe Ids.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#j-formats"><span class="std std-ref">formats</span></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#j-shift"><span class="std std-ref">shift</span></a></p></td>
+<td><p>Linking between user-defined universe Ids and shift-defined universe Ids.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#j-formats"><span class="std std-ref">formats</span></a></p></td>
 <td><p>Formatting control parameters.</p></td>
 </tr>
 </tbody>
@@ -248,6 +251,18 @@ It must be pointed out that if this card is not provided, the explicit definitio
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">links</span>
 <span class="n">template1</span> <span class="n">fuel0</span><span class="p">,</span> <span class="n">fuel1</span><span class="p">,</span> <span class="n">fuel2</span><span class="p">,</span> <span class="n">fuel3</span><span class="p">,</span> <span class="n">fuel4</span><span class="p">,</span> <span class="n">fuel5</span>
 <span class="n">template2</span> <span class="n">ref</span>
+</pre></div>
+</div>
+</section>
+<section id="shift">
+<span id="j-shift"></span><h2>shift<a class="headerlink" href="#shift" title="Permalink to this headline">¶</a></h2>
+<p><strong>Linkage between user-defined universes and shift universe Indices defined within the .h5 files.</strong></p>
+<p><em>Optional Card</em></p>
+<p>This card is identical to the <a class="reference internal" href="#j-serpent"><span class="std std-ref">serpent</span></a> card with the slight difference in syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">shift</span>
+<span class="o">&lt;</span><span class="n">univ</span> <span class="n">Id1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">shift</span> <span class="n">universe</span> <span class="n">Id11</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">shift</span> <span class="n">universe</span> <span class="n">Id12</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">&lt;</span><span class="n">univ</span> <span class="n">Id2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">shift</span> <span class="n">universe</span> <span class="n">Id21</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">shift</span> <span class="n">universe</span> <span class="n">Id22</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">...</span>
 </pre></div>
 </div>
 </section>

@@ -29,6 +29,8 @@ Set what?							Description
 --------------------- -------------------------------------------------------------------
 :ref:`i_labels`				Branch labels as they appear in Serpent branch .coe file.
 --------------------- -------------------------------------------------------------------
+:ref:`i_shift`				Shift perturbation files from which data is read.
+--------------------- -------------------------------------------------------------------
 :ref:`i_manipulate`		Data manipulation including energy condensation operations.
 --------------------- -------------------------------------------------------------------
 :ref:`i_filter`				States and data names to be filtered/included.
@@ -537,7 +539,65 @@ and, in the **<branch> sub-cards**,
 	dens dens630, nom, dens780 
 
 
+.. _i_shift:
 
+=======
+Shift
+=======
+
+
+**Shift perturbation .h5 files.**
+
+*Optional Card*. Unlike the :ref:`i_serpent` card, the :ref:`i_labels` card is NOT needed here.
+
+.. code::
+		
+   set serpent <N-files> <N-states> <FLUX> <ENE>
+   <history-1> <time-1> <branch-11>,... <.h5 file 1>
+   <history-2> <time-2> <branch-21>,... <.h5 file 2>
+   ...
+  
+
+where in the **set** line,
+ - ``N-files`` describe the number of .h5 perturbation files to be provided in the following rows.
+ - ``N-states`` describe the number of perturbations (+history and time) points provided in each row. History and time must be included. For example if the only the moderator density is defined as a branch parameter, then the ``N-states=3``, e.g., 
+
+	.. code::
+
+		set shift 1 3 coarse_flux 10.0E+6, 0.6025, 0.0
+
+ - ``FLUX`` is the name of the flux variable used in serpent, similarly defined in :ref:`i_data`.
+ - ``ENE`` energy structure in descending order similarly used in :ref:`i_data`. Must include upper and lower boundaries, e.g., for a 2-group structure:  
+
+	.. code::
+
+		set data infflx 10.0E+6, 0.6025, 0.0
+		
+
+and, the description of perturbations along with their .h5 files are provided in the following lines.
+	- the description of ``history``, ``time``, and ``branch`` must correspond to the values provided in :ref:`i_histories`, :ref:`i_times` and :ref:`i_branches` respectively.
+	- It must be pointed out that each file contains a distinctive perturbation point. 
+	- Each .h5 file can include either a single or multiple universes.
+
+	
+**Examples**:
+
+.. code::
+
+	set shift 1 3 coarse_flux 10.0E+6, 0.6025, 0.0
+	nom 0.0 700.0  .\bwrCellNodal.out.h5
+
+		
+or, if multiple branches are to be collected:
+
+.. code::
+
+	set shift 4 5 coarse_flux 10.0E+6, 0.6025, 0.0
+	nom 0.0 500.0 700.0 1200.0  .\boron500_dens700_fuel1200_nom_time0.h5
+	nom 0.0 000.0 700.0 1200.0  .\boron500_dens700_fuel1200_nom_time0.h5
+	nom 0.0 500.0 700.0 900.00  .\boron500_dens700_fuel900_nom_time0.h5
+	nom 0.0 000.0 700.0 900.00  .\boron500_dens700_fuel900_nom_time0.h5
+		
 
 .. _i_manipulate:
 

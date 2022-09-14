@@ -74,10 +74,13 @@ Description on the format, comments, and general instructions is provided in <a 
 <tr class="row-even"><td><p><a class="reference internal" href="#i-labels"><span class="std std-ref">Labels</span></a></p></td>
 <td><p>Branch labels as they appear in Serpent branch .coe file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#i-manipulate"><span class="std std-ref">Manipulate</span></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#i-shift"><span class="std std-ref">Shift</span></a></p></td>
+<td><p>Shift perturbation files from which data is read.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#i-manipulate"><span class="std std-ref">Manipulate</span></a></p></td>
 <td><p>Data manipulation including energy condensation operations.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#i-filter"><span class="std std-ref">Filter</span></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#i-filter"><span class="std std-ref">Filter</span></a></p></td>
 <td><p>States and data names to be filtered/included.</p></td>
 </tr>
 </tbody>
@@ -521,6 +524,57 @@ Description on the format, comments, and general instructions is provided in <a 
 <span class="n">fuel</span> <span class="n">f600</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">f1200</span><span class="p">,</span> <span class="n">f1500</span>
 <span class="n">boron</span> <span class="n">b0</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">b2250</span>
 <span class="n">dens</span> <span class="n">dens630</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">dens780</span>
+</pre></div>
+</div>
+</section>
+<section id="shift">
+<span id="i-shift"></span><h2>Shift<a class="headerlink" href="#shift" title="Permalink to this headline">¶</a></h2>
+<p><strong>Shift perturbation .h5 files.</strong></p>
+<p><em>Optional Card</em>. Unlike the <a class="reference internal" href="#i-serpent"><span class="std std-ref">Serpent</span></a> card, the <a class="reference internal" href="#i-labels"><span class="std std-ref">Labels</span></a> card is NOT needed here.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">serpent</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">-</span><span class="n">files</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">-</span><span class="n">states</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">FLUX</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">ENE</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">history</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">time</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">branch</span><span class="o">-</span><span class="mi">11</span><span class="o">&gt;</span><span class="p">,</span><span class="o">...</span> <span class="o">&lt;.</span><span class="n">h5</span> <span class="n">file</span> <span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">history</span><span class="o">-</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">time</span><span class="o">-</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">branch</span><span class="o">-</span><span class="mi">21</span><span class="o">&gt;</span><span class="p">,</span><span class="o">...</span> <span class="o">&lt;.</span><span class="n">h5</span> <span class="n">file</span> <span class="mi">2</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<dl>
+<dt>where in the <strong>set</strong> line,</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">N-files</span></code> describe the number of .h5 perturbation files to be provided in the following rows.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">N-states</span></code> describe the number of perturbations (+history and time) points provided in each row. History and time must be included. For example if the only the moderator density is defined as a branch parameter, then the <code class="docutils literal notranslate"><span class="pre">N-states=3</span></code>, e.g.,</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">shift</span> <span class="mi">1</span> <span class="mi">3</span> <span class="n">coarse_flux</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FLUX</span></code> is the name of the flux variable used in serpent, similarly defined in <a class="reference internal" href="#i-data"><span class="std std-ref">Data</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ENE</span></code> energy structure in descending order similarly used in <a class="reference internal" href="#i-data"><span class="std std-ref">Data</span></a>. Must include upper and lower boundaries, e.g., for a 2-group structure:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">data</span> <span class="n">infflx</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+<dt>and, the description of perturbations along with their .h5 files are provided in the following lines.</dt><dd><ul class="simple">
+<li><p>the description of <code class="docutils literal notranslate"><span class="pre">history</span></code>, <code class="docutils literal notranslate"><span class="pre">time</span></code>, and <code class="docutils literal notranslate"><span class="pre">branch</span></code> must correspond to the values provided in <a class="reference internal" href="#i-histories"><span class="std std-ref">Histories</span></a>, <a class="reference internal" href="#i-times"><span class="std std-ref">Times</span></a> and <a class="reference internal" href="#i-branches"><span class="std std-ref">Branches</span></a> respectively.</p></li>
+<li><p>It must be pointed out that each file contains a distinctive perturbation point.</p></li>
+<li><p>Each .h5 file can include either a single or multiple universes.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Examples</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">shift</span> <span class="mi">1</span> <span class="mi">3</span> <span class="n">coarse_flux</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">nom</span> <span class="mf">0.0</span> <span class="mf">700.0</span>  <span class="o">.</span>\<span class="n">bwrCellNodal</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">h5</span>
+</pre></div>
+</div>
+<p>or, if multiple branches are to be collected:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">shift</span> <span class="mi">4</span> <span class="mi">5</span> <span class="n">coarse_flux</span> <span class="mf">10.0E+6</span><span class="p">,</span> <span class="mf">0.6025</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">nom</span> <span class="mf">0.0</span> <span class="mf">500.0</span> <span class="mf">700.0</span> <span class="mf">1200.0</span>  <span class="o">.</span>\<span class="n">boron500_dens700_fuel1200_nom_time0</span><span class="o">.</span><span class="n">h5</span>
+<span class="n">nom</span> <span class="mf">0.0</span> <span class="mf">000.0</span> <span class="mf">700.0</span> <span class="mf">1200.0</span>  <span class="o">.</span>\<span class="n">boron500_dens700_fuel1200_nom_time0</span><span class="o">.</span><span class="n">h5</span>
+<span class="n">nom</span> <span class="mf">0.0</span> <span class="mf">500.0</span> <span class="mf">700.0</span> <span class="mf">900.00</span>  <span class="o">.</span>\<span class="n">boron500_dens700_fuel900_nom_time0</span><span class="o">.</span><span class="n">h5</span>
+<span class="n">nom</span> <span class="mf">0.0</span> <span class="mf">000.0</span> <span class="mf">700.0</span> <span class="mf">900.00</span>  <span class="o">.</span>\<span class="n">boron500_dens700_fuel900_nom_time0</span><span class="o">.</span><span class="n">h5</span>
 </pre></div>
 </div>
 </section>
