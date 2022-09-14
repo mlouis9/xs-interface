@@ -254,12 +254,13 @@ def _ProcessCards(data, externalId, externalSets):
         multisets, externalSets =\
             _PopulateSerpentSets(rc, states, serpent, labels, externalId,
                                  externalSets)
+        if multisets is None:    
         #                                                      `Shift` .h5 data
         #----------------------------------------------------------------------
-        errmsg = "Shift .h5 data"
-        card = "shift"
-        multisets, externalSets =\
-            _PopulateShiftSets(rc, states, shift, externalSets, externalId)
+            errmsg = "Shift .h5 data"
+            card = "shift"
+            multisets, externalSets =\
+                _PopulateShiftSets(rc, states, shift, externalSets, externalId)
         #                                                           `Data` sets
         #----------------------------------------------------------------------
         errmsg = "Data Sets"
