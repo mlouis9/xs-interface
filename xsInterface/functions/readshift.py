@@ -78,27 +78,27 @@ def ReadShiftFiles(files, attrs=None, mgxsName = 'mg_xs/tallies',
     for state, file in files.items():
         
         # Read shift single file for a specific state
-        dataOut = _ReadShiftFile(file, mgxsName, tallies, sct_neutrons, flux,
-                                 scattering)
+        dataOut = _ReadShiftFile(file, mgxsName, tallies, sct_neutrons,
+                                 transfer, flux, scattering)
         # structure of structure is history, time, branches         
         history = state[0]  # history
         time = state[1]  # time
-        branch = list(state[2:])  # branch
+        branch = tuple(state[2:])  # branch
         
         # universes-->histories-->times-->branches-->attributes
         for univId, univData in dataOut.items():
             if univId not in data:
                 # universe does not exist
-                data.update({univId: {history: {time:{ branch:{univData}}}}})
+                data.update({univId: {history: {time:{ branch:univData}}}})
                 
             elif history not in data[univId]:
-                data[univId].update({history: {time:{ branch:{univData}}}})
+                data[univId].update({history: {time:{ branch:univData}}})
 
             elif time not in data[univId][history]:
-                data[univId][history].update({time:{ branch:{univData}}})
+                data[univId][history].update({time:{ branch:univData}})
 
             else:
-                [univId][history][time].update({ branch:{univData}})            
+                [univId][history][time].update({ branch:univData})            
                 
     return data
             

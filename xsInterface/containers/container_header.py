@@ -72,8 +72,9 @@ SerpentCard = {
     "history name": "corresponding .coe file"
     }
 
-ShidtCard = {
-    "N": "number of .h5 files",
+ShiftCard = {
+    "N-files": "number of .h5 files",
+    "N-states": "number of state points, i.e., history and time included",
     "FLUX": "name of the flux variable",
     "ENE": " energy structure in descending order. with Upper, lower bounds",
     "history name": "corresponding .coe file"

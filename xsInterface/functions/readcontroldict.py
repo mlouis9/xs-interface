@@ -5,7 +5,7 @@ should be read. It also specifies the format that wil be used to output
 the required information.
 
 Created on Tue July 19 13:35:00 2022 @author: Dan Kotlyar
-Last updated on Tue Aug 09 12:10:00 2022 @author: Dan Kotlyar
+Last updated on Wed Sep 14 05:30:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -13,6 +13,7 @@ List changes / additions:
 "Concise description" - MM/DD/YYY - Name initials
 Read - 07/19/2022 - DK
 serpent card - 08/09/2022 - DK
+shift card - 09/13/2022 - DK
 
 """
 
@@ -39,6 +40,7 @@ FORMT_REGX = compile(r'\s*(set\s+)(formats)', IGNORECASE)
 OUTPT_REGX = compile(r'\s*(set\s+)(outputs)', IGNORECASE)
 LINKS_REGX = compile(r'\s*(set\s+)(links)', IGNORECASE)
 SERPT_REGX = compile(r'\s*(set\s+)(serpent)', IGNORECASE)
+SHIFT_REGX = compile(r'\s*(set\s+)(shift)', IGNORECASE)
 
 # default formats for outputting data
 STATE_FRMT = "{:5.3f}"
@@ -70,11 +72,13 @@ def Read(inputFile):
         keys represent template Ids; values the universes Ids linked to these.
     formats: dict
         formats used for printing variables, states, attributes.
-    serpent : dict
+    external : dict
         keys are the names of the universes Ids and values are the Ids in the
-        serpent files. None values are used for universes for which data is not
-        read from serpent.
+        external codes (e.g., serpent) files.
+        None values are used for universes for which data is not read from
+        the external code.
 
+    
     Raises
     ------
     TypeError
@@ -106,10 +110,10 @@ def Read(inputFile):
     data = _CleanFile(dataFile)
     
     # Process data
-    universes, outputs, templates, links, formats, serpent =\
+    universes, outputs, templates, links, formats, external =\
         _ProcessCards(data)
     
-    return universes, outputs, templates, links, formats, serpent
+    return universes, outputs, templates, links, formats, external
     
     
 
@@ -120,6 +124,7 @@ def _ProcessCards(data):
     # Reset all dictionaries to store data
     # -------------------------------------------------------------------------    
     serpent = {}
+    shift = {}
     universes = {}
     templates = {}
     outputs = {}
@@ -138,8 +143,6 @@ def _ProcessCards(data):
     "must contain:\n<template name> <corresponding output file>"
     errlink = "<set links> is not defined properly.\nSubsequent lines must"\
     " contain:\n<template name> <corresponding universes Ids>"
-    errserp = "<set serpent> is not defined properly.\nSubsequent lines must"\
-    " contain:\n<univ name> <universe Ids in the serpent file>"
 
     # -------------------------------------------------------------------------   
     #                              Universes
@@ -203,28 +206,45 @@ def _ProcessCards(data):
 
 
     # -------------------------------------------------------------------------   
-    #                           Serpent Files
+    #                 External codes' (e.g., Serpent) Files
     # -------------------------------------------------------------------------   
     for cardKey, cardData in data.items():
         if SERPT_REGX.search(cardKey):
             serpent = _CardDict(cardData)
+    for cardKey, cardData in data.items():
+        if SHIFT_REGX.search(cardKey):
+            shift = _CardDict(cardData)
+    if shift != {} and serpent != {}:
+        raise ControlFileError(
+            "shift and serpent cards can not be provided together. \nEither "
+            "serpent or shift only.")
+    external = {}
     if serpent != {}:
-        for serpId in serpent:
-            if serpId not in universes:
+        external = serpent
+        errextr = "<set serpent> is not defined properly.\nSubsequent lines "\
+            "must contain:\n<univ name> <universe Ids in the serpent file>"
+    elif shift != {}:
+        external = shift
+        errextr = "<set serpent> is not defined properly.\nSubsequent lines "\
+            "must contain:\n<univ name> <universe Ids in the serpent file>"
+
+    if external != {}:
+        for externalId in external:
+            if externalId not in universes:
                 raise ControlFileError(
                     "{}\nUniverses names must be consistent with <set "
-                    "universes> card".format(errserp))
+                    "universes> card".format(errextr))
     for key in universes:
-        if key not in serpent:
-            serpent[key] = [None]
+        if key not in external:
+            external[key] = [None]
 
     univIds = []  # list to store all the Ids after joining the serpent Id    
-    for univId, serpIds in serpent.items():
-        for serpId in serpIds:
-            if serpId is None:
+    for univId, externalIds in external.items():
+        for externalId in externalIds:
+            if externalId is None:
                 univIds.append(univId)
             else:
-                univIds.append(univId+serpId)
+                univIds.append(univId+externalId)
     if univlinks != {}:
         for key in univlinks:
             for univId in univlinks[key]:
@@ -236,7 +256,7 @@ def _ProcessCards(data):
     
     
     # Return values
-    return universes, outputs, templates, univlinks, formats, serpent
+    return universes, outputs, templates, univlinks, formats, external
 
 
 

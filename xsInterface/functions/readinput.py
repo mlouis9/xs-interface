@@ -256,8 +256,8 @@ def _ProcessCards(data, externalId, externalSets):
                                  externalSets)
         #                                                      `Shift` .h5 data
         #----------------------------------------------------------------------
-        errmsg = "Serpent .coe data"
-        card = "serpent"
+        errmsg = "Shift .h5 data"
+        card = "shift"
         multisets, externalSets =\
             _PopulateShiftSets(rc, states, shift, externalSets, externalId)
         #                                                           `Data` sets
@@ -347,11 +347,8 @@ def _PopulateSerpentSets(rc, states, serpent, labels, serpId, serpentData):
         raise InputCardError("Name of serpent files provided \n<{}>.\nBut "
                              "serpent Id in the control files not provided."
                              .format(serpent["files"]), INPUT_CARDS, "serpent")
-    elif serpId is not None and serpent["files"] is None:
-        raise InputCardError("serpent Id in the control files provided.\n<{}>"
-                             "Name of serpent files not provided. "
-                             .format(serpId), INPUT_CARDS, "serpent")
-    if serpId is None:
+
+    if serpent["files"] is None:
         ms = None
         return ms, serpentData
     
@@ -413,9 +410,15 @@ def _PopulateSerpentSets(rc, states, serpent, labels, serpId, serpentData):
 def _PopulateShiftSets(rc, states, shift, shiftData, shiftId):
     """"populate the multi sets container by reading shift h5 files"""
     
+    if shift["files"] is not None and shiftId is None:
+        raise InputCardError("Name of shift files provided \n<{}>.\nBut "
+                             "shift Id in the control files not provided."
+                             .format(shift["files"]), INPUT_CARDS, "shift")
+
     if shift["files"] is None:
-        raise InputCardError("Name of shift files not provided \n<{}>."
-                             .format(shift["files"]), INPUT_CARDS, "serpent")
+        ms = None
+        return ms, shiftData
+
 
     # read shift h5 only once
     if shiftData == {}:
@@ -443,9 +446,14 @@ def _PopulateShiftSets(rc, states, shift, shiftData, shiftId):
                 # store data for this specific state
                 ss = SingleSet(rc, states, fluxName=shift['flx'],
                                energyStruct=shift['energy'])
-                ss.AddState(
-                    branch=np.array(branchId), history=histId, time=timeId)
-                for attr in data[histId][timeId][branchId]:
+                ss.AddState(branch=np.array(branchId, dtype=float),
+                            history=histId, time=float(timeId))
+                for attr in attrs:
+                    if attr not in data[histId][timeId][branchId]:
+                        raise ValueError(
+                            "No attribute {} in shift \n{}:"
+                            .format(attr,data[histId][timeId][branchId]
+                                    .keys()))
                     key = None
                     if attr in rc.macro:
                         key='macro'
@@ -455,13 +463,14 @@ def _PopulateShiftSets(rc, states, shift, shiftData, shiftId):
                         key='kinetics'
                     else:
                         key='meta'
+                    
                     ss.AddData(key, **{attr:
                                        data[histId][timeId][branchId][attr]})
 
                 # add the single set to multi sets
                 ms.Add(ss)
         
-    return ms, serpentData
+    return ms, shiftData
 
 
 def _PopulateManipulations(rc, ms, cutoffE, manipData):
@@ -955,6 +964,10 @@ def _ImportShiftFiles(setLine, tlines):
     setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
     filesN = int(setValues[0])
     statesN = int(setValues[1])  # number of states + history + time
+    if statesN < 3:
+        raise ValueError("Number of values in <set shift> should be at least 3"
+                         " and not {}.\nProvide History, time, and branch "
+                         .format(statesN))        
     flxName = setValues[2]
     eneStruct = np.array(setValues[3:], dtype=float)  # in descending order
 
@@ -982,7 +995,7 @@ def _ImportShiftFiles(setLine, tlines):
         states = tline_vec[0:statesN]
         for statename in states:
             # remove all states and leave just the file name
-            tline = tline.replace(statename, '')
+            tline = tline.replace(statename, '', 1)
         
         # Name of the shift file
         shiftFile = tline
