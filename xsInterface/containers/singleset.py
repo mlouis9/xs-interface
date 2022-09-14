@@ -427,7 +427,7 @@ class SingleSet():
         # ---------------------------------------------------------------------
         for attr, value in self.macro.items():
             ndim = value.ndim  # 1-dim or  2-dim values are allowed
-            ng = int(value.size / ndim)  # number of energy groups
+            ng = int(value.size**(1/ndim))  # number of energy groups
             boundsE = self.energygrid
             flux = self.GetValues(self.fluxname)
             condvals, condE =\
