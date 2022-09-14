@@ -21,6 +21,8 @@ Set what?							Description
 --------------------- -------------------------------------------------------------------
 :ref:`j_serpent`			Linking between user-defined universe Ids and serpent-defined universe Ids.
 --------------------- -------------------------------------------------------------------
+:ref:`j_shift`				Linking between user-defined universe Ids and shift-defined universe Ids.
+--------------------- -------------------------------------------------------------------
 :ref:`j_formats`			Formatting control parameters.
 ===================== ===================================================================
 
@@ -254,6 +256,28 @@ where,
 	template2 ref
 
 
+.. _j_shift:
+
+=======
+shift
+=======
+
+**Linkage between user-defined universes and shift universe Indices defined within the .h5 files.**
+
+*Optional Card*
+
+
+This card is identical to the :ref:`j_serpent` card with the slight difference in syntax:
+
+
+.. code::
+		
+   set shift
+   <univ Id1> <shift universe Id11> <shift universe Id12> ...
+   <univ Id2> <shift universe Id21> <shift universe Id22> ...
+   ...
+  
+	
 
 .. _j_formats:
 
