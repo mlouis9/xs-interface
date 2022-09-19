@@ -77,8 +77,10 @@ ShiftCard = {
     "N-states": "number of state points, i.e., history and time included",
     "FLUX": "name of the flux variable",
     "ENE": " energy structure in descending order. with Upper, lower bounds",
-    "history name": "corresponding .coe file"
+    "perturbation files": "corresponding .h5 files"
     }
+
+
 
 LabelCard = {
     "N": "number of branches to relabel",
