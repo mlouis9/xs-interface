@@ -1,11 +1,11 @@
 """readshift.py
 
-Read the data in multiple .coe branch files using the ``serpentTools`` package.
-This method allows to read multiple history files with multiple universes.
-It also allows to filter the data/attributes of interest.
+Read the data in multiple .h5 files printed by Shift.
+Each state point identified by history, time, and branch is assumed to be
+unique in each file. Multiple universes can exist in each .h5 file.
 
 Created on Sat July 30 05:00:00 2022 @author: Dan Kotlyar
-Last updated on Wed Aug 04 16:00:00 2022 @author: Dan Kotlyar
+Last updated on Sun Sep 18 07:00:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -15,6 +15,7 @@ ReadCoefFiles  - 07/30/2022 - DK
 _ReLabelStates  - 08/03/2022 - DK
 _FilterAttrs - 08/04/2022 - DK
 ReadSerpent - 08/04/2022 - DK
+Error checking in ReadShiftFiles - 09/18/2022 - DK
 
 """
 
@@ -25,11 +26,10 @@ import h5py
 import numpy as np
 
 
-from xsInterface.errors.checkerrors import _isstr, _isarray, _isequallength,\
-    _isndarray, _is1darray
+from xsInterface.errors.checkerrors import _isstr, _islist, _isnumber
 
 
-def ReadShiftFiles(files, attrs=None, mgxsName = 'mg_xs/tallies',
+def ReadShiftFiles(files, mgxsName = 'mg_xs/tallies',
                    tallies = ['scattering_matrix0', 'scattering_matrix1'],
                    sct_neutrons=4, transfer='transfer_{:d}n', flux='flux',
                    scattering='scattering_matrix'):
@@ -44,9 +44,6 @@ def ReadShiftFiles(files, attrs=None, mgxsName = 'mg_xs/tallies',
         file name (+path included) as keys and states dictionary as values
         files = {'file1': {state1}, 'file2': {state2}, ...}
         state = {'history': value, 'time': value, 'branch': value}    
-    attrs : list
-        selected attributes. If None is defined then all the attributes that
-        exist in the tallies and mg xs are collected.
     mgxsName : string
         full path to the mg_xs data in the hdf5 file
     tallies : list of strings
@@ -73,6 +70,15 @@ def ReadShiftFiles(files, attrs=None, mgxsName = 'mg_xs/tallies',
 
 
     """
+    
+    # Check potential errors
+    _isstr(mgxsName, 'MG Cross Sections Name')
+    _islist(tallies, 'Tally names')
+    _isnumber(sct_neutrons, 'Number of scattering neutrons')
+    _isstr(transfer, 'Name of the nxn neutrons transfer')
+    _isstr(flux, "Name of the flux variable")
+    _isstr(scattering, "Name of the output scattering matrix")
+    
     
     data = {}
     for state, file in files.items():
@@ -103,11 +109,8 @@ def ReadShiftFiles(files, attrs=None, mgxsName = 'mg_xs/tallies',
     return data
             
 
-def _ReadShiftFile(shiftFile, mgxsName = 'mg_xs/tallies',
-                   tallies = ['scattering_matrix0', 'scattering_matrix1'],
-                   sct_neutrons=4,
-                   transfer='transfer_{:d}n', flux='flux',
-                   scattering='scattering_matrix'):
+def _ReadShiftFile(shiftFile, mgxsName, tallies, sct_neutrons, transfer, flux,
+                   scattering):
     """Read a specific hdf5 shift file with cell nodal tallies and mg_xs
     
     Parameters
@@ -132,7 +135,7 @@ def _ReadShiftFile(shiftFile, mgxsName = 'mg_xs/tallies',
     data : dict
         data dict that stores all the tallies and mg_xs attributes and
         their coresponding values.
-        The data structure is  = {univId1: {attr1: values1, attr2: values2,...},
+        The data structure is  = {univId1: {attr1: values1, attr2: values2,..},
                                  univId2: {attr1: values1, attr2: values2,...},
                                  ...}
 
