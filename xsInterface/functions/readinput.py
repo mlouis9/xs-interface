@@ -765,7 +765,10 @@ def _ImportManipulations(setLine, tlines):
     # -------------------------------------------------------------------------       
     if data != {}:  # manipulation is not mandatory
         for item, value in data.items():
-            if len(value) != 3:
+            if len(value) == 2 and 'transpose' in value[-1]:
+                # for a transpose operation only one attribute is needed
+                data[item] = [value[0], value[0], value[1]]
+            elif len(value) != 3:
                 raise InputCardError("Three entries [attrIn1, attrIn2, operati"
                                      "on] are expected for attrOut=<{}>.\n{}"
                                      .format(item, errmsg), INPUT_CARDS, card)

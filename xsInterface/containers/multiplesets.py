@@ -311,7 +311,7 @@ class MultipleSets():
         ----------
         modes : string or list of strings
             types of the mathematical relation
-            ["multiply", "divide", "add", "subtract"]
+            ["multiply", "divide", "add", "subtract", "transpose"]
         attrs : string or list of strings
             name/ss of attribute/s where results will be written to.            
         attrs1 : string or list of strings
