@@ -10,7 +10,7 @@ Container to collect, store, and process data including:
 
 
 Created on Tue Apr 05 22:30:00 2022 @author: Dan Kotlyar
-Last updated on Tue June 21 09:00:00 2022 @author: Dan Kotlyar
+Last updated on Wed Sep 28 20:30:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -19,6 +19,7 @@ List changes or additions:
 "Concise description" - MM/DD/YYY - Name initials
 Energy condensation method - 04/13/2022 - DK
 Manipulate method - 06/21/2022 - DK
+Manipulate method (transpose) - 09/28/2022 - DK
 
 """
 
@@ -36,7 +37,7 @@ from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
     _islist, _isnonNegativeArray
 
 # REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
-OPERATION_MODES = ["multiply", "divide", "add", "subtract"]
+OPERATION_MODES = ["multiply", "divide", "add", "subtract", "transpose"]
 
 class SingleSet():
     """Container that stores the most basic data set
@@ -248,13 +249,13 @@ class SingleSet():
 
         Mathematical operation is performed between two macro/micro attributes
         including:
-            - Multiplication, division, addition, and subtraction operations
+            - Multiplication, division, addition, subtraction, and transpose
 
         Parameters
         ----------
         modes : string or list of strings
             types of the mathematical relation
-            ["multiply", "divide", "add", "subtract"]
+            ["multiply", "divide", "add", "subtract", "transpose"]
         attrs : string or list of strings
             name/ss of attribute/s where results will be written to.            
         attrs1 : string or list of strings
@@ -328,8 +329,8 @@ class SingleSet():
                 nd1 = np.tile(nd1, (1, colN))
                 # val1 = sum(val1*nd1)
             else:
-                raise KeyError("Attribute 1 <{}> does not exist in macro or micro"
-                               .format(attr1))            
+                raise KeyError("Attribute 1 <{}> does not exist in macro or "
+                               "micro".format(attr1))            
             # Attribute 2
             microFlag2 = False
             if attr2 in selfCopy.macro:
@@ -377,8 +378,10 @@ class SingleSet():
                 val = val1 / val2
             elif mode == "add":
                 val = val1 + val2
-            else: # mode == "subtract"
+            elif mode == "subtract":
                 val = val1 - val2
+            else:
+                val = val1.transpose()
             
             
             if (microFlag1 and microFlag2):

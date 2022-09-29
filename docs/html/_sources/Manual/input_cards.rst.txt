@@ -622,8 +622,8 @@ where in the **set** line,
 and, the following **lines** represent binary (between variable ``var1`` and ``var2``) mathematical operations to be performed.
 	- ``var`` name of the new variable to be created. 
 	- ``var1`` name of the first variable (e.g., ``inf_rabs``). Can only be of type ``macro`` or ``micro``.
-	- ``var2`` name of the second variable (e.g., ``sig_f``).	Can be either of type ``macro`` or ``micro`` or a number.
-	- ``operation`` mode of the mathematical operation with the following options only: ``add``, ``subtract``, ``multiply``, ``divide``.
+	- ``var2`` name of the second variable (e.g., ``sig_f``).	Can be either of type ``macro`` or ``micro`` or a number. This variable dows not need to be provided if the operation mode is ``transpose``.
+	- ``operation`` mode of the mathematical operation with the following options only: ``add``, ``subtract``, ``multiply``, ``divide``, ``transpose``.
 
 **Notes:**
 	
@@ -706,6 +706,7 @@ and, the following **lines** represent binary (between variable ``var1`` and ``v
 	set manipulate 0.0
 	new_nsf, inf_nsf, sig_f, subtract
 	new_sct, inf_sp0, sig_sct, add
+	new_sct_transpose, inf_sp0, transpose
 
 
 **Finally**, 
