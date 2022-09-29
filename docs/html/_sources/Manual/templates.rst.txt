@@ -198,7 +198,7 @@ where,
  - ``<state1>``, ``<state2>``, ... represent the names of the various states (e.g., fuel, moderator, coolant temperatures). The latter are defined in the :ref:`i_branches`, :ref:`i_histories`, and :ref:`i_times`	cards.
  - ``<value1>``, ``<value2>``, ... are the corresponding singular values for each of the various states.
  - ``<indices>`` are the indices provided to assess the data at specific index values. For example, if beta has six delayed neutron groups, a specific group can be accessed by applying the indices.
- - ``<format>`` a standard format notation, e.g., ``3d``, ``3.3f``, ``5.5e`` with which the input variable will be written in the output file. If provided, the format **must** be provided within ``<...>`` brackets.
+ - ``<format>`` a standard format notation, e.g., ``3d``, ``3.3f``, ``5.5e`` with which the input variable will be written in the output file. If provided, the format **must** be provided within ``<...>`` brackets. The format can also include space, delimiter, and spaces again. In which case, these spaces and delimiter will be added to how the results will be printed out.
  - ``<format>`` can be omitted along with the ``<...>`` brackets. In which case, the default value will be used according to the format defined in the control deck (:ref:`j_formats`).
  - ``<N>`` is max number of values that can be printed in a single line. It can be provided only if the ``format`` is provided. It can also be omitted, even if ``format`` is provided.
  - Default values for ``<format>`` and ``<N>`` are defined in :ref:`j_formats`.
@@ -221,11 +221,14 @@ where,
 
 	.. code::
 	
-		"values"{u0, inf_rabs, fuel=1500, time=0.0, history=nom  [0] <5.5e>4} 
+		"values"{u0, inf_rabs, fuel=1500, time=0.0, history=nom  [0] <5.5e>4}
 
 		
-	Let's assume that only a single state of fuel=1500 and time=0.0 was defined. The attribute ``inf_rabs`` has 2-group values. Therefore, the index ``0`` will evaluate only the first value in the array.
+	Let's assume that only a single state of fuel=1500 and time=0.0 was defined. The attribute ``inf_rabs`` has 2-group values. Therefore, the index ``0`` will evaluate only the first value in the array. If we want to use multiple spaces and delimiter, the following can be used.
 
+	.. code::
+
+		"values"{u0, inf_rabs, fuel=1500, time=0.0, history=nom  [0] <5.5e  ;  >4}	
 
 	
 - Compound evaluation.
