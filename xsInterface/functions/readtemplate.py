@@ -128,6 +128,7 @@ def _PopulateValues(dataIn, universes, formats):
 
         frmtPrnt = None
         nrowPrnt = None
+        frmtDelim = ''
 
         # Identify and execute an "values" line having an attribute
         attrline0 = VALS_REGEX.search(tline)
@@ -141,15 +142,11 @@ def _PopulateValues(dataIn, universes, formats):
             # Obtain formatting requirements
             # -----------------------------------------------------------------
             indices = []
+            frmtFlag = False
             if FRMT_N_REGEX.search(attrline) is not None:
+                frmtFlag = True
                 # the format included within <...>&nrow
                 condFrmt = FRMT_N_REGEX.search(attrline)
-                # format and delimiter can be provided
-                frmtData = condFrmt.group(1).split()
-                frmtPrnt = "{:" + frmtData[0] + "}"
-                frmtDelim = None
-                if len(frmtData) > 1:
-                    frmtDelim = frmtData[1]
                 nrowPrnt = condFrmt.group(0).split('>')[-1]
                 attrline = attrline.replace(condFrmt.group(0), '')
             elif FRMT_REGEX.search(attrline) is not None:
@@ -159,10 +156,20 @@ def _PopulateValues(dataIn, universes, formats):
                 frmtData = condFrmt.group(1).split()
                 frmtPrnt = "{:" + frmtData[0] + "}"
                 frmtDelim = None
-                if len(frmtData) > 1:
-                    frmtDelim = frmtData[1]
                 #frmtPrnt = "{:" + condFrmt.group(1) + "}"
                 attrline = attrline.replace(condFrmt.group(0), '')
+
+            if frmtFlag:
+                # format and delimiter can be provided
+                frmtData = condFrmt.group(1).split(' ')
+                for i in frmtData:
+                    if frmtPrnt is None and i != '':
+                        frmtPrnt = "{:" + frmtData[0] + "}"
+                    elif frmtPrnt is not None and i == '':
+                        frmtDelim += ' '
+                    elif frmtPrnt is not None and i != '':
+                        frmtDelim += i
+
             if frmtPrnt is not None:
                 try:
                     fmtCheck = frmtPrnt.format(444)
@@ -270,12 +277,12 @@ def _PopulateValues(dataIn, universes, formats):
                     frmtPrnt = formats["attr"]
             if nrowPrnt is None:
                 nrowPrnt = formats["nrow"]  # default val of max number in row 
-            if frmtDelim is None:
-                frmtDelim = formats["delim"]  # default delimiter
+            if frmtDelim == '':
+                frmtDelim = formats["delimiter"]  # default delimiter
           
             # format the values to be printed
             tlines = _Array2tlines(tline, attrline0.group(0), valsPrint,
-                                   nrowPrnt, frmtPrnt)
+                                   nrowPrnt, frmtPrnt, frmtDelim)
             
             for tline in tlines:
                 dataOut.append(tline)
@@ -528,13 +535,14 @@ def _LocalVariables(currLocals, funcList):
     return currList
 
 
-def _Array2tlines(tline, origstr, valsarray, nrow, frmt):
+def _Array2tlines(tline, origstr, valsarray, nrow, frmt, delimiter):
     """Convert original string in a line to multiple lines given by an array"""
     # tline: original line
     # origstr: original string to be replaced/removed
     # valsarray: values in an array
     # nrow: maximum number of values in a row
     # frmt: the format of the 
+    # delimiter is simply a sign inserted between the values
 
     tlines = []
     valsremain = copy.deepcopy(valsarray)
@@ -543,16 +551,23 @@ def _Array2tlines(tline, origstr, valsarray, nrow, frmt):
         if len(valsremain) > nrow:
             valsrow = valsremain[0:nrow]  # values to be printed a row
             valsremain = valsremain[nrow:]  # remaining vals for following rows
+            lastRow = False  # flag to indicate is this is the last values row
         else:
             valsrow = valsremain
             valsremain = []
+            lastRow = True
 
         str0 = ''  # empty string to be appended
-        for val in valsrow:
+        nvalsrow = len(valsrow)
+        delimFrmt = delimiter
+        for idx, val in enumerate(valsrow):
+            # no delimiter should be used for the last values
+            if lastRow and idx == nvalsrow-1:
+                delimFrmt = ''
             if isinstance(val, str):
-                str0 += '{} '.format(val)
+                str0 += '{}{}'.format(val, delimFrmt)
             else:
-                str0 += frmt.format(val) + ' '
+                str0 += frmt.format(val) + delimFrmt
         
         if replaceFlag:
             tlines.append(tline.replace(origstr, str0))

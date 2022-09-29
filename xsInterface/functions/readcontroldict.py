@@ -46,6 +46,7 @@ SHIFT_REGX = compile(r'\s*(set\s+)(shift)', IGNORECASE)
 STATE_FRMT = "{:5.3f}"
 VAR_FRMT = "{:d}"
 ATTR_FRMT = "{:5.5e}"
+DELIM_FRMT = " "
 ROW_VALS_N = 5  # maximum number of values printed in a line
 POST_PRFX = ''
 
@@ -130,7 +131,8 @@ def _ProcessCards(data):
     outputs = {}
     univlinks = {}
     formats = {"state": STATE_FRMT, "var": VAR_FRMT, "attr": ATTR_FRMT,
-               "nrow": ROW_VALS_N, "postfix": POST_PRFX}
+               "nrow": ROW_VALS_N, "postfix": POST_PRFX,
+               "delimiter": DELIM_FRMT}
 
     # -------------------------------------------------------------------------   
     #                              Error messages
