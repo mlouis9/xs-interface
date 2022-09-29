@@ -135,7 +135,6 @@ def _PopulateValues(dataIn, universes, formats):
             attrline = attrline0.group(1)
             attrline = attrline.replace("\n", '')  # remove new line
             attrline = attrline.replace("\t", ' ')  # remove tabs
-            attrline = attrline.replace(',', ' ')  # remove commas
             attrline = attrline.replace('=', ' ')  # remove = signs
             
             # -----------------------------------------------------------------
@@ -145,13 +144,24 @@ def _PopulateValues(dataIn, universes, formats):
             if FRMT_N_REGEX.search(attrline) is not None:
                 # the format included within <...>&nrow
                 condFrmt = FRMT_N_REGEX.search(attrline)
-                frmtPrnt = "{:" + condFrmt.group(1) + "}"
+                # format and delimiter can be provided
+                frmtData = condFrmt.group(1).split()
+                frmtPrnt = "{:" + frmtData[0] + "}"
+                frmtDelim = None
+                if len(frmtData) > 1:
+                    frmtDelim = frmtData[1]
                 nrowPrnt = condFrmt.group(0).split('>')[-1]
                 attrline = attrline.replace(condFrmt.group(0), '')
             elif FRMT_REGEX.search(attrline) is not None:
                 # the format included within <...> only
                 condFrmt = FRMT_N_REGEX.search(attrline)
-                frmtPrnt = "{:" + condFrmt.group(1) + "}"
+                # format and delimiter can be provided
+                frmtData = condFrmt.group(1).split()
+                frmtPrnt = "{:" + frmtData[0] + "}"
+                frmtDelim = None
+                if len(frmtData) > 1:
+                    frmtDelim = frmtData[1]
+                #frmtPrnt = "{:" + condFrmt.group(1) + "}"
                 attrline = attrline.replace(condFrmt.group(0), '')
             if frmtPrnt is not None:
                 try:
@@ -168,6 +178,8 @@ def _PopulateValues(dataIn, universes, formats):
                     msg0 = 'Provided format <{}> is not valid.\n{}'\
                     .format(nrowPrnt, tline)
                     raise TemplateFileError(msg0+'\n'+detail)           
+
+            attrline = attrline.replace(',', ' ')  # remove commas
 
             # -----------------------------------------------------------------
             # Obtain indices
@@ -258,6 +270,8 @@ def _PopulateValues(dataIn, universes, formats):
                     frmtPrnt = formats["attr"]
             if nrowPrnt is None:
                 nrowPrnt = formats["nrow"]  # default val of max number in row 
+            if frmtDelim is None:
+                frmtDelim = formats["delim"]  # default delimiter
           
             # format the values to be printed
             tlines = _Array2tlines(tline, attrline0.group(0), valsPrint,
