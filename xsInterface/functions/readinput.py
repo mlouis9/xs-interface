@@ -140,9 +140,11 @@ def ReadInput(externalIds, **kwargs):
                 _ProcessCards(data, extrnalId, externalSets)
             
             if extrnalId is not None:
-                univId = univId + extrnalId
+                univId0 = univId + extrnalId
+            else:
+                univId0 = univId
             # add the data to the universe containers
-            univs.Add(univId, rc, states, msets)
+            univs.Add(univId0, rc, states, msets)
         
     
     # Build Pandas Tables for all the universes
@@ -360,17 +362,23 @@ def _PopulateSerpentSets(rc, states, serpent, labels, serpId, serpentData):
         attrs = rc.macro + rc.micro + rc.meta + rc.kinetics
     
         if serpent['time']:
-            serpentData, timepoints =\
+            serpentData0, timepoints =\
                 ReadSerpent(fnames, labels, states.branches, attrs,
                             times=states.time['values'])
         else:
-            serpentData, timepoints =\
+            serpentData0, timepoints =\
                 ReadSerpent(fnames, labels, states.branches, attrs,
                             burnup=states.time['values'])
-
+       
+        serpentData['data'] = serpentData0
+        serpentData['timepoints'] = timepoints
+    
+    else:
+        timepoints = serpentData['timepoints']
+        
     
     try:
-        data = serpentData[serpId]
+        data = serpentData['data'][serpId]
     
     except KeyError:
         errserp = "<set serpent> is not defined properly.\nSubsequent lines "\
