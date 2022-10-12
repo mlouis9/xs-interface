@@ -433,7 +433,7 @@ def _PopulateShiftSets(rc, states, shift, shiftData, shiftId):
     if shiftData == {}:
         attrs = rc.macro + rc.micro + rc.meta + rc.kinetics
         # read all shift files
-        shiftData = ReadShiftFiles(shift['files'], attrs=attrs)
+        shiftData = ReadShiftFiles(shift['files'])
     # read the data for a specific universe
     data = shiftData[int(shiftId)]
         
