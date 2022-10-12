@@ -371,7 +371,7 @@ def _CleanFile(dataFile):
             continue
         # no comment or empty line exist at this stage
         setMatch = SET_REGEX.search(tline)
-        tline = tline.lower()  # case insensitive
+        # tline = tline.lower()  # case insensitive
 
         if setMatch is not None:
             currKey = tline         
