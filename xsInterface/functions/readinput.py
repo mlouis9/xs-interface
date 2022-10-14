@@ -430,9 +430,9 @@ def _PopulateShiftSets(rc, states, shift, shiftData, shiftId):
 
 
     # read shift h5 only once
+    attrs = rc.macro + rc.micro + rc.meta + rc.kinetics
     if shiftData == {}:
-        attrs = rc.macro + rc.micro + rc.meta + rc.kinetics
-        # read all shift files
+        # read all shift files (only once)
         shiftData = ReadShiftFiles(shift['files'])
     # read the data for a specific universe
     data = shiftData[int(shiftId)]

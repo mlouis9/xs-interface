@@ -1,0 +1,32 @@
+"vari"{id=0}
+<ParameterList name="bwr">
+  <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="num groups" type="int" value="2"/>
+"vari"{id=id+1}
+  <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="pn order" type="int" value="5"/>
+"vari"{id=id+1}
+  <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="material names" type="Array(string)" value="{0, 1, 2, 3, 4, 5, 6, 7, 8}"/>
+"vari"{name=0}
+"vari"{univ=[0, 1, 2, 3, 4, 5, 6, 7, 8]}
+"rep"{9
+"vari"{id=id+8}
+  <ParameterList id=""varo"{id}" name=""varo"{name}">
+"vari"{id=id-7}
+    <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="total" type="Array(double)" value="{"values"{fuel"varo"{univ[name]}, total, <.17e , >2}}"/>
+"vari"{id=id+1}
+    <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="nu_fission" type="Array(double)" value="{"values"{fuel"varo"{univ[name]}, nu_fission, <.17e , >2}}"/>
+"vari"{id=id+1}
+    <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="scattering" type="Array(double)" value="{"values"{fuel"varo"{univ[name]}, infscattp0, <.17e , >2}}"/>
+"vari"{id=id+1}
+    <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="fission" type="Array(double)" value="{"values"{fuel"varo"{univ[name]}, fission, <.17e , >2}}"/>
+"vari"{id=id+1}
+    <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="chi" type="Array(double)" value="{"values"{fuel"varo"{univ[name]}, fission_spectrum, <.17e , >2}}"/>
+"vari"{id=id+1}
+    <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="sigma_s0" type="TwoDArray(double)" value="2x2:{"values"{fuel"varo"{univ[name]}, new_sp0, <.17e , >4}}"/>
+"vari"{id=id+1}
+    <Parameter docString="" id=""varo"{id}" isDefault="false" isUsed="true" name="sigma_s1" type="TwoDArray(double)" value="2x2:{"values"{fuel"varo"{univ[name]}, new_sp1, <.17e , >4}}"/>
+"vari"{id=id+1}
+"vari"{name=name+1}
+  </ParameterList>
+"rep"}
+  <Validators/>
+</ParameterList>
