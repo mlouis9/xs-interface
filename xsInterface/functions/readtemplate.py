@@ -507,7 +507,8 @@ def _RepetitiveBlocks(dataIn):
             pos[idxLvl, 2] = iline
          
     # if positions table is incomplete with all identifiers
-    if not (pos[:, 1:] > 0).all():
+    
+    if not (pos == 0).all() and not (pos[:, 1:] > 0).all():
         msg1 = ''
         for idx in range(pos.shape[0]):
             if pos[idx, 2] == 0:
