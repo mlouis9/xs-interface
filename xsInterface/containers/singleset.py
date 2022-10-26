@@ -648,7 +648,8 @@ class SingleSet():
                         "Attribute <{}>".format(attr))
         elif ndim == 1:        
             # Expected data includes: absorption, fission, ... cross sections
-            if len(value) == dsetup.ng*dsetup.ng:  # convert to 2-dim
+            if len(value) !=1 and len(value) == dsetup.ng*dsetup.ng:
+                # convert to 2-dim
                 value = np.reshape(value, (dsetup.ng, dsetup.ng))
             else:
                 _isequallength(value, dsetup.ng, "Energy groups for "
