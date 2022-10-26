@@ -417,6 +417,10 @@ def _CleanDataCopy(dataIn, fmt0):
 
 def _DuplicateBlocks(dataIn, pos):
     """Duplicate/copy blocks that need to be repeated"""
+    
+    if (pos == 0).all():
+        return dataIn
+    
     pos1 = copy.deepcopy(pos)    
     # sort pos1 according to the level of appearance in text file
     idxsort = np.argsort(pos[:, 0])
