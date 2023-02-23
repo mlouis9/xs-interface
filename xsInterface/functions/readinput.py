@@ -19,6 +19,7 @@ Import & populate serpent data - 08/09/2022 - DK
 Shift Card - 09/11/2022 - DK
 Populate Shift data - 09/12/2022 - DK
 
+
 """
 
 from pathlib import Path
@@ -361,10 +362,14 @@ def _PopulateSerpentSets(rc, states, serpent, labels, serpId, serpentData):
         fnames = {'': serpent["files"]}
         attrs = rc.macro + rc.micro + rc.meta + rc.kinetics
     
-        if serpent['time']:
+        if serpent['time'] and serpent['timeFlag']:
             serpentData0, timepoints =\
                 ReadSerpent(fnames, labels, states.branches, attrs,
                             times=states.time['values'])
+        elif serpent['time'] and not serpent['timeFlag']:
+            serpentData0, timepoints =\
+                ReadSerpent(fnames, labels, states.branches, attrs,
+                            burnups=states.time['values'])        
         else:
             serpentData0, timepoints =\
                 ReadSerpent(fnames, labels, states.branches, attrs,
@@ -917,7 +922,7 @@ def _ImportSerpentFiles(setLine, tlines):
     setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
     N = int(setValues[0])
     timeFlag = True
-    if float(setValues[0]) < 0:
+    if float(setValues[1]) < 0:
         timeFlag = False    
     flxName = setValues[2]
     eneStruct = np.array(setValues[3:], dtype=float)  # in descending order

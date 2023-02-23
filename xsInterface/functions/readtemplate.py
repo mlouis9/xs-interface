@@ -417,6 +417,10 @@ def _CleanDataCopy(dataIn, fmt0):
 
 def _DuplicateBlocks(dataIn, pos):
     """Duplicate/copy blocks that need to be repeated"""
+    
+    if (pos == 0).all():
+        return dataIn
+    
     pos1 = copy.deepcopy(pos)    
     # sort pos1 according to the level of appearance in text file
     idxsort = np.argsort(pos[:, 0])
@@ -507,7 +511,8 @@ def _RepetitiveBlocks(dataIn):
             pos[idxLvl, 2] = iline
          
     # if positions table is incomplete with all identifiers
-    if not (pos[:, 1:] > 0).all():
+    
+    if not (pos == 0).all() and not (pos[:, 1:] > 0).all():
         msg1 = ''
         for idx in range(pos.shape[0]):
             if pos[idx, 2] == 0:
