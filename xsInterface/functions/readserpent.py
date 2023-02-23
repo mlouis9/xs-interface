@@ -5,7 +5,7 @@ This method allows to read multiple history files with multiple universes.
 It also allows to filter the data/attributes of interest.
 
 Created on Sat July 30 05:00:00 2022 @author: Dan Kotlyar
-Last updated on Wed Aug 04 16:00:00 2022 @author: Dan Kotlyar
+Last updated on Thu Feb 23 15:00:00 2022 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -15,6 +15,7 @@ ReadCoefFiles  - 07/30/2022 - DK
 _ReLabelStates  - 08/03/2022 - DK
 _FilterAttrs - 08/04/2022 - DK
 ReadSerpent - 08/04/2022 - DK
+_FilterAttrs - 02/23/2023 - DK (changed burnup / time treatment)
 
 """
 
@@ -195,6 +196,8 @@ def _ReadCoefFile(coeFile):
 
     # loop over all the branches
     for brKeys, brData in coe0.items():
+        # converet to lower case
+        brKeysLower = tuple([i.lower() for i in brKeys])
         # Loop over all the universes and time points
         for univKey in brData:
             
@@ -212,7 +215,7 @@ def _ReadCoefFile(coeFile):
             univData = brData.getUniv(univId, index=step)
 
             # add the data to the data dictionary
-            data[univId][step][brKeys] = univData
+            data[univId][step][brKeysLower] = univData
                      
     return data
                 

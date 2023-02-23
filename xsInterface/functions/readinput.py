@@ -917,7 +917,7 @@ def _ImportSerpentFiles(setLine, tlines):
     setValues = _ProcessSetLine(setLine, expvals, card, errmsg)
     N = int(setValues[0])
     timeFlag = True
-    if float(setValues[0]) < 0:
+    if float(setValues[1]) < 0:
         timeFlag = False    
     flxName = setValues[2]
     eneStruct = np.array(setValues[3:], dtype=float)  # in descending order
