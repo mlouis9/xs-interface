@@ -37,6 +37,12 @@ Set what?							Description
 ===================== ===================================================================
 
 
+For some cases when using only the serpent .coe files, each perturbation branch can incorporate multiple perturbations
+simultaneously. Thus, serpent will label these under a unified name, e.g., ``f600b0dens630`` where in reality 
+this name should be broken to ``f600 b0 dens630``. The ``xsInterface`` package includes a capability to rename
+the unified name to the split branches readable by ``xsInterface`` using the :ref:`coerelabel` function. 
+The relabaling capability is added before the main execution lines.
+
 
 .. _gen_comments:
 
