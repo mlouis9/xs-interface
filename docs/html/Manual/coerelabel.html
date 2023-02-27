@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Relabel .coe files &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Input-Setups" href="../InputSetups/index.html" />
+    <link rel="prev" title="Code Execution" href="code_exe.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="relabel-coe-files">
+<span id="coerelabel"></span><h1>Relabel .coe files<a class="headerlink" href="#relabel-coe-files" title="Permalink to this headline">¶</a></h1>
+<p>A simple pre-procesing tool to convert the .coe file to be readable by the <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code> package.</p>
+<section id="execution">
+<h2>Execution<a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h2>
+<p>Requires to import using the following command:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.functions.relabelcoe</span> <span class="kn">import</span> <span class="n">coeRelabel</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The actual run is performed using the next command line:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">coeRelabel</span><span class="p">(</span><span class="n">origCoeFile</span><span class="p">,</span> <span class="n">modCoeFile</span><span class="p">,</span> <span class="n">inpLabels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>where,</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">origCoeFile</span></code>: [string] full path to the original (and existing) .coe file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">modCoeFile</span></code>: [string] name of the modified .coe file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inpLabelsFile</span></code> : [string] Config file with description of the labels.</p></li>
+</ul>
+</section>
+<section id="configuration-labels-file">
+<h2>Configuration Labels File<a class="headerlink" href="#configuration-labels-file" title="Permalink to this headline">¶</a></h2>
+<p>An additional label configuration file must be provided.
+It can be any txt file, where each line describes
+the original and modified labels in the following manner.</p>
+<blockquote>
+<div><p>&lt;original label&gt;  &lt;modified label&gt;</p>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">original</span> <span class="pre">label</span></code> is used in Serpent to generate the individual
+perturbation/branching states. The <code class="docutils literal notranslate"><span class="pre">modified</span> <span class="pre">label</span></code> is broken to separate
+strings, each describing a certain perturbation.</p>
+<p><strong>Example</strong>:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f600b0dens630</span>        <span class="n">f600</span> <span class="n">b0</span> <span class="n">dens630</span>
+<span class="n">f600b0densNom</span>        <span class="n">f600</span> <span class="n">b0</span> <span class="n">nom</span>
+<span class="n">f600b0dens780</span>        <span class="n">f600</span> <span class="n">b0</span> <span class="n">dens780</span>
+<span class="n">f600bNomdens630</span>      <span class="n">f600</span> <span class="n">nom</span> <span class="n">dens630</span>
+<span class="n">f600bNomdensNom</span>      <span class="n">f600</span> <span class="n">nom</span> <span class="n">nom</span>
+<span class="n">f600bNomdens780</span>      <span class="n">f600</span> <span class="n">nom</span> <span class="n">dens780</span>
+<span class="n">f600b2250dens630</span>     <span class="n">f600</span> <span class="n">b2250</span> <span class="n">dens630</span>
+<span class="n">f600b2250densNom</span>     <span class="n">f600</span> <span class="n">b2250</span> <span class="n">nom</span>
+<span class="n">f600b2250dens780</span>     <span class="n">f600</span> <span class="n">b2250</span> <span class="n">dens780</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>Instructions</strong>:</p>
+<ul class="simple">
+<li><p>For the modified labeling use patterns,
+e.g. <code class="docutils literal notranslate"><span class="pre">f600</span></code>, <code class="docutils literal notranslate"><span class="pre">f1500</span></code> as these are needed for gcwrite</p></li>
+<li><p>The number of columns in each row must be identical.</p></li>
+<li><p>The first column describes the original labels.
+Each column that follows describes a specific perturbation. Be consistent.
+More specifically, if the second column represents the fuel temperature, this
+perturbation should always be present in the same column.</p></li>
+<li><p>The nominal branch must be denoted by a specific string (e.g. nom).</p></li>
+<li><p>Lines with spaces are allowed.</p></li>
+</ul>
+<p><strong>Monitored errors</strong> (the function should alert):</p>
+<ul class="simple">
+<li><p>If the original .coe file or label file do not exist.</p></li>
+<li><p>If no perturbations exist in the label file.</p></li>
+<li><p>If the modified labeling is not specified in the labels file.</p></li>
+<li><p>If the labeling used in the original Seprent execution is repetitive,
+i.e. same branch appears multiple times.</p></li>
+<li><p>If the modified labeleing repetitive.</p></li>
+<li><p>If the modified labels do not create a square matrix. More specifically, if
+the number of perturbation states include 4 fuel temperature,
+3 coolant densities, and 3 levels of ppm-Boron, then a total pf 36 unique
+perturbation points must be provided. The function should identify this
+potential error.</p></li>
+</ul>
+<p>A full example is provided in the <code class="docutils literal notranslate"><span class="pre">example</span></code> directory (see <code class="docutils literal notranslate"><span class="pre">ex_relabelcoe.py</span></code>).</p>
+</section>
+<section id="full-example">
+<h2>Full Example<a class="headerlink" href="#full-example" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.functions.main</span> <span class="kn">import</span> <span class="n">Main</span>
+<span class="kn">from</span> <span class="nn">xsInterface.functions.relabelcoe</span> <span class="kn">import</span> <span class="n">coeRelabel</span>
+
+<span class="c1"># Define input files</span>
+<span class="n">inputFile</span> <span class="o">=</span> <span class="s2">&quot;./controlDict&quot;</span>
+<span class="n">coeRelabelFile</span> <span class="o">=</span> <span class="s2">&quot;./branchLabels&quot;</span>
+<span class="n">coeOrigFile</span> <span class="o">=</span> <span class="s2">&quot;./combTest2.i.coe&quot;</span>
+
+<span class="c1"># This file will be used in controlDict</span>
+<span class="n">coeModFile</span> <span class="o">=</span> <span class="s2">&quot;./u0.coe&quot;</span>
+
+<span class="c1"># create a modified .coe file with branches relabeled to a readable</span>
+<span class="c1"># xsInterface format</span>
+<span class="n">coeRelabel</span><span class="p">(</span><span class="n">origCoeFile</span><span class="o">=</span><span class="n">coeOrigFile</span><span class="p">,</span>
+           <span class="n">modCoeFile</span><span class="o">=</span><span class="n">coeModFile</span><span class="p">,</span>
+           <span class="n">inpLabels</span><span class="o">=</span><span class="n">coeRelabelFile</span><span class="p">)</span>
+
+
+<span class="c1"># Read the control dict</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">Main</span><span class="p">(</span><span class="n">inputFile</span><span class="p">)</span>
+
+<span class="c1"># Read xs data and templates and populate data</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>
+
+<span class="c1"># Write data to txt files</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../InputSetups/index.html">Input-Setups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">User’s Manual</a><ul>
+      <li>Previous: <a href="code_exe.html" title="previous chapter">Code Execution</a></li>
+      <li>Next: <a href="../InputSetups/index.html" title="next chapter">Input-Setups</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/Manual/coerelabel.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

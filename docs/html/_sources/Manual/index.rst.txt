@@ -34,6 +34,7 @@ Chapters							    Description
    input_cards
    templates
    code_exe
+   coerelabel
 
 
 Data Flow

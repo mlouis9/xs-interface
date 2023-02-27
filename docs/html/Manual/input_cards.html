@@ -85,6 +85,11 @@ Description on the format, comments, and general instructions is provided in <a 
 </tr>
 </tbody>
 </table>
+<p>For some cases when using only the serpent .coe files, each perturbation branch can incorporate multiple perturbations
+simultaneously. Thus, serpent will label these under a unified name, e.g., <code class="docutils literal notranslate"><span class="pre">f600b0dens630</span></code> where in reality
+this name should be broken to <code class="docutils literal notranslate"><span class="pre">f600</span> <span class="pre">b0</span> <span class="pre">dens630</span></code>. The <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code> package includes a capability to rename
+the unified name to the split branches readable by <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code> using the <a class="reference internal" href="coerelabel.html#coerelabel"><span class="std std-ref">Relabel .coe files</span></a> function.
+The relabaling capability is added before the main execution lines.</p>
 <section id="general-comments">
 <span id="gen-comments"></span><h2>General comments<a class="headerlink" href="#general-comments" title="Permalink to this headline">¶</a></h2>
 <ul>
