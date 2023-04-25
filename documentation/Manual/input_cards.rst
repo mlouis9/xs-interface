@@ -558,7 +558,7 @@ Shift
 
 .. code::
 		
-   set serpent <N-files> <N-states> <FLUX> <ENE>
+   set shift <N-files> <N-states> <FLUX> <ENE>
    <history-1> <time-1> <branch-11>,... <.h5 file 1>
    <history-2> <time-2> <branch-21>,... <.h5 file 2>
    ...
@@ -572,7 +572,7 @@ where in the **set** line,
 
 		set shift 1 3 coarse_flux 10.0E+6, 0.6025, 0.0
 
- - ``FLUX`` is the name of the flux variable used in serpent, similarly defined in :ref:`i_data`.
+ - ``FLUX`` is the name of the flux variable used in shift, similarly defined in :ref:`i_data`.
  - ``ENE`` energy structure in descending order similarly used in :ref:`i_data`. Must include upper and lower boundaries, e.g., for a 2-group structure:  
 
 	.. code::
