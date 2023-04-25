@@ -219,6 +219,27 @@ def _ReadCoefFile(coeFile):
                      
     return data
                 
+
+def _ReadResFile(coeFile):
+    """Read serpent output .res file
+
+    Read result files using the ``serpentTools``
+
+    Parameters
+    ----------
+    TBC
+
+    Raises
+    ------
+    TBC
+        
+    Returns
+    -------
+    TBC
+
+    """
+    pass
+
             
 def _ReLabelStates(dataIn, strLabels, numLabels):
     """ReLabel the names of the states in the .coe files
