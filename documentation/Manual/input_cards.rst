@@ -1,3 +1,9 @@
+.. raw:: html
+
+    <style> .red {color:red} </style>
+
+.. role:: red
+
 .. _universecards:
 
 
@@ -202,6 +208,7 @@ and, in the **<branch> sub-cards**,
 	- number of sub-cards must be equal to ``N``.
 	- ``branch-N`` is the user-defined name (e.g., fuel) that will be assigned with the N-th branch.
 	- arbitrary number of numeric values can be provided for each branch.
+	- :red:`if serpent card is provided you need to make sure the order the branches appear in the branches card correspond to their order in the .coe file.`
 
 	.. code::
 

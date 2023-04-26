@@ -1,0 +1,75 @@
+# ===================================================================================================================================================
+    Each energy group value is written separately but all the states are printed together in a matrix form.
+    
+    The default order of states is: history, time/burnup, the order at which the branches were provided in the universe file.
+    Here, the order of the states is as follows: coolant temp., mod. temp., fuel temp., times, histories
+# ===================================================================================================================================================
+
+
+
+"vari"{times=[0]}
+"vari"{fuel=[600, 900]}
+"vari"{boron=[0.0, 750 ]}
+"vari"{dens=[700.0 ]}
+"vari"{history=["nom"]}
+
+
+* ---------------------------------------------------------------------------------------------------------------------------------------------------
+  STATES ORDER
+* ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+"vari"{idxH=0}
+"rep"{2
+"vari"{idxB=0}
+"rep"{{1
+"vari"{idxF=0}
+"rep"{{{4
+"vari"{idxM=0}
+"rep"{{{{3	
+ "vari"{idxC=0}
+"rep"{{{{{3
+History = "varo"{history[idxH]<s>}, Time = "varo"{times[idxB]<3.3f>}, Fuel T. = "varo"{fuel[idxF]<3.3f>}, Boron= "varo"{boron[idxM]<3.3f>}, Dens = "varo"{dens[idxC]<3.3f>} 
+"vari"{idxC=idxC+1}
+"rep"}}}}}
+"vari"{idxM=idxM+1}
+"rep"}}}}
+"vari"{idxF=idxF+1}
+"rep"}}}
+"vari"{idxB=idxB+1}
+"rep"}}
+"vari"{idxH=idxH+1}
+"rep"}
+
+
+
+* ---------------------------------------------------------------------------------------------------------------------------------------------------
+  INF_KAPPA
+* ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+"vari"{idxE=-1}
+"rep"{2
+"vari"{idxE=idxE+1}
+  Group "varo"{idxE}
+  "values"{infkappa,  ["varo"{idxE}]} 
+"rep"}
+
+* ---------------------------------------------------------------------------------------------------------------------------------------------------
+  INF_SP0
+* ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+"vari"{idxE0=-1}
+"rep"{2
+"vari"{idxE0=idxE0+1}
+"vari"{idxE1=-1}
+"rep"{{2
+"vari"{idxE1=idxE1+1}
+  Group "varo"{idxE0} --> Group "varo"{idxE1}
+  "values"{infsp0,  ["varo"{idxE0}, "varo"{idxE1}]} 
+"rep"}}
+"rep"}
+
+
+
+
+

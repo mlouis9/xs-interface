@@ -301,7 +301,9 @@ def _ReLabelStates(dataIn, strLabels, numLabels):
                     else:
                         raise SerpentFileError(
                             "Branch <{}> not provided\nfor univ=<{}>; "
-                            "history=<{}>".format(branchId, univId, histId))
+                            "history=<{}>.\nCheck that order of branches card "
+                            "correspond to the order provided in the .coe file"
+                            .format(branchId, univId, histId))
                     
     return dataOut
 

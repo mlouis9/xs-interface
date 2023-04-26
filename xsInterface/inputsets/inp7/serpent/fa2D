@@ -1,0 +1,206 @@
+set title "3D 17x17 standard PWR Assembly - XS gen."
+
+pin 101
+Fuel     0.4095
+Clad     0.4750
+Water_750B
+
+pin 200
+Water_750B  0.5715
+Clad        0.6120
+Water_750B
+
+pin 201
+Water_750B  0.5715
+Clad        0.6120
+Water_750B
+
+pin 301
+AIC           0.4331
+steel         0.4839
+Water_750B    0.5715
+Clad          0.6120
+Water_750B
+
+
+% --- Pin lattice:
+lat 500  1  0.0 0.0  17 17  1.260
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+101  101  101  101  101  201  101  101  201  101  101  201  101  101  101  101  101
+101  101  101  201  101  101  101  101  101  101  101  101  101  201  101  101  101
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+101  101  201  101  101  201  101  101  201  101  101  201  101  101  201  101  101
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+101  101  201  101  101  201  101  101  200  101  101  201  101  101  201  101  101
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+101  101  201  101  101  201  101  101  201  101  101  201  101  101  201  101  101
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+101  101  101  201  101  101  101  101  101  101  101  101  101  201  101  101  101
+101  101  101  101  101  201  101  101  201  101  101  201  101  101  101  101  101
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101  101
+
+
+
+% --- Assembly unit cell:
+surf  41  sqc    0.0  0.0  10.71  0               % Defenition of Assembly
+surf  42  sqc    0.0  0.0  10.75  0               % Defenition of Assembly + water
+
+
+%--- Assembly Cell Definition
+cell 401  0  fill 500        -41
+cell  96  0  Water_750B      41 -42                                                                                 
+cell  97  0  outside         42                   % Outside world
+
+
+% ------------   Materials -------------------------------
+
+mat   Fuel    sum  burn 1 rgb 250 0 100      
+92235.09c  8.15077056e-004
+92238.09c  2.21889771e-002
+ 8016.09c  4.60081082e-002
+
+
+% --- Coolant without boron:
+mat Water_0B   -0.700  moder lwtr 1001 rgb 0 100 150                    
+ 1001.06c       3.33330E-01
+ 8016.06c       6.66670E-01
+     
+% --- Coolant with 750 ppm boron:
+mat Water_750B   -0.700 moder lwtr 1001 rgb 0 100 150                    
+ 1001.06c       3.33076E-01
+ 8016.06c       6.66161E-01    
+ 5010.06c       1.51847E-04    
+ 5011.06c       6.11204E-04     
+ 
+ % --- Coolant with 1500 ppm boron:
+mat Water_1500B   -0.700 moder lwtr 1001 rgb 0 100 150                    
+ 1001.06c       3.32821E-01
+ 8016.06c       6.65653E-01    
+ 5010.06c       3.03690E-04    
+ 5011.06c       1.22239E-03                                         
+                                                                              
+% --- Cladding:
+mat Clad       -6.55000 rgb 0 0 0
+40090.06c 0.5145
+40091.06c 0.1122
+40092.06c 0.1715
+40094.06c 0.1738
+40096.06c 0.0280
+           
+mat steel  -7.7936
+ 6000.06c   1.15167E-02
+14000.06c   5.41767E-03
+25055.06c   1.33445E-02
+15031.06c   4.46581E-04
+42000.06c   2.54632E-03
+26000.06c   9.61544E-01
+28000.06c   5.18479E-03
+
+% --- Control rod absorber
+
+mat AIC   -10.1608
+47107.06c   4.19366E-01
+47109.06c   3.89611E-01
+49113.06c   6.11337E-03
+49115.06c   1.36391E-01
+48106.06c   6.06488E-04
+48108.06c   4.31810E-04
+48110.06c   6.05989E-03
+48111.06c   6.21036E-03
+48112.06c   1.17074E-02
+48113.06c   5.92903E-03
+48114.06c   1.39393E-02
+48116.06c   3.63404E-03               
+
+% --- Thermal scattering data for light water:
+therm lwtr lwj3.11t
+
+%-----------------------------------------------------------
+%   Cross section library file path
+%-----------------------------------------------------------
+
+set acelib "/nv/hp22/dkotlyar6/data/Codes/DATA/sss_endfb7u.xsdata"
+set declib "/nv/hp22/dkotlyar6/data/Codes/DATA/sss_endfb7.dec"
+set nfylib "/nv/hp22/dkotlyar6/data/Codes/DATA/sss_endfb7.nfy"
+
+
+
+set inventory
+ 541350
+ 922340
+ 922350
+ 942390
+
+set power 48074
+
+set bc 2
+
+% --- Group constant generation:
+
+% symmetry = 12
+set sym  0
+
+% --- Neutron population and criticality cycles:
+
+set pop 20000 150 50
+
+% --- Geometry and mesh plots:
+% mesh 3 500 500
+% mesh 2 500 3000
+% set outfile 1
+
+set pcc 0
+set opti 3
+%set printm 1
+
+set egrid 5e-5 1e-9 15.0
+
+%% Group Constant Homogenization, energy groups from Hitachi data
+ene 1 1 1E-11 0.625E-6 15
+% 8-group structure 
+set gcu 0 101
+
+% --- Few-group structure: (two groups, boundary et 0.625 eV)
+set nfg 2 0.625E-6
+
+% --- Run B1 leakage correction: (WIMS 172-group structure, solution at end)
+set fum wms172 2
+
+% --- ADF calculation: (super-imposed surface and full symmetry)
+surf ADF sqc 0.0 0.0  10.75
+set adf 0 ADF full 
+
+% --- Calculate poison cross sections:
+set poi 1
+
+
+dep butot 0.1000  1.0000  2.0000 
+
+%-----------------------------------------
+% Branches for cross-section generation
+%-----------------------------------------
+branch nom                                              % do nothing 
+
+branch RHOm1  stp Water_750B -0.6400  570 lwtr lwj3.09t lwj3.11t              % Branch from cool.Dens. 700 kg/m**3 to 640 kg/m**3 
+branch RHOp1  stp Water_750B -0.7250  570 lwtr lwj3.09t lwj3.11t              % Branch from cool.Dens. 700 kg/m**3 to 725 kg/m**3 
+branch RHOp2  stp Water_750B -0.7600  570 lwtr lwj3.09t lwj3.11t              % Branch from cool.Dens. 700 kg/m**3 to 760 kg/m**3 
+
+branch BORm1 repm Water_750B Water_0B                  % Branch from 750 ppm to    0 ppm
+branch BORp1 repm Water_750B Water_1500B               % Branch from 750 ppm to 1500 ppm
+
+branch TFUm1  stp Fuel sum  600                        % Branch from fuel-temp 900K to  600K 
+branch TFUp1  stp Fuel sum 1200                        % Branch from fuel-temp 900K to 1200K 
+
+branch CRin repu 201 301                               % Branch from control rods OUT to CR IN
+
+
+coef 3 0.0000 0.1000  1.0000
+4 nom RHOm1 RHOp1 RHOp2
+3 nom BORm1 BORp1
+3 nom TFUm1 TFUp1
+2 nom CRin
+

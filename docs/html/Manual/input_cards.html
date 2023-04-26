@@ -35,7 +35,7 @@
 
           <div class="body" role="main">
             
-  <section id="universe-data-cards">
+  <style> .red {color:red} </style><section id="universe-data-cards">
 <span id="universecards"></span><h1>Universe data cards<a class="headerlink" href="#universe-data-cards" title="Permalink to this headline">¶</a></h1>
 <p>For each unique cross-section set or universe a separate file is defined.
 It is up to the user to control the data flow.</p>
@@ -224,6 +224,7 @@ The relabaling capability is added before the main execution lines.</p>
 <li><p>number of sub-cards must be equal to <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">branch-N</span></code> is the user-defined name (e.g., fuel) that will be assigned with the N-th branch.</p></li>
 <li><p>arbitrary number of numeric values can be provided for each branch.</p></li>
+<li><p><span class="red">if serpent card is provided you need to make sure the order the branches appear in the branches card correspond to their order in the .coe file.</span></p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fuel</span> <span class="mf">600.0</span> <span class="mf">900.0</span> <span class="mf">1200.0</span> <span class="mf">1500.0</span> <span class="mf">1800.0</span>
 </pre></div>
