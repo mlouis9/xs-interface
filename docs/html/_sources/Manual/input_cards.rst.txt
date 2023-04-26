@@ -451,7 +451,7 @@ Serpent
 =======
 
 
-**Serpent branch .coe files.**
+**Serpent branch .coe files.** or **_res.m files.**
 
 *Optional Card*. Must be provided together with the :ref:`i_labels` card.
 
@@ -459,7 +459,7 @@ Serpent
 		
    set serpent <N> <TIME> <FLUX> <ENE>
    <history-1> <.coe file 1>
-   <history-2> <.coe file 2>
+   <history-2> <_res.m file 2>
    ...
   
 
@@ -474,10 +474,11 @@ where in the **set** line,
 		set data infflx 10.0E+6, 0.6025, 0.0
 		
 
-and, the names of the history branches along with their .coe files are provided in the following lines.
+and, the names of the history branches along with their .coe or _res.m files are provided in the following lines.
 	- ``history`` must correspond to the history names provided in :ref:`i_histories`.
 	- It must be pointed out that the history branches are read from separate serpent files; under the assumption that `coefficient matrix definition <https://serpent.vtt.fi/mediawiki/index.php/Input_syntax_manual#coef_.28coefficient_matrix_definition.29>`_ is used to produce separate .coe files for each history. 
 	- Each .coe file can include either a single or multiple universes.
+	- Users can provide either the .coe or _res.m files or a combination of .coe and _res.m. However, it must be pointed out that the _res.m files do not include a description of the branch/perturbation and thus the labels provided in :ref:`i_labels` will be used chronologically. 
 
 
 **Notes:**	
