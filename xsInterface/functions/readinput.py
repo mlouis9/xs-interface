@@ -252,7 +252,7 @@ def _ProcessCards(data, externalId, externalSets):
         states = _PopulateStates(sd)
         #                                                   `Serpent` .coe data
         #----------------------------------------------------------------------
-        errmsg = "Serpent .coe data"
+        errmsg = "Serpent .coe/_res data"
         card = "serpent"
         multisets, externalSets =\
             _PopulateSerpentSets(rc, states, serpent, labels, externalId,

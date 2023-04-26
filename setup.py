@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="xsInterface",
-    version="0.0.1",
+    version="0.1.0",
     author="Dan Kotlyar",
     author_email="dan.kotlyar@me.gatech.edu",
     description="Cross Section Interface for multi-group XS manipulation ",
@@ -26,5 +26,6 @@ setuptools.setup(
               'xsInterface.containers', 'xsInterface.debug',
               'xsInterface.errors', 'xsInterface.examples',
               'xsInterface.functions', 'xsInterface.inputsets',
-              'xsInterface.tests', ],
+              'xsInterface.inputsets', 'xsInterface.otemplates',
+              'xsInterface.tests', 'xsInterface.workshops' ],
 )
