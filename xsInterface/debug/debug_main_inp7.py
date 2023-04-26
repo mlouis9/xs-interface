@@ -3,12 +3,10 @@
 
 Debug:
 --------
-Main functionality of this package is debugged in respect to the input set
-located in:
-    xsInterface\inputsets\inp3
+Check that .coe AND .res files can be read by the package.
 
-Created on Tue July 26 15:00:00 2022 @author: Dan Kotlyar
-Last updated on Tue July 26 15:00:00 2022 @author: Dan Kotlyar
+Created on Wed Apr 26 09:00:00 2023 @author: Dan Kotlyar
+Last updated on Wed Apr 26 09:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -34,8 +32,8 @@ xs.Write()
 
 
 # obtain results:
-xs.Table("univ0", ['infkappa'], time=0.0, history='nom', fuel=900, boron=750,
-         dens=700)
+# xs.Table("univ0", ['infkappa'], time=0.0, history='nom', fuel=900, boron=750,
+#          dens=700)
 
 # obtain results:
 # xs.Values("fuel0", 'infkappa', time=0.0, history='nom',

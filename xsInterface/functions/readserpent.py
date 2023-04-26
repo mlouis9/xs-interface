@@ -367,8 +367,8 @@ def _FilterAttrs(dataIn, attrs, times, burnups):
                                "in Serpent.\nTry burnups.".format(times)) 
                         # this time-point should be saved
                         elif (np.isclose(times, branchData.day)).any():
-                            if (len(timepoints) == 0 or not
-                                (np.isclose(times, branchData.day)).any()):
+                            if (len(timepoints) == 0 or not (np.isclose(
+                                    timepoints, branchData.day)).any()):
                                 timepoints.append(branchData.day)
                         else:
                             # remove the data for the current time point
@@ -385,7 +385,7 @@ def _FilterAttrs(dataIn, attrs, times, burnups):
                         # this burnup-point should be saved
                         elif (np.isclose(burnups, branchData.bu)).any():
                             if (len(timepoints) == 0 or not
-                                (np.isclose(burnups, branchData.bu)).any()):
+                                (np.isclose(timepoints, branchData.bu)).any()):
                                 timepoints.append(branchData.bu) 
                         else:
                             # remove the data for the current time point
