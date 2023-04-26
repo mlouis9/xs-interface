@@ -10,7 +10,7 @@
 
 
 set universes
-univ C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp7\univ
+univ C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp7\coe\univ
 
 
 # -----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ univ 0 101
 # -----------------------------------------------------------------------------
 
 set templates
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp7\template0
+template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp7\coe\template0
 
 
 # -----------------------------------------------------------------------------
@@ -36,7 +36,7 @@ template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Re
 # -----------------------------------------------------------------------------
 
 set outputs
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp7\output_
+template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp7\coe\output\output_
 
 # -----------------------------------------------------------------------------
 #                           UNIVERSE-TO-FILES LINKS 

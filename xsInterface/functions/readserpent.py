@@ -29,6 +29,7 @@ import serpentTools
 from xsInterface.errors.checkerrors import _isstr, _isarray, _isequallength,\
     _isndarray, _is1darray
 from xsInterface.errors.customerrors import SerpentFileError
+from serpentTools.parsers.results import ResultsReader
 
 
 def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
@@ -83,7 +84,7 @@ def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
         attrs = [attr.lower() for attr in attrs]
 
     # Read all the .coe file
-    dataStrBranches = _ReadHistoryFiles(fnames)
+    dataStrBranches = _ReadHistoryFiles(fnames, strLabels)
     
     # Replace the string branch values with numeric values
     dataNumBranches = _ReLabelStates(dataStrBranches, strLabels, numLabels)
@@ -94,7 +95,7 @@ def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
     return dataOut, timepoints
 
 
-def _ReadHistoryFiles(fnames):
+def _ReadHistoryFiles(fnames, strLabels):
     """Read multiple serpent output .coe files
 
     Parameters
@@ -103,7 +104,10 @@ def _ReadHistoryFiles(fnames):
         .coe file directory path + file name
         for universes with various history branches
         structure of the dictionary: {universe:{history:filename}}
-        
+    strLabels : dict
+        keys represent the names of the states, e.g., fuel, boron, ..
+        values represent the corresponding names in a string format, e.g.,
+        strLabels = {'fuel': ['f600', 'f900', 'nom', 'f1200']}        
 
     Raises
     ------
@@ -130,9 +134,12 @@ def _ReadHistoryFiles(fnames):
         
         for historyId, coeFile in fnames[univUsrId].items():
 
-            print("... Reading coe file for hisotry <{}> ..."
+            print("... Reading coe/_res.m file for hisotry <{}> ..."
                   .format(historyId))
+            
             coedata = _ReadCoefFile(coeFile)
+            if isinstance(coedata, ResultsReader): 
+                coedata = _ReadResFile(coedata, strLabels)
         
             for univ in coedata:
                 univId = univUsrId + univ
@@ -143,7 +150,6 @@ def _ReadHistoryFiles(fnames):
             
     return data
     
-
 
 
 def _ReadCoefFile(coeFile):
@@ -190,6 +196,9 @@ def _ReadCoefFile(coeFile):
     # rc['xs.reshapeScatter'] = True
     coe0 = serpentTools.read(coeFile)  # coe is a data container
     
+    if isinstance(coe0, ResultsReader):
+        return coe0
+    
     # Structure of the data container
     # univId: {timeIdx: {state: univData}}   
     data = {}
@@ -218,27 +227,74 @@ def _ReadCoefFile(coeFile):
             data[univId][step][brKeysLower] = univData
                      
     return data
-                
 
-def _ReadResFile(coeFile):
-    """Read serpent output .res file
 
-    Read result files using the ``serpentTools``
+
+
+def _ReadResFile(res0, strLabels):
+    """Process serpent output .res file
+
+    Results data is obtained using the ``serpentTools``
 
     Parameters
     ----------
-    TBC
+    res0 : ResultsReader object
+        ResultsReader object with 
+    strLabels : dict
+        keys represent the names of the states, e.g., fuel, boron, ..
+        values represent the corresponding names in a string format, e.g.,
+        strLabels = {'fuel': ['f600', 'f900', 'nom', 'f1200']}
 
-    Raises
-    ------
-    TBC
-        
+
     Returns
     -------
-    TBC
+    data : dict
+        data dict that acts as a container with the following structure
+        univId: {timeIdx: {branch: univData}}
+        where univId is a string, timeIdx is an int, branch is a tuple Id, and
+        univData is a data container.
+    burnups : list
+        burnup values
+    timedays: list
+        time values in days
 
     """
-    pass
+
+
+
+    # construct all the labels of the used branches according to their order
+    # of appearance
+    strIds  = [key for key in itertools.product(*strLabels.values())]
+    nbranches = len(strIds)  # total number of branches
+    
+    # Structure of the data container
+    # univId: {timeIdx: {state: univData}}   
+    data = {}
+    # Loop over all the universes and time points
+    for univKey, univData in res0.universes.items():
+
+        # step idx that indicates a branch
+        try:
+            step, branchIdx = divmod(univKey.step, nbranches)
+            brKeysLower = tuple(strIds[branchIdx])
+        except:
+            raise ValueError("The _res.m file has more branches than defined "
+                             "by the branch card{}".format(strLabels))
+        
+
+        univId = univKey.universe
+
+        if univId not in data:
+            data[univId] = {}
+        if step not in data[univId]:
+            data[univId][step] = {}
+
+
+        # add the data to the data dictionary
+        data[univId][step][brKeysLower] = univData
+        
+                     
+    return data
 
             
 def _ReLabelStates(dataIn, strLabels, numLabels):

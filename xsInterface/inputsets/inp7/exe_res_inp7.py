@@ -16,7 +16,7 @@ from xsInterface.functions.main import Main
 
 inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\inputsets\\inp7\\controlDict"
+        "xs-interface\\xsInterface\\inputsets\\inp7\\res\\controlDict"
 
 # Read the control dict
 xs = Main(inputFile)
@@ -32,12 +32,12 @@ xs.Write()
 
 
 # obtain results:
-# xs.Table("univ0", ['infkappa'], time=0.0, history='nom', fuel=900, boron=750,
-#          dens=700)
+xs.Table("univ0", ['infkappa'], time=0.0, history='nom', fuel=900, boron=750,
+          dens=700)
 
 # obtain results:
-# xs.Values("fuel0", 'infkappa', time=0.0, history='nom',
-#           dens=700)
+xs.Values("univ0", 'infflx', time=0.0, history='nom',
+          dens=700)
 # xs.Values("fuel0", 'infkappa', time=0.0, history='nom', boron=500, dens=700)
 # xs.Values("fuel0", 'infkappa', fuel=900, boron=0, dens=700,time=0.0, history='nom')
 # xs.Values("ref0", "infsp0", fuel=900)
