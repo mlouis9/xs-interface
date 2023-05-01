@@ -5,7 +5,7 @@ Main class object that connects and executes all the reading, storing and
 printing cabalities.
 
 Created on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
-Last updated on Fri July 22 14:00:00 2022 @author: Dan Kotlyar
+Last updated on Mon May 01 15:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -24,6 +24,7 @@ Values - 07/22/2022 - DK
 from xsInterface.functions.readcontroldict import Read
 from xsInterface.functions.readinput import ReadInput
 from xsInterface.functions.readtemplate import ReadTemplate
+from xsInterface.errors.checkerrors import _inlist
 
 
 class Main():
@@ -72,6 +73,8 @@ class Main():
         self.formats = formats
         self.externalIds = externalIds
         self.dataFiles = {}
+        self.channels = None
+        self.radmap = None
 
 
     def Read(self):
@@ -192,4 +195,3 @@ class Main():
         """
 
         return self.universes.Values(univId, attr, **kwargs)
-        
