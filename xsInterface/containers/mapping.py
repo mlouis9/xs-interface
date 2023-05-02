@@ -8,9 +8,16 @@ channels must be provided.
 
 
 Created on Mon May 01 13:00:00 2023 @author: Dan Kotlyar
-Last updated on Mon May 01 13:00:00 2023 @author: Dan Kotlyar
+Last updated on Mon May 02 13:30:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
+
+
+List changes / additions:
+--------------------------
+"Concise description" - MM/DD/YYY - Name initials
+Validate - 05/02/2023 - DK
+
 """
 
 
@@ -18,9 +25,11 @@ import copy
 
 import numpy as np
 
-from xsInterface.errors.checkerrors import _isstr,\
-    _is1darray, _inrange, _isequallength, _islist, _inlist
+from xsInterface.errors.checkerrors import _isstr, _inlist,\
+    _is1darray, _inrange, _isequallength, _islist, _compare2lists
 
+
+ALLOWED_MANIPULATION = ['multiply', 'divide']
 
 
 class Map:
@@ -144,7 +153,7 @@ class Map:
                 c += 1
                 
 
-    def Channel(self, chId, universes, volumes):
+    def Channel(self, chId, universes, volumes=None):
         """Add the name, universes and volumes for a specific channel
 
 
@@ -185,6 +194,10 @@ class Map:
         nvals = len(universes)
         if nvals == 0:
             raise ValueError("universes cannot be empty.")
+        
+        # if volume is not provided set to unity volume
+        if volumes is None:
+            volumes = np.ones(nvals)
         
         # convert to numpy array (if provided as a list)
         volumes = np.array(volumes)
@@ -249,19 +262,15 @@ class Map:
         return self.channels[pos]
 
 
-    def Validate(self, xsobj):
+    def Validate(self):
         """post validation to check that all channels were defined
 
         This function is executed once all the channels were added
         to the ``Map`` container. 
         If the number of defined channels is not equal to
-        the number of expected channels the ``VerifyChannels`` will alert.
+        the number of expected channels the ``Validate`` will alert.
 
-        Parameters
-        ----------
-        xsobj : Main object
-            An object that includes all the cross sections for all universes      
-
+ 
         Raises
         ------
         ValueError
@@ -278,63 +287,135 @@ class Map:
                              .format(expChannels, prdChannels))
 
         
-        # verify that all the universes exist
-        for channel in self.channels.values():
-            for univ in channel['layers']:
-                _inlist(univ, "universe", xsobj.universes.universeIds)
-                      
-        self.xs = xsobj
+        # Check for potential errors
+        chMap = list(self.chIds)
+        chChnls = list(self.channels.keys())
+        _compare2lists(chMap, chChnls, "Channel names in set <map>", 
+                       "Channel names in set <channels>")
+
         
 
-    def ValueChannel(self, chId, attr, **kwargs):
-        """Obtain the values of a single attribute and corresponding states
+    # def Values(self, attr, chIds=None, volManip=None, **kwargs):
+    #     """Obtain the values of a single attribute for all the channels
 
-        This method returns a list vector for all the layers in the channel.
-        All the attributes must be provided.
+    #     This method returns a 2-dim list for a specific attribute across
+    #     all channels and layers.
 
 
-        Parameters
-        ----------
-        chId : string
-            name of the channel
-        attr : string
-            name of the attribute
-        kwargs : named arguments
-            keys represent the state name and value represent the values.
-            The filtering of data is performed according to kwargs.
+    #     Parameters
+    #     ----------
+    #     attr : string
+    #         name of the attribute
+    #     chIds : list of string
+    #         list with all the channel names. If None, the results for all the
+    #         channels is provided.
+    #     volManip : string
+    #         volume manipulation ['multiply', 'divide']. Default is None.
+    #     kwargs : named arguments
+    #         keys represent the state name and value represent the values.
+    #         The filtering of data is performed according to kwargs.
 
-        Examples
-        --------
-        >>> universes.Values("u0", attr="inf_nsf", fuel=900)
-        ... {'inf_nsf': [array([0.36666667]), array([0.36666667])],
-        ...  'history': array(['nom', 'nom'], dtype='<U3'),
-        ...  'time': array([0., 0.]),
-        ...  'fuel': array([900., 900.]),
-        ...  'mod': array([600., 600.]),
-        ...  'cool': array([600., 500.])}
+    #     Examples
+    #     --------
+    #     >>> universes.Values("u0", attr="inf_nsf", fuel=900)
+    #     ... TBC ....
 
-        """
+    #     """
 
-        univs = self[chId]['layers']  # all the different universes in channel
-        nlayers = self[chId]['nlayers']  # number of layers
-        vols = self[chId]['volumes']  # volumes
         
-        values = [None]*nlayers
 
-        for idx, univ in enumerate(univs):
+    #     if chIds is None:
+    #         chIds = self.core.chIds
+
+    #     nchannels = len(chIds)  # number of channels
+    #     results = [None]*nchannels  # results will be stored here
+        
+        
+    #     # check that the states for all the channels are provided            
+    #     for key, value in kwargs.items():
+    #         nvals = len(value)
+    #         if nvals != nchannels:
+    #             raise ValueError(
+    #                 "The number of states for <{}> must be of size {} and not "
+    #                 "{}".format(key, nchannels, nvals))
+
             
-            # loop over all the perturbations to build the current state
-            state = {}
-            for key, value in kwargs.items():
-                state[key] = value[idx]
-
-            values[idx] = self.xs.Values(univ, attr, **state)[attr]
+    #     for idx, chId in enumerate(chIds):
+    #         state = {}  # construct the channel state
+    #         for key, value in kwargs.items():
+    #             state[key] = value[idx]   
+        
+    #         # Evaluate the results for a specific channel
+    #         results[idx] = self._ChannelValues(chId, attr, volManip, **kwargs)
+        
             
-        return values
+    #     return results
             
+                            
+    # def _ChannelValues(self, chId, attr, volManip=None, **kwargs):
+    #     """Obtain the values of a single attribute and corresponding states
+
+    #     This method returns a list vector for all the layers in the channel.
+    #     All the state branches must be provided.
+
+
+    #     Parameters
+    #     ----------
+    #     chId : string
+    #         name of the channel
+    #     attr : string
+    #         name of the attribute
+    #     volManip : string
+    #         volume manipulation ['multiply', 'divide']. Default is None.
+    #     kwargs : named arguments
+    #         keys represent the state name and value represent the values.
+    #         The filtering of data is performed according to kwargs.
+
+    #     Examples
+    #     --------
+    #     >>> core.ValueChannel('ch1', 'infkappa', None,
+    #     ...                   history=['nom', 'nom', 'nom', 'nom'],
+    #     ...                   time=[0.0, 0.0, 0.0, 0.0],
+    #     ...                   fuel=[900, 900, 900, 900],
+    #     ...                   boron=[0, 0, 0, 0],
+    #     ...                   dens=[700, 700, 700, 700])
+
+    #     """
+
+    #     if volManip is not None:
+    #         _inlist(volManip, "Volume manipulation", ALLOWED_MANIPULATION)
+
+    #     if chId not in self.core.chIds:
+    #         raise KeyError("chId <{}> does not exist in {}"
+    #                        .format(chId, self.core.chIds))
+
+    #     univs = self[chId]['layers']  # all the universes in a specific channel
+    #     nlayers = self[chId]['nlayers']  # number of layers
+    #     vols = self[chId]['volumes']  # volumes
+        
+    #     values = [None]*nlayers
+
+    #     for idx, univ in enumerate(univs):
             
+    #         # loop over all the perturbations to build the current state
+    #         state = {}
+    #         for key, value in kwargs.items():
+    #             if (idx==0) and (len(value) != nlayers):
+    #                 raise ValueError(
+    #                     "The number of entries for state {} must equal to the"
+    #                     " number of universes <{}> in channel <{}>"
+    #                     .format(len(value), nlayers, chId))
+    #             state[key] = value[idx]
 
 
+    #         if volManip == 'multiply':
+    #             values[idx] = vols[idx]*self.Values(univ, attr, **state)[attr]
+    #         elif volManip == 'divide':
+    #             values[idx] = self.Values(univ, attr, **state)[attr]/vols[idx]   
+    #         else:  # None
+    #             values[idx] = self.Values(univ, attr, **state)[attr]
 
+    #     return values
+            
 
 

@@ -5,7 +5,7 @@ Main class object that connects and executes all the reading, storing and
 printing cabalities.
 
 Created on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
-Last updated on Mon May 01 15:00:00 2023 @author: Dan Kotlyar
+Last updated on Mon May 02 13:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -17,6 +17,7 @@ Read - 07/22/2022 - DK
 Write - 07/22/2022 - DK
 Table - 07/22/2022 - DK
 Values - 07/22/2022 - DK
+ValidateMap - 05/02/2023 - DK
 
 """
 
@@ -25,6 +26,9 @@ from xsInterface.functions.readcontroldict import Read
 from xsInterface.functions.readinput import ReadInput
 from xsInterface.functions.readtemplate import ReadTemplate
 from xsInterface.errors.checkerrors import _inlist
+
+
+ALLOWED_MANIPULATION = ['multiply', 'divide']
 
 
 class Main():
@@ -50,7 +54,10 @@ class Main():
         {"state": "{:5.3f}", "var": "{:d}", "attr": "{:5.5e}", "nrow": 5}
     externalIds: dict
         keys represent universe Ids; values the external codes Ids 
-        (e.g., serpent or shift) linked to these.        
+        (e.g., serpent or shift) linked to these.       
+    core : Map object
+        an object with attributes and map that links the cross sections
+        and the distribution of channels and universes.
 
     Methods
     -------
@@ -64,7 +71,7 @@ class Main():
     def __init__(self, inputFile):
         
         # read the main 
-        universes, outputs, templates, links, formats, externalIds =\
+        universes, outputs, templates, links, formats, externalIds, core =\
             Read(inputFile)
         self.univfiles = universes
         self.outputs = outputs
@@ -73,9 +80,7 @@ class Main():
         self.formats = formats
         self.externalIds = externalIds
         self.dataFiles = {}
-        self.channels = None
-        self.radmap = None
-
+        self.core = core
 
     def Read(self):
         """Read universes cross-section data and associated templates
@@ -109,6 +114,9 @@ class Main():
                 fileId = self.outputs[tmplkey]
                 self.dataFiles[fileId] = ReadTemplate(tmplfile, self.universes,
                                                       self.formats)                
+
+        # check if a core is provided and verify universes against channels
+        self.ValidateMap()
 
 
     def Write(self, writemode="w"):
@@ -195,3 +203,154 @@ class Main():
         """
 
         return self.universes.Values(univId, attr, **kwargs)
+
+
+    def CoreValues(self, attr, chIds=None, volManip=None, **kwargs):
+        """Obtain the values of a single attribute for all the channels
+
+        This method returns a 2-dim list for a specific attribute across
+        all channels and layers.
+
+
+        Parameters
+        ----------
+        attr : string
+            name of the attribute
+        chIds : list of string
+            list with all the channel names. If None, the results for all the
+            channels is provided.
+        volManip : string
+            volume manipulation ['multiply', 'divide']. Default is None.
+        kwargs : named arguments
+            keys represent the state name and value represent the values.
+            The filtering of data is performed according to kwargs.
+
+        Examples
+        --------
+        >>> universes.Values("u0", attr="inf_nsf", fuel=900)
+        ... TBC ....
+
+        """
+
+        
+
+        if chIds is None:
+            chIds = self.core.chIds
+
+        nchannels = len(chIds)  # number of channels
+        results = [None]*nchannels  # results will be stored here
+        
+        
+        # check that the states for all the channels are provided            
+        for key, value in kwargs.items():
+            nvals = len(value)
+            if nvals != nchannels:
+                raise ValueError(
+                    "The number of states for <{}> must be of size {} and not "
+                    "{}".format(key, nchannels, nvals))
+
+            
+        for idx, chId in enumerate(chIds):
+            state = {}  # construct the channel state
+            for key, value in kwargs.items():
+                state[key] = value[idx]   
+        
+            # Evaluate the results for a specific channel
+            results[idx] = self._ChannelValues(chId, attr, volManip, **state)
+        
+            
+        return results
+            
+                            
+    def _ChannelValues(self, chId, attr, volManip=None, **kwargs):
+        """Obtain the values of a single attribute and corresponding states
+
+        This method returns a list vector for all the layers in the channel.
+        All the state branches must be provided.
+
+
+        Parameters
+        ----------
+        chId : string
+            name of the channel
+        attr : string
+            name of the attribute
+        volManip : string
+            volume manipulation ['multiply', 'divide']. Default is None.
+        kwargs : named arguments
+            keys represent the state name and value represent the values.
+            The filtering of data is performed according to kwargs.
+
+        Examples
+        --------
+        >>> core.ValueChannel('ch1', 'infkappa', None,
+        ...                   history=['nom', 'nom', 'nom', 'nom'],
+        ...                   time=[0.0, 0.0, 0.0, 0.0],
+        ...                   fuel=[900, 900, 900, 900],
+        ...                   boron=[0, 0, 0, 0],
+        ...                   dens=[700, 700, 700, 700])
+
+        """
+
+        if volManip is not None:
+            _inlist(volManip, "Volume manipulation", ALLOWED_MANIPULATION)
+
+        if chId not in self.core.chIds:
+            raise KeyError("chId <{}> does not exist in {}"
+                           .format(chId, self.core.chIds))
+
+        univs = self.core[chId]['layers']  # all the universes in a specific channel
+        nlayers = self.core[chId]['nlayers']  # number of layers
+        vols = self.core[chId]['volumes']  # volumes
+        
+        values = [None]*nlayers
+
+        for idx, univ in enumerate(univs):
+            
+            # loop over all the perturbations to build the current state
+            state = {}
+            for key, value in kwargs.items():
+                if (idx==0) and (len(value) != nlayers):
+                    raise ValueError(
+                        "The number of entries for state {} must equal to the"
+                        " number of universes <{}> in channel <{}>"
+                        .format(len(value), nlayers, chId))
+                state[key] = value[idx]
+
+
+            values[idx] = self.Values(univ, attr, **state)[attr]
+            if volManip == 'multiply':
+                manipvals = [val*vols[idx] for val in values[idx]]
+                values[idx] = manipvals
+            elif volManip == 'divide':
+                manipvals = [val/vols[idx] for val in values[idx]]
+                values[idx] = manipvals 
+
+        return values
+
+    def ValidateMap(self):
+        """post validation to check that all channels were defined
+
+        This function is executed once all the channels were added
+        to the ``Map`` container. 
+        If the number of defined channels is not equal to
+        the number of expected channels the ``VerifyChannels`` will alert.
+
+ 
+
+        Raises
+        ------
+        ValueError
+            If the number of defined channels does not match the number of
+            channels defined in the radial map.
+
+        """
+
+        if self.core is not None:
+            # verify that all the universes exist
+            for channel in self.core.channels.values():
+                for univ in channel['layers']:
+                    _inlist(univ, "universe", self.universes.universeIds)
+                
+                      
+
