@@ -5,7 +5,7 @@ Main class object that connects and executes all the reading, storing and
 printing cabalities.
 
 Created on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
-Last updated on Mon May 02 13:00:00 2023 @author: Dan Kotlyar
+Last updated on Wed May 03 12:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -18,6 +18,7 @@ Write - 07/22/2022 - DK
 Table - 07/22/2022 - DK
 Values - 07/22/2022 - DK
 ValidateMap - 05/02/2023 - DK
+CoreValues - 05/03/2023 - DK
 
 """
 
@@ -25,7 +26,7 @@ ValidateMap - 05/02/2023 - DK
 from xsInterface.functions.readcontroldict import Read
 from xsInterface.functions.readinput import ReadInput
 from xsInterface.functions.readtemplate import ReadTemplate
-from xsInterface.errors.checkerrors import _inlist
+from xsInterface.errors.checkerrors import _inlist, _islist
 
 
 ALLOWED_MANIPULATION = ['multiply', 'divide']
@@ -205,16 +206,17 @@ class Main():
         return self.universes.Values(univId, attr, **kwargs)
 
 
-    def CoreValues(self, attr, chIds=None, volManip=None, **kwargs):
+    def CoreValues(self, attrs, chIds=None, volManip=None, **kwargs):
         """Obtain the values of a single attribute for all the channels
 
-        This method returns a 2-dim list for a specific attribute across
+        This method returns a dictionary ... complete
+        2-dim list for a specific attribute across
         all channels and layers.
 
 
         Parameters
         ----------
-        attr : string
+        attrs : string or list of strings
             name of the attribute
         chIds : list of string
             list with all the channel names. If None, the results for all the
@@ -222,23 +224,57 @@ class Main():
         volManip : string
             volume manipulation ['multiply', 'divide']. Default is None.
         kwargs : named arguments
-            keys represent the state name and value represent the values.
+            keys represent the state/branch name and value represent the values
             The filtering of data is performed according to kwargs.
 
+        Returns
+        -------
+        results : dict
+            keys represent attributes and values are the attributes value.
+
+        Raises
+        ------
+        TypeError
+            If ``attrs`` is not a list ot str.
+        ValueError
+            If the number of rows in kwrags does not match the number of
+            channels defined.        
+        
         Examples
         --------
-        >>> universes.Values("u0", attr="inf_nsf", fuel=900)
-        ... TBC ....
-
+        >>> xs.CoreValues(['infkappa', 'infsp0'], 
+        ...              chIds=['S1', 'S2', 'S3', 'S4'], 
+        ...              volManip=None, 
+        ...              history=[['nom', 'nom', 'nom', 'nom']]*4,
+        ...              time=[[0.0, 0.0, 0.0, 0.0]]*4, 
+        ...              fuel=[[900, 900, 900, 900]]*4, 
+        ...              boron=[[0, 0, 0, 0]]*4,
+        ...              dens=[[700, 700, 700, 700]]*4)
+        >>> xs.CoreValues('infflx', 
+        ...              chIds=['S1', 'S2', 'S3', 'S4'], 
+        ...              volManip='divide', 
+        ...              history=[['nom', 'nom', 'nom', 'nom']]*4,
+        ...              time=[[0.0, 0.0, 0.0, 0.0]]*4, 
+        ...              fuel=[[900, 900, 900, 900]]*4, 
+        ...              boron=[[0, 0, 0, 0]]*4,
+        ...              dens=[[700, 700, 700, 700]]*4)
         """
 
         
 
         if chIds is None:
             chIds = self.core.chIds
+            
+        if isinstance(attrs, str):
+            attrs = [attrs]  # convert to a string
+            
+        _islist(attrs, "Attributes")
 
         nchannels = len(chIds)  # number of channels
-        results = [None]*nchannels  # results will be stored here
+        
+        results = {}  # create a dictionary to host all the results
+        for attr in attrs:
+            results[attr] = [None]*nchannels
         
         
         # check that the states for all the channels are provided            
@@ -255,8 +291,10 @@ class Main():
             for key, value in kwargs.items():
                 state[key] = value[idx]   
         
-            # Evaluate the results for a specific channel
-            results[idx] = self._ChannelValues(chId, attr, volManip, **state)
+            for attr in attrs:
+                # Evaluate the results for a specific channel
+                results[attr][idx] =\
+                    self._ChannelValues(chId, attr, volManip, **state)
         
             
         return results

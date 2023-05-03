@@ -45,11 +45,23 @@ fuel = [[900, 900, 900, 900]]*nchs
 boron = [[0, 0, 0, 0]]*nchs
 dens = [[700, 700, 700, 700]]*nchs
 
-xs.CoreValues('infkappa', chIds=['S1', 'S2', 'S3', 'S4'], 
-              volManip='divide', history=history,
-              time=time, fuel=fuel, boron=boron)
+xs.CoreValues(['infkappa', 'infsp0'], 
+              chIds=['S1', 'S2', 'S3', 'S4'], 
+              volManip=None, 
+              history=[['nom', 'nom', 'nom', 'nom']]*nchs,
+              time=[[0.0, 0.0, 0.0, 0.0]]*nchs, 
+              fuel=[[900, 900, 900, 900]]*nchs, 
+              boron=[[0, 0, 0, 0]]*nchs,
+              dens=[[700, 700, 700, 700]]*nchs)
 
-
+xs.CoreValues('infflx', 
+              chIds=['S1', 'S2', 'S3', 'S4'], 
+              volManip='divide',  # divide the flux by volume
+              history=[['nom', 'nom', 'nom', 'nom']]*nchs,
+              time=[[0.0, 0.0, 0.0, 0.0]]*nchs, 
+              fuel=[[900, 900, 900, 900]]*nchs, 
+              boron=[[0, 0, 0, 0]]*nchs,
+              dens=[[700, 700, 700, 700]]*nchs)
 
 
 # -----------------------------------------------------------------------------
