@@ -5,7 +5,7 @@ Main class object that connects and executes all the reading, storing and
 printing cabalities.
 
 Created on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
-Last updated on Wed May 03 12:00:00 2023 @author: Dan Kotlyar
+Last updated on Wed May 03 17:30:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -19,9 +19,11 @@ Table - 07/22/2022 - DK
 Values - 07/22/2022 - DK
 ValidateMap - 05/02/2023 - DK
 CoreValues - 05/03/2023 - DK
+Condense - 05/03/2023 - DK
 
 """
 
+import copy
 
 from xsInterface.functions.readcontroldict import Read
 from xsInterface.functions.readinput import ReadInput
@@ -204,6 +206,40 @@ class Main():
         """
 
         return self.universes.Values(univId, attr, **kwargs)
+
+
+    def Condense(self, cutoffE):
+        """Energy condensation method
+
+        Condensation is performed for a new energy structure and for all the
+        parameters in the macro and micro dictionaries over all existing states
+
+        Parameters
+        ----------
+        cutoffE : 1-dim array
+            energy cutoffs
+
+        Raises
+        ------
+        TypeError
+            If ``cutoffE`` is not array.
+        ValueError
+            If ``cutoffE`` is negative.
+
+        Examples
+        --------
+        >>> xs.Condense([0.0625, 1E+03])
+
+        """
+        
+        condObj = copy.deepcopy(self)  # deep copy of for the condensed object
+        for univId in self.universes.universeIds:
+            rc, states, msets =\
+                self.universes.Condense(univId, cutoffE)
+            condObj.universes.universes[univId] = (rc, states, msets)
+            condObj.universes.PandaTables()
+        return condObj
+
 
 
     def CoreValues(self, attrs, chIds=None, volManip=None, **kwargs):
