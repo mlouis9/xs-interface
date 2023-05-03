@@ -24,6 +24,12 @@ Set what?							Description
 :ref:`j_shift`				Linking between user-defined universe Ids and shift-defined universe Ids.
 --------------------- -------------------------------------------------------------------
 :ref:`j_formats`			Formatting control parameters.
+--------------------- -------------------------------------------------------------------
+:ref:`j_map`					Map with radial channels distribution.
+--------------------- -------------------------------------------------------------------
+:ref:`j_channels`			Definition of the channels using existing universes.
+--------------------- -------------------------------------------------------------------
+:ref:`j_volumes`			Volumes corresponding to all the defined channels.
 ===================== ===================================================================
 
 .. _j_universes:
@@ -332,4 +338,120 @@ or
 
 	set formats 4 .txt
 	attr 6.6e
+
+
+.. _j_map:
+
+====
+map
+====
+
+Description of the channels radial distribution/map.
+**Not required**. 
+
+Create a map the describes the layout for all the channels.
+This is useful for post-processing the results and linking the universes to specific channels.
+
+**Syntax**:
+
+.. code::
+
+	set map <idx1> <idx2> ...
+	<chId11> <chId12> ...
+	<chId21> <chId22> ...
+	...
 	
+**Example**:
+
+.. code::
+
+	set map 0 -1 0	
+       S1  S2
+     S3  S4  S3 
+       S5  S6
+
+	
+.. note::
+
+	*	The indices defined in the ``set map`` indicate the location of the first channel in the corresponding row.
+	
+	* The number of indices and rows must be identical.
+	
+	* However, indices are not required, and if not given the position of the first channel in the row will be at the origin.
+		
+	*	In the given example, three rows will be given as three indices are provided. The second row will be shifted to the left (start at -1).	
+	
+	
+
+.. _j_channels:
+
+========
+channels
+========
+
+Description of universes in each of the defined channels.
+**Not required**. But, if provided the ``set map`` card must also be defined.
+
+.. code::
+
+	set channels
+	<ch1> <univ1> <univ2> <univ3> ...
+	<ch2> <univ2> <univ2> <univ2> ...
+	...
+	
+**Example**:
+
+.. code::
+
+	set channels
+	S1 ref0 fuel0 fuel0 fuel0 fuel0 ref0            
+	S2 fuel0 fuel0 fuel0 fuel0 fuel0            
+	S3 fuel0 fuel0 fuel0 fuel0 fuel0 fuel0 fuel0           
+	S4 fuel0 fuel0 fuel0 fuel0  
+	
+	
+.. note::
+
+	*	The first entry in each row is the name of the channel and should correspond to the channels provided in ``set map``.
+
+	*	The values that follow the name of the channel represent the universes in the different layers. These universes must be defined. 
+
+	*	Each row/channel can contain different number of entries.
+
+
+.. _j_volumes:
+
+========
+volumes
+========
+
+Description of universes in each of the defined channels.
+**Not required card**. If provided then ``set channels`` must be defined.
+
+.. code::
+
+	set volumes
+	<ch1> <vol11> <vol12> <vol13> ...
+	<ch2> <vol21> <vol22> <vol23> ...
+	...
+	
+**Example**:
+
+.. code::
+
+	set volumes
+	S1 1 1 1 1 1 1        
+	S2 1 1 1 1 1            
+	S3 1 1 1 1 1 1 1          
+	S4 1 1 1 1  
+	
+	
+.. note::
+
+	*	The first entry in each row is the name of the channel and should correspond to the channels provided in ``set map``.
+
+	*	The values that follow the name of the channel represent the volumes of the different layers. 
+
+	*	Each row/channel must contain number of entries corresponding to the number of entries provided in ``set channels``.
+
+	*	If ``set channels`` card is defined and this card is omitted all the volumes are assumed as unity volumes.

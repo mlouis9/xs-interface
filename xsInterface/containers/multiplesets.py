@@ -296,7 +296,7 @@ class MultipleSets():
         condObj = copy.deepcopy(self)  # deep copy of for the condensed object
         for iset, ss in self.sets.items():
             condObj.sets[iset] = ss.Condense(cutoffE)
-        ng = len(ss.energygrid) - 1
+        ng = len(condObj.sets[iset].energygrid) - 1
         return condObj, ng
 
 

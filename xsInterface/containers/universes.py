@@ -4,7 +4,7 @@
 Container to collect and store ``MultipleSets``.
 
 Created on Mon June 13 21:20:00 2022 @author: Dan Kotlyar
-Last updated on Thu July 21 16:30:00 2022 @author: Dan Kotlyar
+Last updated on Wed May 03 16:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -18,10 +18,13 @@ PandaTables - 06/16/2022 - DK
 Values - 06/16/2022 - DK
 PrintValues - 07/18/2022 - DK
 PandaTables - 07/21/2022 - DK
+Condense - 05/03/2023 - DK
 
 Need to add error checking!!!
 
 """
+
+import copy
 
 import numpy as np
 import pandas as pd
@@ -238,6 +241,44 @@ class Universes():
         _isstr(univId, "Universe Identifier")
         rc, states, msets = self[univId]
         return msets.Values(attrs, **kwargs)
+
+
+    def Condense(self, univId, cutoffE):
+        """Energy condensation method
+
+        Condensation is performed for a new energy structure and for all the
+        parameters in the macro and micro dictionaries over all existing states
+        for this specific universe.
+
+        Parameters
+        ----------
+        univId : string
+            name of the universe
+        cutoffE : 1-dim array
+            energy cutoffs
+
+        Raises
+        ------
+        TypeError
+            If ``cutoffE`` is not array.
+            If ``univId`` is not str.
+        ValueError
+            If ``cutoffE`` is negative.
+            If ``univId` does not exist.
+
+        Examples
+        --------
+        >>> ss.Condense("u0", [0.0625, 1E+03])
+
+        """
+
+        _isstr(univId, "Universe Identifier")
+        
+        rc, states, msets = self[univId]
+        condMsets, condNg = msets.Condense(cutoffE)
+        rc.ng = condNg  # update the number of energy groups
+                
+        return rc, states, condMsets
         
 
     def Values(self, univId, attr, **kwargs):

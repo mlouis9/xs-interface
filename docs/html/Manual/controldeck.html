@@ -70,6 +70,15 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#j-formats"><span class="std std-ref">formats</span></a></p></td>
 <td><p>Formatting control parameters.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#j-map"><span class="std std-ref">map</span></a></p></td>
+<td><p>Map with radial channels distribution.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#j-channels"><span class="std std-ref">channels</span></a></p></td>
+<td><p>Definition of the channels using existing universes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#j-volumes"><span class="std std-ref">volumes</span></a></p></td>
+<td><p>Volumes corresponding to all the defined channels.</p></td>
+</tr>
 </tbody>
 </table>
 <section id="universes">
@@ -308,6 +317,91 @@ It must be pointed out that if this card is not provided, the explicit definitio
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">formats</span> <span class="mi">4</span> <span class="o">.</span><span class="n">txt</span>
 <span class="n">attr</span> <span class="mf">6.6</span><span class="n">e</span>
 </pre></div>
+</div>
+</section>
+<section id="map">
+<span id="j-map"></span><h2>map<a class="headerlink" href="#map" title="Permalink to this headline">¶</a></h2>
+<p>Description of the channels radial distribution/map.
+<strong>Not required</strong>.</p>
+<p>Create a map the describes the layout for all the channels.
+This is useful for post-processing the results and linking the universes to specific channels.</p>
+<p><strong>Syntax</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nb">map</span> <span class="o">&lt;</span><span class="n">idx1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">idx2</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">&lt;</span><span class="n">chId11</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">chId12</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">&lt;</span><span class="n">chId21</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">chId22</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="nb">set</span> <span class="nb">map</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="mi">0</span>
+  <span class="n">S1</span>  <span class="n">S2</span>
+<span class="n">S3</span>  <span class="n">S4</span>  <span class="n">S3</span>
+  <span class="n">S5</span>  <span class="n">S6</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The indices defined in the <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">map</span></code> indicate the location of the first channel in the corresponding row.</p></li>
+<li><p>The number of indices and rows must be identical.</p></li>
+<li><p>However, indices are not required, and if not given the position of the first channel in the row will be at the origin.</p></li>
+<li><p>In the given example, three rows will be given as three indices are provided. The second row will be shifted to the left (start at -1).</p></li>
+</ul>
+</div>
+</section>
+<section id="channels">
+<span id="j-channels"></span><h2>channels<a class="headerlink" href="#channels" title="Permalink to this headline">¶</a></h2>
+<p>Description of universes in each of the defined channels.
+<strong>Not required</strong>. But, if provided the <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">map</span></code> card must also be defined.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">channels</span>
+<span class="o">&lt;</span><span class="n">ch1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">univ1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">univ2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">univ3</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">&lt;</span><span class="n">ch2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">univ2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">univ2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">univ2</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">channels</span>
+<span class="n">S1</span> <span class="n">ref0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">ref0</span>
+<span class="n">S2</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span>
+<span class="n">S3</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span>
+<span class="n">S4</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span> <span class="n">fuel0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The first entry in each row is the name of the channel and should correspond to the channels provided in <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">map</span></code>.</p></li>
+<li><p>The values that follow the name of the channel represent the universes in the different layers. These universes must be defined.</p></li>
+<li><p>Each row/channel can contain different number of entries.</p></li>
+</ul>
+</div>
+</section>
+<section id="volumes">
+<span id="j-volumes"></span><h2>volumes<a class="headerlink" href="#volumes" title="Permalink to this headline">¶</a></h2>
+<p>Description of universes in each of the defined channels.
+<strong>Not required card</strong>. If provided then <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">channels</span></code> must be defined.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">volumes</span>
+<span class="o">&lt;</span><span class="n">ch1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">vol11</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">vol12</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">vol13</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">&lt;</span><span class="n">ch2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">vol21</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">vol22</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">vol23</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">volumes</span>
+<span class="n">S1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span>
+<span class="n">S2</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span>
+<span class="n">S3</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span>
+<span class="n">S4</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The first entry in each row is the name of the channel and should correspond to the channels provided in <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">map</span></code>.</p></li>
+<li><p>The values that follow the name of the channel represent the volumes of the different layers.</p></li>
+<li><p>Each row/channel must contain number of entries corresponding to the number of entries provided in <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">channels</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">channels</span></code> card is defined and this card is omitted all the volumes are assumed as unity volumes.</p></li>
+</ul>
 </div>
 </section>
 </section>

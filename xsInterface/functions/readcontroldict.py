@@ -5,7 +5,7 @@ should be read. It also specifies the format that wil be used to output
 the required information.
 
 Created on Tue July 19 13:35:00 2022 @author: Dan Kotlyar
-Last updated on Wed Sep 14 05:30:00 2022 @author: Dan Kotlyar
+Last updated on Tue May 02 13:30:00 2023 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -14,6 +14,7 @@ List changes / additions:
 Read - 07/19/2022 - DK
 serpent card - 08/09/2022 - DK
 shift card - 09/13/2022 - DK
+Radial map and channels - 05/02/2023 - DK
 
 """
 
@@ -21,8 +22,11 @@ from pathlib import Path
 from re import compile, IGNORECASE
 import copy
 
-from xsInterface.errors.checkerrors import _isstr
+import numpy as np
+
+from xsInterface.errors.checkerrors import _isstr, _compare2lists
 from xsInterface.errors.customerrors import NonInputError, ControlFileError
+from xsInterface.containers.mapping import Map
 
 # General regular expressions needed for processing data
 SPECIAL_CHAR = compile(r'[\?\$\&\~\<\>\`]')  # special character
@@ -41,6 +45,10 @@ OUTPT_REGX = compile(r'\s*(set\s+)(outputs)', IGNORECASE)
 LINKS_REGX = compile(r'\s*(set\s+)(links)', IGNORECASE)
 SERPT_REGX = compile(r'\s*(set\s+)(serpent)', IGNORECASE)
 SHIFT_REGX = compile(r'\s*(set\s+)(shift)', IGNORECASE)
+CHANNELS_REGX = compile(r'\s*(set\s+)(channels)', IGNORECASE)
+VOLUMES_REGX = compile(r'\s*(set\s+)(volumes)', IGNORECASE)
+MAP_REGX = compile(r'\s*(set\s+)(map)', IGNORECASE)
+
 
 # default formats for outputting data
 STATE_FRMT = "{:5.3f}"
@@ -111,10 +119,10 @@ def Read(inputFile):
     data = _CleanFile(dataFile)
     
     # Process data
-    universes, outputs, templates, links, formats, external =\
+    universes, outputs, templates, links, formats, external, core =\
         _ProcessCards(data)
     
-    return universes, outputs, templates, links, formats, external
+    return universes, outputs, templates, links, formats, external, core
     
     
 
@@ -130,6 +138,13 @@ def _ProcessCards(data):
     templates = {}
     outputs = {}
     univlinks = {}
+    
+    # data provided for channels and maps (not mandatory)
+    coreChnls = None  # channels Ids
+    coreVols = None   # channels volumes
+    coreMap = None   # core map
+    coreIdx = None  # core index bounds
+    core = None  #  core object
     formats = {"state": STATE_FRMT, "var": VAR_FRMT, "attr": ATTR_FRMT,
                "nrow": ROW_VALS_N, "postfix": POST_PRFX,
                "delimiter": DELIM_FRMT}
@@ -208,6 +223,20 @@ def _ProcessCards(data):
 
 
     # -------------------------------------------------------------------------   
+    #                 Channels, volumes, and map Data
+    # -------------------------------------------------------------------------   
+    for cardKey, cardData in data.items():
+        if CHANNELS_REGX.search(cardKey):
+            coreChnls = _CardDict(cardData)  # core channels
+        if VOLUMES_REGX.search(cardKey):
+            coreVols = _CardDict(cardData)  # core channels
+        if MAP_REGX.search(cardKey):
+            setLine =  cardKey[MAP_REGX.search(cardKey).span()[1]:]
+            coreMap, coreIdx = _RadialMap(setLine, cardData)  # core map
+    # create a core MAP object
+    core = _Map(coreIdx, coreMap, coreChnls, coreVols)        
+
+    # -------------------------------------------------------------------------   
     #                 External codes' (e.g., Serpent) Files
     # -------------------------------------------------------------------------   
     for cardKey, cardData in data.items():
@@ -258,8 +287,7 @@ def _ProcessCards(data):
     
     
     # Return values
-    return universes, outputs, templates, univlinks, formats, external
-
+    return universes, outputs, templates, univlinks, formats, external, core
 
 
 # -----------------------------------------------------------------------------
@@ -350,6 +378,76 @@ def _ImportFiles(tlines, errmsg):
         outputsIds[key] = outfile
 
     return outputsIds
+
+
+# -----------------------------------------------------------------------------
+#                  Process Radial map distribution
+# -----------------------------------------------------------------------------
+def _RadialMap(setline, cdata):
+    """Process radial map distribution with channels"""
+    msgMap = "Entries' number for map indices {}\n not matching the data {}\n"\
+        .format(setline, cdata)
+    coreMap = []
+    coreIdx = []
+
+    if len(cdata) > 1:
+        try:
+            idxMap = _str2vec(setline, dtype=int)
+        except ValueError:
+            raise ControlFileError("set <map>:\n{}".format(cdata))
+        if len(idxMap) != len(cdata):
+            raise ControlFileError(msgMap)
+    else:  # set default indices to zero
+        idxMap = [0]*len(cdata)
+    # Loop over the map layout for each row
+    for rowIdx, rowData in enumerate(cdata):
+        try:
+            currRow = _str2vec(rowData, dtype=str)
+            coreMap.append(currRow)
+            coreIdx.append([idxMap[rowIdx],
+                            idxMap[rowIdx] + len(currRow)-1])
+        except ValueError:
+            raise ControlFileError("set <map>:\n{}".format(currRow))
+
+    return coreMap, coreIdx
+
+
+def _Map(coreIdx, coreMap, channels, volumes):
+    """create a Map object with radial channels and axial universes"""
+
+    if (coreMap is None) and (channels is None):
+            return None
+    elif (coreMap is None):
+        raise ControlFileError("set <map>\n{}\n"
+                               "must be defined together with set <channels>"
+                               .format(coreMap))
+    elif (channels is None):
+        raise ControlFileError("set <channels>\n{}\n"
+                               "must be defined together set <map>"
+                               .format(channels))
+    # Check for potential errors
+    if volumes is not None:
+        chnames1 = list(channels.keys())
+        chnames2 = list(volumes.keys())
+        _compare2lists(chnames1, chnames2, "Channel names in <channels>", 
+                       "Channel names in <volumes>")
+
+    # Reset the container
+    core = Map(coreMap, coreIdx)
+    
+    # loop over all the channels and add them to the object
+    if volumes is None:
+        for ch, universes in channels.items():
+            core.Channel(ch, universes)
+    else:
+        for ch, universes in channels.items():
+            vols = np.array(volumes[ch], dtype=float)
+            core.Channel(ch, universes, vols)    
+
+    # check that all channels were provided
+    core.Validate()
+
+    return core
 
 
 # -----------------------------------------------------------------------------
@@ -474,4 +572,20 @@ def _StripLine(tline):
             raise ControlFileError("\nSpecial chars {} not allowed:\n"
                                 .format(tline))
     return tline
+
+
+
+def _str2vec(tline, dtype=float):
+    """convert a line into a vector/ndarray"""
+    if dtype is not str and dtype is not int and dtype is not float:
+        raise ControlFileError("This line: \n{}\n Cannot be converted from "
+                               "str to values".format(tline))
+    strVals = tline.split()
+    if dtype is str:
+        return strVals
+    vals = []
+    for idx, val in enumerate(strVals):
+        val = int(val) if dtype is int else float(val)
+        vals.append(val)
+    return np.array(strVals, dtype)
 
