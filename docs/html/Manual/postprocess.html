@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Post process &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Relabel .coe files" href="coerelabel.html" />
+    <link rel="prev" title="Code Execution" href="code_exe.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="post-process">
+<span id="postprocess"></span><h1>Post process<a class="headerlink" href="#post-process" title="Permalink to this headline">¶</a></h1>
+<p>After the execution of <code class="docutils literal notranslate"><span class="pre">xs.Read()</span></code>, the data can be directly obtained by using multiple methods.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#p-table"><span class="std std-ref">Table</span></a></p></td>
+<td><p>Values presented in a table (pandas) format</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#p-values"><span class="std std-ref">Values</span></a></p></td>
+<td><p>Values presented in a dictionary format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#p-corevalues"><span class="std std-ref">CoreValues</span></a></p></td>
+<td><p>Values for radial channels &amp; layers</p></td>
+</tr>
+</tbody>
+</table>
+<section id="table">
+<span id="p-table"></span><h2>Table<a class="headerlink" href="#table" title="Permalink to this headline">¶</a></h2>
+<p><strong>Obtain values for a single universe and multiple parameters/attributes in a table format</strong>.</p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">univId</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where,</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">univId</span></code> is the universe name. Only a single universe string is allowed to be used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attrs</span></code> is a list or string containing the parameters of interest.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kwargs</span></code> represent the different states (i.e., branches, history, time) for which data is obtained.</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">],</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="s1">&#39;nom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="values">
+<span id="p-values"></span><h2>Values<a class="headerlink" href="#values" title="Permalink to this headline">¶</a></h2>
+<p><strong>Obtain values for a single universe and single attribute in a dictionary format.</strong></p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">univId</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where, the parameters are identical to the ones used by the <code class="docutils literal notranslate"><span class="pre">Table</span></code> method, but the <code class="docutils literal notranslate"><span class="pre">attr</span></code> that can only be a single string describing a single attribute.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="s1">&#39;nom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="corevalues">
+<span id="p-corevalues"></span><h2>CoreValues<a class="headerlink" href="#corevalues" title="Permalink to this headline">¶</a></h2>
+<p><strong>Obtain values for multiple attributes and all channels &amp; layers.</strong></p>
+<p>This method returns a dictionary with keys representing attributes
+and values that are 2-dim lists representing values across
+all channels and layers.</p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">CoreValues</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">chIds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">volManip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where,</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">attrs</span></code> is string or list of strings. Name/s of the attribute/s.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chIds</span></code> is a list of strings. List with all the channel names. If None, the results for all the channels are provided.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">volManip</span></code> is a string. Volume manipulation that be: ‘multiply’ or ‘divide’ or None. Default is None.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kwargs</span></code> represent the different states (i.e., branches, history, time) for which data is obtained.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kwargs</span></code> is named arguments. keys represent the state/branch name and value represent the values</p></li>
+</ul>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">CoreValues</span><span class="p">([</span><span class="s1">&#39;infkappa&#39;</span><span class="p">,</span> <span class="s1">&#39;infsp0&#39;</span><span class="p">],</span>
+             <span class="n">chIds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;S1&#39;</span><span class="p">,</span> <span class="s1">&#39;S2&#39;</span><span class="p">,</span> <span class="s1">&#39;S3&#39;</span><span class="p">,</span> <span class="s1">&#39;S4&#39;</span><span class="p">],</span>
+             <span class="n">volManip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">history</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+             <span class="n">time</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+             <span class="n">fuel</span><span class="o">=</span><span class="p">[[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+             <span class="n">boron</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+             <span class="n">dens</span><span class="o">=</span><span class="p">[[</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">CoreValues</span><span class="p">(</span><span class="s1">&#39;infflx&#39;</span><span class="p">,</span>
+             <span class="n">chIds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">volManip</span><span class="o">=</span><span class="s1">&#39;divide&#39;</span><span class="p">,</span>
+             <span class="n">history</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+             <span class="n">time</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+             <span class="n">fuel</span><span class="o">=</span><span class="p">[[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+             <span class="n">boron</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+             <span class="n">dens</span><span class="o">=</span><span class="p">[[</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../InputSetups/index.html">Input-Setups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">User’s Manual</a><ul>
+      <li>Previous: <a href="code_exe.html" title="previous chapter">Code Execution</a></li>
+      <li>Next: <a href="coerelabel.html" title="next chapter">Relabel .coe files</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/Manual/postprocess.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

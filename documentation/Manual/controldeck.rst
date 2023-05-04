@@ -346,8 +346,9 @@ or
 map
 ====
 
-Description of the channels radial distribution/map.
-**Not required**. 
+**Description of the channels radial distribution/map.**
+
+*Optional card*. 
 
 Create a map the describes the layout for all the channels.
 This is useful for post-processing the results and linking the universes to specific channels.
@@ -371,7 +372,7 @@ This is useful for post-processing the results and linking the universes to spec
        S5  S6
 
 	
-.. note::
+**Notes:**
 
 	*	The indices defined in the ``set map`` indicate the location of the first channel in the corresponding row.
 	
@@ -389,8 +390,9 @@ This is useful for post-processing the results and linking the universes to spec
 channels
 ========
 
-Description of universes in each of the defined channels.
-**Not required**. But, if provided the ``set map`` card must also be defined.
+**Description of universes in each of the defined channels**.
+
+*Optional card*.  But, if provided the ``set map`` card must also be defined.
 
 .. code::
 
@@ -410,7 +412,7 @@ Description of universes in each of the defined channels.
 	S4 fuel0 fuel0 fuel0 fuel0  
 	
 	
-.. note::
+**Notes:**
 
 	*	The first entry in each row is the name of the channel and should correspond to the channels provided in ``set map``.
 
@@ -425,8 +427,9 @@ Description of universes in each of the defined channels.
 volumes
 ========
 
-Description of universes in each of the defined channels.
-**Not required card**. If provided then ``set channels`` must be defined.
+**Volumes for each of the layers in each of the defined channels.**
+
+*Optional card*. If provided then ``set channels`` must be defined.
 
 .. code::
 
@@ -446,7 +449,7 @@ Description of universes in each of the defined channels.
 	S4 1 1 1 1  
 	
 	
-.. note::
+**Notes:**
 
 	*	The first entry in each row is the name of the channel and should correspond to the channels provided in ``set map``.
 

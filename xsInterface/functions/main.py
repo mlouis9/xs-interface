@@ -243,10 +243,10 @@ class Main():
 
 
     def CoreValues(self, attrs, chIds=None, volManip=None, **kwargs):
-        """Obtain the values of a single attribute for all the channels
+        """Obtain the values for multiple attributes and all channels & layers.
 
-        This method returns a dictionary ... complete
-        2-dim list for a specific attribute across
+        This method returns a dictionary with keys representing attributes
+        and values that are 2-dim lists representing values across
         all channels and layers.
 
 
