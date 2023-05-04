@@ -21,7 +21,9 @@ Chapters							    Description
 ------------------------- --------------------------------------------
 :ref:`controldeck`		    Control the input-to-output data flow 
 ------------------------- --------------------------------------------
-:ref:`codeexe`				    Execution and post-processing of the code
+:ref:`codeexe`				    Execution of the code and data manipulation
+------------------------- --------------------------------------------
+:ref:`postprocess`				Post-processing of results
 ========================= ============================================
 
 
@@ -34,6 +36,7 @@ Chapters							    Description
    input_cards
    templates
    code_exe
+   postprocess
    coerelabel
 
 

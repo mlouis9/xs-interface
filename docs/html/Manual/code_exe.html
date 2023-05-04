@@ -16,7 +16,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Input-Setups" href="../InputSetups/index.html" />
+    <link rel="next" title="Post process" href="postprocess.html" />
     <link rel="prev" title="Templates" href="templates.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -48,7 +48,35 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Write the data to output files.</p>
+</section>
+<hr class="docutils" />
+<section id="manipulation-methods">
+<h1>Manipulation methods<a class="headerlink" href="#manipulation-methods" title="Permalink to this headline">¶</a></h1>
+<p>After the execution of <code class="docutils literal notranslate"><span class="pre">xs.Read()</span></code>, the data can be manipulated and presented using different methods.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#e-write"><span class="std std-ref">Write</span></a></p></td>
+<td><p>Write data to a user-defined template</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#e-condense"><span class="std std-ref">Condense</span></a></p></td>
+<td><p>Perform energy condensation.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="write">
+<span id="e-write"></span><h2>Write<a class="headerlink" href="#write" title="Permalink to this headline">¶</a></h2>
+<p><strong>Write the data to output files.</strong></p>
+<p>The data is written according to the <a class="reference internal" href="templates.html#templates"><span class="std std-ref">Templates</span></a> provided by the user.</p>
+<p><strong>Syntax:</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">writemode</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -58,48 +86,31 @@
 </pre></div>
 </div>
 </section>
-<section id="access-data-directly">
-<h1>Access Data Directly<a class="headerlink" href="#access-data-directly" title="Permalink to this headline">¶</a></h1>
-<p>After the execution of <code class="docutils literal notranslate"><span class="pre">xs.Read()</span></code>, the data can be directly obtained by using two methods.</p>
-<ol class="arabic">
-<li><p>Obtain values for a single universe and multiple parameters/attributes in a table format.</p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">univId</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<section id="condense">
+<span id="e-condense"></span><h2>Condense<a class="headerlink" href="#condense" title="Permalink to this headline">¶</a></h2>
+<p><strong>Energy condensation method.</strong></p>
+<p>Condensation is performed for a new energy structure and for all the parameters in the macro and micro dictionaries over all existing perturbation states.</p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Condense</span><span class="p">(</span><span class="n">cutoffE</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where,</p>
+<p>where, <code class="docutils literal notranslate"><span class="pre">cutoffE</span></code> energy cutoffs used for energy condensation.</p>
+<p><strong>Notes:</strong></p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">univId</span></code> is the universe name. Only a single universe string is allowed to be used.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">attrs</span></code> is a list or string containing the parameters of interest.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">kwargs</span></code> represent the different states (i.e., branches, histories, times) for which data is obtained.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cutoffE</span></code> must contain at least one number (which will generate a 2-group or 1-group structure). <code class="docutils literal notranslate"><span class="pre">cutoffE</span></code> must be within the energy bounds &lt;ENE&gt; defined in the <a class="reference internal" href="input_cards.html#i-data"><span class="std std-ref">Data</span></a> card.
+* <code class="docutils literal notranslate"><span class="pre">cutoffE</span></code> must be provided in descending order. To avoid energy condensation use the same cutoffs as defined in &lt;ENE&gt;.</p></li>
+<li><dl class="simple">
+<dt>A new energy grid will be created based on the provided <code class="docutils literal notranslate"><span class="pre">cutoffE</span></code> and closest energy boundaries &lt;ENE&gt; defined in the <a class="reference internal" href="input_cards.html#i-data"><span class="std std-ref">Data</span></a> card.</dt><dd><ul>
+<li><p>If &lt;ENE&gt; = <code class="docutils literal notranslate"><span class="pre">10.0E+6,</span> <span class="pre">0.6025,</span> <span class="pre">0.0</span></code> and &lt;cutoffE&gt; = <code class="docutils literal notranslate"><span class="pre">0.005</span></code> then a 1-group <code class="docutils literal notranslate"><span class="pre">10.0E+6,</span> <span class="pre">0.0</span></code> will be created.</p></li>
+<li><p>If &lt;ENE&gt; = <code class="docutils literal notranslate"><span class="pre">10.0E+6,</span> <span class="pre">0.6025,</span> <span class="pre">0.0</span></code> and &lt;cutoffE&gt; = <code class="docutils literal notranslate"><span class="pre">0.6025</span></code> or above then 2-groups <code class="docutils literal notranslate"><span class="pre">10.0E+6,</span> <span class="pre">0.6025,</span> <span class="pre">0.0</span></code> will be created.</p></li>
+<li><p>For the provided &lt;ENE&gt; structure if &lt;cutoffE&gt; equals to the outermost left or right boundary a 1-group <code class="docutils literal notranslate"><span class="pre">10.0E+6,</span> <span class="pre">0.0</span></code> will be utilized.</p></li>
+<li><p>&lt;cutoffE&gt; cannot create a finer grid than &lt;ENE&gt; regardless to how many <code class="docutils literal notranslate"><span class="pre">cutoffE</span></code> boundaries are provided (as no interpolation is used).</p></li>
 </ul>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">],</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>or</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="s1">&#39;nom&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
+</dd>
+</dl>
 </li>
-<li><p>Obtain values for a single universe and single attribute in a dictionary format.</p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">univId</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>where, the parameters are identical to the ones used by the <code class="docutils literal notranslate"><span class="pre">Table</span></code> method, but the <code class="docutils literal notranslate"><span class="pre">attr</span></code> that can only be a single string describing a single attribute.</p>
-<p>Examples:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;inf_rabs&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>or</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="s2">&quot;u0&quot;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="n">fuel</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="s1">&#39;nom&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-</ol>
+</ul>
+</section>
 </section>
 
 
@@ -140,7 +151,7 @@
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="index.html">User’s Manual</a><ul>
       <li>Previous: <a href="templates.html" title="previous chapter">Templates</a></li>
-      <li>Next: <a href="../InputSetups/index.html" title="next chapter">Input-Setups</a></li>
+      <li>Next: <a href="postprocess.html" title="next chapter">Post process</a></li>
   </ul></li>
   </ul></li>
 </ul>

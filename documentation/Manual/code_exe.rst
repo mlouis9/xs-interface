@@ -23,7 +23,38 @@ Read universes' data and templates files and populate data.
 	xs.Read()
 
 
-Write the data to output files.
+//////////////////////////////////////////////////////////////////
+
+
+
+
+
+Manipulation methods
+--------------------
+
+After the execution of ``xs.Read()``, the data can be manipulated and presented using different methods. 
+
+========================= ============================================
+Method							   		 Description
+========================= ============================================
+:ref:`e_write`			      Write data to a user-defined template
+------------------------- --------------------------------------------
+:ref:`e_condense`	        Perform energy condensation.
+========================= ============================================
+
+
+.. _e_write:
+
+=========
+Write
+=========
+
+
+**Write the data to output files.**
+
+The data is written according to the :ref:`templates` provided by the user.
+
+**Syntax:**
 
 .. code::
 
@@ -36,55 +67,34 @@ where, ``writemode`` defines the writing mode and can be 'w', 'a', and so on.
 .. code::
 
 	xs.Write(writemode='w')
+	
+	
+	
+.. _e_condense:
+
+=========
+Condense
+=========	
+
+**Energy condensation method.**
+
+Condensation is performed for a new energy structure and for all the parameters in the macro and micro dictionaries over all existing perturbation states.
 
 
-Access Data Directly
--------------------- 
+**Syntax:**
 
-After the execution of ``xs.Read()``, the data can be directly obtained by using two methods.
+.. code::
 
-1. Obtain values for a single universe and multiple parameters/attributes in a table format.
+	xs.Condense(cutoffE)
+	
+where, ``cutoffE`` energy cutoffs used for energy condensation.
 
-	.. code::
+**Notes:**
 	
-		xs.Table(univId, attrs, **kwargs)
-		
-	where,
-	
-	- ``univId`` is the universe name. Only a single universe string is allowed to be used.
-	- ``attrs`` is a list or string containing the parameters of interest.
-	- ``kwargs`` represent the different states (i.e., branches, histories, times) for which data is obtained.
-	
-	Example:
-	
-	.. code::
-	
-		xs.Table("u0", ['inf_rabs', 'beta'], fuel=1500)
-		
-	or
-	
-	.. code::
-	
-		xs.Table("u0", 'beta', fuel=1500, mod=600, time=0.0, history='nom')
-
-2. Obtain values for a single universe and single attribute in a dictionary format.
-
-
-	.. code::
-	
-		xs.Values(univId, attr, **kwargs)
-		
-	where, the parameters are identical to the ones used by the ``Table`` method, but the ``attr`` that can only be a single string describing a single attribute. 
-		
-	Examples:
-	
-	.. code::
-	
-		xs.Values("u0", 'inf_rabs', fuel=1500)
-		
-	or
-	
-	.. code::
-	
-		xs.Values("u0", 'beta', fuel=1500, mod=600, time=0.0, history='nom')
-	
+*	``cutoffE`` must contain at least one number (which will generate a 2-group or 1-group structure). ``cutoffE`` must be within the energy bounds <ENE> defined in the :ref:`i_data` card.
+	* ``cutoffE`` must be provided in descending order. To avoid energy condensation use the same cutoffs as defined in <ENE>.
+* A new energy grid will be created based on the provided ``cutoffE`` and closest energy boundaries <ENE> defined in the :ref:`i_data` card.
+	* If <ENE> = ``10.0E+6, 0.6025, 0.0`` and <cutoffE> = ``0.005`` then a 1-group ``10.0E+6, 0.0`` will be created.
+	* If <ENE> = ``10.0E+6, 0.6025, 0.0`` and <cutoffE> = ``0.6025`` or above then 2-groups ``10.0E+6, 0.6025, 0.0`` will be created.
+	* For the provided <ENE> structure if <cutoffE> equals to the outermost left or right boundary a 1-group ``10.0E+6, 0.0`` will be utilized.
+	* <cutoffE> cannot create a finer grid than <ENE> regardless to how many ``cutoffE`` boundaries are provided (as no interpolation is used).
