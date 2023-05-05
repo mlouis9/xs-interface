@@ -85,7 +85,7 @@ class Main():
         self.dataFiles = {}
         self.core = core
 
-    def Read(self):
+    def Read(self, what='all'):
         """Read universes cross-section data and associated templates
         
         The ``Read`` method also populates the template files with data. 
@@ -97,10 +97,23 @@ class Main():
             correponding files populated with data.
 
         """
-
-        # Read the data for all the universes
-        self.universes = ReadInput(self.externalIds, **self.univfiles)
         
+        # what = 'all' / 'universes' / 'templates'
+
+        _inlist(what, 'Read what?', ['all', 'universes', 'templates'])
+
+        if (what == 'all') or (what == 'universes'):
+
+            # Read the data for all the universes
+            self.universes = ReadInput(self.externalIds, **self.univfiles)
+            
+            # check if a core is provided and verify universes against channels
+            self.ValidateMap()
+
+        if what != 'templates':
+            return
+
+        # Read templates
         self.dataFiles = {}
         
         # Read template files
@@ -118,8 +131,7 @@ class Main():
                 self.dataFiles[fileId] = ReadTemplate(tmplfile, self.universes,
                                                       self.formats)                
 
-        # check if a core is provided and verify universes against channels
-        self.ValidateMap()
+
 
 
     def Write(self, writemode="w"):
