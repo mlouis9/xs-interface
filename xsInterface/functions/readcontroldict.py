@@ -355,7 +355,6 @@ def _ImportFormats(setline, tlines, defltDict):
 # -----------------------------------------------------------------------------
 #                  Files (templates, universes, outputs)
 # -----------------------------------------------------------------------------
-
 def _ImportFiles(tlines, errmsg):
     """Import data related to files definitions"""
 
@@ -375,7 +374,10 @@ def _ImportFiles(tlines, errmsg):
             raise ControlFileError(errmsg+
                                    "\nEmpty string for entry <{}>".format(key)) 
         
-        outputsIds[key] = outfile
+        if key not in outputsIds:
+            outputsIds[key] = outfile
+        else:
+            outputsIds[key] += outfile
 
     return outputsIds
 
@@ -515,7 +517,10 @@ def _CardDataDict(tlines):
         idx = FIRSTWORD_REGEX.search(tline).span()
         name = tline[idx[0]:idx[1]]
         vals = tline[idx[1]:]
-        cardData[name] = vals
+        if name not in cardData:
+            cardData[name] = vals
+        else:
+            cardData[name] += ' {}'.format(vals)
         
     return cardData
 
