@@ -23,7 +23,7 @@ xs = Main(controlFile)
 xs.Read(what='universes')  # read only the universe data
 xs.Read(what='templates')  # read the template data
 # Write data to txt files
-xs.Write()  # write data
+# xs.Write()  # write data
 
 
 

@@ -48,7 +48,8 @@ SHIFT_REGX = compile(r'\s*(set\s+)(shift)', IGNORECASE)
 CHANNELS_REGX = compile(r'\s*(set\s+)(channels)', IGNORECASE)
 VOLUMES_REGX = compile(r'\s*(set\s+)(volumes)', IGNORECASE)
 MAP_REGX = compile(r'\s*(set\s+)(map)', IGNORECASE)
-
+REPETITION_REGEX = compile(r'\*\s*[\d\.]+')  # magic star
+IDX_REGEX = compile(r'\*\d\[(.*?)\]')  # index inside parentheses
 
 # default formats for outputting data
 STATE_FRMT = "{:5.3f}"
@@ -467,6 +468,7 @@ def _CleanFile(dataFile):
             tline = _StripLine(tline)
             if tline.strip() == '':
                 continue
+            tline = _applyrepetition(tline)
         else:
             continue
         # no comment or empty line exist at this stage
@@ -482,6 +484,93 @@ def _CleanFile(dataFile):
             raise NonInputError("\nThe following line:\n<{}>\nis not "
                                    "associated to any card.\n".format(tline))
     return dataSets
+
+
+def _applyrepetition(tline):
+    """modify the line and apply repetition"""
+    # converts FE*3[1, 2] ME*2[4, 3]--> FE1 FE3 FE5 ME4 ME7
+
+    msg0 ='Error when using the magic repetition star. Use integers & follow'\
+        'the format: *N1[N2, N3]\n.'\
+
+    FlagParen = False  # flag to indicate if parenthesis exist in line
+    if IDX_REGEX.search(tline) is not None:
+        FlagParen = True
+    else:
+        return tline  # return the original sentence without any modifications
+
+    tline1 = ''  # tline decomposed into multiple line inserted into a list
+    while FlagParen:
+
+        # Loop over the entire line to identify repetitions
+        idxcond = IDX_REGEX.search(tline)
+
+        # process the following section in tline 'template univ*5[2, 3]'
+        procsLine = tline[0:idxcond.span()[1]]
+
+        # only the magic section '*5[2, 3]'
+        magicSection = tline[idxcond.span()[0]:idxcond.span()[1]]
+        
+        # Repeat the following section without the magic card
+        repeatLine = procsLine[0:idxcond.span()[0]]
+        
+        # Obtain the repeat word if exists
+        
+        allWords = _str2vec(repeatLine, dtype=str)
+        if allWords == []:
+            raise ControlFileError("Error in line {}\n with the string "
+                              "<{}>.\n{}".format(tline, repeatLine, msg0))
+
+        repeatWord = allWords[-1]  # only this str is repeated
+        fixedStr = ' '
+        if len(allWords) > 1:
+            for val in allWords[0:-1]:
+                fixedStr = fixedStr + ' ' + val  # str not be repeated
+            
+
+        idxSqL = magicSection.find('[')  # find left & right indices of [...]
+        idxSqR = magicSection.find(']')
+        
+        try:
+            # indices to access the data 
+            indicesStr = magicSection[idxSqL+1: idxSqR]
+            indices = _str2vec(indicesStr, int)
+            if len(indices) != 2:
+                raise ValueError()
+        except:
+            raise ControlFileError("Error in line {}\n with assessing indices "
+                              "<{}>.\n{}".format(tline, magicSection, msg0))            
+        
+        try:
+            numRepeat = int(magicSection[1: idxSqL])
+        except:
+            raise ControlFileError("Error in line {}\n with number of repeats "
+                              "<{}>.\n{}".format(tline, magicSection, msg0)) 
+
+        repeatSection = ' '
+        currIdx = indices[0]
+        incrStep = indices[1]
+        for j in range(numRepeat):
+            repeatSection = repeatSection + repeatWord + str(currIdx)+ ' '
+            currIdx += incrStep
+        
+        tline1 = tline1 + fixedStr + repeatSection
+        
+        # remaining of the sentence
+        try:
+            remainLine = tline[idxcond.span()[1]:]
+        except:
+            return tline1
+        
+        # flag to indicate if parenthesis exist in line
+        FlagParen = False  
+        if IDX_REGEX.search(remainLine) is not None:
+            FlagParen = True
+        else:
+            tline1 = tline1 + ' ' + remainLine
+            return tline1
+
+        tline = remainLine
 
 
 
@@ -593,4 +682,5 @@ def _str2vec(tline, dtype=float):
         val = int(val) if dtype is int else float(val)
         vals.append(val)
     return np.array(strVals, dtype)
+
 
