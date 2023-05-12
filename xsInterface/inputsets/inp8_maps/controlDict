@@ -65,7 +65,7 @@ var d
 set map 0 -1 0
     S1
   S2  S3
-    S4
+    S4  
   
 set channels
 S1 ref0 fuel0 fuel0 ref0

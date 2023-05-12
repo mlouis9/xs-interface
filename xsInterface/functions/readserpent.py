@@ -339,8 +339,8 @@ def _ReLabelStates(dataIn, strLabels, numLabels):
     strIds  = [key for key in itertools.product(*strLabels.values())]
     numIds  = [key for key in itertools.product(*numLabels.values())]
     
-    if len(strIds) == 1:
-        strIds = list(strIds[0])
+    # if len(strIds) == 1:
+    #     strIds = list(strIds[0])
 
     # link between the original branch Ids and their numeric values
     for univId, univData in dataIn.items():
