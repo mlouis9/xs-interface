@@ -7,6 +7,10 @@ Control Deck
 This is the main file that controls the flow of data and the corresponding output formatting.
 
 A list of all the input cards within this file is provided in the table below.
+The data is provided by setting certain cards.
+
+See :ref:`general-card` remarks on building an input deck file. The general remarks
+include various requirements and description of special characters including the **magic star** (*).
 
 ===================== ===================================================================
 Set what?							Description
