@@ -6,7 +6,7 @@ Debug:
 Read a file that contains cross sections for the full core.
 
 Created on Thu May 04 16:05:00 2023 @author: Dan Kotlyar
-Last updated on Thu May 04 16:05:00 2023 @author: Dan Kotlyar
+Last updated on Tue May 09 10:45:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 

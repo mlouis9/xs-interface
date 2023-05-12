@@ -48,8 +48,8 @@ SHIFT_REGX = compile(r'\s*(set\s+)(shift)', IGNORECASE)
 CHANNELS_REGX = compile(r'\s*(set\s+)(channels)', IGNORECASE)
 VOLUMES_REGX = compile(r'\s*(set\s+)(volumes)', IGNORECASE)
 MAP_REGX = compile(r'\s*(set\s+)(map)', IGNORECASE)
-REPETITION_REGEX = compile(r'\*\s*[\d\.]+')  # magic star
-IDX_REGEX = compile(r'\*\d\[(.*?)\]')  # index inside parentheses
+IDX_REGEX = compile(r'\*\d+\[(.*?)\]')  # index inside parentheses
+MAGIC_REGEX = compile(r'\*\s*\d+')  # index inside parentheses
 
 # default formats for outputting data
 STATE_FRMT = "{:5.3f}"
@@ -161,7 +161,11 @@ def _ProcessCards(data):
     "must contain:\n<template name> <corresponding output file>"
     errlink = "<set links> is not defined properly.\nSubsequent lines must"\
     " contain:\n<template name> <corresponding universes Ids>"
-
+    errserp = "<set serpent> is not defined properly.\nSubsequent lines must"\
+    " contain:\n<univ name> <corresponding serpent Ids>"
+    errshft = "<set shift> is not defined properly.\nSubsequent lines must"\
+    " contain:\n<univ name> <corresponding shift Ids>"
+    
     # -------------------------------------------------------------------------   
     #                              Universes
     # -------------------------------------------------------------------------   
@@ -242,10 +246,17 @@ def _ProcessCards(data):
     # -------------------------------------------------------------------------   
     for cardKey, cardData in data.items():
         if SERPT_REGX.search(cardKey):
-            serpent = _CardDict(cardData)
+            serpent0 = _ImportFiles(cardData, errserp)
+            for key, vals in serpent0.items():
+                serpent[key] = [val for val in vals.split()]
+
     for cardKey, cardData in data.items():
         if SHIFT_REGX.search(cardKey):
-            shift = _CardDict(cardData)
+            shift0 = _ImportFiles(cardData, errshft)
+            for key, vals in shift0.items():
+                shift[key] = [val for val in vals.split()]
+
+
     if shift != {} and serpent != {}:
         raise ControlFileError(
             "shift and serpent cards can not be provided together. \nEither "
@@ -468,7 +479,8 @@ def _CleanFile(dataFile):
             tline = _StripLine(tline)
             if tline.strip() == '':
                 continue
-            tline = _applyrepetition(tline)
+            tline = _repetitionIndexStar(tline)  # repetition of str*N1[N2, N3]
+            tline = _repetitionStar(tline)  # repetition of str*N
         else:
             continue
         # no comment or empty line exist at this stage
@@ -486,7 +498,7 @@ def _CleanFile(dataFile):
     return dataSets
 
 
-def _applyrepetition(tline):
+def _repetitionIndexStar(tline):
     """modify the line and apply repetition"""
     # converts FE*3[1, 2] ME*2[4, 3]--> FE1 FE3 FE5 ME4 ME7
 
@@ -553,6 +565,11 @@ def _applyrepetition(tline):
         for j in range(numRepeat):
             repeatSection = repeatSection + repeatWord + str(currIdx)+ ' '
             currIdx += incrStep
+            if currIdx < 0:
+                raise ControlFileError("Error in line \n{}\n"
+                    "The defined step N3=<{}> results in negative index {}.\n"
+                    "Change the step (N3) in the format *N1[N2, N3]"
+                    .format(tline, incrStep, currIdx))                 
         
         tline1 = tline1 + fixedStr + repeatSection
         
@@ -572,6 +589,75 @@ def _applyrepetition(tline):
 
         tline = remainLine
 
+
+def _repetitionStar(tline):
+    """modify the line and apply repetition"""
+    # converts FE*3 --> FE FE FE
+
+    msg0 ='Error when using the magic repetition star. \n'\
+        'The format is: str*N\n.'\
+
+    FlagParen = False  # flag to indicate if magic star exist in line
+    if MAGIC_REGEX.search(tline) is not None:
+        FlagParen = True
+    else:
+        return tline  # return the original sentence without any modifications
+
+    tline1 = ''  # tline decomposed into multiple line inserted into a list
+    # Loop over the entire line to identify all repetitions
+    while FlagParen:
+
+        idxcond = MAGIC_REGEX.search(tline)
+
+        # process the following section in tline 'template univ*3'
+        procsLine = tline[0:idxcond.span()[1]]
+
+        # only the magic section '*3'
+        magicSection = tline[idxcond.span()[0]:idxcond.span()[1]]
+        
+        # Repeat the following section without the magic card
+        repeatLine = procsLine[0:idxcond.span()[0]]
+        
+        # Obtain the repeat word if exists
+        allWords = _str2vec(repeatLine, dtype=str)
+        if allWords == []:
+            raise ControlFileError("Error in line {}\n with the string "
+                              "<{}>.\n{}".format(tline, repeatLine, msg0))
+
+        repeatWord = allWords[-1]  # only this str is repeated
+        fixedStr = ' '
+        if len(allWords) > 1:
+            for val in allWords[0:-1]:
+                fixedStr = fixedStr + ' ' + val  # str not be repeated
+            
+        # convert the number of repetitions to integer from string    
+        try:
+            numRepeat = int(magicSection[1:])
+        except:
+            raise ControlFileError("Error in line {}\n with number of repeats "
+                              "<{}>.\n{}".format(tline, magicSection, msg0)) 
+
+        repeatSection = ' '
+        for j in range(numRepeat):
+            repeatSection = repeatSection + repeatWord + ' '
+                    
+        tline1 = tline1 + fixedStr + repeatSection
+        
+        # remaining of the sentence
+        try:
+            remainLine = tline[idxcond.span()[1]:]
+        except:
+            return tline1
+        
+        # flag to indicate if magic star exist in line
+        FlagParen = False  
+        if MAGIC_REGEX.search(remainLine) is not None:
+            FlagParen = True
+        else:
+            tline1 = tline1 + ' ' + remainLine
+            return tline1
+
+        tline = remainLine
 
 
 def _ProcessSetLine(tline):
@@ -628,7 +714,10 @@ def _CardDict(tlines):
                                    " line:\n{}".format(tline))            
         name = strList[0]
         vals = strList[1:]
-        cardData[name] = vals
+        if name not in cardData:
+            cardData[name] = vals
+        else:
+            cardData[name] = cardData[name] + vals
         
     return cardData
 
