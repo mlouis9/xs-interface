@@ -28,10 +28,10 @@ inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
 xs = Main(inputFile)
 
 # Read xs data and templates and populate data
-xs.Read()
+xs.Read(readTemplate=True)
 
 # Write data to txt files
-# xs.Write()  # I am not writing anything here
+xs.Write()  # I am not writing anything here
 
 
 xscond = xs.Condense([10.0E+06, 0.0])
