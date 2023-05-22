@@ -5,7 +5,7 @@ Main class object that connects and executes all the reading, storing and
 printing cabalities.
 
 Created on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
-Last updated on Wed May 03 17:30:00 2023 @author: Dan Kotlyar
+Last updated on Sat May 20 06:30:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -18,7 +18,7 @@ Write - 07/22/2022 - DK
 Table - 07/22/2022 - DK
 Values - 07/22/2022 - DK
 ValidateMap - 05/02/2023 - DK
-CoreValues - 05/03/2023 - DK
+CoreValues - 05/20/2023 - DK
 Condense - 05/03/2023 - DK
 
 """
@@ -28,7 +28,7 @@ import copy
 from xsInterface.functions.readcontroldict import Read
 from xsInterface.functions.readinput import ReadInput
 from xsInterface.functions.readtemplate import ReadTemplate
-from xsInterface.errors.checkerrors import _inlist, _islist
+from xsInterface.errors.checkerrors import _inlist, _islist, _isequallength
 
 
 ALLOWED_MANIPULATION = ['multiply', 'divide']
@@ -85,16 +85,21 @@ class Main():
         self.dataFiles = {}
         self.core = core
 
-    def Read(self, readTemplate=True):
+    def Read(self, readUniverses=True, readTemplate=False,
+             readMapTemplate=False):
         """Read universes cross-section data and associated templates
         
         The ``Read`` method also populates the template files with data. 
 
         Parameters
         ----------
-        templateRead : bool
+        readTemplate : bool
             flag that indicates if templates need to be read and populated
             with data
+        readUniverses : bool
+            flag that indicates if cross sections for different universes
+            need to be read
+
 
 
         Returns
@@ -105,13 +110,24 @@ class Main():
 
         """
         
-        # Read the data for all the universes
-        self.universes = ReadInput(self.externalIds, **self.univfiles)
+        if readUniverses:
+            # Read the data for all the universes
+            self.universes = ReadInput(self.externalIds, **self.univfiles)
         
         # check if a core is provided and verify universes against channels
         self.ValidateMap()
 
-        if not readTemplate:
+        if readTemplate and readMapTemplate:
+            print('readTemplate and readMapTemplate cannot be both '
+                  'true.\nreadMapTemplate is set as True and '
+                  'readTemplate is swtiched to False.')
+            readTemplate = False
+
+        if readMapTemplate:
+            self._ReadCoreMap()
+            return
+
+        if not readTemplate:  # stop here if templates do not need to be ran
             return
 
         # Read templates
@@ -254,6 +270,18 @@ class Main():
         return condObj
 
 
+    def _Attributes(self):
+        """obtain all the attribues stored for every universe"""
+        
+        attrs = {}  # keys represent the universe Id and values the attributes
+        for univId in self.universes.universeIds:
+            rc, states, msets =\
+                self.universes.universes[univId]
+            attrs[univId] = rc.macro+rc.micro+rc.kinetics+rc.meta
+            
+
+        return attrs
+
 
     def CoreValues(self, attrs, chIds=None, volManip=None, **kwargs):
         """Obtain the values for multiple attributes and all channels & layers.
@@ -270,7 +298,7 @@ class Main():
         chIds : list of string
             list with all the channel names. If None, the results for all the
             channels is provided.
-        volManip : string
+        volManip : string or list of string
             volume manipulation ['multiply', 'divide']. Default is None.
         kwargs : named arguments
             keys represent the state/branch name and value represent the values
@@ -293,7 +321,7 @@ class Main():
         --------
         >>> xs.CoreValues(['infkappa', 'infsp0'], 
         ...              chIds=['S1', 'S2', 'S3', 'S4'], 
-        ...              volManip=None, 
+        ...              volManip=[None]*4, 
         ...              history=[['nom', 'nom', 'nom', 'nom']]*4,
         ...              time=[[0.0, 0.0, 0.0, 0.0]]*4, 
         ...              fuel=[[900, 900, 900, 900]]*4, 
@@ -301,7 +329,7 @@ class Main():
         ...              dens=[[700, 700, 700, 700]]*4)
         >>> xs.CoreValues('infflx', 
         ...              chIds=['S1', 'S2', 'S3', 'S4'], 
-        ...              volManip='divide', 
+        ...              volManip=['divide'], 
         ...              history=[['nom', 'nom', 'nom', 'nom']]*4,
         ...              time=[[0.0, 0.0, 0.0, 0.0]]*4, 
         ...              fuel=[[900, 900, 900, 900]]*4, 
@@ -310,21 +338,26 @@ class Main():
         """
 
         
-
         if chIds is None:
             chIds = self.core.chIds
             
         if isinstance(attrs, str):
-            attrs = [attrs]  # convert to a string
+            attrs = [attrs]  # convert to a list
             
         _islist(attrs, "Attributes")
-
-        nchannels = len(chIds)  # number of channels
+        nattrs = len(attrs)  # number of attributes
         
+        if (isinstance(volManip, str)) or (volManip is None):
+            volManip = [volManip]*nattrs  # duplicate as number of channels
+        else:
+            _islist(volManip, "volManip")
+        _isequallength(volManip, nattrs, "volManip")
+
+       
+        nchannels = len(chIds)  # number of channels
         results = {}  # create a dictionary to host all the results
         for attr in attrs:
             results[attr] = [None]*nchannels
-        
         
         # check that the states for all the channels are provided            
         for key, value in kwargs.items():
@@ -340,10 +373,10 @@ class Main():
             for key, value in kwargs.items():
                 state[key] = value[idx]   
         
-            for attr in attrs:
+            for jattr, attr in enumerate(attrs):
                 # Evaluate the results for a specific channel
                 results[attr][idx] =\
-                    self._ChannelValues(chId, attr, volManip, **state)
+                    self._ChannelValues(chId, attr, volManip[jattr], **state)
         
             
         return results
@@ -440,4 +473,41 @@ class Main():
                     _inlist(univ, "universe", self.universes.universeIds)
                 
                       
+    def _ReadCoreMap(self):
+        """Write the cross sections for all the channels and layers
+        
+        The ``CoreWrite`` method populates the template files with data. 
+
+        Returns
+        -------
+        dataFiles : dict
+            keys represent universes or dummy variables; values represent
+            correponding files populated with data.
+
+        """
+        
+
+        # check if a core is provided and verify universes against channels
+        self.ValidateMap()
+
+        # get all the attributes for each of the universes
+        attrs = self._Attributes()
+
+        # Read templates
+        self.dataFiles = {}
+        
+        self._corexs = {}
+        
+        # Read template files
+        for tmplkey, tmplfile in self.templates.items():
+            for ch, layers in self.core.channels.items():
+                for idx, layer in enumerate(layers['layers']):
+                    fileId =\
+                        self.outputs[tmplkey]+ch+'_'+str(idx)+'_'+layer+'_'+\
+                        self.formats['postfix']        
+            
+            
+                    self.dataFiles[fileId] =\
+                        ReadTemplate(tmplfile, self.universes, self.formats,
+                                     layer)
 

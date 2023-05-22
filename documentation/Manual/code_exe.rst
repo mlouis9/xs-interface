@@ -22,6 +22,34 @@ Read universes' data and templates files and populate data.
 
 	xs.Read()
 
+The ``Read method`` has some flexibility in filtering what data to read and what data to read.
+
+**Syntax:**
+
+.. code::
+
+	xs.Read(readUniverses, readTemplate, readMapTemplate)
+	
+where,
+
+- ``readUniverses`` (boolean) indicates whether cross sections for all the universes should be read. The defualt is True.
+- ``readTemplate`` (boolean) indicates whether template files should be read. Default is False. This is useful if the data is not written anywhere but rather just read.
+- ``readMapTemplate`` (boolean) indicates whether the data should be read for each channel and layer, which might contain the same universes. Default is False.
+- ``readTemplate`` and ``readMapTemplate`` cannot be both True. If they are, then reading and data storing is performed according to ``readMapTemplate=True`` and  ``readTemplate=False``.
+
+
+**Example 1:** Read only the universes data.
+
+.. code::
+
+	xs.Read(readUniverses=True)
+
+
+**Example 2:** Read cross section data and templates and populate data for each channel and layer.
+
+.. code:: 
+
+	xs.Read(readUniverses=False, readTemplate=True, readMapTemplate=True)
 
 //////////////////////////////////////////////////////////////////
 
