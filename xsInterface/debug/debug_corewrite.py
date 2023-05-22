@@ -31,10 +31,13 @@ xs = Main(inputFile)
 xs.Read(readUniverses=True)
 
 # Read xs data and templates and populate data
-xs.Read(readUniverses=False, readTemplate=True)
+xs.Read(readUniverses=False, readTemplate=True, readMapTemplate=True)
 
 # Write data to txt files
-xs.Write()  # I am not writing anything here
+# xs.Write()  # I am not writing anything here
+
+# Write data from all the channels and layers to txt file
+xs.Write()
 
 
 xscond = xs.Condense([10.0E+06, 0.0])
@@ -50,7 +53,6 @@ fuel = [[900, 900, 900, 900]]*nchs
 boron = [[0, 0, 0, 0]]*nchs
 dens = [[700, 700, 700, 700]]*nchs
 
-xs._Attributes()
 
 xs.CoreValues(['infkappa', 'infsp0'], 
               chIds=['S1', 'S2', 'S3', 'S4'], 
@@ -71,15 +73,7 @@ xscond.CoreValues('infflx',
               boron=[[0, 0, 0, 0]]*nchs,
               dens=[[700, 700, 700, 700]]*nchs)
 
-# do not provide the attributes (and no data manipulation)
-xs.CoreValues(None, 
-              chIds=['S1', 'S2', 'S3', 'S4'], 
-              volManip=None, 
-              history=[['nom', 'nom', 'nom', 'nom']]*nchs,
-              time=[[0.0, 0.0, 0.0, 0.0]]*nchs, 
-              fuel=[[900, 900, 900, 900]]*nchs, 
-              boron=[[0, 0, 0, 0]]*nchs,
-              dens=[[700, 700, 700, 700]]*nchs)
+
 
 
 # -----------------------------------------------------------------------------

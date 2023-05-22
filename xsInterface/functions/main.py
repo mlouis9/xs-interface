@@ -85,7 +85,8 @@ class Main():
         self.dataFiles = {}
         self.core = core
 
-    def Read(self, readUniverses=True, readTemplate=True):
+    def Read(self, readUniverses=True, readTemplate=False,
+             readMapTemplate=False):
         """Read universes cross-section data and associated templates
         
         The ``Read`` method also populates the template files with data. 
@@ -116,7 +117,17 @@ class Main():
         # check if a core is provided and verify universes against channels
         self.ValidateMap()
 
-        if not readTemplate:
+        if readTemplate and readMapTemplate:
+            print('readTemplate and readMapTemplate cannot be both '
+                  'true.\nreadMapTemplate is set as True and '
+                  'readTemplate is swtiched to False.')
+            readTemplate = False
+
+        if readMapTemplate:
+            self._ReadCoreMap()
+            return
+
+        if not readTemplate:  # stop here if templates do not need to be ran
             return
 
         # Read templates
@@ -272,7 +283,7 @@ class Main():
         return attrs
 
 
-    def CoreValues(self, attrs=None, chIds=None, volManip=None, **kwargs):
+    def CoreValues(self, attrs, chIds=None, volManip=None, **kwargs):
         """Obtain the values for multiple attributes and all channels & layers.
 
         This method returns a dictionary with keys representing attributes
@@ -327,12 +338,6 @@ class Main():
         """
 
         
-        # if not provided assume that attributes are the same for all universes
-        if attrs is None:
-            for key, vals in self._Attributes().items():
-                attrs = vals
-                break
-
         if chIds is None:
             chIds = self.core.chIds
             
@@ -468,7 +473,7 @@ class Main():
                     _inlist(univ, "universe", self.universes.universeIds)
                 
                       
-    def CoreWrite(self, data):
+    def _ReadCoreMap(self):
         """Write the cross sections for all the channels and layers
         
         The ``CoreWrite`` method populates the template files with data. 
@@ -485,6 +490,9 @@ class Main():
         # check if a core is provided and verify universes against channels
         self.ValidateMap()
 
+        # get all the attributes for each of the universes
+        attrs = self._Attributes()
+
         # Read templates
         self.dataFiles = {}
         
@@ -495,7 +503,7 @@ class Main():
             for ch, layers in self.core.channels.items():
                 for idx, layer in enumerate(layers['layers']):
                     fileId =\
-                        self.outputs[tmplkey]+ch+'_'+idx+'_'+layer+'_'+\
+                        self.outputs[tmplkey]+ch+'_'+str(idx)+'_'+layer+'_'+\
                         self.formats['postfix']        
             
             
