@@ -107,7 +107,7 @@ where,
 
 - ``attrs`` is string or list of strings. Name/s of the attribute/s.
 - ``chIds`` is a list of strings. List with all the channel names. If None, the results for all the channels are provided.
-- ``volManip`` is a string. Volume manipulation that be: 'multiply' or 'divide' or None. Default is None.
+- ``volManip`` is a string or list of strings. Volume manipulation that be: 'multiply' or 'divide' or None. Default is None. If this is a list then the number of components must equal to the number of attributes. 
 - ``kwargs`` represent the different states (i.e., branches, history, time) for which data is obtained.
 - ``kwargs`` is named arguments. keys represent the state/branch name and value represent the values
 
@@ -132,6 +132,19 @@ or
 	xs.CoreValues('infflx', 
 	             chIds=None, 
 	             volManip='divide', 
+	             history=[['nom', 'nom', 'nom', 'nom']]*4,
+	             time=[[0.0, 0.0, 0.0, 0.0]]*4, 
+	             fuel=[[900, 900, 900, 900]]*4, 
+	             boron=[[0, 0, 0, 0]]*4,
+	             dens=[[700, 700, 700, 700]]*4)
+
+or
+
+.. code::
+
+	xs.CoreValues(['infkappa', 'infsp0'], 
+	             chIds=['S1', 'S2', 'S3', 'S4'], 
+	             volManip=[None, 'multiply'], 
 	             history=[['nom', 'nom', 'nom', 'nom']]*4,
 	             time=[[0.0, 0.0, 0.0, 0.0]]*4, 
 	             fuel=[[900, 900, 900, 900]]*4, 

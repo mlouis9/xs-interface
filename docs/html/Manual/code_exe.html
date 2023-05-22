@@ -48,6 +48,26 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Read</span> <span class="pre">method</span></code> has some flexibility in filtering what data to read and what data to read.</p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">readUniverses</span><span class="p">,</span> <span class="n">readTemplate</span><span class="p">,</span> <span class="n">readMapTemplate</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where,</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">readUniverses</span></code> (boolean) indicates whether cross sections for all the universes should be read. The defualt is True.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">readTemplate</span></code> (boolean) indicates whether template files should be read. Default is False. This is useful if the data is not written anywhere but rather just read.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">readMapTemplate</span></code> (boolean) indicates whether the data should be read for each channel and layer, which might contain the same universes. Default is False.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">readTemplate</span></code> and <code class="docutils literal notranslate"><span class="pre">readMapTemplate</span></code> cannot be both True. If they are, then reading and data storing is performed according to <code class="docutils literal notranslate"><span class="pre">readMapTemplate=True</span></code> and  <code class="docutils literal notranslate"><span class="pre">readTemplate=False</span></code>.</p></li>
+</ul>
+<p><strong>Example 1:</strong> Read only the universes data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">readUniverses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Example 2:</strong> Read cross section data and templates and populate data for each channel and layer.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">readUniverses</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">readTemplate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">readMapTemplate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <hr class="docutils" />
 <section id="manipulation-methods">
