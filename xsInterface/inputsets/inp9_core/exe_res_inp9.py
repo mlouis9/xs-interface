@@ -19,23 +19,32 @@ controlFile = ".\\res\\controldict"
 # Read the control dict
 xs = Main(controlFile)
 
-# Read xs data and templates and populate data
-xs.Read(what='universes')  # read only the universe data
-xs.Read(what='templates')  # read the template data
+# Read xs data and templates and populate data (for all channels and layers)
+xs.Read(readUniverses=True, readMapTemplate=True)  
+
 # Write data to txt files
 # xs.Write()  # write data
 
+# Get results
+chIds=list(xs.core.chIds)
+nchs = len(chIds)
+nlayers = 22
 
+results, chIds =\
+xs.CoreValues(['infnsf', 'infflx'], 
+              chIds=xs.core.chIds, 
+              volManip=None, 
+              history=[['nom']*nlayers]*nchs,
+              time=[[0.0]*nlayers]*nchs, 
+              dens=[[700.0]*nlayers]*nchs,)
 
+# Plot results
+xs.SlicePlot(results['infflx'], layer=3, markersize=160, spacesize=60.0,
+             textsize=5, chnls2Ignore='R', textcolor='w', textweight="bold", 
+             precision=".2f", edge=2.0, norm=1E+16, label="flux [1E+16]")
 
+xs.SlicePlot(results['infflx'], layer=15, markersize=300, spacesize=2.0,
+             textsize=5, chnls2Ignore='R', textcolor='w', textweight="bold", 
+             precision=".2f", edge=0.5, norm=1E+16, label="flux [1E+16]", 
+             includeCols=[0, 8], includeRows=[0, 8])
 
-# obtain results:
-# xs.Table("univ0", ['infkappa'], time=0.0, history='nom', fuel=900, boron=750,
-#           dens=700)
-
-# # obtain results:
-# xs.Values("univ0", 'infflx', time=0.0, history='nom',
-#           dens=700)
-# xs.Values("fuel0", 'infkappa', time=0.0, history='nom', boron=500, dens=700)
-# xs.Values("fuel0", 'infkappa', fuel=900, boron=0, dens=700,time=0.0, history='nom')
-# xs.Values("ref0", "infsp0", fuel=900)
