@@ -31,10 +31,10 @@ xs = Main(inputFile)
 xs.Read(readUniverses=True)
 
 # Read xs data and templates and populate data
-xs.Read(readUniverses=False, readTemplate=True)
+xs.Read(readUniverses=False, readMapTemplate=True)
 
 # Write data to txt files
-xs.Write()  # I am not writing anything here
+# xs.Write()  # I am not writing anything here
 
 
 xscond = xs.Condense([10.0E+06, 0.0])
@@ -59,6 +59,7 @@ xs.CoreValues(['infkappa', 'infsp0'],
               boron=[[0, 0, 0, 0]]*nchs,
               dens=[[700, 700, 700, 700]]*nchs)
 
+flx2g, chIds0 =\
 xs.CoreValues('infflx', 
               chIds=['S1', 'S2', 'S3', 'S4'], 
               volManip='divide',  # divide the flux by volume
@@ -69,14 +70,23 @@ xs.CoreValues('infflx',
               dens=[[700, 700, 700, 700]]*nchs)
 
 
-xscond.CoreValues('infflx', 
-              chIds=['S1', 'S2', 'S3', 'S4'], 
-              volManip='divide',  # divide the flux by volume
-              history=[['nom', 'nom', 'nom', 'nom']]*nchs,
-              time=[[0.0, 0.0, 0.0, 0.0]]*nchs, 
-              fuel=[[900, 900, 900, 900]]*nchs, 
-              boron=[[0, 0, 0, 0]]*nchs,
-              dens=[[700, 700, 700, 700]]*nchs)
+flx, chIds =\
+    xscond.CoreValues('infflx', 
+                      chIds=['S1', 'S2', 'S3', 'S4'], 
+                      volManip='divide',  # divide the flux by volume
+                      history=[['nom', 'nom', 'nom', 'nom']]*nchs,
+                      time=[[0.0, 0.0, 0.0, 0.0]]*nchs, 
+                      fuel=[[900, 900, 900, 900]]*nchs, 
+                      boron=[[0, 0, 0, 0]]*nchs,
+                      dens=[[700, 700, 700, 700]]*nchs)
+
+
+xscond.SlicePlot(flx['infflx'], shift=[0, 0.5, 0])
+
+# -----------------------------------------------------------------------------
+#                 PLOT RESULTS
+# -----------------------------------------------------------------------------
+
 
 
 # -----------------------------------------------------------------------------

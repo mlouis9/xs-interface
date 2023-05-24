@@ -39,8 +39,8 @@
 <p>After the execution of <code class="docutils literal notranslate"><span class="pre">xs.Read()</span></code>, the data can be directly obtained by using multiple methods.</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 30%" />
-<col style="width: 70%" />
+<col style="width: 28%" />
+<col style="width: 72%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
@@ -56,6 +56,9 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#p-corevalues"><span class="std std-ref">CoreValues</span></a></p></td>
 <td><p>Values for radial channels &amp; layers</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#p-sliceplot"><span class="std std-ref">SlicePlot</span></a></p></td>
+<td><p>Plot radial selected property distribution</p></td>
 </tr>
 </tbody>
 </table>
@@ -147,6 +150,75 @@ all channels and layers.</p>
              <span class="n">fuel</span><span class="o">=</span><span class="p">[[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
              <span class="n">boron</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
              <span class="n">dens</span><span class="o">=</span><span class="p">[[</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">]]</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="sliceplot">
+<span id="p-sliceplot"></span><h2>SlicePlot<a class="headerlink" href="#sliceplot" title="Permalink to this headline">¶</a></h2>
+<p><strong>Plot radial property distribution for a given axial layer</strong></p>
+<p>Please note that this plotting routine is only applicable after the values for all the channels and layers are obtained.
+These value can be obtained using the <code class="docutils literal notranslate"><span class="pre">CoreValues</span></code> method.</p>
+<p><em>Inputs</em>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">values</span></code> : 3-dim list. Values for all the channels, layers, and energy groups.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chIds</span></code> : identification strings of all the channels.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">layer</span></code> : int index of the axial layer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">egroup</span></code> : int index of the energy group.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">radmap</span></code> : 2-dim list of all the radial channels distribution. Default is None.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label</span></code> : str description of the output variable. A default exist
+for every parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shift</span></code> : list of int shift rows by increments of 0.5 or 1
+(negative or positive)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">norm</span></code> : float data normalization factor</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spacesize</span></code> : float determines the space between elements</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">markersize</span></code> : float hexagon/square/circles marker/shape size</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmap</span></code> : str color map</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">text</span></code> : bool flag to indicate if the text should be printed or not</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">textsize</span></code> : float size of the text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">textcolor</span></code> : str color of the text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">textweight</span></code> : str font weight of the text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">edge</span></code> : float number that creates edges in case some of the assemblies are cut. The larger is the number the more edge is created.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chnls2Ignore</span></code> : str of channels to be ignored. If the string is even partially appears in the channels naming the channel results will not be presented.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">includeRows</span></code> : list with two integers marking the first row and the last row that are included in results presentation. None indicates that all rows are included.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">includeCols</span></code> : list with two integers marking the first column and the last column that are included in results presentation. None indicates that all column are included.</p></li>
+</ul>
+<p><em>Execute</em></p>
+<p>Plot the results</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">SlicePlot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;infflx&#39;</span><span class="p">],</span> <span class="n">layer</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">160</span><span class="p">,</span> <span class="n">spacesize</span><span class="o">=</span><span class="mf">60.0</span><span class="p">,</span>
+         <span class="n">textsize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">chnls2Ignore</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="n">textcolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">textweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+         <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;.2f&quot;</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="mf">1E+16</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;flux [1E+16]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/postprocess_map_1.png" src="../_images/postprocess_map_1.png" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">SlicePlot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;infflx&#39;</span><span class="p">],</span> <span class="n">layer</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">spacesize</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+         <span class="n">textsize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">chnls2Ignore</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="n">textcolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">textweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+         <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;.2f&quot;</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="mf">1E+16</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;flux [1E+16]&quot;</span><span class="p">,</span>
+         <span class="n">includeCols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">includeRows</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+</pre></div>
+</div>
+<img alt="../_images/postprocess_map_2.png" src="../_images/postprocess_map_2.png" />
+<p><strong>Remark</strong></p>
+<p>It must be pointed out that the user is expected to generate the values and channels Ids and only then plot the results.</p>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># get the channels Ids</span>
+<span class="n">chIds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">chIds</span><span class="p">)</span>
+<span class="n">nchs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chIds</span><span class="p">)</span>
+<span class="n">nlayers</span> <span class="o">=</span> <span class="mi">22</span>
+
+<span class="c1"># obtain all the results and chIds correesponding to the results values</span>
+<span class="n">results</span><span class="p">,</span> <span class="n">chIds</span> <span class="o">=</span>\
+<span class="n">xs</span><span class="o">.</span><span class="n">CoreValues</span><span class="p">([</span><span class="s1">&#39;infnsf&#39;</span><span class="p">,</span> <span class="s1">&#39;infflx&#39;</span><span class="p">],</span>
+              <span class="n">chIds</span><span class="o">=</span><span class="n">xs</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">chIds</span><span class="p">,</span>
+              <span class="n">volManip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">history</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;nom&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">nlayers</span><span class="p">]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
+              <span class="n">time</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">]</span><span class="o">*</span><span class="n">nlayers</span><span class="p">]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
+              <span class="n">dens</span><span class="o">=</span><span class="p">[[</span><span class="mf">700.0</span><span class="p">]</span><span class="o">*</span><span class="n">nlayers</span><span class="p">]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,)</span>
+
+<span class="c1"># use the obtained results to plot data</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">SlicePlot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;infflx&#39;</span><span class="p">],</span> <span class="n">layer</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">spacesize</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+       <span class="n">textsize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">chnls2Ignore</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="n">textcolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">textweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+       <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;.2f&quot;</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="mf">1E+16</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;flux [1E+16]&quot;</span><span class="p">,</span>
+       <span class="n">includeCols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">includeRows</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
