@@ -7,7 +7,7 @@
 
 
 Created on Wed May 24 10:15:00 2023 @author: Dan Kotlyar
-Last updated on Wed May 24 10:15:00 2023 @author: Dan Kotlyar
+Last updated on Wed May 24 12:45:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -20,33 +20,23 @@ exeDyn3D - 05/24/20223 - DK
 
 import numpy as np
 import os
-import copy
 import subprocess
 
-from xsInterface.functions.lstreader import get_fluxes as getFlxDyn3d
-from xsInterface.functions.lstreader import get_keff as getKeffDyn3d
+from xsInterface.functions.lstreader import lstRead
 
 
-
-
-def exeDyn3D(casedir, xsdir, casefile, exefile, prefixFile='xs', postFile='.dat'):
-    """write cross sections into a nemtab format and execute DYN3D
+def exeDyn3D(casedir, casefile, exefile):
+    """Execute DYN3D and collect results
    
         
     Parameters
     ----------
-    dyn3dFiles : dict
-        describes position of files and directories.
-        {'xsdir': 'string', 'casedir': 'string', 'casefile': 'string', 
-         'exefile': 'string''}
-         xsdir - full directory where the cross sections are
-         casedir - full (relative or absolute) directory of _kin file
-         casefile - name of the case file
-         exefile - name of the file with the actual execution command
-    prefixFile : str
-        a prefix that starts the cross section file name
-    postFile : str
-        a postfix that ends the cross section file name
+    casedir : str
+        full (relative or absolute) directory where the _kin file is located
+    casefile : str
+        name of the case file
+    exefile : str 
+        name of the file with the actual execution command
 
     Returns
     ------
@@ -81,32 +71,9 @@ def exeDyn3D(casedir, xsdir, casefile, exefile, prefixFile='xs', postFile='.dat'
     lstFile = os.path.join(casedir, casefile+'_lst.dat')
 
     # obtain results from dyn3d _lst file
-    dyn3dResult = {}
-    dyn3dResult['keff'] = getKeffDyn3d(lstFile)
-    dyn3dResult['flux'] = getFlxDyn3d(lstFile)
+    keff, fluxes = lstRead(lstFile)
     
-    normFlux = np.array(dyn3dResult['flux']).flatten()
+    normFlux = np.array(fluxes).flatten()
     normFlux /= normFlux.sum()
     
-
-    return dyn3dResult, normFlux
-
-    
-
-
-            
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return keff, fluxes, normFlux

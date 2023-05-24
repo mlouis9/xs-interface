@@ -34,7 +34,7 @@ xs.Read(readUniverses=True)
 xs.Read(readUniverses=False, readMapTemplate=True)
 
 # Write data to txt files
-# xs.Write()  # I am not writing anything here
+xs.Write()  # I am not writing anything here
 
 
 xscond = xs.Condense([10.0E+06, 0.0])
@@ -81,7 +81,8 @@ flx, chIds =\
                       dens=[[700, 700, 700, 700]]*nchs)
 
 
-xscond.SlicePlot(flx['infflx'], shift=[0, 0.5, 0])
+xscond.SlicePlot(flx['infflx'], shift=[0, 0.5, 0], layer=1, norm=1E+17,
+                 markersize=250, spacesize=5, geomarker='s')
 
 # -----------------------------------------------------------------------------
 #                 PLOT RESULTS
