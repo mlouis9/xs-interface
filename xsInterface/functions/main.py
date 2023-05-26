@@ -524,12 +524,10 @@ class Main():
 
         Examples
         --------
-        >>> core.ValueChannel('ch1', 'infkappa', None,
-        ...                   history=['nom', 'nom', 'nom', 'nom'],
-        ...                   time=[0.0, 0.0, 0.0, 0.0],
-        ...                   fuel=[900, 900, 900, 900],
-        ...                   boron=[0, 0, 0, 0],
-        ...                   dens=[700, 700, 700, 700])
+        >>> xs.PopulateCoreData(attributes=['infkappa', 'infsp0', 'infflx'],
+        ...                     states=states, 
+        ...                     volManip=[None, None, 'divide'],
+        ...                     sph=None, adf=adfvals)
 
         """
         
