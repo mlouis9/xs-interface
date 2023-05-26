@@ -21,6 +21,7 @@ ValidateMap - 05/02/2023 - DK
 CoreValues - 05/20/2023 - DK
 Condense - 05/03/2023 - DK
 SlicePlot - 05/24/2023 - DK
+PopulateCoreData - 05/25/2023 - DK
 
 """
 
@@ -82,17 +83,20 @@ class Main():
         # read the main 
         universes, outputs, templates, links, formats, externalIds, core =\
             Read(inputFile)
-        self.univfiles = universes
-        self.outputs = outputs
-        self.templates = templates
-        self.links = links
-        self.formats = formats
-        self.externalIds = externalIds
-        self.dataFiles = {}
+        self._univfiles = universes
+        self._outputs = outputs
+        self._templates = templates
+        self._links = links
+        self._formats = formats
+        self._externalIds = externalIds
+        self._dataFiles = {}
         self.core = core
+        self.chIds = {}
+        self.corevalues = {}
+        self.corestates = {}
 
     def Read(self, readUniverses=True, readTemplate=False,
-             readMapTemplate=False):
+             readMapTemplate=False, userdata=None):
         """Read universes cross-section data and associated templates
         
         The ``Read`` method also populates the template files with data. 
@@ -105,7 +109,10 @@ class Main():
         readUniverses : bool
             flag that indicates if cross sections for different universes
             need to be read
-
+        userdata : dict
+            contains the data for all the attributes in a 3-dim list
+            with the structure #channels x #layers x #groups
+            keys represent the attributes.
 
 
         Returns
@@ -118,7 +125,7 @@ class Main():
         
         if readUniverses:
             # Read the data for all the universes
-            self.universes = ReadInput(self.externalIds, **self.univfiles)
+            self.universes = ReadInput(self._externalIds, **self._univfiles)
         
         # check if a core is provided and verify universes against channels
         self.ValidateMap()
@@ -130,29 +137,29 @@ class Main():
             readTemplate = False
 
         if readMapTemplate:
-            self._ReadCoreMap()
+            self._ReadCoreMap(userdata)
             return
 
         if not readTemplate:  # stop here if templates do not need to be ran
             return
 
         # Read templates
-        self.dataFiles = {}
+        self._dataFiles = {}
         
         # Read template files
-        for tmplkey, tmplfile in self.templates.items():
-            if self.links != {} and tmplkey in self.links:
-                for univId in self.links[tmplkey]:
+        for tmplkey, tmplfile in self._templates.items():
+            if self._links != {} and tmplkey in self._links:
+                for univId in self._links[tmplkey]:
                     # include the univId in the name of the file
                     fileId =\
-                        self.outputs[tmplkey]+univId+self.formats['postfix']
-                    self.dataFiles[fileId] =\
-                        ReadTemplate(tmplfile, self.universes, self.formats,
+                        self._outputs[tmplkey]+univId+self._formats['postfix']
+                    self._dataFiles[fileId] =\
+                        ReadTemplate(tmplfile, self.universes, self._formats,
                                      univId)
             else:
-                fileId = self.outputs[tmplkey]
-                self.dataFiles[fileId] = ReadTemplate(tmplfile, self.universes,
-                                                      self.formats)                
+                fileId = self._outputs[tmplkey]
+                self._dataFiles[fileId] = ReadTemplate(tmplfile, self.universes,
+                                                      self._formats)                
 
 
 
@@ -160,11 +167,11 @@ class Main():
     def Write(self, writemode="w"):
         """Write the data file structure into dedicated output files"""
         
-        if self.dataFiles == {}:
+        if self._dataFiles == {}:
             raise ValueError("!!!No data exist. Execute the ``Read`` method.")
         
         print("\n")
-        for inpFile, dataFile in self.dataFiles.items():
+        for inpFile, dataFile in self._dataFiles.items():
             print("... Writing to ...\n{}".format(inpFile))   
             # write the output files
             with open(inpFile, writemode) as txtFile:
@@ -479,6 +486,89 @@ class Main():
                     _inlist(univ, "universe", self.universes.universeIds)
                 
 
+    def PopulateCoreData(self, attributes, states, volManip, **addattrs):
+        """Populate new data for all the channels and layers
+    
+        Instead of using the universes directly, the data is evaluated for
+        the different channels and layers.
+        
+    
+        Parameters
+        ----------
+        attributes : list
+            all the attributes required for the problem
+        states : dict
+            dict with keys as the states names, e.g., history, time, and pert names 
+            and values as 2-dim list with the values of the state for channels and
+            layers. e.g., time = [[0.0, 0.0, 0.0, 0.0]]*5
+        volManip : string or list of string
+            volume manipulation ['multiply', 'divide']. Default is None.
+        addattrs : **kwargs
+            keys are the names of the new variables and corrsponding values
+            are the values for these new attributes. If the values are None
+            then the attribute is reset with unity values for all channels 
+            and layers. 
+    
+       
+        Attributes
+        ----------
+        _states : dict
+            dict with keys as the states names, e.g., history, time, and pert names 
+            and values as 2-dim list with the values of the state for channels and
+            layers. e.g., time = [[0.0, 0.0, 0.0, 0.0]]*5
+        _corevalues : dict
+            keys represent attributes and values are 3-dim lists corrsponding
+            to states provided in _states
+        _chIds : list
+            list with all the names for all the channels
+
+        Examples
+        --------
+        >>> xs.PopulateCoreData(attributes=['infkappa', 'infsp0', 'infflx'],
+        ...                     states=states, 
+        ...                     volManip=[None, None, 'divide'],
+        ...                     sph=None, adf=adfvals)
+
+        """
+        
+        # obtain all the values for the reference points
+        nomvalues, chIds =\
+        self.CoreValues(attributes, 
+                        chIds=self.core.chIds, 
+                        volManip=volManip, 
+                        **states)
+        
+        chIds = list(chIds)
+        nchs = len(chIds)  # number of channels
+        ng = len(nomvalues[attributes[0]][0][0])  # number of energy groups
+
+        for key, value in addattrs.items():
+            if value is None:
+                x0 = [1.0]*nchs
+                for ich, ch in enumerate(nomvalues[attributes[0]]):
+                    nlayers = len(ch)  # number of layers
+                    x0[ich] = [np.ones(ng)]*nlayers
+                nomvalues[key] = x0  # add the new attribute
+            else:
+                _islist(value, "Values for {}".format(key))
+                _isequallength(value, nchs, "1st-dim for {}".format(key))
+                for ich, ch in enumerate(nomvalues[attributes[0]]):
+                    nlayers = len(ch)  # number of layers
+                    _isequallength(value[ich], nlayers, "2nd-dim for {}"
+                                   .format(key))
+                    for layer in value[ich]:
+                         _isequallength(layer, ng, 
+                                        "3rd-dim for {}".format(key))
+                nomvalues[key] = value  # add the new attribute
+
+        self.core.chIds = chIds
+        self.core.corevalues = nomvalues
+        self.core.corestates = states
+
+        # Read xs data and templates and populate data for channels & layers
+        self.Read(readUniverses=False, readMapTemplate=True,
+                  userdata = nomvalues)   
+
     def SlicePlot(self, values, chIds=None, layer=0, egroup=0, radmap=None,
                   label=None, shift=None,  geomarker='s', norm=1.0,
                   spacesize=1.0, markersize=500, cmap='viridis', text=True, 
@@ -583,7 +673,7 @@ class Main():
 
 
 
-    def _ReadCoreMap(self):
+    def _ReadCoreMap(self, attrsvals):
         """Read and store cross sections for all the channels and layers
         
 
@@ -603,20 +693,39 @@ class Main():
         # attrs = self._Attributes()
 
         # Read templates
-        self.dataFiles = {}
-        
-        self._corexs = {}
-        
+        self._dataFiles = {}
+                
         # Read template files
-        for tmplkey, tmplfile in self.templates.items():
-            for ch, layers in self.core.channels.items():
+        for tmplkey, tmplfile in self._templates.items():
+            for ich, ch in enumerate(self.core.chIds):
+                layers = self.core.channels[ch]
                 for idx, layer in enumerate(layers['layers']):
                     fileId =\
-                        self.outputs[tmplkey]+ch+'_'+str(idx)+'_'+layer+\
-                        self.formats['postfix']        
+                        self._outputs[tmplkey]+ch+'_'+str(idx)+'_'+layer+\
+                        self._formats['postfix']        
+            
+                    attrval = self._ChannelLayerValue(attrsvals, ich, idx)        
             
             
-                    self.dataFiles[fileId] =\
-                        ReadTemplate(tmplfile, self.universes, self.formats,
-                                     layer)
+                    self._dataFiles[fileId] =\
+                        ReadTemplate(tmplfile, self.universes, self._formats,
+                                     layer, attrval)
+
+    @staticmethod
+    def _ChannelLayerValue(attrsvals, ich, ilayer):
+        """obtain the values for all the attributes for a channel-layer pair"""
+        
+        attrval = {}
+        for attr, vals in attrsvals.items():
+            attrval[attr] = np.array(vals[ich][ilayer])
+        return attrval
+
+
+# class _Container():
+#     """General container to hold whatever data is provided to it"""
+
+#     def __init__(self, **kwargs):     
+#         for key, value in kwargs.items():
+#             setattr(self, key, value)
+
 

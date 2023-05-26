@@ -5,7 +5,7 @@ This file contains certain regular-like expressions which are repeated
 and replaced.
 
 Created on Fri July 01 06:00:00 2022 @author: Dan Kotlyar
-Last updated on Sat Aug 13 07:00:00 2022 @author: Dan Kotlyar
+Last updated on Thu May 25 13:00:00 2023 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -15,7 +15,7 @@ Repetition  - 07/01/2022 - DK
 ReadTemplate  - 07/05/2022 - DK
 _CleanDataCopy - 07/05/2022 - DK
 _PopulateValues - 07/21/2022 - DK
-_PopulateValues - 08/13/2022 - DK
+_PopulateValues [uservals] - 05/25/2023 - DK
 """
 
 from pathlib import Path
@@ -47,7 +47,7 @@ VALUES_REGEX = compile(r'"values"\{')  # used to identify "values"
 #MAX_N_ROW = 5  # maximum number of values printed in a row
 
 
-def ReadTemplate(tmplFile, universes, formats, univId=None):
+def ReadTemplate(tmplFile, universes, formats, univId=None, uservals=None):
     """Read the template input file defined by the user
 
     This function reads the template file and manipulates it to create
@@ -99,7 +99,7 @@ def ReadTemplate(tmplFile, universes, formats, univId=None):
     dataClean = _CleanDataCopy(dataDup, formats["var"])
 
     # Populate data
-    dataPopulated = _PopulateValues(dataClean, universes, formats)
+    dataPopulated = _PopulateValues(dataClean, universes, formats, uservals)
 
     return dataPopulated
 
@@ -116,7 +116,7 @@ def _InsertUnivId(dataIn, univId):
         dataOut.append(tline)
     return dataOut
 
-def _PopulateValues(dataIn, universes, formats):
+def _PopulateValues(dataIn, universes, formats, uservals=None):
     """Replace states and attrs with corresponding states and atrrs values"""
 
     # correct format message    
@@ -236,8 +236,11 @@ def _PopulateValues(dataIn, universes, formats):
             
             # Get values
             try:
-                vals =\
-                    universes.Values(univId, attr, **states)[attr]              
+                if uservals is not None and attr in uservals:
+                    vals = [uservals[attr]]
+                else:
+                    vals =\
+                        universes.Values(univId, attr, **states)[attr]              
             except ValueError as detail:
                 msg0 = 'The "values" command is not properly defined.\n{}\n{}'\
                         'Follow the format:\n.'.format(tline, detail)

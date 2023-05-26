@@ -151,7 +151,11 @@ class Map:
             for jcol, col in enumerate(row):
                 self.idxmap[irow][jcol] = c
                 c += 1
-                
+        
+        # core operational states for the results (not used here directly)
+        self.corestates = {}
+        # core values for different attributes (not used here directly)
+        self.corevalues = {}
 
     def Channel(self, chId, universes, volumes=None):
         """Add the name, universes and volumes for a specific channel
