@@ -10,8 +10,7 @@
 
 
 set universes
-fuel C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\debug\inp10_correction\fuel
-ref C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\debug\inp10_correction\fuel
+u .\inputs\univs
 
 
 # -----------------------------------------------------------------------------
@@ -20,9 +19,8 @@ ref C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Reposito
 
 
 set serpent
-fuel 0
-ref 0
-# univId serpId1, serpId2, serpId3, ...
+u 1 2 3 4 5 6 7 8 9 10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  54  55
+
 
 
 # -----------------------------------------------------------------------------
@@ -30,7 +28,7 @@ ref 0
 # -----------------------------------------------------------------------------
 
 set templates
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\debug\inp10_correction\template0
+template0 .\inputs\template_dyn3d_2g
 
 
 # -----------------------------------------------------------------------------
@@ -38,14 +36,14 @@ template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Re
 # -----------------------------------------------------------------------------
 
 set outputs
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp10_corr\output_
+template0 .\dyn3d\xs\xs_
 
 # -----------------------------------------------------------------------------
 #                           UNIVERSE-TO-FILES LINKS 
 # -----------------------------------------------------------------------------
 
 set links
-template0 fuel0 ref0
+template0 u*36[1, 1] u54 u55
 
 # -----------------------------------------------------------------------------
 #                            FORMAT
@@ -61,21 +59,12 @@ var d
 #                            CHANNELS & MAP
 # -----------------------------------------------------------------------------
 
-# set map 0 -1 0
-set map 0 -1 0
+set map 0
     S1
-  S2  S3
-    S4  
   
 set channels
-S1 ref0 fuel0 fuel0 ref0
-S2 fuel0 fuel0 fuel0 fuel0
-S3 fuel0 fuel0 fuel0 fuel0
-S4 fuel0 fuel0 fuel0 fuel0
+S1 u54 u*36[1,1] u55
 
 
 set volumes
-S1 2.0 1.0 1.0 1.0
-S2 2.0 1.0 1.0 1.0
-S3 2.0 1.0 1.0 1.0
-S4 2.0 1.0 1.0 1.0
+S1 20.0 10.160*36 20.0

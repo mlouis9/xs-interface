@@ -5,7 +5,7 @@ Main class object that connects and executes all the reading, storing and
 printing cabalities.
 
 Created on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
-Last updated on Wed May 24 05:00:00 2023 @author: Dan Kotlyar
+Last updated on Mon May 29 04:20:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -21,7 +21,7 @@ ValidateMap - 05/02/2023 - DK
 CoreValues - 05/20/2023 - DK
 Condense - 05/03/2023 - DK
 SlicePlot - 05/24/2023 - DK
-PopulateCoreData - 05/25/2023 - DK
+PopulateCoreData - 05/29/2023 - DK
 
 """
 
@@ -33,7 +33,7 @@ import numpy as np
 from xsInterface.functions.readcontroldict import Read
 from xsInterface.functions.readinput import ReadInput
 from xsInterface.functions.readtemplate import ReadTemplate
-from xsInterface.functions.coresliceplot import coreSlicePlot
+from xsInterface.functions.plotters import coreSlicePlot
 from xsInterface.errors.checkerrors import _inlist, _islist, _isequallength,\
     _iszeropositive, _inrange
 
@@ -91,9 +91,7 @@ class Main():
         self._externalIds = externalIds
         self._dataFiles = {}
         self.core = core
-        self.chIds = {}
-        self.corevalues = {}
-        self.corestates = {}
+
 
     def Read(self, readUniverses=True, readTemplate=False,
              readMapTemplate=False, userdata=None):
@@ -160,8 +158,6 @@ class Main():
                 fileId = self._outputs[tmplkey]
                 self._dataFiles[fileId] = ReadTemplate(tmplfile, self.universes,
                                                       self._formats)                
-
-
 
 
     def Write(self, writemode="w"):
@@ -461,6 +457,7 @@ class Main():
 
         return values
 
+
     def ValidateMap(self):
         """post validation to check that all channels were defined
 
@@ -486,7 +483,8 @@ class Main():
                     _inlist(univ, "universe", self.universes.universeIds)
                 
 
-    def PopulateCoreData(self, attributes, states, volManip, **addattrs):
+    def PopulateCoreData(self, states, attributes=None, volManip=None,
+                         **addattrs):
         """Populate new data for all the channels and layers
     
         Instead of using the universes directly, the data is evaluated for
@@ -496,11 +494,12 @@ class Main():
         Parameters
         ----------
         attributes : list
-            all the attributes required for the problem
+            all the attributes required for the problem. If None the attributes
+            are obtained automaitically for all existing attributes.
         states : dict
-            dict with keys as the states names, e.g., history, time, and pert names 
-            and values as 2-dim list with the values of the state for channels and
-            layers. e.g., time = [[0.0, 0.0, 0.0, 0.0]]*5
+            dict with keys as the states names, e.g., history, time, and pert 
+            names and values as 2-dim list with the values of the state for 
+            channels and layers. e.g., time = [[0.0, 0.0, 0.0, 0.0]]*5
         volManip : string or list of string
             volume manipulation ['multiply', 'divide']. Default is None.
         addattrs : **kwargs
@@ -512,14 +511,14 @@ class Main():
        
         Attributes
         ----------
-        _states : dict
+        core.corestates : dict
             dict with keys as the states names, e.g., history, time, and pert names 
             and values as 2-dim list with the values of the state for channels and
             layers. e.g., time = [[0.0, 0.0, 0.0, 0.0]]*5
-        _corevalues : dict
+        core.corevalues : dict
             keys represent attributes and values are 3-dim lists corrsponding
             to states provided in _states
-        _chIds : list
+        core.chIds : list
             list with all the names for all the channels
 
         Examples
@@ -531,11 +530,29 @@ class Main():
 
         """
         
+        # Obtain all attributes if not provided
+        if attributes is None:
+            for key, attrsvals in self._Attributes().items():
+                attributes = attrsvals
+                nattrs = len(attributes)
+                break
+            
+        # define for which attributes manipulation is needed
+        if isinstance(volManip, dict):
+            volManipulations = [None]*nattrs
+            for volkey, volval in volManip.items():
+                _inlist(volkey, "Key in volManip", attributes)
+                idx = attributes.index(volkey)
+                volManipulations[idx] = volval  # insert the manipulation
+        else:
+            volManipulations = volManip
+                    
+                       
         # obtain all the values for the reference points
         nomvalues, chIds =\
         self.CoreValues(attributes, 
                         chIds=self.core.chIds, 
-                        volManip=volManip, 
+                        volManip=volManipulations, 
                         **states)
         
         chIds = list(chIds)

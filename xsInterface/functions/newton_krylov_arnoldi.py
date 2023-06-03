@@ -15,7 +15,7 @@ xk = x0 + s*dx
 dx is obtained by using the Krylov-Arnoldi routine
 
 Created on Wed May 24 15:10:00 2023 @author: Dan Kotlyar
-Last updated on Wed May 24 15:10:00 2023 @author: Dan Kotlyar
+Last updated on Sat June 03 07:15:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -23,17 +23,15 @@ List changes or additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 ArnoldiIteration - 05/24/2023 - DK
+ArnoldiIteration - 06/03/2023 - DK
 
 """
 
-import copy
 import numpy as np
-from xsInterface.functions.thirdpartycodes import exeDyn3D
 
 
-def ArnoldiIteration(xs, Fx0, x0, b, nodesN: int, n: int,
-                     iterScheme, refFlx, casedir, casefile, exefile, 
-                     pert=1e-03):
+def ArnoldiIteration(dyn3d, Fx0, x0, b, nodesN: int, n: int, iterScheme, 
+                     pert=1e-03, eps=1e-12):
     """Computes othonormal basis of the (n + 1)-Krylov subspace for Fx*dx:
         
     This function allow to estimate the required variation in x (i.e., dx)
@@ -45,8 +43,8 @@ def ArnoldiIteration(xs, Fx0, x0, b, nodesN: int, n: int,
     
     Parameters
     ----------
-    xs : xsInterface object
-        An object of type xsInterface
+    dyn3d : DYN3D object
+        An object of type DYN3D with the ability to execute and store results
     x0 : 1-dim array
         Initial guess/solution for the input vector needed to run a reduced
         order solution. x0 can be diffusion coefficient, discontinuity factors,
@@ -61,15 +59,14 @@ def ArnoldiIteration(xs, Fx0, x0, b, nodesN: int, n: int,
         Number of total nodes (i.e., #channels x #layers x #energy-groups)
     n : int
         dimension of Krylov subspace, must be >= 1                        
-    casedir : str
-        full (relative or absolute) directory where the _kin file is located
-    casefile : str
-        name of the case file
-    exefile : str 
-        name of the file with the actual execution command
+    iterScheme : str
+        the name of the attribute or scheme which needs to be iterated and
+        converged. e.g, sph.
     pert : float
         a fraction that represents the perturbation that is required to be
-        applied for x for each vector of the Krylov space.              
+        applied for x for each vector of the Krylov space.  
+    eps : float
+        criterion to stop arnoldi iteration.       
 
     
     Returns
@@ -81,10 +78,6 @@ def ArnoldiIteration(xs, Fx0, x0, b, nodesN: int, n: int,
     """
     
     
-    
-    pert = 1e-03  # perturbation to evaluate the function
-    eps = 1e-12  # criterion to stop arnoldi iteration
-
     h = np.zeros((n+1,n))  # upper Hessenberg
     Q = np.zeros((nodesN,n+1))
 
@@ -94,9 +87,20 @@ def ArnoldiIteration(xs, Fx0, x0, b, nodesN: int, n: int,
         
         xI = x0 + pert*Q[:,k-1]  # perturbed transport cross section
 
-        # perturbed DYN3D solution
-        keff, fluxes, normFlux = exeDyn3D(casedir, casefile, exefile)
-        FxI = normFlux.flatten()   
+        # reshape xI to fit the flux structure [channels x layers x groups]
+        xIcore = _reshapeTo3D(dyn3d.flux, xI)
+
+        # update the cross sections
+        dyn3d.xs.core.corevalues[iterScheme] = xIcore
+        
+        # Read xs data and templates and populate data for channels & layers
+        dyn3d.xs.Read(readUniverses=False, readMapTemplate=True,
+                      userdata = dyn3d.xs.core.corevalues) 
+
+        # Execute DYN3D and obtain solution
+        dyn3d.Execute()
+        
+        FxI = _reshapeTo1D(dyn3d.flux, nodesN, normFlag=True)   
         
         v = (FxI - Fx0) / pert  # this is the matrix-vector product
                                 # v = A^n b
@@ -112,17 +116,16 @@ def ArnoldiIteration(xs, Fx0, x0, b, nodesN: int, n: int,
     return Q, h
 
 
-def NewtonKrylov(dyn3dInputs, iterScheme, refFlx, nodes: int, newtonIters: int,
-                 krylovSpan: int, indexMap, channelMap, radialChannels, numFAs,
-                 dz, dampingF=1.0):
+def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
+                 krylovSpan: int, dampingF=1.0):
     """Jacobian-free Newton Krylov iterative sequence to update the
     input-vector x0 until the reference solution is obtained.
         
 
     Parameters
     ----------
-    dyn3dInputs : dict
-        includes all the cross sections and inputs required to execute DYN3D
+    dyn3d : DYN3D object
+        an object with the ability to execute DYN3D and collect result
     iterScheme : str
         Determine the iterative parameter, e.g., transport, adf, sph, axial_adf
     refFlx : 1-dim array
@@ -161,68 +164,47 @@ def NewtonKrylov(dyn3dInputs, iterScheme, refFlx, nodes: int, newtonIters: int,
     
     """
     
+    nodes = _numNodes(refFlx)  # total number of nodes channels x layers groups
     
-    # convert to 1-dim array
-    nFAs = len(refFlx)
-    nLayers = len(refFlx[0])    
-    nodes = int(nFAs * nLayers)
     # define and reset return parameters
     fluxes = np.zeros((newtonIters+1, nodes))
     xinputs = np.zeros((newtonIters+1, nodes))
     norm_err = np.zeros(newtonIters+1)
+    
+    dyn3d.iterInputs[iterScheme] = [None]*newtonIters
 
 
-    refFlxOrig = copy.deepcopy(refFlx)
-
-    # choose what is the iterative parameter
-    if iterScheme == 'transpxs':
-        x0 = np.array(dyn3dInputs['transpxs']).flatten()
-    elif iterScheme == 'adf':
-        x0 = np.array(dyn3dInputs['adf']).flatten() 
-    elif iterScheme == 'axial_adf':
-        x0 = np.array(dyn3dInputs['topDf']).flatten() 
-    elif iterScheme == 'sph':
-        x0 = np.array(dyn3dInputs['sph']).flatten() 
+    refFlxNorm = _reshapeTo1D(refFlx, nodes, normFlag=True)
 
     for newtonI in range(newtonIters):
         
-        x0Reshape = x0.reshape((nFAs, nLayers))
-        x0List = [xvals for xvals in x0Reshape]
-        if iterScheme == 'transpxs':
-            dyn3dInputs['transpxs'] = x0List
-        elif iterScheme == 'adf':
-            dyn3dInputs['adf'] = x0List
-        elif iterScheme == 'axial_adf':
-            dyn3dInputs['topDf'] = x0List
-        elif iterScheme == 'sph':
-            dyn3dInputs['sph'] = x0List
+        # if iteration scheme is of SPH manipulation of cross sections needed
+        if iterScheme == 'sph':
+            pass
+
             
-        # execute DYN3D
-        dyn3dResult, normFlux = ExeDyn3d(**dyn3dInputs)
+        # execute DYN3D and collect results
+        dyn3d.Execute()
         
-        # calculate the normalized fluxes for both Serpent and DYN3D
-        fluxDYN3D, fluxSERP, chFAs =\
-            CreateFluxes(dyn3dResult["flux"], refFlxOrig, indexMap, channelMap,
-                         radialChannels, numFAs, dz)
+        # calculate the normalized fluxes for both the reference and dyn3d
+        # the 3-dim lists are converted to 1-dim arrays
+        dynFlxNorm = _reshapeTo1D(dyn3d.flux, nodes, normFlag=True)
         
-        fluxes[newtonI, :] = fluxDYN3D.flatten()  # save the current iterate
-        refFlx = fluxSERP.flatten()
+
+        # save the current iterate
+        fluxes[newtonI, :] = dynFlxNorm  
         
         # difference bewteen the approximate and reference solution
-        Fx0 = fluxes[newtonI, :]-refFlx    
+        Fx0 = fluxes[newtonI, :]-refFlxNorm    
         r0 = -Fx0  # define residual
         norm_err[newtonI] = np.linalg.norm(r0)  # store norm2
         
         # execute the krylov-arnoldi procedure to obtain othonormal basis of 
         # Krylov subspace and the upper Hessenberg matrix
         Q, h =\
-            ArnoldiIteration(Fx0=fluxes[newtonI, :], x0=x0, b=r0, nodesN=nodes,
-                             n=krylovSpan, dyn3dInputs=dyn3dInputs,
-                             iterScheme=iterScheme, 
-                             indexMap=indexMap, channelMap=channelMap,
-                             radialChannels=radialChannels, numFAs=numFAs, 
-                             dz=dz,refFlx=refFlxOrig,
-                             pert=1e-03)
+            ArnoldiIteration(dyn3d, Fx0=fluxes[newtonI, :], x0=x0, b=r0,
+                             nodesN=nodes, n=krylovSpan,
+                             iterScheme=iterScheme, pert=1e-03)
         
         # calculate the coefficients used as weights for the othonormal basis    
         e1 = np.zeros(krylovSpan+1)
@@ -238,30 +220,86 @@ def NewtonKrylov(dyn3dInputs, iterScheme, refFlx, nodes: int, newtonIters: int,
         dxk = np.dot(Q[:, 0:-1],coefy[0])
         x0 = x0 + dampingF*dxk  # no damping coefficient at the moment
         
+        # reshape xI to fit the flux structure [channels x layers x groups]
+        x0core = _reshapeTo3D(dyn3d.flux, x0)
 
-    x0Reshape = x0.reshape((nFAs, nLayers))
-    x0List = [xvals for xvals in x0Reshape]
-    if iterScheme == 'transpxs':
-        dyn3dInputs['transpxs'] = x0List
-    elif iterScheme == 'adf':
-        dyn3dInputs['adf'] = x0List
-    elif iterScheme == 'axial_adf':
-        dyn3dInputs['topDf'] = x0List
-    elif iterScheme == 'sph':
-        dyn3dInputs['sph'] = x0List
+        # update the cross sections
+        dyn3d.xs.core.corevalues[iterScheme] = x0core
 
-    xinputs[newtonI+1, :] = x0
-    dyn3dResult, normFlux = ExeDyn3d(**dyn3dInputs)
-    # calculate the normalized fluxes for both Serpent and DYN3D
-    fluxDYN3D, fluxSERP, chFAs =\
-        CreateFluxes(dyn3dResult["flux"], refFlxOrig, indexMap, channelMap,
-                     radialChannels, numFAs, dz)
+        # save the variation in inputs as a function of iteration
+        dyn3d.iterInputs[iterScheme][newtonI] = x0core
     
-    fluxes[newtonI+1, :] = fluxDYN3D.flatten()  # save the current iterate
+        
 
-    # define residual    
-    norm_err[newtonI+1] = np.linalg.norm(fluxes[newtonI+1, :]-refFlx)
+    # LAST EXECUTION
+    # -------------------------------------------------------------------------
+    
+    # execute DYN3D and collect results
+    dyn3d.Execute()
+    
+    # calculate the normalized fluxes for both the reference and dyn3d
+    # the 3-dim lists are converted to 1-dim arrays
+    dynFlxNorm = _reshapeTo1D(dyn3d.flux, nodes, normFlag=True)
+    # save the current iterate
+    fluxes[newtonI+1, :] = dynFlxNorm  
+    # difference bewteen the approximate and reference solution
+    Fx0 = fluxes[newtonI+1, :]-refFlxNorm    
+    r0 = -Fx0  # define residual
+    norm_err[newtonI+1] = np.linalg.norm(r0)  # store norm2    
+    
+    return fluxes, xinputs, norm_err, refFlxNorm
+    
 
-    return fluxes, xinputs, norm_err, refFlx
+# -----------------------------------------------------------------------------
+#                          Supplementary function
+# -----------------------------------------------------------------------------
+
+def _reshapeTo1D(flxIn, n, normFlag=True):
+    """Normalize the flux to unity"""
+
+    flx = np.zeros(n)
+    c = 0  # counter
+    for channel in flxIn:
+        for layer in channel:
+            for grVal in layer:
+                flx[c] = grVal
+                c += 1
+    if normFlag:
+        flx = flx / flx.sum()
+    return flx
+
+
+
+def _reshapeTo3D(flx, x0In):
+    """Reshape the input parameter to match the flux structure"""
+
+    nch = len(flx)
+    x0Out = [None]*nch  # reset the input variable
+    ng = len(flx[0][0])  # number of energy groups
     
-    
+    c = 0
+    for ich in range(nch):
+        nz = len(flx[ich])  # of layers
+        channel = [None]*nz
+        for iz in range(nz):
+            groups = np.empty(ng)
+            for ig in range(ng):
+                groups[ig] = x0In[c]  # group values
+                c += 1
+            channel[iz] = groups  # group values for each layer
+        x0Out[ich] = channel # values for all the channels
+
+    return x0Out
+
+
+def _numNodes(flxIn):
+    """Calculate the total number of nodes required for the solution"""
+
+    c = 0  # counter
+    for channel in flxIn:
+        c += len(channel)
+        
+    ng = len(flxIn[0][0])
+    c *= ng
+    return c  # total number of nodes
+                 
