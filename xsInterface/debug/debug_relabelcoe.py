@@ -10,6 +10,10 @@ Last updated on Mon Feb 27 05:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
+Last Checked:
+---------------
+06/05/2023 - DK
+
 """
 
 from xsInterface.functions.relabelcoe import coeRelabel

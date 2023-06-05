@@ -12,9 +12,13 @@ Last updated on Wed May 24 12:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
+Last Checked:
+---------------
+06/05/2023 - DK
+
 """
 
-from xsInterface.functions.thirdpartycodes import exeDyn3D
+from xsInterface.functions.dyn3d import exeDyn3D
 
              
 casedir = ".\\debugfiles\\\dyn3d_test\\rho1_1gr"   # dyn3d dir
@@ -26,5 +30,5 @@ exefile = "RUN_DYN3D" # dyn3d executuin file
 
 # execute DYN3D and get fluxes and k-eff
 # -----------------------------------------------------------------------------
-keff, fluxes, normFlx = exeDyn3D(casedir, casefile, exefile)
+keff, fluxes, = exeDyn3D(casedir, casefile, exefile)
 

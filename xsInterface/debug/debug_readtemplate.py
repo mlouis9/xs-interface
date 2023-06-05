@@ -18,15 +18,15 @@ from xsInterface.functions.readinput import ReadInput
 
 inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\otemplates\\dyn3d"
+        "xs-interface\\xsInterface\\debug\\debugfiles\\bad_template"
 
 univFile0 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\inputsets\\u0"
+        "xs-interface\\xsInterface\\debug\\debugfiles\\u0"
 
 univFile1 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\inputsets\\u1"
+        "xs-interface\\xsInterface\\debug\\debugfiles\\u1"
 
 
 # read the universe file/s and collect data for all the universes

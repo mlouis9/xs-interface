@@ -10,6 +10,11 @@ Created on Fri Apr 01 11:30:00 2022 @author: Dan Kotlyar
 Last updated on Fri Apr 01 11:30:00 2022 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
+
+Last Checked:
+---------------
+06/05/2023 - DK
+
 """
 
 from xsInterface.containers.datasettings import DataSettings

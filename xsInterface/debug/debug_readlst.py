@@ -12,9 +12,13 @@ Last updated on Wed May 24 12:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
+Last Checked:
+---------------
+06/05/2023 - DK
+
 """
 
-from xsInterface.functions.lstreader import lstRead
+from xsInterface.functions.dyn3d import lstRead
 
 
 lstFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
