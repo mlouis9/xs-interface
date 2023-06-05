@@ -840,8 +840,9 @@ class Main():
         """obtain the values for all the attributes for a channel-layer pair"""
         
         attrval = {}
-        for attr, vals in attrsvals.items():
-            attrval[attr] = np.array(vals[ich][ilayer])
+        if attrsvals is not None:
+            for attr, vals in attrsvals.items():
+                attrval[attr] = np.array(vals[ich][ilayer])
         return attrval
 
 

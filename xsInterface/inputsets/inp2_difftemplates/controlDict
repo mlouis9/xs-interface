@@ -10,7 +10,7 @@
 
 
 set universes
-u0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp2\u0
+u0 .\u0
 
 
 # -----------------------------------------------------------------------------
@@ -18,18 +18,18 @@ u0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositor
 # -----------------------------------------------------------------------------
 
 set templates
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp2\template0
-template1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp2\template1
-template2 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp2\template2
+template0 .\template0
+template1 .\template1
+template2 .\template2
 
 # -----------------------------------------------------------------------------
 #                            OUTPUT FILES
 # -----------------------------------------------------------------------------
 
 set outputs
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp2\output0_
-template1 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp2\output1_
-template2 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp2\output2_
+template0 .\outputs\output0_
+template1 .\outputs\output1_
+template2 .\outputs\output2_
 
 
 # -----------------------------------------------------------------------------

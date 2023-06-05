@@ -10,8 +10,8 @@
 
 
 set universes
-fuel C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp8_maps\fuel
-ref C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp8_maps\fuel
+fuel .\fuel
+ref .\fuel
 
 
 # -----------------------------------------------------------------------------
@@ -30,7 +30,7 @@ ref 0
 # -----------------------------------------------------------------------------
 
 set templates
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp8_maps\template0
+template0 .\template0
 
 
 # -----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Re
 # -----------------------------------------------------------------------------
 
 set outputs
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp8_map\output_
+template0 .\outputs\output_
 
 # -----------------------------------------------------------------------------
 #                           UNIVERSE-TO-FILES LINKS 

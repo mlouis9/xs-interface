@@ -10,7 +10,7 @@
 
 
 set universes
-fuel C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp4\fuel
+fuel .\fuel
 
 
 # -----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ fuel 0
 # -----------------------------------------------------------------------------
 
 set templates
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp4\template_dyn3d
+template0 .\template_dyn3d
 
 
 # -----------------------------------------------------------------------------
@@ -35,7 +35,7 @@ template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Re
 # -----------------------------------------------------------------------------
 
 set outputs
-template0 C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\junkfiles\inp4\output_
+template0 .\outputs\output_
 
 # -----------------------------------------------------------------------------
 #                           UNIVERSE-TO-FILES LINKS 

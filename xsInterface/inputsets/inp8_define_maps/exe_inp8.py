@@ -14,9 +14,7 @@ email: dan.kotlyar@me.gatech.edu
 
 from xsInterface.functions.main import Main
 
-inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
-    "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\inputsets\\inp8_maps\\controlDict"
+inputFile = ".\\controlDict"
         
 
 
@@ -84,32 +82,6 @@ flx, chIds =\
 xscond.SlicePlot(flx['infflx'], shift=[0, 0.5, 0], layer=1, norm=1E+17,
                  markersize=250, spacesize=5, geomarker='s')
 
-# -----------------------------------------------------------------------------
-#                 PLOT RESULTS
-# -----------------------------------------------------------------------------
-
-
-
-# -----------------------------------------------------------------------------
-#                 DEFINE THE MAP MANUALLY - NOT USED ANYMORE
-# -----------------------------------------------------------------------------
-
-# # Define the channels Id in the map and the indices
-# chsMap = [['1'], ['3', '4'], ['1']]  # channels' names
-# bounds = [[-1, -1], [-1, 0], [-1, -1]]  # channels idx
-
-# # Reset the container
-# core = Map(chsMap, bounds)
-
-# # Add channels specifications
-# core.Channel('1', ['ref0', 'fuel0', 'fuel0', 'ref0'], volumes=[1, 1, 1, 1])
-
-# # the user can also copy existing channels and just rename the identifier
-# core.Copy('1', '3')
-# core.Copy('1', '4')
-
-# # excess the data
-# #core['3']['layers']
 
 
 

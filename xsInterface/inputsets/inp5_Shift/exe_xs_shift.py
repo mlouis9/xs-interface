@@ -19,7 +19,7 @@ inputFile = ".\\controlDict"
 xs = Main(inputFile)
 
 # Read xs data and templates and populate data
-xs.Read()
+xs.Read(readTemplate=True)
 
 # Write data to txt files
 xs.Write()

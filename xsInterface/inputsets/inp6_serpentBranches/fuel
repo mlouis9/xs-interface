@@ -74,8 +74,8 @@ lambda 1, 1, 1, 1, 1, 1, 1, 1, 1
 # -----------------------------------------------------------------------------
 
 set serpent 2 +1 infFlx 10.0E+6, 0.6025, 0.0
-nom  C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\u0.coe
-pert  C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp3\u0.coe
+nom  .\u0.coe
+pert  .\u0.coe
 
 
 # -----------------------------------------------------------------------------

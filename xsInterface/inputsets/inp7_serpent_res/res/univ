@@ -55,7 +55,7 @@ crods nom, CRin
 # -----------------------------------------------------------------------------
 
 set serpent 1 -1 infFlx 10.0E+6, 0.6025, 0.0
-nom  C:\Users\dkotlyar6\Dropbox (GaTech)\Reactor-Simulation-tools\GitHub Repositories\Public\xs-interface\xsInterface\inputsets\inp7\serpent\fa2D_res.m
+nom  .\serpent\fa2D_res.m
 
 
 # -----------------------------------------------------------------------------
