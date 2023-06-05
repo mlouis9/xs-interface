@@ -172,7 +172,7 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
     norm_err = np.zeros(newtonIters+1)
     
     dyn3d.iterInputs[iterScheme] = [None]*newtonIters
-
+    dyn3d.iterOutputs = [None]*newtonIters
 
     refFlxNorm = _reshapeTo1D(refFlx, nodes, normFlag=True)
 
@@ -189,7 +189,7 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
         # calculate the normalized fluxes for both the reference and dyn3d
         # the 3-dim lists are converted to 1-dim arrays
         dynFlxNorm = _reshapeTo1D(dyn3d.flux, nodes, normFlag=True)
-        
+        dyn3d.iterOutputs[newtonI] = dyn3d.flux
 
         # save the current iterate
         fluxes[newtonI, :] = dynFlxNorm  

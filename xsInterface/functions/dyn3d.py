@@ -11,7 +11,7 @@ Iterative method to calculate correction factors
 required to match the predicted flux solution (DYN3D) with the reference one. 
 
 Created on Sat May 27 16:20:00 2023 @author: Dan Kotlyar
-Last updated on Tue May 30 11:15:00 2023 @author: Dan Kotlyar
+Last updated on Mon June 05 08:30:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -22,7 +22,8 @@ __init__ capability - 05/27/2023 - DK
 Execute method - 05/27/2023 - DK
 exeDyn3D - 05/30/2023 - DK
 lstreader - 05/30/2023 - DK
-
+Iterate - 06/03/2023 - DK
+PlotFluxes - 06/05/2023 - DK
 
 """
 
@@ -32,14 +33,20 @@ import subprocess
 import re
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from xsInterface.functions.newton_krylov_arnoldi import NewtonKrylov,\
     _reshapeTo1D, _numNodes
+from xsInterface.functions.plotters import Plot1d
 from xsInterface.errors.checkerrors import _islist, _isequallength, _isarray,\
-    _inlist, _isstr
+    _inlist, _isstr, _isnonNegativeArray, _iszeropositive, _inrange
 
 match_number = re.compile('-?\ *[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
 
+from matplotlib import rcParams
+rcParams['figure.dpi'] = 300
+FONT_SIZE = 16
+MARKER_SIZE = 6
 
 class DYN3D():
     """A container to store unique universes having MultipleSets objects
@@ -91,6 +98,7 @@ class DYN3D():
         self.keff = None
         # store all results
         self.iterInputs = {}
+        self.iterOutputs = {}
         self.norm_err = None
 
 
@@ -206,6 +214,149 @@ class DYN3D():
         self.norm_err = norm_err
         
 
+    def PlotFluxes(self, xvalues, iters,  
+                   chId, layers=None, egroup=0, refFlag=True,
+                   flip=False, xlabel="Height, cm", ylabel='Normalized flux',
+                   norm=1.0, fontsize=FONT_SIZE, markers="--*", 
+                   markerfill=False, markersize=MARKER_SIZE):
+        """plot the fluxes for the different newton iterations
+        
+        Parameters
+        ----------
+        iters : array
+            iteration indices
+        xvalues : array
+            x-axis values, e.g., heights in cm.
+        chId : str
+            identification string of the channels.
+        layers : array
+            layers to be included in the plot. If None all the layers included.
+        egroup : int
+            energy group integer. Default is 0 (i.e., Fast group).
+        refFlag : bool
+            flag to indicate if the reference flux to be included in the plot
+        flip : bool
+            boolean flag to indicate whether results should flipped
+        layers : int, list of int, ndarray of int
+            identifier/s of the axial layer. If None then all layers are plotted
+        xlabel : str
+            x-axis label with a default ``Axial height, meters``
+        ylabel : str
+            y-axis label with a default for any existing parameter
+        fontsize : float
+            font size value
+        markers : str or list of strings
+            markers type
+        markerfill : bool
+            True if the marking filling to be included and False otherwise
+        markersize : int or float
+            size of the marker with a default of 8.
+    
+        Raises
+        ------
+        TypeError
+            If ``channel`` is not str or ``layer`` is not int.
+            If ``ylabel`` is not str or ``fontsize`` is not int.
+        KeyError
+            If the channel or layer do not exist.
+        NameError
+            If attribute does not exist.
+    
+    
+        """
+    
+        # Check potential errors
+  
+        allchIds = list(self.xs.core.chIds)
+        _inlist(chId, "Channel Id", allchIds)
+        
+        
+        if layers is not None:
+            _isnonNegativeArray(layers, "layers")
+        
+        # iterative results
+        results = self.iterOutputs
+
+        # results for all iterations 
+        yvalues = {}     
+        diff_yvalues = {}
+        if iters is not None:
+            _isnonNegativeArray(iters, "Iteration indices")
+            niter = len(results)
+            maxiter = max(iters)
+            _inrange(maxiter, "Max iter in {}".format(iters), [0, niter-1])
+                
+        # energy group
+        _iszeropositive(egroup, "energy group")
+        _inrange(egroup, "energy groups", [0, self.xs.core.ng-1])
+
+        idxch = allchIds.index(chId)  # channel index
+        nlayers = self.xs.core.layers[idxch]  # number of layers
+        if layers is None:
+            layers = np.linspace(0, nlayers-1, nlayers, dtype=int)
+        else:
+            maxlayer = max(layers)
+            # check that layers exist
+            _inrange(maxlayer, "Max layer in {}".format(layers), 
+                     [0, nlayers-1])
+            nlayers = len(layers)
+
+        
+        sumrefFlx = np.sum(np.array(self.refFlx))
+
+        xvals = np.empty(nlayers) 
+        for idx, ilayer in enumerate(layers):
+            xvals[idx] = xvalues[ilayer]
+
+        # collect results for all iterations
+        if iters is not None:
+            for it in iters:
+                yvals = np.empty(nlayers)
+                for idx, ilayer in enumerate(layers):
+                    yvals[idx] = results[it][idxch][ilayer][egroup]
+                yvalues["It"+str(it)] = yvals
+        else:
+            yvals = np.empty(nlayers)
+            for idx, ilayer in enumerate(layers):
+                yvals[idx] = results[0][idxch][ilayer][egroup]
+            yvalues["no correction"] = yvals            
+            yvals = np.empty(nlayers)
+            for idx, ilayer in enumerate(layers):
+                yvals[idx] = results[-1][idxch][ilayer][egroup]
+            yvalues["with correction"] = yvals 
+
+        refvals = np.empty(nlayers) 
+        for idx, ilayer in enumerate(layers):
+            refvals[idx] = self.refFlx[idxch][ilayer][egroup] / sumrefFlx
+                        
+        for key, vals in yvalues.items():
+            diff_yvalues[key] = 100*(1-vals/refvals)
+            
+
+        if refFlag:
+            yvalues["Reference"] = refvals
+
+               
+        # plot results for the chosen channels
+        plt.figure()
+        Plot1d(xvals, yvalues, flip=flip, xlabel=xlabel, ylabel=ylabel, 
+               norm=norm, fontsize=fontsize, markers=markers, 
+               markerfill=markerfill, markersize=markersize)  
+        
+        # plot differences
+        plt.figure()
+        Plot1d(xvals, diff_yvalues, flip=flip, xlabel=xlabel, 
+               ylabel="Percent difference in flux, %", 
+               norm=norm, fontsize=fontsize, markers=markers[1:], 
+               markerfill=markerfill, markersize=markersize) 
+
+        # plot norm2
+        niter = len(self.norm_err)
+        plt.figure()
+        Plot1d(np.linspace(0, niter-1, niter) , self.norm_err, flip=flip,
+               xlabel="Iteration #", ylabel="Flux norm2 [reference - predicted]", 
+               norm=norm, fontsize=fontsize, markers='--', 
+               markerfill=markerfill, markersize=markersize)          
 
 # -----------------------------------------------------------------------------
 #         Supplementary functions
@@ -323,6 +474,9 @@ def lstRead(lstfile):
         
         if fluxes is not None and keff is not None:
             break
+        
+    fluxes = np.array(fluxes)
+    fluxes = fluxes / fluxes.sum()
     # multiplication factor and flux values
     return keff, np.array(fluxes)
 

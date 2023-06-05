@@ -1,0 +1,50 @@
+CONTROL OF XS-LIBRARY RBWR
+XS
+NEUTRON GROUPS   DELAYED NEUTRONS GROUPS
+   1        7 
+****************************************************
+  ENERGY LIMITS
+  1.5000E+07  1.4800E-00  1.0000E-04
+****************************************************
+   NXSCORE    NXSREFL
+     38          0
+****************************************************
+  NAME    NUMBER OF BURNUP STATES
+xs_S1_0_u54.dat      1
+xs_S1_1_u1.dat       1 
+xs_S1_2_u2.dat       1
+xs_S1_3_u3.dat       1
+xs_S1_4_u4.dat       1
+xs_S1_5_u5.dat       1
+xs_S1_6_u6.dat       1
+xs_S1_7_u7.dat       1
+xs_S1_8_u8.dat       1
+xs_S1_9_u9.dat       1
+xs_S1_10_u10.dat      1
+xs_S1_11_u11.dat      1
+xs_S1_12_u12.dat      1
+xs_S1_13_u13.dat      1
+xs_S1_14_u14.dat      1
+xs_S1_15_u15.dat      1
+xs_S1_16_u16.dat      1
+xs_S1_17_u17.dat      1
+xs_S1_18_u18.dat      1
+xs_S1_19_u19.dat      1
+xs_S1_20_u20.dat      1
+xs_S1_21_u21.dat      1
+xs_S1_22_u22.dat      1
+xs_S1_23_u23.dat      1
+xs_S1_24_u24.dat      1 
+xs_S1_25_u25.dat      1
+xs_S1_26_u26.dat      1
+xs_S1_27_u27.dat      1
+xs_S1_28_u28.dat      1
+xs_S1_29_u29.dat      1
+xs_S1_30_u30.dat      1
+xs_S1_31_u31.dat      1
+xs_S1_32_u32.dat      1
+xs_S1_33_u33.dat      1
+xs_S1_34_u34.dat      1
+xs_S1_35_u35.dat      1
+xs_S1_36_u36.dat      1
+xs_S1_37_u55.dat      1

@@ -3,22 +3,24 @@
 
 Diffrenet plotting capabilities:
 
-(1)
+(1) Plot1d
+    
     
 
 
-(2)
+(2) coreSlicePlot
     A method to plot various results/inputs/cross sections as a slice 
     (i.e., radial map) of the core.
 
 Created on Tue May 23 05:30:00 2023 @author: Dan Kotlyar
-Last updated on Tue May 23 05:30:00 2023 @author: Dan Kotlyar
+Last updated on Mon June 05 05:30:00 2023 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes or additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 coreSlicePlot - 05/23/2023 - DK
+Plot1d - 06/05/2023 - DK
 
 """
 
@@ -40,10 +42,7 @@ MARKER_SIZE = 6
 def Plot1d(xvalues, yvalues, flip=False, xlabel=None, ylabel=None, norm=1,
            fontsize=FONT_SIZE, markers="--*", markerfill=False,
            markersize=MARKER_SIZE):
-    """plot the 1-dim data of a property over multiple channels/layers
-
-    The use of this method is similar to the ``getvalues`` method.
-    It is important to note that not all the values have axial layers.
+    """plot the 1-dim data for all the keys defined in ``yvalues`` dict
 
     Parameters
     ----------
@@ -51,8 +50,6 @@ def Plot1d(xvalues, yvalues, flip=False, xlabel=None, ylabel=None, norm=1,
         x-axis values, e.g., heights in cm.
     yvalues : dict or 1-dim array
         y-axis values where keys represent channels and values are data arrays 
-    channels : str or list of str
-        identifier/s of the channel
     flip : bool
         boolean flag to indicate whether results should flipped
     layers : int, list of int, ndarray of int
@@ -73,13 +70,7 @@ def Plot1d(xvalues, yvalues, flip=False, xlabel=None, ylabel=None, norm=1,
     Raises
     ------
     TypeError
-        If ``channel`` is not str or ``layer`` is not int.
-        If ``ylabel`` is not str or ``fontsize`` is not int.
-    KeyError
-        If the channel or layer do not exist.
-    NameError
-        If attribute does not exist.
-
+        If fontsize, markersize, flip, markerfill, norm are not of correct type
 
     """
 

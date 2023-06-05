@@ -1,0 +1,87 @@
+* Mod Dens Boron ppm Fuel Temp Mod Temp
+1 0 0 0
+700.0
+*
+*----------------------------------------------------------
+* BURNUP 0.000
+*----------------------------------------------------------
+*
+* Transport XSEC Table
+*
+* GROUP 1
+2.314580e-01 
+* GROUP 2
+8.850810e-01 
+*
+* Reduced absorption XSEC Table
+*
+* GROUP 1
+9.829670e-03 
+* GROUP 2
+8.848580e-02 
+*
+* Nu-Fission XSEC Table
+*
+* GROUP 1
+7.729980e-03 
+* GROUP 2
+1.528200e-01 
+*
+* Kappa-Fission XSEC Table
+*
+* GROUP 1
+9.912929e-14 
+* GROUP 2
+2.032459e-12 
+*
+* Scattering XSEC Table
+*
+* GROUP 1 -> 1
+5.166670e-01 
+* GROUP 1 -> 2
+1.656700e-02 
+* GROUP 2 -> 1
+1.626880e-03 
+* GROUP 2 -> 2
+1.243040e+00 
+*
+* ADF Table XSEC Table
+*
+* GROUP 1
+1.000000e+00 
+* GROUP 2
+1.000000e+00 
+*
+* Axial ADF
+* bottom
+* GROUP 1
+1.000000e+00 
+* GROUP 2
+1.000000e+00 
+* top
+* GROUP 1
+1.002530e+00 
+* GROUP 2
+1.002823e+00 
+*
+* Fission Spectrum
+*
+* GROUP 1 2
+1.000000e+00 0.000000e+00
+*
+* Inverse Velocity
+*
+* GROUP 1 2
+5.747730e-08 2.395700e-06 
+*
+* Delay Neutron Decay Constant (Lambda)
+*
+* GROUP 1 2 3 4 5 6 7
+8.166260e-01 1.249080e-02 3.166340e-02 1.101990e-01 3.204460e-01 1.346200e+00 8.894570e+00
+*
+* Delay Neutron Fraction (Beta)
+*
+* GROUP 1 2 3 4 5 6 7
+6.828180e-03 1.957600e-04 1.095910e-03 1.048440e-03 3.136660e-03 1.002760e-03 3.486430e-04
+*
+End

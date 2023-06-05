@@ -1,0 +1,70 @@
+$ BGU-BWR simple 7x7
+IFC-67
+$ NST0 NST1 NSTD
+    0    0    0
+$ NST2  NR   NTYP 
+    1    5    1
+$ NST3
+    0 
+$ MISCH
+    1  
+$  NS  IKL  IGR 
+    0    2   0
+$       DBI        DBA           FB         RLB         ROB          CB 
+      0.000001     0.0121158     1.0      0.0036      10420.         0.25
+$       DHI        DHA           FH         RLH         ROH          CH  
+      0.0124206    0.0143002      .0      0.013      6600.         0.33
+$      DHYD             S          AST         RPIN 
+      0.016985665   0.0187452      0.009347826    49.
+$      QR(1,NR)
+         1.0         1.0         1.0         1.0         1.0
+$         1.0         1.0         1.0         1.0         1.0
+$       ALSP
+        10000.0
+$       D0          TB0         TH0         PGAS         XHE 
+$      0.01524        20.         20.        0.25         1.0
+$      RAUB        RAUH 
+$     0.00025     0.00015
+$         HE          HA           ZA 
+          .0          .0           1.0
+$          P          DP     
+        7.13      150.0    
+$    PLENMASS
+     0.
+$    ZD(1,NH)
+     38*0.0001 
+$ TFR0  kg/s
+   15.5
+$    FR(1,NK)
+$    ZE(1,NK)
+    1.
+$    ITYP(1,NK)
+    1
+$   IZO(1,NS) 
+$       2       
+$   ITYP(1,NS)
+$       1       
+$    RK(1,NS)
+$       1.25   
+$    HME(1,NS)
+$       0.     
+$    ZE(1,NS) 
+$      25.44  
+$       EPS1        EPS2        EPS3        EPS4        EPS5
+       0.002       0.002       0.005       0.001         0.8
+$       EPS6        EPS7        EPS8        EPS9        EPS10
+       0.001       0.001         1.0         0.5         0.5
+$   MIXING MODEL
+$   NUMBER OF LOOPS
+       1    
+$W320
+$    RMS(1)     COOLANT TEMP    BORON ACID CONC.
+      1.0          287.4                0.0
+$     IDRU
+       0
+$  THERMOHYDRAULIC PERTURBATIONS
+$  MIPG  MIP(NSL)
+    0    0
+
+
+ 
