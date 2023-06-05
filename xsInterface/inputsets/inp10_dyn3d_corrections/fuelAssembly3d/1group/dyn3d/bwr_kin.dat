@@ -1,0 +1,138 @@
+$ STATIC CALCULATION 
+$ OECD MOX RIA 2-D  unrodded case
+$ 8 groups HELIOS XS-LIB
+$ With pin type averaged SPH factors
+$  ICON IWQS IREWIN TOTIM       DTREST 
+    -1   22    1    18000.0       1.0
+$  ISTART
+    1
+$RBWR
+HEXNEM1
+$STANDARD MAP INPUT
+$SP3 
+$ IBKTYP
+    2
+CONTROL OF CALCULATION
+$ ITIM IOINP IH1  IH2  IH3  IH4  IH5   
+    1    1    0    1    0    0    0
+DIMENSIONS OF ARRAYS
+$ISYM NJMAX NIMAX NCAS NZ NOBOU NOSYMS NOMAS NOBT
+ 360    1     1     1  38   6      0     38    2
+$   ndiv
+     1 
+NEUTRON ENERGY GROUPS
+$   NG NOMAXDSC NOMAXUSC NGUPSC
+     1      7       2      0   
+CONTROL OF ITERATION                                                 
+$  EPSBES    EPSK       EPSF              
+   .00002  .00000001   .000000001    
+$ EKEFF
+  1.0                                               
+$ITOUMA ITINMA ITSCH   
+  2000      4    7  
+$ ITOUTS
+   0                   
+TOTAL POWER                                                    
+$   TOTPOW    arbitrary chosen
+     70367.34694E-06 
+$     3565.
+$IBOR INDXE INDSM  KRIPAR ITKRIM    
+  1    0     0       1      100 
+$   EPSKRI   EPSTF     EPSRH     THETA
+  .000001   .0001      .0002    0.5                          
+$   BW      EKEFF0   CBLIM
+  .00022     1.0     0.0
+$ ICSTYP
+    1                 
+$ NOFUEL 
+    1
+$ IBURN
+    0 
+$ fuel types
+1  2 3 4 5 6 7 8 9 10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36 37 38
+MATERIAL MAP
+$ JMIN JMAX
+    0    0
+$ ILEFT    
+    0 
+$ IRIGHT    
+    0
+$ nsub
+$   0
+$ NSHUFF 
+    0
+$MAP
+  1
+GEOMETRICAL PARAMETERS
+$ AX
+ 18.911     
+$ AZ
+ 20.0 36*10.16 20.0
+$ IZBOT IZTOP      
+    2   37
+CONTROL RODS
+$ NOBANK NOW
+    0    0
+$                                                                                                                   
+ASSEMBLY DISCONTINUITY FACTORS
+AXIAL ASSEMBLY DISCONTINUITY FACTORS
+CURRENT COUPLING RELAXATION
+$ THETA_CN
+     0.7
+BOUNDARY RELATIONS
+    1.0    
+    0.0    
+   -1
+  6*1     
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+   0
+$ IREFU
+    2   
+$ IREFO
+    2  
+$ FEEDBACK ADJUSTING COEFFICIENTS
+     0.0  0.0  0.0  0.0
+$NHYCHA
+    0
+$ALBEDOS
+$    3
+$    8   16  22
+END OF DATA FOR STATIONARY CALCULATION                                  
+CALCULATION WITH GIVEN POWER
+FINE 
+

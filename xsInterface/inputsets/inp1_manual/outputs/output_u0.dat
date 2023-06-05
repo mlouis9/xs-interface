@@ -1,0 +1,40 @@
+This file shows a simple capability to create template files.
+
+Input variable assessed by the package internally can be specificed with the ``vari`` command.
+For example, the following command define a list ``times``.
+
+
+The following command resets an index to be used by the code:
+
+
+The following ``rep`` command indicates that the entire block will be replicated twice.
+	 
+* ----------------------------------------------------------------
+* BURNUP  0.000 
+* ----------------------------------------------------------------
+* 
+* Transport XSEC Table
+* 
+  
+  Group     0
+  1.000000e-01 
+
+  
+  Group     1
+  2.000000e-01 
+
+* ----------------------------------------------------------------
+* BURNUP  1.000 
+* ----------------------------------------------------------------
+* 
+* Transport XSEC Table
+* 
+  
+  Group     0
+  1.000000e-01 
+
+  
+  Group     1
+  2.000000e-01 
+
+
