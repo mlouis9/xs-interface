@@ -17,7 +17,6 @@ import matplotlib.pyplot as plt
 
 from xsInterface.functions.main import Main
 from xsInterface.functions.dyn3d import DYN3D
-from xsInterface.functions.plotters import Plot1d
 
 inputFile = ".\\inputs\\controlDict"
         
@@ -100,7 +99,8 @@ reslt.PlotFluxes(zmid, iters=None,  markers=['--', '*', 'o'],
                chId="S1", layers=None, egroup=1)
 
 
-xs.ChannelsPlot('infflx', zmid)
+xs.ChannelsPlot('infflx', zmid, ylabel='Flux', xlabel='Height, cm', markers='ro',
+                layers=np.linspace(1,30,30, dtype=int), markerfill=True)
 
 # plt.figure()
 # reslt.PlotFluxes(zmid, iters=np.array([0, 1, 2]),  markers=['--', '<', '*', 'o'], markerfill=True,

@@ -11,7 +11,7 @@ Iterative method to calculate correction factors
 required to match the predicted flux solution (DYN3D) with the reference one. 
 
 Created on Sat May 27 16:20:00 2023 @author: Dan Kotlyar
-Last updated on Mon June 05 08:30:00 2023 @author: Dan Kotlyar
+Last updated on Tue June 06 06:00:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -24,6 +24,7 @@ exeDyn3D - 05/30/2023 - DK
 lstreader - 05/30/2023 - DK
 Iterate - 06/03/2023 - DK
 PlotFluxes - 06/05/2023 - DK
+DYN3D polishing - 06/06/2023 - DK
 
 """
 
@@ -49,30 +50,55 @@ FONT_SIZE = 16
 MARKER_SIZE = 6
 
 class DYN3D():
-    """A container to store unique universes having MultipleSets objects
+    """An object that allows operations with DYN3D
 
     Parameters
     ----------
     xs : Main object
         an object of type ``Main`` with all cross sections and methods defined.
-
+    casedir : str
+        full (relative or absolute) directory where the _kin file is 
+        located
+    casefile : str
+        name of the case file
+    exefile : str 
+        name of the file with the actual execution command
 
     Attributes
     ----------
     xs : Main object
         an object of type ``Main`` with all cross sections and methods defined.
-    corrattrs : list of str
-        name of the iterative attributes which will be iterated for correction.
-    refFlx : 3-dim list
-        reference flux solution for all the channels, layers, energy groups. 
-        Default is None. In which case the results will be obtained from
-        the results on the xs object. The order/structure has to follow
-        ``refFlx[channel][layer][group]``
+    casedir : str
+        full (relative or absolute) directory where the _kin file is 
+        located
+    casefile : str
+        name of the case file
+    exefile : str 
+        name of the file with the actual execution command
+    flux : array (3-dim)
+        flux values for all channels, layes, and energy groups
+    keff : float
+        multiplication factor
+    iterInputs : dict
+        inputs (e.g., adf) values for all the Newton iterations. keys represent
+        the attribute, and values represent the 3-dim values 
+        [channel, layer, egroup] for each iteration.
+    iterOutputs : dict
+        Output flux values for all the Newton iterations. keys represent
+        the attribute, and values represent the 3-dim values 
+        [channel, layer, egroup] for each iteration.
+    norm_err : array 1-dim
+        norm2 of the predcted minus the reference fluxes
 
 
-    Methods
-    -------
-    TBC : ....
+    Raises
+    ------
+    ValueError
+        If the onject ``xs`` has no core values. This indicated that the
+        ``PopulateCoreValues`` must be executed prior.
+    TypeError
+        If ``casedir``, ``casefile``, ``exefile`` are not strings.
+
 
     """
 
@@ -103,9 +129,7 @@ class DYN3D():
 
 
     def Execute(self):
-        """Read universes cross-section data and associated templates
-        
-        The ``Read`` method also populates the template files with data. 
+        """Single DYN3D execution
 
         Parameters
         ----------
@@ -117,12 +141,12 @@ class DYN3D():
         exefile : str 
             name of the file with the actual execution command
     
-        Returns
-        -------
-        dyn3dResult : dict
-            keff and flux values from DYN3D        
-        normFlux : array
-            1-dim normalized flux values (normalized to unity)
+        Attributes
+        ----------
+        flux : array (3-dim)
+            flux values for all channels, layes, and energy groups
+        keff : float
+            multiplication factor
 
         """
         
@@ -147,12 +171,18 @@ class DYN3D():
         Parameters
         ----------
         corrattrs : list of str
-            name of the iterative attributes which will be iterated for correction.
+            name/s of the iterative attributes to be iterated for correction.
         refFlx : 3-dim list
             reference flux solution for all the channels, layers, energy groups. 
             Default is None. In which case the results will be obtained from
             the results on the xs object. The order/structure has to follow
             ``refFlx[channel][layer][group]``
+        newtonIters : int
+            number of Newton iterates
+        krylovSpan : int
+            number of Krylov iterates/vectors, must be >= 1 
+        dampingF : float
+            a damping factor between 0 and 1
         
         Returns
         -------
@@ -164,6 +194,10 @@ class DYN3D():
             Default is None. In which case the results will be obtained from
             the results on the xs object. The order/structure has to follow
             ``refFlx[channel][layer][group]``
+        flux : array 2-dim
+            Fluxes (flat 1-dim) as a function of iteration.
+        xinputs = xinputs
+            Last Input variable (flat 1-dim) as a function of iteration.
             
         """
         

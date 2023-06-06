@@ -174,7 +174,7 @@ all the channels and layers. *Please note that the provided data can only be for
        
 .. code:: 
 
-    xs.PopulateCoreData(self, states, attributes, volManip, **addattrs)
+    xs.PopulateCoreData(states, attributes, volManip, **addattrs)
 
 
 *Inputs*:
