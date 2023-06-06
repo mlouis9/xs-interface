@@ -15,11 +15,12 @@ Method							   		 Description
 ------------------------- --------------------------------------------
 :ref:`p_corevalues`	 			Values for radial channels & layers
 ------------------------- --------------------------------------------
+:ref:`p_poplatedata`	 		Populate exiting and new data for all channels & layers
+------------------------- --------------------------------------------
 :ref:`p_sliceplot`	 			Plot radial selected property distribution
 ------------------------- --------------------------------------------
-:ref:`p_poplatedata`	 		Populate exiting and new data for all channels & layers
+:ref:`p_channelsplot`	 		Plot (1D) data of a single property over multiple channels & layers
 ========================= ============================================
-
 
 .. _p_table:
 
@@ -156,6 +157,67 @@ or
 	             dens=[[700, 700, 700, 700]]*4)
 	             
 	             
+
+.. _p_poplatedata:
+
+=================
+PopulateCoreData
+=================
+
+
+**Populate existing and new data for all the channels and layers**
+
+In addition to using data stored for all the universes directly, additional data can be provided for
+all the channels and layers. *Please note that the provided data can only be for a single state for each channel-layer pair.*
+
+*Syntax*
+       
+.. code:: 
+
+    xs.PopulateCoreData(states, attributes, volManip, **addattrs)
+
+
+*Inputs*:
+
+- ``states`` dict with keys represent the state/branch name and value represent the values. Different states (i.e., branches, history, time) for which data is obtained.
+-  ``attributes`` : list. With attributes to be used in lieu of the data stored for all the universes. If None, all the existing attributes will be used. 
+- ``volManip`` is a string or list of strings. Volume manipulation that be: 'multiply' or 'divide' or None. Default is None. If this is a list then the number of components must equal to the number of attributes. 
+- ``addattr`` named arguments. keys/variables represent the name of the new attribute and values are 3-dim list with the following structure: #channels x #layers x #groups. The values can also be of ``None`` type in which case the values will be automatically populated with unity values for all channels, layers, and energy groups. 
+
+*Execute*
+       
+
+Define new attributes ``adf`` and ``sph``.
+
+.. code:: 
+
+	nchs = 4
+	states = {
+	'history':[['nom', 'nom', 'nom', 'nom']]*nchs,
+	'time': [[0.0, 0.0, 0.0, 0.0]]*nchs,
+	'fuel': [[900, 900, 900, 900]]*nchs,
+	'boron': [[0, 0, 0, 0]]*nchs,
+	'dens': [[700, 700, 700, 700]]*nchs,
+	}
+	
+	adfvals = [[[0.91, 1.11], [0.92, 1.12], [0.93, 1.13], [0.94, 1.14]]]*nchs
+	
+	
+	xs.PopulateCoreData(attributes=['infkappa', 'infsp0', 'infflx'],
+	                    states=states, 
+	                    volManip=[None, None, 'divide'],
+	                    sph=None, adf=adfvals)
+	                    
+or 	                    
+
+.. code:: 
+	
+	xs.PopulateCoreData(attributes=None,
+	                    states=states, 
+	                    volManip=[None, None, 'divide'],
+	                    sph=None, adf=adfvals)
+
+
 	             
 .. _p_sliceplot:
 
@@ -262,55 +324,77 @@ For example:
                precision=".2f", edge=0.5, norm=1E+16, label="flux [1E+16]", 
                includeCols=[0, 8], includeRows=[0, 8])
                
-               
-.. _p_poplatedata:
-
-=================
-PopulateCoreData
-=================
 
 
-**Populate existing and new data for all the channels and layers**
+.. _p_channelsplot:
 
-In addition to using data stored for all the universes directly, additional data can be provided for
-all the channels and layers. *Please note that the provided data can only be for a single state for each channel-layer pair.*
+=============
+ChannelsPlot
+=============
+
+
+**plot the 1-dim data of a property over multiple channels/layers**
+
 
 *Syntax*
        
 .. code:: 
 
-    xs.PopulateCoreData(self, attributes, states, volManip, **addattrs)
-
+    xs.ChannelsPlot(self, attr, xvalues, chIds=None, layers=None, egroup=0, 
+                    flip=False, xlabel=None, ylabel=None,
+                    norm=1.0, fontsize=FONT_SIZE, markers="--*", 
+                    markerfill=False, markersize=MARKER_SIZE)
 
 *Inputs*:
 
--  ``attributes`` : list. With attributes to be used in lieu of the data stored for all the universes.
-- ``states`` dict with keys represent the state/branch name and value represent the values. Different states (i.e., branches, history, time) for which data is obtained.
-- ``volManip`` is a string or list of strings. Volume manipulation that be: 'multiply' or 'divide' or None. Default is None. If this is a list then the number of components must equal to the number of attributes. 
-- ``addattr`` named arguments. keys/variables represent the name of the new attribute and values are 3-dim list with the following structure: #channels x #layers x #groups. The values can also be of ``None`` type in which case the values will be automatically populated with unity values for all channels, layers, and energy groups. 
+-  ``attr`` : name of the attribute to be plotted.
+-  ``xvalues`` : x-axis values, e.g., heights in cm.
+-  ``chIds`` : identification strings of all the channels. Multiiple channels can be provided.
+-  ``layers`` : array. Identifier/s of the axial layers to be included. If None then all layers are plotted
+-  ``egroup`` : int index of the energy group.
+-  ``xlabel`` : str. x-axis label.
+-  ``ylabel`` : str. y-axis label.
+-  ``norm`` : float data normalization factor
+-  ``fontsize`` : float. font size value.
+-  ``markers`` : str or list of strings. markers type
+-  ``markerfill`` : boolean. True if the marking filling to be excluded and False otherwise.
+-  ``markersize`` : float. marker size.
+
 
 *Execute*
        
 
-Define new attributes ``adf`` and ``sph``.
+Plot the results
 
 .. code:: 
 
-	nchs = 4
-	states = {
-	'history':[['nom', 'nom', 'nom', 'nom']]*nchs,
-	'time': [[0.0, 0.0, 0.0, 0.0]]*nchs,
-	'fuel': [[900, 900, 900, 900]]*nchs,
-	'boron': [[0, 0, 0, 0]]*nchs,
-	'dens': [[700, 700, 700, 700]]*nchs,
-	}
-	
-	adfvals = [[[0.91, 1.11], [0.92, 1.12], [0.93, 1.13], [0.94, 1.14]]]*nchs
-	
-	
-	xs.PopulateCoreData(attributes=['infkappa', 'infsp0', 'infflx'],
+    xs.ChannelsPlot('infflx', zmid, ylabel='Flux', xlabel='Height, cm')
+
+
+.. image:: images//plotchannel1.png
+
+
+
+Specific layers can be selected.
+
+.. code:: 
+
+    xs.ChannelsPlot('infflx', zmid, ylabel='Flux', xlabel='Height, cm', markers='ro',
+                		layers=np.linspace(1,30,30, dtype=int), markerfill=True)
+
+
+.. image:: images//plotchannel2.png
+
+
+**Remark**
+
+The user must populate the exiting and any new data for all channels & layers using :ref:`p_poplatedata` before using this plotting routine.
+
+e.g., 
+
+.. code:: 
+
+	xs.PopulateCoreData(
 	                    states=states, 
-	                    volManip=[None, None, 'divide'],
-	                    sph=None, adf=adfvals)
-
-
+	                    attributes=None,
+	                    volManip=volmanip)

@@ -17,7 +17,6 @@ import matplotlib.pyplot as plt
 
 from xsInterface.functions.main import Main
 from xsInterface.functions.dyn3d import DYN3D
-from xsInterface.functions.plotters import Plot1d
 
 inputFile = ".\\inputs\\controlDict"
         
@@ -78,7 +77,7 @@ exefile = "RUN_DYN3D" # dyn3d executuin file
 reslt = DYN3D(xs, casedir, casefile, exefile)
 # reslt.Execute()
 reslt.Iterate(
-    corrattrs=['topadf'], refFlx=refFlx, newtonIters=14, krylovSpan=20, 
+    corrattrs=['topadf'], refFlx=refFlx, newtonIters=4, krylovSpan=8, 
     dampingF=1.0)
 
 
@@ -91,7 +90,6 @@ layers = np.hstack((-20.0, layers, 385.76))  # with reflectors
 zmid = 0.5*(layers[0:-1] + layers[1:])
 
 
-
 plt.figure()
 reslt.PlotFluxes(zmid, iters=None,  markers=['--', '*', 'o'],
                chId="S1", layers=None, egroup=0)
@@ -99,6 +97,10 @@ reslt.PlotFluxes(zmid, iters=None,  markers=['--', '*', 'o'],
 plt.figure()
 reslt.PlotFluxes(zmid, iters=None,  markers=['--', '*', 'o'],
                chId="S1", layers=None, egroup=1)
+
+
+xs.ChannelsPlot('infflx', zmid, ylabel='Flux', xlabel='Height, cm', markers='ro',
+                layers=np.linspace(1,30,30, dtype=int), markerfill=True)
 
 # plt.figure()
 # reslt.PlotFluxes(zmid, iters=np.array([0, 1, 2]),  markers=['--', '<', '*', 'o'], markerfill=True,

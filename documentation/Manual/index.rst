@@ -24,6 +24,8 @@ Chapters							    Description
 :ref:`codeexe`				    Execution of the code and data manipulation
 ------------------------- --------------------------------------------
 :ref:`postprocess`				Post-processing of results
+------------------------- --------------------------------------------
+:ref:`dyn3d`				    	Application the ``xsInterface`` with the nodal diffusion code, DYN3D.
 ========================= ============================================
 
 
@@ -39,6 +41,8 @@ Chapters							    Description
    postprocess
    coerelabel
    general
+   dyn3d
+   example1_dyn3d
 
 
 Data Flow
