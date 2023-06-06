@@ -258,11 +258,11 @@ class DYN3D():
         Parameters
         ----------
         iters : array
-            iteration indices
+            iteration indices. If None, the 0th and last iterations will be plotted.
         xvalues : array
             x-axis values, e.g., heights in cm.
         chId : str
-            identification string of the channels.
+            identification string of the channel.
         layers : array
             layers to be included in the plot. If None all the layers included.
         egroup : int
@@ -271,8 +271,6 @@ class DYN3D():
             flag to indicate if the reference flux to be included in the plot
         flip : bool
             boolean flag to indicate whether results should flipped
-        layers : int, list of int, ndarray of int
-            identifier/s of the axial layer. If None then all layers are plotted
         xlabel : str
             x-axis label with a default ``Axial height, meters``
         ylabel : str
@@ -280,9 +278,9 @@ class DYN3D():
         fontsize : float
             font size value
         markers : str or list of strings
-            markers type
+            markers type/s
         markerfill : bool
-            True if the marking filling to be included and False otherwise
+            True if the marking filling to be excluded and False otherwise
         markersize : int or float
             size of the marker with a default of 8.
     
