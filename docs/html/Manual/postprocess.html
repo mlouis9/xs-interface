@@ -39,8 +39,8 @@
 <p>After the execution of <code class="docutils literal notranslate"><span class="pre">xs.Read()</span></code>, the data can be directly obtained by using multiple methods.</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 27%" />
-<col style="width: 73%" />
+<col style="width: 24%" />
+<col style="width: 76%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Method</p></th>
@@ -57,11 +57,14 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#p-corevalues"><span class="std std-ref">CoreValues</span></a></p></td>
 <td><p>Values for radial channels &amp; layers</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#p-sliceplot"><span class="std std-ref">SlicePlot</span></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#p-poplatedata"><span class="std std-ref">PopulateCoreData</span></a></p></td>
+<td><p>Populate exiting and new data for all channels &amp; layers</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#p-sliceplot"><span class="std std-ref">SlicePlot</span></a></p></td>
 <td><p>Plot radial selected property distribution</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#p-poplatedata"><span class="std std-ref">PopulateCoreData</span></a></p></td>
-<td><p>Populate exiting and new data for all channels &amp; layers</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#p-channelsplot"><span class="std std-ref">ChannelsPlot</span></a></p></td>
+<td><p>Plot (1D) data of a single property over multiple channels &amp; layers</p></td>
 </tr>
 </tbody>
 </table>
@@ -156,6 +159,50 @@ all channels and layers.</p>
 </pre></div>
 </div>
 </section>
+<section id="populatecoredata">
+<span id="p-poplatedata"></span><h2>PopulateCoreData<a class="headerlink" href="#populatecoredata" title="Permalink to this headline">¶</a></h2>
+<p><strong>Populate existing and new data for all the channels and layers</strong></p>
+<p>In addition to using data stored for all the universes directly, additional data can be provided for
+all the channels and layers. <em>Please note that the provided data can only be for a single state for each channel-layer pair.</em></p>
+<p><em>Syntax</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">PopulateCoreData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">volManip</span><span class="p">,</span> <span class="o">**</span><span class="n">addattrs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Inputs</em>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">states</span></code> dict with keys represent the state/branch name and value represent the values. Different states (i.e., branches, history, time) for which data is obtained.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attributes</span></code> : list. With attributes to be used in lieu of the data stored for all the universes. If None, all the existing attributes will be used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">volManip</span></code> is a string or list of strings. Volume manipulation that be: ‘multiply’ or ‘divide’ or None. Default is None. If this is a list then the number of components must equal to the number of attributes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">addattr</span></code> named arguments. keys/variables represent the name of the new attribute and values are 3-dim list with the following structure: #channels x #layers x #groups. The values can also be of <code class="docutils literal notranslate"><span class="pre">None</span></code> type in which case the values will be automatically populated with unity values for all channels, layers, and energy groups.</p></li>
+</ul>
+<p><em>Execute</em></p>
+<p>Define new attributes <code class="docutils literal notranslate"><span class="pre">adf</span></code> and <code class="docutils literal notranslate"><span class="pre">sph</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nchs</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">states</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s1">&#39;history&#39;</span><span class="p">:[[</span><span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
+<span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
+<span class="s1">&#39;fuel&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
+<span class="s1">&#39;boron&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
+<span class="s1">&#39;dens&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">adfvals</span> <span class="o">=</span> <span class="p">[[[</span><span class="mf">0.91</span><span class="p">,</span> <span class="mf">1.11</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.92</span><span class="p">,</span> <span class="mf">1.12</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.93</span><span class="p">,</span> <span class="mf">1.13</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.94</span><span class="p">,</span> <span class="mf">1.14</span><span class="p">]]]</span><span class="o">*</span><span class="n">nchs</span>
+
+
+<span class="n">xs</span><span class="o">.</span><span class="n">PopulateCoreData</span><span class="p">(</span><span class="n">attributes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;infkappa&#39;</span><span class="p">,</span> <span class="s1">&#39;infsp0&#39;</span><span class="p">,</span> <span class="s1">&#39;infflx&#39;</span><span class="p">],</span>
+                    <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
+                    <span class="n">volManip</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;divide&#39;</span><span class="p">],</span>
+                    <span class="n">sph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adf</span><span class="o">=</span><span class="n">adfvals</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">PopulateCoreData</span><span class="p">(</span><span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
+                    <span class="n">volManip</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;divide&#39;</span><span class="p">],</span>
+                    <span class="n">sph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adf</span><span class="o">=</span><span class="n">adfvals</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 <section id="sliceplot">
 <span id="p-sliceplot"></span><h2>SlicePlot<a class="headerlink" href="#sliceplot" title="Permalink to this headline">¶</a></h2>
 <p><strong>Plot radial property distribution for a given axial layer</strong></p>
@@ -234,40 +281,50 @@ for every parameter.</p></li>
 </pre></div>
 </div>
 </section>
-<section id="populatecoredata">
-<span id="p-poplatedata"></span><h2>PopulateCoreData<a class="headerlink" href="#populatecoredata" title="Permalink to this headline">¶</a></h2>
-<p><strong>Populate existing and new data for all the channels and layers</strong></p>
-<p>In addition to using data stored for all the universes directly, additional data can be provided for
-all the channels and layers. <em>Please note that the provided data can only be for a single state for each channel-layer pair.</em></p>
+<section id="channelsplot">
+<span id="p-channelsplot"></span><h2>ChannelsPlot<a class="headerlink" href="#channelsplot" title="Permalink to this headline">¶</a></h2>
+<p><strong>plot the 1-dim data of a property over multiple channels/layers</strong></p>
 <p><em>Syntax</em></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">PopulateCoreData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">volManip</span><span class="p">,</span> <span class="o">**</span><span class="n">addattrs</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">ChannelsPlot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">xvalues</span><span class="p">,</span> <span class="n">chIds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">egroup</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">flip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">norm</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">FONT_SIZE</span><span class="p">,</span> <span class="n">markers</span><span class="o">=</span><span class="s2">&quot;--*&quot;</span><span class="p">,</span>
+                <span class="n">markerfill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="n">MARKER_SIZE</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><em>Inputs</em>:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">attributes</span></code> : list. With attributes to be used in lieu of the data stored for all the universes.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">states</span></code> dict with keys represent the state/branch name and value represent the values. Different states (i.e., branches, history, time) for which data is obtained.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">volManip</span></code> is a string or list of strings. Volume manipulation that be: ‘multiply’ or ‘divide’ or None. Default is None. If this is a list then the number of components must equal to the number of attributes.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">addattr</span></code> named arguments. keys/variables represent the name of the new attribute and values are 3-dim list with the following structure: #channels x #layers x #groups. The values can also be of <code class="docutils literal notranslate"><span class="pre">None</span></code> type in which case the values will be automatically populated with unity values for all channels, layers, and energy groups.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attr</span></code> : name of the attribute to be plotted.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xvalues</span></code> : x-axis values, e.g., heights in cm.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chIds</span></code> : identification strings of all the channels. Multiiple channels can be provided.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">layers</span></code> : array. Identifier/s of the axial layers to be included. If None then all layers are plotted</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">egroup</span></code> : int index of the energy group.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xlabel</span></code> : str. x-axis label.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ylabel</span></code> : str. y-axis label.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">norm</span></code> : float data normalization factor</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fontsize</span></code> : float. font size value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">markers</span></code> : str or list of strings. markers type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">markerfill</span></code> : boolean. True if the marking filling to be excluded and False otherwise.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">markersize</span></code> : float. marker size.</p></li>
 </ul>
 <p><em>Execute</em></p>
-<p>Define new attributes <code class="docutils literal notranslate"><span class="pre">adf</span></code> and <code class="docutils literal notranslate"><span class="pre">sph</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nchs</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">states</span> <span class="o">=</span> <span class="p">{</span>
-<span class="s1">&#39;history&#39;</span><span class="p">:[[</span><span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
-<span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
-<span class="s1">&#39;fuel&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">,</span> <span class="mi">900</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
-<span class="s1">&#39;boron&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
-<span class="s1">&#39;dens&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">]]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="n">adfvals</span> <span class="o">=</span> <span class="p">[[[</span><span class="mf">0.91</span><span class="p">,</span> <span class="mf">1.11</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.92</span><span class="p">,</span> <span class="mf">1.12</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.93</span><span class="p">,</span> <span class="mf">1.13</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.94</span><span class="p">,</span> <span class="mf">1.14</span><span class="p">]]]</span><span class="o">*</span><span class="n">nchs</span>
-
-
-<span class="n">xs</span><span class="o">.</span><span class="n">PopulateCoreData</span><span class="p">(</span><span class="n">attributes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;infkappa&#39;</span><span class="p">,</span> <span class="s1">&#39;infsp0&#39;</span><span class="p">,</span> <span class="s1">&#39;infflx&#39;</span><span class="p">],</span>
+<p>Plot the results</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">ChannelsPlot</span><span class="p">(</span><span class="s1">&#39;infflx&#39;</span><span class="p">,</span> <span class="n">zmid</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Flux&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Height, cm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/plotchannel1.png" src="../_images/plotchannel1.png" />
+<p>Specific layers can be selected.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">ChannelsPlot</span><span class="p">(</span><span class="s1">&#39;infflx&#39;</span><span class="p">,</span> <span class="n">zmid</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Flux&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Height, cm&#39;</span><span class="p">,</span> <span class="n">markers</span><span class="o">=</span><span class="s1">&#39;ro&#39;</span><span class="p">,</span>
+                            <span class="n">layers</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">markerfill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/plotchannel2.png" src="../_images/plotchannel2.png" />
+<p><strong>Remark</strong></p>
+<p>The user must populate the exiting and any new data for all channels &amp; layers using <a class="reference internal" href="#p-poplatedata"><span class="std std-ref">PopulateCoreData</span></a> before using this plotting routine.</p>
+<p>e.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">PopulateCoreData</span><span class="p">(</span>
                     <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
-                    <span class="n">volManip</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;divide&#39;</span><span class="p">],</span>
-                    <span class="n">sph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adf</span><span class="o">=</span><span class="n">adfvals</span><span class="p">)</span>
+                    <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">volManip</span><span class="o">=</span><span class="n">volmanip</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

@@ -78,7 +78,7 @@ exefile = "RUN_DYN3D" # dyn3d executuin file
 reslt = DYN3D(xs, casedir, casefile, exefile)
 # reslt.Execute()
 reslt.Iterate(
-    corrattrs=['topadf'], refFlx=refFlx, newtonIters=14, krylovSpan=20, 
+    corrattrs=['topadf'], refFlx=refFlx, newtonIters=4, krylovSpan=8, 
     dampingF=1.0)
 
 
@@ -91,7 +91,6 @@ layers = np.hstack((-20.0, layers, 385.76))  # with reflectors
 zmid = 0.5*(layers[0:-1] + layers[1:])
 
 
-
 plt.figure()
 reslt.PlotFluxes(zmid, iters=None,  markers=['--', '*', 'o'],
                chId="S1", layers=None, egroup=0)
@@ -99,6 +98,9 @@ reslt.PlotFluxes(zmid, iters=None,  markers=['--', '*', 'o'],
 plt.figure()
 reslt.PlotFluxes(zmid, iters=None,  markers=['--', '*', 'o'],
                chId="S1", layers=None, egroup=1)
+
+
+xs.ChannelsPlot('infflx', zmid)
 
 # plt.figure()
 # reslt.PlotFluxes(zmid, iters=np.array([0, 1, 2]),  markers=['--', '<', '*', 'o'], markerfill=True,

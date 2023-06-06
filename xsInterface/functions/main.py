@@ -705,8 +705,6 @@ class Main():
                      markerfill=False, markersize=MARKER_SIZE):
         """plot the 1-dim data of a property over multiple channels/layers
     
-        The use of this method is similar to the ``getvalues`` method.
-        It is important to note that not all the values have axial layers.
     
         Parameters
         ----------
@@ -725,6 +723,8 @@ class Main():
             x-axis label with a default ``Axial height, meters``
         ylabel : str
             y-axis label with a default for any existing parameter
+        norm : float
+            data normalization factor
         fontsize : float
             font size value
         markers : str or list of strings
