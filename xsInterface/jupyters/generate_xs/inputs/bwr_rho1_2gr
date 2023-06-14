@@ -1,0 +1,776 @@
+set title "BWR Pin Burnup+TH Calculation - void history effect"
+
+% --- Fuel pins:
+
+
+pin 1
+FUEL1   0.60579
+gasgap  0.62103
+clad    0.71501
+water1  
+
+
+pin 2
+FUEL2   0.60579
+gasgap  0.62103
+clad    0.71501
+water2  
+
+
+pin 3
+FUEL3   0.60579
+gasgap  0.62103
+clad    0.71501
+water3  
+
+
+pin 4
+FUEL4   0.60579
+gasgap  0.62103
+clad    0.71501
+water4  
+
+
+pin 5
+FUEL5   0.60579
+gasgap  0.62103
+clad    0.71501
+water5  
+
+
+pin 6
+FUEL6   0.60579
+gasgap  0.62103
+clad    0.71501
+water6  
+
+
+pin 7
+FUEL7   0.60579
+gasgap  0.62103
+clad    0.71501
+water7  
+
+
+pin 8
+FUEL8   0.60579
+gasgap  0.62103
+clad    0.71501
+water8  
+
+
+pin 9
+FUEL9   0.60579
+gasgap  0.62103
+clad    0.71501
+water9  
+
+
+pin 10
+FUEL10   0.60579
+gasgap  0.62103
+clad    0.71501
+water10  
+
+
+pin 11
+FUEL11   0.60579
+gasgap  0.62103
+clad    0.71501
+water11  
+
+
+pin 12
+FUEL12   0.60579
+gasgap  0.62103
+clad    0.71501
+water12  
+
+
+pin 13
+FUEL13   0.60579
+gasgap  0.62103
+clad    0.71501
+water13  
+
+
+pin 14
+FUEL14   0.60579
+gasgap  0.62103
+clad    0.71501
+water14  
+
+
+pin 15
+FUEL15   0.60579
+gasgap  0.62103
+clad    0.71501
+water15  
+
+
+pin 16
+FUEL16   0.60579
+gasgap  0.62103
+clad    0.71501
+water16  
+
+
+pin 17
+FUEL17   0.60579
+gasgap  0.62103
+clad    0.71501
+water17  
+
+
+pin 18
+FUEL18   0.60579
+gasgap  0.62103
+clad    0.71501
+water18  
+
+
+pin 19
+FUEL19   0.60579
+gasgap  0.62103
+clad    0.71501
+water19  
+
+
+pin 20
+FUEL20   0.60579
+gasgap  0.62103
+clad    0.71501
+water20  
+
+
+pin 21
+FUEL21   0.60579
+gasgap  0.62103
+clad    0.71501
+water21  
+
+
+pin 22
+FUEL22   0.60579
+gasgap  0.62103
+clad    0.71501
+water22  
+
+
+pin 23
+FUEL23   0.60579
+gasgap  0.62103
+clad    0.71501
+water23  
+
+
+pin 24
+FUEL24   0.60579
+gasgap  0.62103
+clad    0.71501
+water24  
+
+
+pin 25
+FUEL25   0.60579
+gasgap  0.62103
+clad    0.71501
+water25  
+
+
+pin 26
+FUEL26   0.60579
+gasgap  0.62103
+clad    0.71501
+water26  
+
+
+pin 27
+FUEL27   0.60579
+gasgap  0.62103
+clad    0.71501
+water27  
+
+
+pin 28
+FUEL28   0.60579
+gasgap  0.62103
+clad    0.71501
+water28  
+
+
+pin 29
+FUEL29   0.60579
+gasgap  0.62103
+clad    0.71501
+water29  
+
+
+pin 30
+FUEL30   0.60579
+gasgap  0.62103
+clad    0.71501
+water30  
+
+
+pin 31
+FUEL31   0.60579
+gasgap  0.62103
+clad    0.71501
+water31  
+
+
+pin 32
+FUEL32   0.60579
+gasgap  0.62103
+clad    0.71501
+water32  
+
+
+pin 33
+FUEL33   0.60579
+gasgap  0.62103
+clad    0.71501
+water33  
+
+
+pin 34
+FUEL34   0.60579
+gasgap  0.62103
+clad    0.71501
+water34  
+
+
+pin 35
+FUEL35   0.60579
+gasgap  0.62103
+clad    0.71501
+water35  
+
+
+pin 36
+FUEL36   0.60579
+gasgap  0.62103
+clad    0.71501
+water36  
+
+
+pin 55
+plenum
+
+pin 54
+plenum
+
+% difinition of the 3D pin cell model
+
+
+lat 100 9 0 0 38  
+   -20.000    54
+    0.0000    1 
+    10.160    2 
+    20.320    3 
+    30.480    4 
+    40.640    5 
+    50.800    6 
+    60.960    7 
+    71.120    8 
+    81.280    9 
+    91.440    10
+    101.60    11
+    111.76    12
+    121.92    13
+    132.08    14
+    142.24    15
+    152.40    16
+    162.56    17
+    172.72    18
+    182.88    19
+    193.04    20
+    203.20    21
+    213.36    22
+    223.52    23
+    233.68    24
+    243.84    25
+    254.00    26
+    264.16    27
+    274.32    28
+    284.48    29
+    294.64    30
+    304.80    31
+    314.96    32
+    325.12    33
+    335.28    34
+    345.44    35
+    355.60    36
+    365.76    55 
+
+surf 1000 cuboid -0.93726 0.93726 -0.93726 0.93726 -20.000 385.760  
+
+cell 110  0  fill 100    -1000
+cell 112  0  outside      1000
+
+
+% --- Periodic boundary condition:
+%1. Black boundary - the neutron is killed
+%2. Reflective boundary - the neutron is reflected back into the geometry
+%3. Periodic boundary - the neutron is moved to the opposite side of the geometry
+%      x y z
+set bc 2 2 1
+
+
+%  ------------------------------------------------
+% 			MATERIALS
+% -------------------------------------------------
+
+mat plenum  0.070462 
+40090.06c  0.0059311
+40091.06c  0.0012934
+40092.06c  0.001977
+40094.06c  0.0020035
+40096.06c  0.00032278
+26054.06c  0.011217
+26056.06c  0.17738
+26057.06c  0.0042545
+26058.06c  0.00054149
+24050.06c  0.0024673
+24052.06c  0.04758
+24053.06c  0.0053951
+24054.06c  0.001343
+28058.06c  0.017122
+28060.06c  0.0065978
+28061.06c  0.00028421
+28062.06c  0.00091398
+28064.06c  0.0002329
+25055.06c  0.0056687
+ 1001.06c   0.47165
+ 8016.06c   0.23583
+
+mat gasgap sum
+8016.06c 3.76661E-5
+
+mat clad   -6.5514
+40000.06c   1.0
+
+therm lwtr lwj3.11t
+
+mat FUEL1 -10.42 tmp 807.31
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL2 -10.42 tmp 807.92
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL3 -10.42 tmp 808.53
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL4 -10.42 tmp 809.14
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL5 -10.42 tmp 809.75
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL6 -10.42 tmp 810.36
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL7 -10.42 tmp 810.97
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL8 -10.42 tmp 811.57
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL9 -10.42 tmp 812.17
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL10 -10.42 tmp 812.77
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL11 -10.42 tmp 813.37
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL12 -10.42 tmp 813.97
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL13 -10.42 tmp 814.57
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL14 -10.42 tmp 815.16
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL15 -10.42 tmp 815.76
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL16 -10.42 tmp 816.35
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL17 -10.42 tmp 816.94
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL18 -10.42 tmp 815.34
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL19 -10.42 tmp 815.31
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL20 -10.42 tmp 815.27
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL21 -10.42 tmp 815.24
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL22 -10.42 tmp 815.21
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL23 -10.42 tmp 815.18
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL24 -10.42 tmp 815.14
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL25 -10.42 tmp 815.11
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL26 -10.42 tmp 815.08
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL27 -10.42 tmp 815.04
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL28 -10.42 tmp 815.01
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL29 -10.42 tmp 814.98
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL30 -10.42 tmp 814.95
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL31 -10.42 tmp 814.91
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL32 -10.42 tmp 814.88
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL33 -10.42 tmp 814.84
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL34 -10.42 tmp 814.81
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL35 -10.42 tmp 814.78
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat FUEL36 -10.42 tmp 814.74
+92235.06c -0.029971
+92238.06c -0.85153
+8016.06c -0.1185
+
+mat water1 -0.75467 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water2 -0.75349 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water3 -0.75231 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water4 -0.75112 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water5 -0.74993 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water6 -0.74873 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water7 -0.74753 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water8 -0.74633 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water9 -0.74512 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water10 -0.74391 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water11 -0.74269 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water12 -0.74147 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water13 -0.74025 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water14 -0.73902 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water15 -0.73778 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water16 -0.73654 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water17 -0.72826 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water18 -0.70259 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water19 -0.67835 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water20 -0.65583 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water21 -0.63483 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water22 -0.61521 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water23 -0.59686 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water24 -0.57966 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water25 -0.56352 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water26 -0.54835 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water27 -0.53406 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water28 -0.52057 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water29 -0.50782 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water30 -0.49574 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water31 -0.48427 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water32 -0.47338 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water33 -0.46302 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water34 -0.45313 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water35 -0.44370 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+mat water36 -0.43468 moder lwtr 1001
+1001.06c 2
+8016.06c 1
+
+det 1 dm FUEL1 dr -8 void
+det 2 dm FUEL2 dr -8 void
+det 3 dm FUEL3 dr -8 void
+det 4 dm FUEL4 dr -8 void
+det 5 dm FUEL5 dr -8 void
+det 6 dm FUEL6 dr -8 void
+det 7 dm FUEL7 dr -8 void
+det 8 dm FUEL8 dr -8 void
+det 9 dm FUEL9 dr -8 void
+det 10 dm FUEL10 dr -8 void
+det 11 dm FUEL11 dr -8 void
+det 12 dm FUEL12 dr -8 void
+det 13 dm FUEL13 dr -8 void
+det 14 dm FUEL14 dr -8 void
+det 15 dm FUEL15 dr -8 void
+det 16 dm FUEL16 dr -8 void
+det 17 dm FUEL17 dr -8 void
+det 18 dm FUEL18 dr -8 void
+det 19 dm FUEL19 dr -8 void
+det 20 dm FUEL20 dr -8 void
+det 21 dm FUEL21 dr -8 void
+det 22 dm FUEL22 dr -8 void
+det 23 dm FUEL23 dr -8 void
+det 24 dm FUEL24 dr -8 void
+det 25 dm FUEL25 dr -8 void
+det 26 dm FUEL26 dr -8 void
+det 27 dm FUEL27 dr -8 void
+det 28 dm FUEL28 dr -8 void
+det 29 dm FUEL29 dr -8 void
+det 30 dm FUEL30 dr -8 void
+det 31 dm FUEL31 dr -8 void
+det 32 dm FUEL32 dr -8 void
+det 33 dm FUEL33 dr -8 void
+det 34 dm FUEL34 dr -8 void
+det 35 dm FUEL35 dr -8 void
+det 36 dm FUEL36 dr -8 void
+%set fmtx 4 -10 10 1 -10 10 1 0 365.75 36
+%src 1 sm FUEL1 sw 0.027778
+%src 2 sm FUEL2 sw 0.027778
+%src 3 sm FUEL3 sw 0.027778
+%src 4 sm FUEL4 sw 0.027778
+%src 5 sm FUEL5 sw 0.027778
+%src 6 sm FUEL6 sw 0.027778
+%src 7 sm FUEL7 sw 0.027778
+%src 8 sm FUEL8 sw 0.027778
+%src 9 sm FUEL9 sw 0.027778
+%src 10 sm FUEL10 sw 0.027778
+%src 11 sm FUEL11 sw 0.027778
+%src 12 sm FUEL12 sw 0.027778
+%src 13 sm FUEL13 sw 0.027778
+%src 14 sm FUEL14 sw 0.027778
+%src 15 sm FUEL15 sw 0.027778
+%src 16 sm FUEL16 sw 0.027778
+%src 17 sm FUEL17 sw 0.027778
+%src 18 sm FUEL18 sw 0.027778
+%src 19 sm FUEL19 sw 0.027778
+%src 20 sm FUEL20 sw 0.027778
+%src 21 sm FUEL21 sw 0.027778
+%src 22 sm FUEL22 sw 0.027778
+%src 23 sm FUEL23 sw 0.027778
+%src 24 sm FUEL24 sw 0.027778
+%src 25 sm FUEL25 sw 0.027778
+%src 26 sm FUEL26 sw 0.027778
+%src 27 sm FUEL27 sw 0.027778
+%src 28 sm FUEL28 sw 0.027778
+%src 29 sm FUEL29 sw 0.027778
+%src 30 sm FUEL30 sw 0.027778
+%src 31 sm FUEL31 sw 0.027778
+%src 32 sm FUEL32 sw 0.027778
+%src 33 sm FUEL33 sw 0.027778
+%src 34 sm FUEL34 sw 0.027778
+%src 35 sm FUEL35 sw 0.027778
+%src 36 sm FUEL36 sw 0.027778
+
+
+set pop 100000 300 400 1
+
+
+%  ------------------------------------------------
+% 			CROSS-SECTIONS
+% -------------------------------------------------
+
+% --- Cross section library file path:
+
+% --- Neutron population and criticality cycles:
+set ures 1 92238.12c 94239.12c 92238.09c 94239.09c 92238.06c
+set power 70367.34694
+
+set gcu 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 54 55
+
+% -- 1-group Cross-Sections
+%ene onegroup 2 1 1E-11 15 
+%set nfg  onegroup
+  
+% -- 2-group Cross-Sections
+ene twogroup 1 1E-11 0.625E-6 15
+set nfg  twogroup
