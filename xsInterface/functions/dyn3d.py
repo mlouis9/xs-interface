@@ -128,7 +128,7 @@ class DYN3D():
         self.norm_err = None
 
 
-    def Execute(self):
+    def Execute(self, printstatus=True):
         """Single DYN3D execution
 
         Parameters
@@ -154,7 +154,8 @@ class DYN3D():
         self.xs.Write()
         
         # execute dyn3d
-        keff, prdFlx = exeDyn3D(self.casedir, self.casefile, self.exefile)
+        keff, prdFlx = exeDyn3D(self.casedir, self.casefile, self.exefile,
+                                printstatus)
         
         # save results
         self.keff = keff 
@@ -162,7 +163,7 @@ class DYN3D():
         
 
     def Iterate(self, corrattrs, refFlx, newtonIters: int, krylovSpan: int, 
-                dampingF=1.0):
+                dampingF=1.0, writestatus=True):
         """Calculate correction factors via non-linear iterations
         
         Iterative method to calculate correction factors
@@ -209,6 +210,9 @@ class DYN3D():
             _inlist(attr, "correction attribute", expattrs)
 
         chIds = list(self.xs.core.chIds)  # channel Ids
+
+        if writestatus:
+            print("... Iterative JFNK ...")  
 
         # check that refFlx is properly provided
         for attr, corevals in self.xs.core.corevalues.items():
@@ -395,7 +399,7 @@ class DYN3D():
 # -----------------------------------------------------------------------------
 
 
-def exeDyn3D(casedir, casefile, exefile):
+def exeDyn3D(casedir, casefile, exefile, printstatus=False):
     """Execute DYN3D and collect results
         
     Provide all the files required to execute DYN3D and execute them
@@ -425,12 +429,14 @@ def exeDyn3D(casedir, casefile, exefile):
 
     # change directory
     os.chdir(casedir)  
-        
-    print("... DYN3D Execution ... Start")
+    
+    if printstatus:
+        print("... DYN3D Execution ... Start")
     exe_process = subprocess.run(exefile, shell=True,
                                    stdout=subprocess.PIPE)   
     if exe_process.stderr is None:
-        print("... DYN3D Execution ... Ended Successfully")
+        if printstatus:
+            print("... DYN3D Execution ... Ended Successfully")
     else:
         raise OSError("... DYN3D Execution ... Error!!!\n{}"
                       .format(exe_process.stderr))

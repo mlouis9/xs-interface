@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Iterative JFNK procedure with DYN3D &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Methodology" href="../Methodology/index.html" />
+    <link rel="prev" title="Execute DYN3D (with 2D XS)" href="exe_dyn3d_2d_xs.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="iterative-jfnk-procedure-with-dyn3d">
+<span id="iterate-dyn3d-example"></span><h1>Iterative JFNK procedure with DYN3D<a class="headerlink" href="#iterative-jfnk-procedure-with-dyn3d" title="Permalink to this headline">¶</a></h1>
+<p>This Notebook demonestrates how to calculate correction factors (i.e.,
+axial ADFs in this case) using the built-in JFNK procedure within the
+<code class="docutils literal notranslate"><span class="pre">xsInterface</span></code> package.</p>
+<p>First, cross sections are read from a serpent <code class="docutils literal notranslate"><span class="pre">_res.m</span></code> file. This
+notebook shows how to execute DYN3D iteratively using the <code class="docutils literal notranslate"><span class="pre">Iterate</span></code>
+method.</p>
+<section id="case-description">
+<h2>Case Description<a class="headerlink" href="#case-description" title="Permalink to this headline">¶</a></h2>
+<p>Directory: <code class="docutils literal notranslate"><span class="pre">.\xs-interface\xsInterface\jupyters\iterate_dyn3d</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.\inputs</span></code> directory includes: - <code class="docutils literal notranslate"><span class="pre">bwr_rho1_2gr</span></code> a serpent input
+file. This is a 3D BWR assembly divided into 36 layers (i.e., universes
+1,2,…,36) of fuel surrounded by a bottom (universe 54) and upper layers
+(universe 55) of reflectors. - <code class="docutils literal notranslate"><span class="pre">bwr_rho1_2gr_res.m</span></code> a serpent results
+file with all the cross sections. - <code class="docutils literal notranslate"><span class="pre">univs</span></code> a file that describes how
+to read <code class="docutils literal notranslate"><span class="pre">bwr_rho1_2gr_res.m</span></code> - <code class="docutils literal notranslate"><span class="pre">template_dyn3d_2g</span></code> is a template
+file that specifies how cross sections should be printed out. -
+<code class="docutils literal notranslate"><span class="pre">controlDict</span></code> the main files that is required by the <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.\dyn3d</span></code> includes a pre-generated DYN3D case. The <code class="docutils literal notranslate"><span class="pre">.\dyn3d\xs</span></code>
+directory will include all the files with printed cross sections
+required by DYN3D.</p>
+<section id="required-imports">
+<h3>Required imports<a class="headerlink" href="#required-imports" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.functions.main</span> <span class="kn">import</span> <span class="n">Main</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># a class required to execute DYN3D</span>
+<span class="kn">from</span> <span class="nn">xsInterface.functions.dyn3d</span> <span class="kn">import</span> <span class="n">DYN3D</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># plotting capability</span>
+<span class="kn">from</span> <span class="nn">xsInterface.functions.plotters</span> <span class="kn">import</span> <span class="n">Plot1d</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inputFile</span> <span class="o">=</span> <span class="s2">&quot;.</span><span class="se">\\</span><span class="s2">inputs</span><span class="se">\\</span><span class="s2">controlDict&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="read-the-cross-sections">
+<h3>Read the cross sections<a class="headerlink" href="#read-the-cross-sections" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset the main object</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">Main</span><span class="p">(</span><span class="n">inputFile</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre class="literal-block">... Reading control dict ...
+&lt;.inputscontrolDict&gt;</pre>
+<section id="read-xs-data-without-populating-the-templates">
+<h4>Read xs data without populating the templates<a class="headerlink" href="#read-xs-data-without-populating-the-templates" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># readTemplate allows to read and populate data using the templates</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">readUniverses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre class="literal-block">SERPENT Serpent 2.1.32 found in .inputsbwr_rho1_2gr_res.m, but version 2.1.31 is defined in settings
+  Attemping to read anyway. Please report strange behaviors/failures to developers.</pre>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span> <span class="n">Reading</span> <span class="n">universe</span> <span class="o">&lt;</span><span class="n">u</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">...</span> <span class="n">Reading</span> <span class="n">coe</span><span class="o">/</span><span class="n">_res</span><span class="o">.</span><span class="n">m</span> <span class="n">file</span> <span class="k">for</span> <span class="n">hisotry</span> <span class="o">&lt;</span><span class="n">nom</span><span class="o">&gt;</span> <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="populate-cross-sections">
+<h3>Populate cross sections<a class="headerlink" href="#populate-cross-sections" title="Permalink to this headline">¶</a></h3>
+<p>In the <code class="docutils literal notranslate"><span class="pre">&quot;.\\inputs\\controlDict&quot;</span></code> the user defined the core map used
+to populate the cross sections according to their channels and layers
+positions.</p>
+<p>In our problem we have 1 channel and 38 axial layers.</p>
+<p><strong>Define states</strong> These states must exist and be used to obtain the
+cross sections for different channels and layers.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nchs</span><span class="p">,</span> <span class="n">nlayers</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">38</span>
+<span class="n">states</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s1">&#39;history&#39;</span><span class="p">:[[</span><span class="s1">&#39;nom&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">nlayers</span><span class="p">]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">]</span><span class="o">*</span><span class="n">nlayers</span><span class="p">]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,</span> <span class="s1">&#39;dens&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mf">700.</span><span class="p">]</span><span class="o">*</span><span class="n">nlayers</span><span class="p">]</span><span class="o">*</span><span class="n">nchs</span><span class="p">,}</span>
+</pre></div>
+</div>
+<p><strong>Populate core data</strong> built-in capability to populate the data
+according to the defined map including defining new variables not listed
+in the original <code class="docutils literal notranslate"><span class="pre">univs</span></code> file. This is a <strong>mandaory</strong> step if the
+intent is to execute DYN3D.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">volmanip</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;infflx&#39;</span><span class="p">:</span> <span class="s1">&#39;divide&#39;</span><span class="p">}</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">PopulateCoreData</span><span class="p">(</span>
+                    <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
+                    <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># specify only if specific attrs needed</span>
+                    <span class="n">volManip</span><span class="o">=</span><span class="n">volmanip</span><span class="p">,</span>
+                    <span class="n">adf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">topadf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bottomadf</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="iteratively-execute-dyn3d">
+<h3>Iteratively execute DYN3D<a class="headerlink" href="#iteratively-execute-dyn3d" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">casedir</span> <span class="o">=</span> <span class="s2">&quot;.</span><span class="se">\\</span><span class="s2">dyn3d&quot;</span>   <span class="c1"># dyn3d dir</span>
+<span class="n">casefile</span> <span class="o">=</span> <span class="s2">&quot;bwr&quot;</span>  <span class="c1"># name of dyn3d file</span>
+<span class="n">exefile</span> <span class="o">=</span> <span class="s2">&quot;RUN_DYN3D&quot;</span> <span class="c1"># dyn3d executuin file</span>
+
+<span class="c1"># Reset the object</span>
+<span class="n">reslt</span> <span class="o">=</span> <span class="n">DYN3D</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">casedir</span><span class="p">,</span> <span class="n">casefile</span><span class="p">,</span> <span class="n">exefile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Set the refernce flux</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">refFlx</span><span class="p">,</span> <span class="n">chIds</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">CoreValues</span><span class="p">(</span><span class="s1">&#39;infflx&#39;</span><span class="p">,</span> <span class="n">volManip</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;divide&#39;</span><span class="p">])</span>
+<span class="n">refFlx</span> <span class="o">=</span> <span class="n">refFlx</span><span class="p">[</span><span class="s1">&#39;infflx&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Execute</strong></p>
+<p>The files will be written to the specified directories and then
+automatically executed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span>
+    <span class="n">corrattrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;topadf&#39;</span><span class="p">],</span> <span class="n">refFlx</span><span class="o">=</span><span class="n">refFlx</span><span class="p">,</span> <span class="n">newtonIters</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">krylovSpan</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">dampingF</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span> <span class="n">Iterative</span> <span class="n">JFNK</span> <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="compare-results-against-serpent">
+<h3>Compare results against Serpent<a class="headerlink" href="#compare-results-against-serpent" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<p>The layers are defined as they were used in the actual problem</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">layers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">365.76</span><span class="p">,</span> <span class="mi">37</span><span class="p">)</span>  <span class="c1">#active core</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="mf">385.76</span><span class="p">))</span>  <span class="c1"># with reflectors</span>
+<span class="n">zmid</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</pre></div>
+</div>
+<p>Built-in plotting capability to plot the reference and DYN3D fluxes</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">PlotFluxes</span><span class="p">(</span><span class="n">zmid</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="n">markers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">],</span>
+               <span class="n">chId</span><span class="o">=</span><span class="s2">&quot;S1&quot;</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">egroup</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Norm. Fast flux&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/jfnk_dyn3d_31_0.png" src="../_images/jfnk_dyn3d_31_0.png" />
+<img alt="../_images/jfnk_dyn3d_31_1.png" src="../_images/jfnk_dyn3d_31_1.png" />
+<img alt="../_images/jfnk_dyn3d_31_2.png" src="../_images/jfnk_dyn3d_31_2.png" />
+<p>There is an option to continue the iterations on other parameters.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span>
+    <span class="n">corrattrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;inftranspxs&#39;</span><span class="p">],</span> <span class="n">refFlx</span><span class="o">=</span><span class="n">refFlx</span><span class="p">,</span> <span class="n">newtonIters</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">krylovSpan</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">dampingF</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span> <span class="n">Iterative</span> <span class="n">JFNK</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">PlotFluxes</span><span class="p">(</span><span class="n">zmid</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="n">markers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">],</span>
+               <span class="n">chId</span><span class="o">=</span><span class="s2">&quot;S1&quot;</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">egroup</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Norm. Fast flux&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/jfnk_dyn3d_34_0.png" src="../_images/jfnk_dyn3d_34_0.png" />
+<img alt="../_images/jfnk_dyn3d_34_1.png" src="../_images/jfnk_dyn3d_34_1.png" />
+<img alt="../_images/jfnk_dyn3d_34_2.png" src="../_images/jfnk_dyn3d_34_2.png" />
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../InputSetups/index.html">Input-Setups</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="exe_dyn3d_2d_xs.html" title="previous chapter">Execute DYN3D (with 2D XS)</a></li>
+      <li>Next: <a href="../Methodology/index.html" title="next chapter">Methodology</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/Examples/jfnk_dyn3d.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

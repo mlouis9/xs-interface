@@ -1,0 +1,15 @@
+CONTROL OF XS-LIBRARY RBWR
+XS
+NEUTRON GROUPS   DELAYED NEUTRONS GROUPS
+   2        7 
+****************************************************
+  ENERGY LIMITS
+  1.5000E+07  1.4800E-00  1.0000E-04
+****************************************************
+   NXSCORE    NXSREFL
+     3           0
+****************************************************
+  NAME    NUMBER OF BURNUP STATES
+xs_S1_0_u54.dat      1
+xs_S1_1_u22.dat      1
+xs_S1_2_u55.dat      1

@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Read Cross Sections &#8212; xsInterface 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Execute DYN3D" href="exe_dyn3d.html" />
+    <link rel="prev" title="Write Cross Sections" href="write_xs.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="read-cross-sections">
+<span id="readxs-example"></span><h1>Read Cross Sections<a class="headerlink" href="#read-cross-sections" title="Permalink to this headline">¶</a></h1>
+<p>This Notebook demonestrates how to read cross sections from a serpent
+<code class="docutils literal notranslate"><span class="pre">_res.m</span></code> file. The capabilities to store and process the data are also
+presented.</p>
+<section id="case-description">
+<h2>Case Description<a class="headerlink" href="#case-description" title="Permalink to this headline">¶</a></h2>
+<p>Directory: <code class="docutils literal notranslate"><span class="pre">.\xs-interface\xsInterface\jupyters\generate_xs</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.\inputs</span></code> directory includes: - <code class="docutils literal notranslate"><span class="pre">bwr_rho1_2gr</span></code> a serpent input
+file. This is a 3D BWR assembly divided into 36 layers (i.e., universes
+1,2,…,36) of fuel surrounded by a bottom (universe 54) and upper layers
+(universe 55) of reflectors. - <code class="docutils literal notranslate"><span class="pre">bwr_rho1_2gr_res.m</span></code> a serpent results
+file with all the cross sections. - <code class="docutils literal notranslate"><span class="pre">univs</span></code> a file that describes how
+to read <code class="docutils literal notranslate"><span class="pre">bwr_rho1_2gr_res.m</span></code> - <code class="docutils literal notranslate"><span class="pre">controlDict</span></code> the main files that is
+required by the <code class="docutils literal notranslate"><span class="pre">xsInterface</span></code>.</p>
+<section id="required-imports">
+<h3>Required imports<a class="headerlink" href="#required-imports" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xsInterface.functions.main</span> <span class="kn">import</span> <span class="n">Main</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inputFile</span> <span class="o">=</span> <span class="s2">&quot;.</span><span class="se">\\</span><span class="s2">inputs</span><span class="se">\\</span><span class="s2">controlDict&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="read-the-cross-sections">
+<h3>Read the cross sections<a class="headerlink" href="#read-the-cross-sections" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset the main object</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">Main</span><span class="p">(</span><span class="n">inputFile</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre class="literal-block">... Reading control dict ...
+&lt;.inputscontrolDict&gt;</pre>
+<section id="read-xs-data-without-populating-the-templates">
+<h4>Read xs data without populating the templates<a class="headerlink" href="#read-xs-data-without-populating-the-templates" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">readUniverses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre class="literal-block">SERPENT Serpent 2.1.32 found in .inputsbwr_rho1_2gr_res.m, but version 2.1.31 is defined in settings
+  Attemping to read anyway. Please report strange behaviors/failures to developers.</pre>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span> <span class="n">Reading</span> <span class="n">universe</span> <span class="o">&lt;</span><span class="n">u</span><span class="o">&gt;</span> <span class="o">...</span>
+<span class="o">...</span> <span class="n">Reading</span> <span class="n">coe</span><span class="o">/</span><span class="n">_res</span><span class="o">.</span><span class="n">m</span> <span class="n">file</span> <span class="k">for</span> <span class="n">hisotry</span> <span class="o">&lt;</span><span class="n">nom</span><span class="o">&gt;</span> <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="process-results">
+<h3>Process results<a class="headerlink" href="#process-results" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s2">&quot;u1&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;infnsf&#39;</span><span class="p">,</span> <span class="s1">&#39;infrabsxs&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>history</th>
+      <th>time</th>
+      <th>dens</th>
+      <th>infnsf</th>
+      <th>infrabsxs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>nom</td>
+      <td>0.0</td>
+      <td>700.0</td>
+      <td>[0.00780015, 0.154742]</td>
+      <td>[0.00988701, 0.0895764]</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="s2">&quot;u1&quot;</span><span class="p">,</span> <span class="s1">&#39;infnsf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;history&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="s1">&#39;nom&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;&lt;U3&#39;</span><span class="p">),</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span>
+ <span class="s1">&#39;dens&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">700.</span><span class="p">]),</span>
+ <span class="s1">&#39;infnsf&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">array</span><span class="p">([</span><span class="mf">0.00780015</span><span class="p">,</span> <span class="mf">0.154742</span>  <span class="p">])]}</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+    <span class="n">univId</span> <span class="o">=</span> <span class="s2">&quot;u&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">univId</span><span class="p">]</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Values</span><span class="p">(</span><span class="n">univId</span><span class="p">,</span> <span class="s1">&#39;infsp0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">results</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;u1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;history&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="s1">&#39;nom&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;&lt;U3&#39;</span><span class="p">),</span>
+  <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span>
+  <span class="s1">&#39;dens&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">700.</span><span class="p">]),</span>
+  <span class="s1">&#39;infsp0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.517267</span>  <span class="p">,</span> <span class="mf">0.0169944</span> <span class="p">],</span>
+          <span class="p">[</span><span class="mf">0.00151575</span><span class="p">,</span> <span class="mf">1.25447</span>   <span class="p">]])]},</span>
+ <span class="s1">&#39;u2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;history&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="s1">&#39;nom&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;&lt;U3&#39;</span><span class="p">),</span>
+  <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span>
+  <span class="s1">&#39;dens&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">700.</span><span class="p">]),</span>
+  <span class="s1">&#39;infsp0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.518501</span>  <span class="p">,</span> <span class="mf">0.0167034</span> <span class="p">],</span>
+          <span class="p">[</span><span class="mf">0.00161828</span><span class="p">,</span> <span class="mf">1.24887</span>   <span class="p">]])]},</span>
+ <span class="s1">&#39;u3&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;history&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="s1">&#39;nom&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;&lt;U3&#39;</span><span class="p">),</span>
+  <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span>
+  <span class="s1">&#39;dens&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">700.</span><span class="p">]),</span>
+  <span class="s1">&#39;infsp0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.518396</span>  <span class="p">,</span> <span class="mf">0.0166698</span> <span class="p">],</span>
+          <span class="p">[</span><span class="mf">0.00161741</span><span class="p">,</span> <span class="mf">1.24832</span>   <span class="p">]])]},</span>
+ <span class="s1">&#39;u4&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;history&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="s1">&#39;nom&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;&lt;U3&#39;</span><span class="p">),</span>
+  <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span>
+  <span class="s1">&#39;dens&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">700.</span><span class="p">]),</span>
+  <span class="s1">&#39;infsp0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.517767</span>  <span class="p">,</span> <span class="mf">0.0166212</span> <span class="p">],</span>
+          <span class="p">[</span><span class="mf">0.00162702</span><span class="p">,</span> <span class="mf">1.24614</span>   <span class="p">]])]}}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">xsInterface</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Developer Team</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Manual/index.html">User’s Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../InputSetups/index.html">Input-Setups</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Methodology/index.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../develop/index.html">Developer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/index.html">File-parsing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="write_xs.html" title="previous chapter">Write Cross Sections</a></li>
+      <li>Next: <a href="exe_dyn3d.html" title="next chapter">Execute DYN3D</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Dan Kotlyar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/Examples/generate_xs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

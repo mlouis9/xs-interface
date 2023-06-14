@@ -98,7 +98,7 @@ def ArnoldiIteration(dyn3d, Fx0, x0, b, nodesN: int, n: int, iterScheme,
                       userdata = dyn3d.xs.core.corevalues) 
 
         # Execute DYN3D and obtain solution
-        dyn3d.Execute()
+        dyn3d.Execute(printstatus=False)
         
         FxI = _reshapeTo1D(dyn3d.flux, nodesN, normFlag=True)   
         

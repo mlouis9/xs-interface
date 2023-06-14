@@ -162,19 +162,21 @@ class Main():
                                                       self._formats)                
 
 
-    def Write(self, writemode="w"):
+    def Write(self, writemode="w", writestatus=False, writeunivs=False):
         """Write the data file structure into dedicated output files"""
         
         if self._dataFiles == {}:
             raise ValueError("!!!No data exist. Execute the ``Read`` method.")
         
-        print("\n")
+        if writestatus:
+            print("\n... Writing cross sections ...\n")  
         for inpFile, dataFile in self._dataFiles.items():
-            print("... Writing to ...\n{}".format(inpFile))   
+            if writeunivs:
+                print("... Writing to ...\n{}".format(inpFile))  
             # write the output files
             with open(inpFile, writemode) as txtFile:
                 txtFile.writelines(dataFile)
-        print("\n")
+        
 
 
     def Table(self, univId, attrs=None, **kwargs):
