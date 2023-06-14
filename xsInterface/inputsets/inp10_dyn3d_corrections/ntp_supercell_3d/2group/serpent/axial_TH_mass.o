@@ -1,0 +1,330 @@
+---------------------------------------
+Begin PBS Prologue Tue Jun 13 22:45:30 EDT 2023
+Job ID:     44111.atl1-1-09-014-3-r.pace.gatech.edu
+User ID:    mkrecicki3
+Job name:   axial_TH_mass.pbs
+Queue:      cinders
+End PBS Prologue Tue Jun 13 22:45:31 EDT 2023
+---------------------------------------
+atl1-1-02-001-11-r.pace.gatech.edu
+
+  _                   .-=-.           .-=-.          .-==-.       
+ { }      __        .' O o '.       .' O o '.       /  -<' )--<   
+ { }    .' O'.     / o .-. O \     / o .-. O \     /  .---`       
+ { }   / .-. o\   /O  /   \  o\   /O  /   \  o\   /O /            
+  \ `-` /   \ O`-'o  /     \  O`-'o  /     \  O`-`o /             
+   `-.-`     '.____.'       `._____.'       `.____.'              
+
+Serpent 2 beta
+
+A Continuous-energy Monte Carlo Reactor Physics Burnup Calculation Code
+
+ - Version 2.1.32 (February 24, 2021) -- Contact: serpent@vtt.fi
+
+ - Reference: J. Leppanen, et al. "The Serpent Monte Carlo code: Status,
+              development and applications in 2013." Ann. Nucl. Energy,
+              82 (2015) 142-150.
+
+ - Compiled Feb 24 2021 11:26:56
+
+ - MPI Parallel calculation mode available
+
+ - OpenMP Parallel calculation mode available
+
+ - Geometry and mesh plotting available
+
+ - Default data path set to: "/storage/c-montecarlo1/rsicc/local/serpent-2.1.32/ENDF70/acedata"
+
+ - Full command used to run Serpent:
+
+   sss2 -omp 24 -checkvolumes 1000000000 axial_TH
+
+Begin calculation on Tue Jun 13 22:45:32 2023 at atl1-1-02-001-11-r.pace.gatech.edu
+
+Reading input file "axial_TH"...
+Reading multi-physics interface "./H2FE_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+Reading multi-physics interface "./CladFE_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+Reading multi-physics interface "./Fuel_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+Reading multi-physics interface "./H2MES_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+Reading multi-physics interface "./ZircInner_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+Reading multi-physics interface "./ZrH_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+Reading multi-physics interface "./H2MER_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+Reading multi-physics interface "./ZircOuter_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+Reading multi-physics interface "./ZrC_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+Reading multi-physics interface "./Sleeve_axial.ifc"...
+Found mesh type 5.
+Allocating list sizes of 2160
+
+Checking duplicate input definitions...
+OK.
+
+Dividing burnable materials...
+OK.
+
+Creating geometry...
+OK.
+
+Counting geometry zones...
+
+The geometry consists of 6 levels:
+
+Level 0 size: max 2 zones
+Level 1 size: max 34 zones
+Level 2 size: max 25 zones
+Level 3 size: max 7 zones
+Level 4 size: max 81 zones
+Level 5 size: max 3 zones
+
+Processing cells...
+OK.
+
+Linking materials to geometry...
+OK.
+
+Processing detector definitions...
+
+ ***** Warning: Energy grid default2 is used for both group constant generation
+ and detector calculation (detector FuelFlx)
+
+
+ ***** Warning: Energy grid default2 is used for both group constant generation
+ and detector calculation (detector ModFlx)
+
+
+ ***** Warning: Energy grid default2 is used for both group constant generation
+ and detector calculation (detector SupercellFlx)
+
+OK.
+
+Allocating RESMAT matrices and associated arrays...
+OK.
+
+Counting cells...
+OK.
+
+Processing data for group constant generation:
+
+ - 70 energy groups in micro-group structure
+ - 2 energy groups in macro-group structure
+ - B1 fundamental mode calculation is not run
+ - Group constants generated in 100 universes
+ - Discontinuity factors are not calculated
+ - Pin-power distributions are not calculated
+ - Albedos are not calculated
+ - Poison cross sections are not calculated
+
+Processing multi-physics interfaces...
+
+Regular mesh based interface "./H2FE_axial.ifc":
+
+ - Maximum density of interface: -7.320000E-03
+ - Interface is linked to the following materials:
+   * H2FE
+ - Majorant density of material H2FE: -7.320000E-03
+ - Material H2FE TMS limits: 200.00 K and 2900.00 K
+
+Regular mesh based interface "./CladFE_axial.ifc":
+
+ - Maximum density of interface: -3.298000E+00
+ - Interface is linked to the following materials:
+   * CladFE
+ - Majorant density of material CladFE: -3.298000E+00
+ - Material CladFE TMS limits: 200.00 K and 2900.00 K
+
+Regular mesh based interface "./Fuel_axial.ifc":
+
+ - Maximum density of interface: -4.948300E+00
+ - Interface is linked to the following materials:
+   * Fuel
+ - Majorant density of material Fuel: -4.948300E+00
+ - Material Fuel TMS limits: 200.00 K and 2900.00 K
+
+Regular mesh based interface "./H2MES_axial.ifc":
+
+ - Maximum density of interface: -6.099500E-02
+ - Interface is linked to the following materials:
+   * H2MES
+ - Majorant density of material H2MES: -6.099500E-02
+ - Material H2MES TMS limits: 30.00 K and 550.00 K
+
+Regular mesh based interface "./ZircInner_axial.ifc":
+
+ - Maximum density of interface: -6.363200E+00
+ - Interface is linked to the following materials:
+   * ZircInner
+ - Majorant density of material ZircInner: -6.363200E+00
+ - Material ZircInner TMS limits: 30.00 K and 550.00 K
+
+Regular mesh based interface "./ZrH_axial.ifc":
+
+ - Maximum density of interface: -5.444544E+00
+ - Interface is linked to the following materials:
+   * ZrH
+ - Majorant density of material ZrH: -5.444544E+00
+ - Material ZrH TMS limits: 30.00 K and 550.00 K
+
+Regular mesh based interface "./H2MER_axial.ifc":
+
+ - Maximum density of interface: -1.390900E-02
+ - Interface is linked to the following materials:
+   * H2MER
+ - Majorant density of material H2MER: -1.390900E-02
+ - Material H2MER TMS limits: 30.00 K and 550.00 K
+
+Regular mesh based interface "./ZircOuter_axial.ifc":
+
+ - Maximum density of interface: -6.363200E+00
+ - Interface is linked to the following materials:
+   * ZircOuter
+ - Majorant density of material ZircOuter: -6.363200E+00
+ - Material ZircOuter TMS limits: 30.00 K and 550.00 K
+
+Regular mesh based interface "./ZrC_axial.ifc":
+
+ - Maximum density of interface: -1.700000E+00
+ - Interface is linked to the following materials:
+   * ZrC
+ - Majorant density of material ZrC: -1.700000E+00
+ - Material ZrC TMS limits: 30.00 K and 550.00 K
+
+Regular mesh based interface "./Sleeve_axial.ifc":
+
+ - Maximum density of interface: -2.231000E+00
+ - Interface is linked to the following materials:
+   * Sleeve
+ - Majorant density of material Sleeve: -2.231000E+00
+ - Material Sleeve TMS limits: 30.00 K and 550.00 K
+OK.
+
+Calculating material volumes by sampling points...
+
+x-dimensions : -2.82902E+00 2.82902E+00 cm
+y-dimensions : -2.45000E+00 2.45000E+00 cm
+z-dimensions : 0.00000E+00 1.37000E+02 cm
+
+Estimated calculation time: 0:00:28
+Realized calculation time:  0:00:26
+
+Volumes (in cm3) :
+
+Material Ref           :        N/A 4.0288E+01 (0.00033) :      N/A * (100.0 % den.)
+Material CladRef       : 1.4594E+00 7.2912E+00 (0.00069) :    > 1.0 * (100.0 % den.)
+Material H2REF         : 6.0760E+00 3.0383E+01 (0.00032) :    > 1.0 * (100.0 % den.)
+Material H2MES_REF     : 2.2619E+00 5.6572E+00 (0.00084) :    > 1.0 * (100.0 % den.)
+Material H2MER_REF     : 1.0460E+01 2.6168E+01 (0.00039) :    > 1.0 * (100.0 % den.)
+Material ZrH_REF       : 3.9550E+01 9.8851E+01 (0.00017) :    > 1.0 * (100.0 % den.)
+Material ZircInner_REF : 1.4730E+00 3.6821E+00 (0.00100) :    > 1.0 * (100.0 % den.)
+Material ZircOuter_REF : 3.0182E+00 7.5425E+00 (0.00069) :    > 1.0 * (100.0 % den.)
+Material ZrC_REF       : 1.5048E+01 3.7615E+01 (0.00030) :    > 1.0 * (100.0 % den.)
+Material Sleeve_REF    :        N/A 5.4412E+01 (0.00028) :      N/A * (100.0 % den.)
+Material Fuel          : 1.9343E+04 3.2234E+02 (0.00010) : -0.98334 * (100.0 % den.)
+Material FuelpF33Br1   : 3.2238E+02 1.0478E+01 (0.00061) : -0.96750 * (100.0 % den.)
+Material FuelpF33Ar1   : 3.2238E+02 2.6710E-01 (0.00374) : -0.99917 * (100.0 % den.)
+Material FuelpF32Br1   : 3.2238E+02 1.0470E+01 (0.00064) : -0.96752 * (100.0 % den.)
+Material FuelpF32Ar1   : 3.2238E+02 2.6696E-01 (0.00369) : -0.99917 * (100.0 % den.)
+Material FuelpF31Br1   : 3.2238E+02 1.0481E+01 (0.00064) : -0.96749 * (100.0 % den.)
+Material FuelpF31Ar1   : 3.2238E+02 2.6627E-01 (0.00378) : -0.99917 * (100.0 % den.)
+Material FuelpF30Br1   : 3.2238E+02 1.0484E+01 (0.00061) : -0.96748 * (100.0 % den.)
+Material FuelpF30Ar1   : 3.2238E+02 2.6828E-01 (0.00399) : -0.99917 * (100.0 % den.)
+Material FuelpF29Br1   : 3.2238E+02 1.0481E+01 (0.00059) : -0.96749 * (100.0 % den.)
+Material FuelpF29Ar1   : 3.2238E+02 2.6732E-01 (0.00380) : -0.99917 * (100.0 % den.)
+Material FuelpF28Br1   : 3.2238E+02 1.0464E+01 (0.00061) : -0.96754 * (100.0 % den.)
+Material FuelpF28Ar1   : 3.2238E+02 2.6725E-01 (0.00348) : -0.99917 * (100.0 % den.)
+Material FuelpF27Br1   : 3.2238E+02 1.0485E+01 (0.00065) : -0.96748 * (100.0 % den.)
+Material FuelpF27Ar1   : 3.2238E+02 2.6817E-01 (0.00372) : -0.99917 * (100.0 % den.)
+Material FuelpF26Br1   : 3.2238E+02 1.0478E+01 (0.00062) : -0.96750 * (100.0 % den.)
+Material FuelpF26Ar1   : 3.2238E+02 2.6736E-01 (0.00372) : -0.99917 * (100.0 % den.)
+Material FuelpF25Br1   : 3.2238E+02 1.0469E+01 (0.00057) : -0.96753 * (100.0 % den.)
+Material FuelpF25Ar1   : 3.2238E+02 2.6748E-01 (0.00365) : -0.99917 * (100.0 % den.)
+Material FuelpF24Br1   : 3.2238E+02 1.0477E+01 (0.00057) : -0.96750 * (100.0 % den.)
+Material FuelpF24Ar1   : 3.2238E+02 2.6711E-01 (0.00341) : -0.99917 * (100.0 % den.)
+Material FuelpF23Br1   : 3.2238E+02 1.0473E+01 (0.00062) : -0.96751 * (100.0 % den.)
+Material FuelpF23Ar1   : 3.2238E+02 2.6494E-01 (0.00384) : -0.99918 * (100.0 % den.)
+Material FuelpF22Br1   : 3.2238E+02 1.0476E+01 (0.00067) : -0.96750 * (100.0 % den.)
+Material FuelpF22Ar1   : 3.2238E+02 2.6579E-01 (0.00398) : -0.99918 * (100.0 % den.)
+Material FuelpF21Br1   : 3.2238E+02 1.0486E+01 (0.00057) : -0.96747 * (100.0 % den.)
+Material FuelpF21Ar1   : 3.2238E+02 2.6470E-01 (0.00396) : -0.99918 * (100.0 % den.)
+Material FuelpF20Br1   : 3.2238E+02 1.0483E+01 (0.00059) : -0.96748 * (100.0 % den.)
+Material FuelpF20Ar1   : 3.2238E+02 2.6518E-01 (0.00406) : -0.99918 * (100.0 % den.)
+Material FuelpF19Br1   : 3.2238E+02 1.0479E+01 (0.00065) : -0.96749 * (100.0 % den.)
+Material FuelpF19Ar1   : 3.2238E+02 2.6508E-01 (0.00433) : -0.99918 * (100.0 % den.)
+Material FuelpF18Br1   : 3.2238E+02 1.0481E+01 (0.00065) : -0.96749 * (100.0 % den.)
+Material FuelpF18Ar1   : 3.2238E+02 2.6612E-01 (0.00330) : -0.99917 * (100.0 % den.)
+Material FuelpF17Br1   : 3.2238E+02 1.0477E+01 (0.00063) : -0.96750 * (100.0 % den.)
+Material FuelpF17Ar1   : 3.2238E+02 2.6599E-01 (0.00410) : -0.99917 * (100.0 % den.)
+Material FuelpF16Br1   : 3.2238E+02 1.0480E+01 (0.00058) : -0.96749 * (100.0 % den.)
+Material FuelpF16Ar1   : 3.2238E+02 2.6810E-01 (0.00446) : -0.99917 * (100.0 % den.)
+Material FuelpF15Br1   : 3.2238E+02 1.0479E+01 (0.00054) : -0.96750 * (100.0 % den.)
+Material FuelpF15Ar1   : 3.2238E+02 2.6546E-01 (0.00369) : -0.99918 * (100.0 % den.)
+Material FuelpF14Br1   : 3.2238E+02 1.0469E+01 (0.00065) : -0.96753 * (100.0 % den.)
+Material FuelpF14Ar1   : 3.2238E+02 2.6754E-01 (0.00393) : -0.99917 * (100.0 % den.)
+Material FuelpF13Br1   : 3.2238E+02 1.0481E+01 (0.00067) : -0.96749 * (100.0 % den.)
+Material FuelpF13Ar1   : 3.2238E+02 2.6413E-01 (0.00380) : -0.99918 * (100.0 % den.)
+Material FuelpF12Br1   : 3.2238E+02 1.0476E+01 (0.00060) : -0.96750 * (100.0 % den.)
+Material FuelpF12Ar1   : 3.2238E+02 2.6569E-01 (0.00404) : -0.99918 * (100.0 % den.)
+Material FuelpF11Br1   : 3.2238E+02 1.0476E+01 (0.00061) : -0.96750 * (100.0 % den.)
+Material FuelpF11Ar1   : 3.2238E+02 2.6801E-01 (0.00362) : -0.99917 * (100.0 % den.)
+Material FuelpF10Br1   : 3.2238E+02 1.0474E+01 (0.00055) : -0.96751 * (100.0 % den.)
+Material FuelpF10Ar1   : 3.2238E+02 2.6616E-01 (0.00360) : -0.99917 * (100.0 % den.)
+Material FuelpF9Br1    : 3.2238E+02 1.0475E+01 (0.00062) : -0.96751 * (100.0 % den.)
+Material FuelpF9Ar1    : 3.2238E+02 2.6693E-01 (0.00386) : -0.99917 * (100.0 % den.)
+Material FuelpF8Br1    : 3.2238E+02 1.0483E+01 (0.00061) : -0.96748 * (100.0 % den.)
+Material FuelpF8Ar1    : 3.2238E+02 2.6607E-01 (0.00394) : -0.99917 * (100.0 % den.)
+Material FuelpF7Br1    : 3.2238E+02 1.0481E+01 (0.00051) : -0.96749 * (100.0 % den.)
+Material FuelpF7Ar1    : 3.2238E+02 2.6784E-01 (0.00365) : -0.99917 * (100.0 % den.)
+Material FuelpF6Br1    : 3.2238E+02 1.0480E+01 (0.00056) : -0.96749 * (100.0 % den.)
+Material FuelpF6Ar1    : 3.2238E+02 2.6808E-01 (0.00343) : -0.99917 * (100.0 % den.)
+Material FuelpF5Br1    : 3.2238E+02 1.0483E+01 (0.00061) : -0.96748 * (100.0 % den.)
+Material FuelpF5Ar1    : 3.2238E+02 2.6718E-01 (0.00352) : -0.99917 * (100.0 % den.)
+Material FuelpF4Br1    : 3.2238E+02 1.0477E+01 (0.00063) : -0.96750 * (100.0 % den.)
+Material FuelpF4Ar1    : 3.2238E+02 2.6791E-01 (0.00438) : -0.99917 * (100.0 % den.)
+Material CladFE        : 1.4594E+01 5.8385E+01 (0.00025) :    > 1.0 * (100.0 % den.)
+Material H2FE          : 6.0760E+01 2.4301E+02 (0.00013) :    > 1.0 * ( 23.7 % den.)
+Material ZrH           : 3.9550E+02 7.9100E+02 (0.00007) :    > 1.0 * (100.0 % den.)
+Material ZircInner     : 1.4730E+01 2.9473E+01 (0.00035) :    > 1.0 * (100.0 % den.)
+Material ZircOuter     : 3.0182E+01 6.0371E+01 (0.00024) :    > 1.0 * (100.0 % den.)
+Material ZrC           : 1.5048E+02 3.0095E+02 (0.00010) :  0.99996 * (100.0 % den.)
+Material Sleeve        :        N/A 4.3520E+02 (0.00009) :      N/A * (100.0 % den.)
+Material H2MES         : 2.2619E+01 4.5237E+01 (0.00028) :  0.99992 * ( 41.0 % den.)
+Material H2MER         : 1.0460E+02 2.0917E+02 (0.00014) :  0.99960 * ( 66.1 % den.)
+Material H2FE_LSP      : 2.0253E+00 4.0472E+00 (0.00092) :  0.99829 * (100.0 % den.)
+Material CladLSP       : 4.8646E-01 9.7689E-01 (0.00195) :    > 1.0 * (100.0 % den.)
+Material LSPFE         :        N/A 5.3690E+00 (0.00083) :      N/A * (100.0 % den.)
+Material H2MES_LSP     : 7.5398E-01 7.5128E-01 (0.00235) : -0.00358   (100.0 % den.)
+Material H2MER_LSP     : 3.4868E+00 3.4865E+00 (0.00119) : -0.00007   (100.0 % den.)
+Material LSPME         :        N/A 2.6942E+01 (0.00040) :      N/A * (100.0 % den.)
+
+Volumes written in file "axial_TH.mvol"
+
+OK.
+
+---------------------------------------
+Begin PBS Epilogue Tue Jun 13 22:45:59 EDT 2023
+Job ID:     44111.atl1-1-09-014-3-r.pace.gatech.edu
+User ID:    mkrecicki3
+Job name:   axial_TH_mass.pbs
+Resources:  nodes=1:ppn=24,mem=100gb,neednodes=1:ppn=24,walltime=01:00:00
+Rsrc Used:  cput=00:10:41,vmem=4452780kb,walltime=00:00:29,mem=260992kb,energy_used=0
+Queue:      cinders
+Nodes:     
+atl1-1-02-001-11-r.pace.gatech.edu
+End PBS Epilogue Tue Jun 13 22:46:00 EDT 2023
+---------------------------------------
