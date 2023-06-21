@@ -157,6 +157,10 @@ class DYN3D():
         keff, prdFlx = exeDyn3D(self.casedir, self.casefile, self.exefile,
                                 printstatus)
         
+        # Match the flux values to their channels positions
+        # prdFlx are not necessarily alligned with the right channels
+        
+        
         # save results
         self.keff = keff 
         self.flux = prdFlx
@@ -427,6 +431,9 @@ def exeDyn3D(casedir, casefile, exefile, printstatus=False):
     if not os.path.isabs(casedir):
         casedir = os.path.abspath(casedir)
 
+    if not os.path.isabs(exefile):
+        exefile = os.path.abspath(exefile)
+
     # change directory
     os.chdir(casedir)  
     
@@ -553,3 +560,14 @@ def _getnums(line,integer=True):
         return [int(x) for x in re.findall(match_number, line)]
     else:
         return [float(x) for x in re.findall(match_number, line)]
+    
+###############################################################################
+# def _assignFluxesToChannels(flxIn, radmap, idxmap, chIds):
+#     """assign DYN3D fluxes to the correct channels"""
+    
+#     nchs = len(chIds)  # number of channels
+    
+    
+    
+    
+    
