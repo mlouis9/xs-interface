@@ -329,8 +329,12 @@ class SingleSet():
                 nd1 = np.tile(nd1, (1, colN))
                 # val1 = sum(val1*nd1)
             else:
-                raise KeyError("Attribute 1 <{}> does not exist in macro or "
-                               "micro".format(attr1))            
+                try:
+                    constFlag = True
+                    val1 = float(attr1)  # if a constant is provided
+                except:
+                    raise KeyError("Attribute 1 <{}> does not exist in macro or "
+                                   "micro".format(attr1))            
             # Attribute 2
             microFlag2 = False
             if attr2 in selfCopy.macro:
@@ -354,11 +358,11 @@ class SingleSet():
                 pass
             elif microFlag1:  # attr1 is micro and attr2 is macro
                 val1 = sum(val1*nd1)
-                if val1.size == 2*ng:  # scattering matrices
+                if val1.size == ng*ng:  # scattering matrices
                     val1 = np.reshape(val1, (ng, ng))
             elif microFlag2:  # attr2 is micro and attr1 is macro
                 val2 = sum(val2*nd2)
-                if val2.size == 2*ng:  # scattering matrices
+                if val2.size == ng*ng:  # scattering matrices
                     val2 = np.reshape(val2, (ng, ng))
             else:  # both attr1 and attr2 are macro parameters
                 pass
