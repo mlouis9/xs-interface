@@ -120,6 +120,10 @@ where,
 	- ``krylovSpan`` [int] number of Krylov iterates/vectors, must be >= 1. 
 	- ``dampingF`` [float] a damping factor between 0 and 1.		
 
+**Note**:
+If ``corrattrs`` contains the preserved word 'sph' then all the printed cross sections will be multipled by the superhumanization (SPHs) factors.
+So far, there is no normalization of the SPH factors.
+
 **Example**
 
 .. code::

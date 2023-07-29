@@ -134,6 +134,9 @@ The governing method for the non-linear solution relies on the JFNK, which inclu
 </ul>
 </dd>
 </dl>
+<p><strong>Note</strong>:
+If <code class="docutils literal notranslate"><span class="pre">corrattrs</span></code> contains the preserved word ‘sph’ then all the printed cross sections will be multipled by the superhumanization (SPHs) factors.
+So far, there is no normalization of the SPH factors.</p>
 <p><strong>Example</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span><span class="n">corrattrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;topadf&#39;</span><span class="p">],</span> <span class="n">refFlx</span><span class="o">=</span><span class="n">refFlx</span><span class="p">,</span> <span class="n">newtonIters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">krylovSpan</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">dampingF</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
