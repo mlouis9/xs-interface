@@ -1,0 +1,11 @@
+#PBS -o axial_TH_mass.o 
+#PBS -j oe 
+#PBS -l nodes=1:ppn=24 
+#PBS -l mem=100gb 
+#PBS walltime=100:00 
+#PBS -q cinders 
+#PBS -A GT-dkotlyar6-montecarlo-CODA20 
+cd $PBS_O_WORKDIR
+hostname 
+module load serpent
+sss2 -omp 24 -checkvolumes 1000000000 axial_TH

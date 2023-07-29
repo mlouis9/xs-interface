@@ -431,8 +431,8 @@ def exeDyn3D(casedir, casefile, exefile, printstatus=False):
     if not os.path.isabs(casedir):
         casedir = os.path.abspath(casedir)
 
-    if not os.path.isabs(exefile):
-        exefile = os.path.abspath(exefile)
+    # if not os.path.isabs(exefile):
+    #     exefile = os.path.abspath(exefile)
 
     # change directory
     os.chdir(casedir)  

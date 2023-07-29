@@ -92,10 +92,17 @@ def ArnoldiIteration(dyn3d, Fx0, x0, b, nodesN: int, n: int, iterScheme,
 
         # update the cross sections
         dyn3d.xs.core.corevalues[iterScheme] = xIcore
-        
-        # Read xs data and templates and populate data for channels & layers
-        dyn3d.xs.Read(readUniverses=False, readMapTemplate=True,
-                      userdata = dyn3d.xs.core.corevalues) 
+
+        # manipulate/modify all the cross sections if the scheme is SPH
+        if iterScheme == 'sph':
+            corevaluesmod = _sphManipulation(dyn3d.xs.core.corevalues, dyn3d)
+            # Read xs data and templates and populate data for channels & layers
+            dyn3d.xs.Read(readUniverses=False, readMapTemplate=True,
+                          userdata = corevaluesmod)             
+        else:
+            # Read xs data and templates and populate data for channels&layers
+            dyn3d.xs.Read(readUniverses=False, readMapTemplate=True,
+                          userdata = dyn3d.xs.core.corevalues) 
 
         # Execute DYN3D and obtain solution
         dyn3d.Execute(printstatus=False)
@@ -178,11 +185,6 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
 
     for newtonI in range(newtonIters):
         
-        # if iteration scheme is of SPH manipulation of cross sections needed
-        if iterScheme == 'sph':
-            pass
-
-            
         # execute DYN3D and collect results
         dyn3d.Execute()
         
@@ -302,4 +304,30 @@ def _numNodes(flxIn):
     ng = len(flxIn[0][0])
     c *= ng
     return c  # total number of nodes
-                 
+
+
+def _sphManipulation(corevalues, dyn3d):
+    """Normalize the flux to unity"""
+
+    dictOut = {}
+    nchannels = len(dyn3d.xs.core.layers)  # number of channels
+    nlayers = dyn3d.xs.core.layers  # vector indicating number of layers for each channel
+    
+    # manipulate all the attributes
+    for attr, values in corevalues.items():
+        if attr == 'sph':
+            continue  # no need to manipulate
+        valuesOut = [None]*nchannels
+        for chIdx in range(nchannels):
+            chVals = values[chIdx]
+            valuesOut[chIdx] = [None]*nlayers[chIdx]
+            for ilayer, layerVals in enumerate(chVals):
+                try:
+                    # can only succeed if these are cross sections
+                    valuesOut[chIdx][ilayer] =\
+                        layerVals * corevalues['sph'][chIdx][ilayer]
+                except:
+                    valuesOut[chIdx][ilayer] = layerVals                 
+        dictOut[attr] = valuesOut        
+
+    return dictOut                 
