@@ -167,7 +167,8 @@ class DYN3D():
         
 
     def Iterate(self, corrattrs, refFlx, newtonIters: int, krylovSpan: int, 
-                dampingF=1.0, writestatus=True):
+                dampingF=1.0, writestatus=True, pert=1e-03, eps=1e-12, 
+                lbound=0.2, ubound=3.0, alpha=0.0, attrObj=None):
         """Calculate correction factors via non-linear iterations
         
         Iterative method to calculate correction factors
@@ -188,6 +189,27 @@ class DYN3D():
             number of Krylov iterates/vectors, must be >= 1 
         dampingF : float
             a damping factor between 0 and 1
+        writestatus : True
+            a flag to indicate whether the iterative status should be printed on screen 
+        attrObj : str
+            objective attribute used to multiply the flux to create a reaction
+            rate objective function
+        pert : float
+            a fraction that represents the perturbation that is required to be
+            applied for x for each vector of the Krylov space.  
+        eps : float
+            criterion to stop arnoldi iteration.
+        lbound : float
+            lower bound to limit the variation of correction factors during 
+            Newton iterations.
+        ubound : float
+            upper bound to limit the variation of correction factors during 
+            Newton iterations.        
+        alpha : float
+            a hyper parameter for Ridge regression and it is a penalty
+            coefficient to minimize the coeff_y in the regression procedure. 
+            Default value 0.0
+            
         
         Returns
         -------
@@ -214,6 +236,9 @@ class DYN3D():
             _inlist(attr, "correction attribute", expattrs)
 
         chIds = list(self.xs.core.chIds)  # channel Ids
+
+        if attrObj is not None:
+            _inlist(attrObj, "objective attribute", expattrs)
 
         if writestatus:
             print("... Iterative JFNK ...")  
@@ -246,9 +271,11 @@ class DYN3D():
             x0 =\
             _reshapeTo1D(self.xs.core.corevalues[attr], nodesN, normFlag=False)
             fluxes, xinputs, norm_err, refFlxNorm =\
-                NewtonKrylov(self, attr, x0, refFlx, newtonIters, krylovSpan, 
-                             dampingF)
-         
+                NewtonKrylov(dyn3d=self, iterScheme=attr, x0=x0, refFlx=refFlx, 
+                             newtonIters=newtonIters, krylovSpan=krylovSpan, 
+                             dampingF=dampingF, pert=pert, eps=eps, 
+                             lbound=lbound, ubound=ubound, alpha=alpha, 
+                             attrObj=attrObj)
                 
         self.fluxes = fluxes
         self.refFlxNorm = refFlxNorm
@@ -341,8 +368,7 @@ class DYN3D():
                      [0, nlayers-1])
             nlayers = len(layers)
 
-        
-        sumrefFlx = np.sum(np.array(self.refFlx))
+        # sumrefFlx = np.sum(np.array(self.refFlx))
 
         xvals = np.empty(nlayers) 
         for idx, ilayer in enumerate(layers):
@@ -367,7 +393,7 @@ class DYN3D():
 
         refvals = np.empty(nlayers) 
         for idx, ilayer in enumerate(layers):
-            refvals[idx] = self.refFlx[idxch][ilayer][egroup] / sumrefFlx
+            refvals[idx] = self.refFlx[idxch][ilayer][egroup] # / sumrefFlx
                         
         for key, vals in yvalues.items():
             diff_yvalues[key] = 100*(1-vals/refvals)

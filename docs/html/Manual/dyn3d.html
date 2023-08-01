@@ -121,7 +121,8 @@ The governing method for the non-linear solution relies on the JFNK, which inclu
 <li><p>Newton-Krylov (outer iterations on the variation in x): xk = x0 + s*dx</p></li>
 </ol>
 <p><strong>Syntax</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span><span class="n">corrattrs</span><span class="p">,</span> <span class="n">refFlx</span><span class="p">,</span> <span class="n">newtonIters</span><span class="p">,</span> <span class="n">krylovSpan</span><span class="p">,</span> <span class="n">dampingF</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span><span class="n">corrattrs</span><span class="p">,</span> <span class="n">refFlx</span><span class="p">,</span> <span class="n">newtonIters</span><span class="p">,</span> <span class="n">krylovSpan</span><span class="p">,</span> <span class="n">dampingF</span><span class="p">,</span> <span class="n">writestatus</span><span class="p">,</span> <span class="n">pert</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span>
+        <span class="n">lbound</span><span class="p">,</span> <span class="n">ubound</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">attrObj</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="simple">
@@ -131,6 +132,13 @@ The governing method for the non-linear solution relies on the JFNK, which inclu
 <li><p><code class="docutils literal notranslate"><span class="pre">newtonIters</span></code> [int] number of Newton iterates.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">krylovSpan</span></code> [int] number of Krylov iterates/vectors, must be &gt;= 1.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dampingF</span></code> [float] a damping factor between 0 and 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">writestatus</span></code> : [bool] a flag to indicate whether the iterative status should be printed on screen. Default is True.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attrObj</span></code> : [str] objective attribute used to multiply the flux to create a reaction rate objective function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pert</span></code> : [float] a fraction that represents the perturbation that is required to be applied for x for each vector of the Krylov space.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">eps</span></code> : [float] criterion to stop arnoldi iteration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lbound</span></code> : [float] lower bound to limit the variation of correction factors during Newton iterations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ubound</span></code> : [float] upper bound to limit the variation of correction factors during Newton iterations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code> : [float] a hyper parameter for Ridge regression of the Krylov vectors following the Arnoldi procedure. Default value 0.0</p></li>
 </ul>
 </dd>
 </dl>

@@ -22,7 +22,7 @@ controlFile = ".\\inputs\\controldict"
 xs = Main(controlFile)
 
 # Read xs data and templates and populate data
-xs.Read()
+xs.Read(readUniverses=True)
 
 # Write data to txt files
 xs.Write()

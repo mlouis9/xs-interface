@@ -14,15 +14,14 @@ email: dan.kotlyar@me.gatech.edu
 
 from xsInterface.functions.main import Main
 
-inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
-    "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\inputsets\\inp7\\coe\\controlDict"
+
+inputFile = ".\\coe\\controlDict"
 
 # Read the control dict
 xs = Main(inputFile)
 
 # Read xs data and templates and populate data
-xs.Read()
+xs.Read(readTemplate=True)
 
 # Write data to txt files
 xs.Write()

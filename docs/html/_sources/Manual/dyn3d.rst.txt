@@ -111,7 +111,8 @@ The governing method for the non-linear solution relies on the JFNK, which inclu
 
 .. code::
 
-	reslt.Iterate(corrattrs, refFlx, newtonIters, krylovSpan, dampingF)
+	reslt.Iterate(corrattrs, refFlx, newtonIters, krylovSpan, dampingF, writestatus, pert, eps, 
+                lbound, ubound, alpha, attrObj)
 	
 where,
 	- ``corrattrs`` [list of strs] name/s of the iterative attributes to be iterated for correction.
@@ -119,6 +120,14 @@ where,
 	- ``newtonIters`` [int] number of Newton iterates.
 	- ``krylovSpan`` [int] number of Krylov iterates/vectors, must be >= 1. 
 	- ``dampingF`` [float] a damping factor between 0 and 1.		
+	- ``writestatus`` : [bool] a flag to indicate whether the iterative status should be printed on screen. Default is True.
+	- ``attrObj`` : [str] objective attribute used to multiply the flux to create a reaction rate objective function.
+	- ``pert`` : [float] a fraction that represents the perturbation that is required to be applied for x for each vector of the Krylov space.  
+	- ``eps`` : [float] criterion to stop arnoldi iteration.
+	- ``lbound`` : [float] lower bound to limit the variation of correction factors during Newton iterations.
+	- ``ubound`` : [float] upper bound to limit the variation of correction factors during Newton iterations.        
+	- ``alpha`` : [float] a hyper parameter for Ridge regression of the Krylov vectors following the Arnoldi procedure. Default value 0.0
+
 
 **Note**:
 If ``corrattrs`` contains the preserved word 'sph' then all the printed cross sections will be multipled by the superhumanization (SPHs) factors.

@@ -78,7 +78,7 @@ reslt = DYN3D(xs, casedir, casefile, exefile)
 # reslt.Execute()
 reslt.Iterate(
     corrattrs=['sph'], refFlx=refFlx, newtonIters=13, krylovSpan=13, 
-    dampingF=1.0, writestatus=False)
+    dampingF=1.0, writestatus=False, attrObj='infrabsxs')
 
 
 # -----------------------------------------------------------------------------

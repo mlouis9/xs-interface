@@ -1,84 +1,95 @@
-* Mod Dens Boron ppm Fuel Temp Mod Temp
-1 0 0 0
-700.0
+"vari"{numgr=4}
+"vari"{idxB=-1}
+"vari"{times = [0.0 0.1]}
+"vari"{rho = [0.0 0.1]}
+"vari"{cb = [0.0 0.1]}
+"vari"{tf = [0.0 0.1]}
+"vari"{sg = [0.0 0.1]}
+"vari"{cr = [0.0 0.1]}
+*      Mod Dens      Boron      Fuel Temp       Mod Temp
+              3          0              3              0
+         600.00     700.00         760.00
+         600.00     900.00        1200.00
 *
-*----------------------------------------------------------
-* BURNUP 0.000
-*----------------------------------------------------------
+"rep"{"varo"{len(times)
+* ----------------------------------------------------------------
+"vari"{idxB=idxB+1}
+* BURNUP  "varo"{times[idxB]<3.3f>} 
+* ----------------------------------------------------------------
 *
 * Transport XSEC Table
 *
 "vari"{idxE=0}
-"rep"{2
+"rep"{{
 * GROUP "varo"{idxE+1<d>}
-"values"{inftranspxs,  ["varo"{idxE}]} 
+"values"{inftranspxs, times= "varo"{times[idxB]}, ["varo"{idxE}]} 
 "vari"{idxE=idxE+1}
-"rep"}
+"rep"}}
 *
 * Reduced absorption XSEC Table
 *
 "vari"{idxE=0}
-"rep"{2
+"rep"{{"varo"{numgr}
 * GROUP "varo"{idxE+1<d>}
 "values"{infrabsxs,  ["varo"{idxE}]} 
 "vari"{idxE=idxE+1}
-"rep"}
+"rep"}}
 *
 * Nu-Fission XSEC Table
 *
 "vari"{idxE=0}
-"rep"{2
+"rep"{{"varo"{numgr}
 * GROUP "varo"{idxE+1<d>}
 "values"{infnsf,  ["varo"{idxE}]} 
 "vari"{idxE=idxE+1}
-"rep"}
+"rep"}}
 *
 * Kappa-Fission XSEC Table
 *
 "vari"{idxE=0}
-"rep"{2
+"rep"{{"varo"{numgr}
 * GROUP "varo"{idxE+1<d>}
 "values"{fissjoule,  ["varo"{idxE}]} 
 "vari"{idxE=idxE+1}
-"rep"}
+"rep"}}
 *
 * Scattering XSEC Table
 *
 "vari"{idxE0=0}
-"rep"{2
+"rep"{{"varo"{numgr}
 "vari"{idxE1=0}
-"rep"{{2
+"rep"{{{"varo"{numgr}
 * GROUP "varo"{idxE0+1<d>} -> "varo"{idxE1+1<d>}
 "values"{infsp0,  ["varo"{idxE0}, "varo"{idxE1}]} 
 "vari"{idxE1=idxE1+1}
-"rep"}}
+"rep"}}}
 "vari"{idxE0=idxE0+1}
-"rep"}
+"rep"}}
 *
 * ADF Table XSEC Table
 *
 "vari"{idxE=0}
-"rep"{2
+"rep"{{"varo"{numgr}
 * GROUP "varo"{idxE+1<d>}
 "values"{adf,  ["varo"{idxE}]} 
 "vari"{idxE=idxE+1}
-"rep"}
+"rep"}}
 *
 * Axial ADF
 * bottom
 "vari"{idxE=0}
-"rep"{2
+"rep"{{"varo"{numgr}
 * GROUP "varo"{idxE+1<d>}
-"values"{topadf,  ["varo"{idxE}]} 
+"values"{bottomadf,  ["varo"{idxE}]} 
 "vari"{idxE=idxE+1}
-"rep"}
+"rep"}}
 * top
 "vari"{idxE=0}
-"rep"{2
+"rep"{{"varo"{numgr}
 * GROUP "varo"{idxE+1<d>}
 "values"{topadf,  ["varo"{idxE}]} 
 "vari"{idxE=idxE+1}
-"rep"}
+"rep"}}
 *
 * Fission Spectrum
 *
@@ -99,5 +110,7 @@
 *
 * GROUP 1 2 3 4 5 6 7
 "values"{betaeff}
+*
+"rep"}
 *
 End

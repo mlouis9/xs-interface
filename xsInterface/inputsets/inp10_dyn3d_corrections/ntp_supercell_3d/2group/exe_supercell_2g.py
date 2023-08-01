@@ -77,9 +77,12 @@ exefile = "RUN_DYN3D" # dyn3d executuin file
 reslt = DYN3D(xs, casedir, casefile, exefile)
 # reslt.Execute()
 reslt.Iterate(
-    corrattrs=['topadf'], refFlx=refFlx, newtonIters=13, krylovSpan=13, 
-    dampingF=1.0, writestatus=False)
+    corrattrs=['topadf'], refFlx=refFlx, newtonIters=30, krylovSpan=2, 
+    dampingF=1.0, writestatus=False, alpha=0.0, pert=1E-3, attrObj=None)
 
+# reslt.Iterate(
+#     corrattrs=['topadf'], refFlx=refFlx, newtonIters=13, krylovSpan=13, 
+#     dampingF=1.0, writestatus=False, attrObj='infrabsxs')
 
 # -----------------------------------------------------------------------------
 #                 PLOT RESULTS
@@ -94,7 +97,7 @@ zmid = 0.5*(layers[0:-1] + layers[1:])
 
 plt.figure()
 reslt.PlotFluxes(zmid, iters=None,  markers=['--', '*', 'o'],
-               chId="S1", layers=None, egroup=0)
+               chId="S1", layers=None, egroup=0, refFlag=True)
 
 plt.figure()
 reslt.PlotFluxes(zmid, iters=None,  markers=['--', '*', 'o'],
@@ -106,3 +109,8 @@ xs.ChannelsPlot('topadf', zmid, egroup=1)
 
 plt.figure()
 xs.ChannelsPlot('topadf', zmid, egroup=0)
+
+serpent_keff = 1.33554E+00
+
+diff_rho = 1E+05*(1/reslt.keff - 1/serpent_keff)
+print("{} pcm".format(diff_rho))
