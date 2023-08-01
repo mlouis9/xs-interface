@@ -15,7 +15,7 @@ xk = x0 + s*dx
 dx is obtained by using the Krylov-Arnoldi routine
 
 Created on Wed May 24 15:10:00 2023 @author: Dan Kotlyar
-Last updated on Sat June 03 07:15:00 2023 @author: Dan Kotlyar
+Last updated on Tue Aug 01 05:20:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -24,14 +24,17 @@ List changes or additions:
 "Concise description" - MM/DD/YYY - Name initials
 ArnoldiIteration - 05/24/2023 - DK
 ArnoldiIteration - 06/03/2023 - DK
+ArnoldiIteration (objective function) - 08/01/2023 - DK
+NewtonKrylov (regression factors & bounds) - 08/01/2023 - DK
 
 """
 
+from sklearn.linear_model import Ridge
 import numpy as np
 
 
 def ArnoldiIteration(dyn3d, Fx0, x0, b, nodesN: int, n: int, iterScheme, 
-                     pert=1e-03, eps=1e-12):
+                     pert=1e-03, eps=1e-12, objmultp=None):
     """Computes othonormal basis of the (n + 1)-Krylov subspace for Fx*dx:
         
     This function allow to estimate the required variation in x (i.e., dx)
@@ -67,7 +70,9 @@ def ArnoldiIteration(dyn3d, Fx0, x0, b, nodesN: int, n: int, iterScheme,
         applied for x for each vector of the Krylov space.  
     eps : float
         criterion to stop arnoldi iteration.       
-
+    attrObj : str
+        objective attribute used to multiply the flux to create a reaction
+        rate objective function
     
     Returns
     ----------
@@ -106,8 +111,13 @@ def ArnoldiIteration(dyn3d, Fx0, x0, b, nodesN: int, n: int, iterScheme,
 
         # Execute DYN3D and obtain solution
         dyn3d.Execute(printstatus=False)
+                
+        dyn3dFlux = _reshapeTo1D(dyn3d.flux, nodesN, normFlag=True)
+        if objmultp is None:
+            FxI = dyn3dFlux
+        else:
+            FxI = dyn3dFlux * objmultp
         
-        FxI = _reshapeTo1D(dyn3d.flux, nodesN, normFlag=True)   
         
         v = (FxI - Fx0) / pert  # this is the matrix-vector product
                                 # v = A^n b
@@ -124,7 +134,8 @@ def ArnoldiIteration(dyn3d, Fx0, x0, b, nodesN: int, n: int, iterScheme,
 
 
 def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
-                 krylovSpan: int, dampingF=1.0):
+                 krylovSpan: int, dampingF=1.0, pert=1e-03, eps=1e-12, 
+                 lbound=0.2, ubound=3.0, alpha=0.0, attrObj=None):
     """Jacobian-free Newton Krylov iterative sequence to update the
     input-vector x0 until the reference solution is obtained.
         
@@ -156,7 +167,25 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
         the length of each layer
     dampingF : float
         a damping factor between 0 and 1
+    attrObj : str
+        objective attribute used to multiply the flux to create a reaction
+        rate objective function
+    pert : float
+        a fraction that represents the perturbation that is required to be
+        applied for x for each vector of the Krylov space.  
+    eps : float
+        criterion to stop arnoldi iteration.
+    lbound : float
+        lower bound to limit the variation of correction factors during 
+        Newton iterates.
+    ubound : float
+        upper bound to limit the variation of correction factors during 
+        Newton iterates.
+    alpha : float
+        a hyper parameter for Ridge regression and it is a penalty coefficient
+        to minimize the coeff_y in the regression procedure. Default value 0.0
 
+            
     Returns
     -------
     fluxes : 2-dim array
@@ -174,14 +203,23 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
     nodes = _numNodes(refFlx)  # total number of nodes channels x layers groups
     
     # define and reset return parameters
-    fluxes = np.zeros((newtonIters+1, nodes))
-    xinputs = np.zeros((newtonIters+1, nodes))
-    norm_err = np.zeros(newtonIters+1)
+    fluxes = np.zeros((newtonIters, nodes))
+    xinputs = np.zeros((newtonIters, nodes))
+    norm_err = np.zeros(newtonIters)
     
     dyn3d.iterInputs[iterScheme] = [None]*newtonIters
     dyn3d.iterOutputs = [None]*newtonIters
 
     refFlxNorm = _reshapeTo1D(refFlx, nodes, normFlag=True)
+
+    # If certain reation rates are to be the objective function
+    if attrObj is not None:  # objective function multiplier
+        objmultp = _reshapeTo1D(dyn3d.xs.core.corevalues[attrObj], nodes)
+    else:
+        objmultp = np.ones(nodes)
+    
+    refFlxNorm = refFlxNorm * objmultp
+    dyn3d.refFlx = _reshapeTo3D(dyn3d.refFlx, refFlxNorm)    
 
     for newtonI in range(newtonIters):
         
@@ -191,7 +229,9 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
         # calculate the normalized fluxes for both the reference and dyn3d
         # the 3-dim lists are converted to 1-dim arrays
         dynFlxNorm = _reshapeTo1D(dyn3d.flux, nodes, normFlag=True)
-        dyn3d.iterOutputs[newtonI] = dyn3d.flux
+        dynFlxNorm = dynFlxNorm * objmultp
+        # dyn3d.iterOutputs[newtonI] = dyn3d.flux
+        dyn3d.iterOutputs[newtonI] = _reshapeTo3D(dyn3d.flux, dynFlxNorm)
 
         # save the current iterate
         fluxes[newtonI, :] = dynFlxNorm  
@@ -206,21 +246,33 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
         Q, h =\
             ArnoldiIteration(dyn3d, Fx0=fluxes[newtonI, :], x0=x0, b=r0,
                              nodesN=nodes, n=krylovSpan,
-                             iterScheme=iterScheme, pert=1e-03)
+                             iterScheme=iterScheme, pert=pert, eps=eps,
+                             objmultp=objmultp)
         
         # calculate the coefficients used as weights for the othonormal basis    
         e1 = np.zeros(krylovSpan+1)
         e1[0] = 1
         normr0 = np.linalg.norm(r0)*e1
         # evaluation of the coefficients from || Hy-||r||e1 ||
-        coefy = np.linalg.lstsq(h, normr0, rcond=None)
-        
+        # coefy = np.linalg.lstsq(h, normr0, rcond=None)
+        # ridge regression
+        model = Ridge(alpha=alpha,fit_intercept=False)
+        model.fit(h, normr0)
+        coefy = model.coef_
+                
         # input for the current Newton step
         xinputs[newtonI, :] = x0
         
         # promote the Newton step
-        dxk = np.dot(Q[:, 0:-1],coefy[0])
+        dxk = np.dot(Q[:, 0:-1],coefy)
+        
         x0 = x0 + dampingF*dxk  # no damping coefficient at the moment
+        
+        # Bound the changes in the correction factors 
+        lmask = np.where(x0 < lbound + pert)
+        umask = np.where(x0 > ubound - pert)
+        x0[lmask] = lbound + pert
+        x0[umask] = ubound - pert
         
         # reshape xI to fit the flux structure [channels x layers x groups]
         x0core = _reshapeTo3D(dyn3d.flux, x0)
@@ -237,17 +289,18 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
     # -------------------------------------------------------------------------
     
     # execute DYN3D and collect results
-    dyn3d.Execute()
+    # dyn3d.Execute()
     
     # calculate the normalized fluxes for both the reference and dyn3d
     # the 3-dim lists are converted to 1-dim arrays
-    dynFlxNorm = _reshapeTo1D(dyn3d.flux, nodes, normFlag=True)
-    # save the current iterate
-    fluxes[newtonI+1, :] = dynFlxNorm  
-    # difference bewteen the approximate and reference solution
-    Fx0 = fluxes[newtonI+1, :]-refFlxNorm    
-    r0 = -Fx0  # define residual
-    norm_err[newtonI+1] = np.linalg.norm(r0)  # store norm2    
+    # dynFlxNorm = _reshapeTo1D(dyn3d.flux, nodes, normFlag=True)
+    # # save the current iterate
+    # fluxes[newtonI+1, :] = dynFlxNorm  * objmultp
+    # # difference bewteen the approximate and reference solution
+    # Fx0 = fluxes[newtonI+1, :]-refFlxNorm    
+    # r0 = -Fx0  # define residual
+    # norm_err[newtonI+1] = np.linalg.norm(r0)  # store norm2    
+    
     
     return fluxes, xinputs, norm_err, refFlxNorm
     

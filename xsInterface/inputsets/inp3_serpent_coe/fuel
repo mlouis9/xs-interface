@@ -83,7 +83,7 @@ pert  .\u0.coe
 # -----------------------------------------------------------------------------
 
 # n/a
-set manipulate 0.0
+set manipulate 10.0E+6, 0.6025, 0.0
 transpxs1g 0.3333333333333333 infDiffcoef divide
 
 

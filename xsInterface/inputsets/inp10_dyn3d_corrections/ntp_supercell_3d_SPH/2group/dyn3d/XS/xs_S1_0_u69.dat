@@ -9,16 +9,16 @@
 * Transport XSEC Table
 *
 * GROUP 1
-2.324896e-01 
+2.327103e-01 
 * GROUP 2
-5.501532e-01 
+5.315314e-01 
 *
 * Reduced absorption XSEC Table
 *
 * GROUP 1
-5.011144e-04 
+5.015902e-04 
 * GROUP 2
-1.958918e-02 
+1.892611e-02 
 *
 * Nu-Fission XSEC Table
 *
@@ -37,13 +37,13 @@
 * Scattering XSEC Table
 *
 * GROUP 1 -> 1
-4.684691e-01 
+4.689139e-01 
 * GROUP 1 -> 2
-2.189756e-02 
+2.115636e-02 
 * GROUP 2 -> 1
-2.201184e-05 
+2.203274e-05 
 * GROUP 2 -> 2
-8.293581e-01 
+8.012857e-01 
 *
 * ADF Table XSEC Table
 *
@@ -72,7 +72,7 @@
 * Inverse Velocity
 *
 * GROUP 1 2
-8.779878e-08 8.121345e-06 
+8.788216e-08 7.846450e-06 
 *
 * Delay Neutron Decay Constant (Lambda)
 *

@@ -9,7 +9,7 @@
 
 
 set settings 2 7
-macro = infflx, inftranspxs, infrabsxs, infnsf, infkappa , infsp0, infchit, infInvv, infFiss
+macro = infflx, inftranspxs, infrabsxs, infnsf, infkappa , infsp0, infchit, infInvv, infFiss, inftot
 kinetics = lambda, betaeff
 
 # -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ nom  .\serpent\axial_TH_res.m
 set manipulate 10.0E+6, 0.6025, 0.0
 fissmev, infFiss, infKappa, multiply
 fissjoule, fissmev, 1.60218e-13, multiply
-
+nsftoabs, infnsf, infrabsxs, divide
 
 # -----------------------------------------------------------------------------
 #                         FILTER DATA & PRINT
