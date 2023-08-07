@@ -51,7 +51,7 @@ History = "varo"{history[idxH]<s>}, Time = "varo"{times[idxB]<3.3f>}, Fuel T. = 
 "rep"{2
 "vari"{idxE=idxE+1}
   Group "varo"{idxE}
-  "values"{infkappa,  ["varo"{idxE}]} 
+  "values"{infKappa,  ["varo"{idxE}]} 
 "rep"}
 
 * ---------------------------------------------------------------------------------------------------------------------------------------------------

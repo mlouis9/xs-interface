@@ -218,16 +218,16 @@ def _PopulateValues(dataIn, universes, formats, uservals=None):
 
             # Assign values
             univId = attrline[0]
-            attr = attrline[1]
+            attr = attrline[1].lower()
             states = {}
             for j in range(2, len(attrline), 2):
-                if attrline[j] == 'history':
+                if attrline[j].lower() == 'history':
                     # history is the only non-numeric value
-                    states[attrline[j]] = attrline[j+1]
+                    states[attrline[j].lower()] = attrline[j+1]
                     continue
                 try:
                     # 1st is key and 2nd is val
-                    states[attrline[j]] = float(attrline[j+1])
+                    states[attrline[j].lower()] = float(attrline[j+1])
                 except:
                     msg0 = 'The "values" command is not properly defined.\n{}'\
                         '<{}> cannot be coverted to a number.'\

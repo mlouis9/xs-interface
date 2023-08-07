@@ -77,8 +77,8 @@ exefile = "RUN_DYN3D" # dyn3d executuin file
 reslt = DYN3D(xs, casedir, casefile, exefile)
 # reslt.Execute()
 reslt.Iterate(
-    corrattrs=['topadf'], refFlx=refFlx, newtonIters=30, krylovSpan=2, 
-    dampingF=1.0, writestatus=False, alpha=0.0, pert=1E-3, attrObj=None)
+    corrattrs=['topadf'], refFlx=refFlx, newtonIters=2, krylovSpan=34, 
+    dampingF=1.0, writestatus=False, alpha=0.7, pert=1E-3, attrObj=None)
 
 # reslt.Iterate(
 #     corrattrs=['topadf'], refFlx=refFlx, newtonIters=13, krylovSpan=13, 

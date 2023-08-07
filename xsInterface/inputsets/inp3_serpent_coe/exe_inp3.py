@@ -32,7 +32,7 @@ xs.Write()
 
 
 # obtain results:
-xs.Table("fuel0", ['infkappa'], time=0.0, history='nom', fuel=900, boron=500,
+xs.Table("fuel0", ['infKappa'], time=0.0, history='nom', fuel=900, boron=500,
          dens=700)
 
 # obtain results:
@@ -41,3 +41,6 @@ xs.Values("fuel0", 'infkappa', time=0.0, history='nom',
 xs.Values("fuel0", 'infkappa', time=0.0, history='nom', boron=500, dens=700)
 xs.Values("fuel0", 'infkappa', fuel=900, boron=0, dens=700,time=0.0, history='nom')
 xs.Values("ref0", "infsp0", fuel=900)
+
+xs.Values("fuel0", 'infKappa', time=0.0, history='nom',
+          boron=0.0, fuel=900)
