@@ -313,6 +313,13 @@ Sub-blocks can be defined within blocks, and these can also include dynamic comm
 <div><ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;rep&quot;{...}</span></code> is preserved (including the curley brackets) keyword.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;N&gt;</span></code> represent the number of times the block will be replicated.</p></li>
+<li><p>It is important to note that <code class="docutils literal notranslate"><span class="pre">&lt;N&gt;</span></code> can be represented by an existing variable called by the <code class="docutils literal notranslate"><span class="pre">&quot;varo&quot;{...}</span></code> capability.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="s2">&quot;varo&quot;</span><span class="p">{</span><span class="n">num</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
 <li><p>The number of curley brackets indicates the hierarchy of the block. Nested blocks can be defined within blocks, but with structured hierarchy.</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;rep&quot;</span><span class="p">{</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span>
