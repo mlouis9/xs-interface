@@ -5,7 +5,7 @@ This file contains certain regular-like expressions which are repeated
 and replaced.
 
 Created on Fri July 01 06:00:00 2022 @author: Dan Kotlyar
-Last updated on Thu May 25 13:00:00 2023 @author: Dan Kotlyar
+Last updated on Mon Aug 07 19:10:00 2023 @author: Dan Kotlyar
 email: dan.kotlyar@me.gatech.edu
 
 List changes / additions:
@@ -16,6 +16,8 @@ ReadTemplate  - 07/05/2022 - DK
 _CleanDataCopy - 07/05/2022 - DK
 _PopulateValues - 07/21/2022 - DK
 _PopulateValues [uservals] - 05/25/2023 - DK
+case insensitive - 08/07/2023 - DK
+_RepetitionNumber - 08/07/2023 - DK
 """
 
 from pathlib import Path
@@ -89,11 +91,14 @@ def ReadTemplate(tmplFile, universes, formats, univId=None, uservals=None):
         _isstr(univId, "Universe Id")
         dataRaw = _InsertUnivId(dataRaw, univId)
     
+    # Replace the repetition block variables with numbers
+    dataRawRep = _RepetitionNumber(dataRaw)
+    
     # Identify locations within the file with text to be repeated
-    pos = _RepetitiveBlocks(dataRaw)
+    pos = _RepetitiveBlocks(dataRawRep)
     
     # Repeat blocks that should be repetitive
-    dataDup = _DuplicateBlocks(dataRaw, pos)
+    dataDup = _DuplicateBlocks(dataRawRep, pos)
     
     # Clean and replace variable text with values
     dataClean = _CleanDataCopy(dataDup, formats["var"])
@@ -218,16 +223,16 @@ def _PopulateValues(dataIn, universes, formats, uservals=None):
 
             # Assign values
             univId = attrline[0]
-            attr = attrline[1]
+            attr = attrline[1].lower()
             states = {}
             for j in range(2, len(attrline), 2):
-                if attrline[j] == 'history':
+                if attrline[j].lower() == 'history':
                     # history is the only non-numeric value
-                    states[attrline[j]] = attrline[j+1]
+                    states[attrline[j].lower()] = attrline[j+1]
                     continue
                 try:
                     # 1st is key and 2nd is val
-                    states[attrline[j]] = float(attrline[j+1])
+                    states[attrline[j].lower()] = float(attrline[j+1])
                 except:
                     msg0 = 'The "values" command is not properly defined.\n{}'\
                         '<{}> cannot be coverted to a number.'\
@@ -294,6 +299,7 @@ def _PopulateValues(dataIn, universes, formats, uservals=None):
             # Copy (and if needed replace line) to a clean data list
             dataOut.append(tline)
     return dataOut
+
 
 
 def _CleanDataCopy(dataIn, fmt0):
@@ -414,6 +420,81 @@ def _CleanDataCopy(dataIn, fmt0):
     
     # a new clean data list is returned
     return dataClean
+
+
+def _RepetitionNumber(dataIn):
+    """Replace variables next to the start of repetition blocks"""
+    # all the local variables defined in this current function/method
+    localVarsList = ['dataIn', 'fmt0', 'fmt', 'localVarsList', 'msgExe',
+                     'fmtCheck', 'dataNew', 'tline', 'condRep0', 'condRep1',
+                     'condVarI', 'condVarO', 'locVariables', 'strsExe',
+                     'strsComplete', 'msg0',
+                     'iexecInLine', 'tline1', 'istrExe', 'strExe', 
+                     'prevLocals', 'currLocals', 'varLocal'] 
+    msgExe = 'Execution cannot be performed in line:\n'
+    
+        
+    dataNew = []
+    for tline in dataIn:    
+
+        # Identify and execute a variable (no need to copy)
+        condVarI = VARI_REGEX.search(tline)
+        if condVarI is not None:
+            try:
+                exec(condVarI.group(1))
+                currLocals = locals()  # local variables after execution
+                varLocal = _LocalVariables(currLocals, localVarsList)
+
+            except:
+                msg0 = msgExe + '{}\n'.format(tline) +\
+                    'exe command: {}\n'.format(condVarI.group(1)) 
+                raise TemplateFileError(msg0)
+            if varLocal == []:
+                msg0 = 'The name for varibale {} is not allowed.\nPlease '\
+                    'select a different name.'.format(condVarI.group(0))
+                raise TemplateFileError(msg0)
+
+        # No need to copy the repetition strings
+        condRep0 = REP_START_REGEX.search(tline)
+        if condRep0 is not None:
+        
+            # Identify, execute, and replace a variable with value
+            condVarO = VARO_REGEX.search(tline)
+            if condVarO is not None:
+                # collect all the execution strings within the same text line
+                strExe = condVarO.group(1)  # execution only string
+                strComplete = condVarO.group(0)  # full strings
+                
+                try:
+                    # evaluate expression
+                    evalexpr = eval(strExe)
+                    fmt_int = "{:d}"
+                    tline =\
+                        tline.replace('{}'.format(strComplete),
+                                      fmt_int.format(evalexpr))
+                except ValueError as detail:
+                    msg0 = msgExe + '{}\n'.format(tline) +\
+                        'exe command: {}\n{}\n'.format(strExe,detail)
+                    raise TemplateFileError(msg0)
+                except TypeError as detail:
+                    msg0 = msgExe + '{}\n'.format(tline) +\
+                        'exe command: {}\n{}\n'.format(strExe,detail) 
+                    raise TemplateFileError(msg0)
+                except IndexError as detail:
+                    msg0 = msgExe + '{}\n'.format(tline) +\
+                        'exe command: {}\n{}\n'.format(strExe,detail) 
+                    raise TemplateFileError(msg0)
+                except NameError as detail:
+                    msg0 = msgExe + '{}\n'.format(tline) +\
+                        'exe command: {}\n{}\n'.format(strExe,detail)
+                    raise TemplateFileError(msg0)   
+
+                         
+        # Copy (and if needed replace line) to a clean data list
+        dataNew.append(tline)
+    
+    # a new clean data list is returned
+    return dataNew
         
         
             

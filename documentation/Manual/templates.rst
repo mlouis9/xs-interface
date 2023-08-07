@@ -309,6 +309,13 @@ where,
 
  - ``"rep"{...}`` is preserved (including the curley brackets) keyword.
  - ``<N>`` represent the number of times the block will be replicated.
+ - It is important to note that ``<N>`` can be represented by an existing variable called by the ``"varo"{...}`` capability.
+ 
+	.. code::
+	
+		"rep"{"varo"{num} 
+ 
+ 
  - The number of curley brackets indicates the hierarchy of the block. Nested blocks can be defined within blocks, but with structured hierarchy.
  
 	.. code::

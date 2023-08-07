@@ -214,6 +214,13 @@ class Main():
 
         """
         
+        if attrs is not None:
+            if isinstance(attrs, str):
+                attrs = attrs.lower()
+            elif isinstance(attrs, list):
+                for idx, attr in enumerate(attrs):
+                    attrs[idx] = attrs[idx].lower()
+                
         return self.universes.TableValues(univId, attrs, **kwargs)
 
 
@@ -246,6 +253,10 @@ class Main():
         ...  'cool': array([600., 500.])}
 
         """
+
+        if attr is not None:
+            if isinstance(attr, str):
+                attr = attr.lower()
 
         return self.universes.Values(univId, attr, **kwargs)
 
