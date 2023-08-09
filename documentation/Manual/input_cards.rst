@@ -637,7 +637,7 @@ and, the following **lines** represent binary (between variable ``var1`` and ``v
 	- ``var`` name of the new variable to be created. 
 	- ``var1`` name of the first variable (e.g., ``inf_rabs``). Can only be of type ``macro`` or ``micro`` or a number..
 	- ``var2`` name of the second variable (e.g., ``sig_f``).	Can be either of type ``macro`` or ``micro`` or a number. This variable does not need to be provided if the operation mode is ``transpose``.
-	- ``operation`` mode of the mathematical operation with the following options only: ``add``, ``subtract``, ``multiply``, ``divide``, ``transpose``.
+	- ``operation`` mode of the mathematical operation with the following options only: ``add``, ``subtract``, ``multiply``, ``divide``, ``weight``, ``weight1gr``, ``transpose``.
 
 **Notes:**
 	
@@ -683,6 +683,25 @@ and, the following **lines** represent binary (between variable ``var1`` and ``v
 		a = a_1 - a_2
 		
 		b = b_1 : b_2
+
+
+	The following code:
+
+	.. code::
+
+		set manipulate 0.625
+		a a1 a2 weight
+		b b1 b2 weight1gr
+
+	Correspond to:
+
+	.. math::
+
+		a = \frac{a_{1,g}a_{2,g}}{\sum a_{2,g}}		
+		
+		b = \frac{\sum b_{1,g}b_{2,g}}{\sum b_{2,g}}	
+		
+	* where the subscript ``g`` in the relations above is an energy group index.
 
 
 	* ``var1`` and ``var2`` must be of either macro or micro types. The newly created variable ``var`` depends on the definitions of ``var1`` and ``var2``. 

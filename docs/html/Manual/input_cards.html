@@ -603,7 +603,7 @@ The relabaling capability is added before the main execution lines.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">var</span></code> name of the new variable to be created.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">var1</span></code> name of the first variable (e.g., <code class="docutils literal notranslate"><span class="pre">inf_rabs</span></code>). Can only be of type <code class="docutils literal notranslate"><span class="pre">macro</span></code> or <code class="docutils literal notranslate"><span class="pre">micro</span></code> or a number..</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">var2</span></code> name of the second variable (e.g., <code class="docutils literal notranslate"><span class="pre">sig_f</span></code>).       Can be either of type <code class="docutils literal notranslate"><span class="pre">macro</span></code> or <code class="docutils literal notranslate"><span class="pre">micro</span></code> or a number. This variable does not need to be provided if the operation mode is <code class="docutils literal notranslate"><span class="pre">transpose</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">operation</span></code> mode of the mathematical operation with the following options only: <code class="docutils literal notranslate"><span class="pre">add</span></code>, <code class="docutils literal notranslate"><span class="pre">subtract</span></code>, <code class="docutils literal notranslate"><span class="pre">multiply</span></code>, <code class="docutils literal notranslate"><span class="pre">divide</span></code>, <code class="docutils literal notranslate"><span class="pre">transpose</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">operation</span></code> mode of the mathematical operation with the following options only: <code class="docutils literal notranslate"><span class="pre">add</span></code>, <code class="docutils literal notranslate"><span class="pre">subtract</span></code>, <code class="docutils literal notranslate"><span class="pre">multiply</span></code>, <code class="docutils literal notranslate"><span class="pre">divide</span></code>, <code class="docutils literal notranslate"><span class="pre">weight</span></code>, <code class="docutils literal notranslate"><span class="pre">weight1gr</span></code>, <code class="docutils literal notranslate"><span class="pre">transpose</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -648,7 +648,17 @@ The relabaling capability is added before the main execution lines.</p>
 <p>Correspond to:</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}a = a_1 - a_2\\b = b_1 : b_2\end{aligned}\end{align} \]</div>
+<p>The following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">manipulate</span> <span class="mf">0.625</span>
+<span class="n">a</span> <span class="n">a1</span> <span class="n">a2</span> <span class="n">weight</span>
+<span class="n">b</span> <span class="n">b1</span> <span class="n">b2</span> <span class="n">weight1gr</span>
+</pre></div>
+</div>
+<p>Correspond to:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}a = \frac{a_{1,g}a_{2,g}}{\sum a_{2,g}}\\b = \frac{\sum b_{1,g}b_{2,g}}{\sum b_{2,g}}\end{aligned}\end{align} \]</div>
 <ul class="simple">
+<li><p>where the subscript <code class="docutils literal notranslate"><span class="pre">g</span></code> in the relations above is an energy group index.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">var1</span></code> and <code class="docutils literal notranslate"><span class="pre">var2</span></code> must be of either macro or micro types. The newly created variable <code class="docutils literal notranslate"><span class="pre">var</span></code> depends on the definitions of <code class="docutils literal notranslate"><span class="pre">var1</span></code> and <code class="docutils literal notranslate"><span class="pre">var2</span></code>.</p></li>
 <li><p>Let us use the following example to describe the possible outcomes:</p></li>
 </ul>
