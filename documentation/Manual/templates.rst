@@ -210,7 +210,13 @@ where,
 	* ``<state>`` can either be a branch name defined in :ref:`i_branches`, or the preserved keyword ``history`` or the preserved keyword ``time``. Not all the states must be provided.
 	* ``<value>`` must exist in the data definition provided in :ref:`i_data`. 
 	* It must be pointed out that when executing the "values"{...} comand, not all states that exist in :ref:`i_data` must be provided. For example, if the states include multiple fuel and coolant temperatures, and the command is evaluated for a specific fuel temperature then all the existing coolant temperatures that correspond to this fuel temperatures will be evaluated and written.
-	* ``<indices>`` must be provided in square brackets [...]. However, indices can also be omitted, in which case no [...] brackets are required.
+	* ``<indices>`` must be provided in square brackets [...]. However, indices can also be omitted, in which case no [...] brackets are required. Multiple indices can be provided at once or the slicing option can be used as follows:
+	
+	.. code::
+	
+		"values"{u0, lambda, [0, 1, 2, 3, 4, 5, 6] <5.5e>4}	or
+		"values"{u0, lambda, [0:6] <5.5e>4}
+	
 	* It is up to the user to know how to slice the data as the user was reponsible to feed the data in.
 	* The most important note is to understand that when the ``values`` command is provided, the program evaluates the values using the ``universes.Values`` method internally. The end result can yield a scalar, vector, or a matrix.
 
