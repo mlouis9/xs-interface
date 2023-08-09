@@ -202,9 +202,25 @@ def _PopulateValues(dataIn, universes, formats, uservals=None):
                 # the content included within [...]
                 idxmatch = idxcond.group(1)
                 try:
-                    # indices will be used to access the data
-                    indices = [int(idx) for idx in idxmatch.split()]
-                    indices = tuple(indices)
+                    # using slicing method to access data
+                    if ":" in idxmatch:
+                        idxmatch = idxmatch.replace(':', ' ')  # remove `:`
+                        indices0 = [int(idx) for idx in idxmatch.split()]
+                        if len(indices0) != 2:
+                            msg0 = 'The "values" command is not properly \
+                                defined.\n{}\nIndices slicing (using :) must \
+                                be defined as [idx0:idx1] and not {}\n. \
+                                You can also use integers.\n.' \
+                                .format(tline, idxmatch)
+                            raise TemplateFileError(msg0+msg_exe)
+                        indices = [int(idx) for idx in range(indices0[0], 
+                                                             indices0[1]+1)]
+                        indices = tuple(indices)
+                        
+                    else:
+                        # indices will be used to access the data
+                        indices = [int(idx) for idx in idxmatch.split()]
+                        indices = tuple(indices)
                 except:
                     msg0 = 'The "values" command is not properly defined.\n{}'\
                         'Indices format <{}> is not allowed. Use integers.'\
