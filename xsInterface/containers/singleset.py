@@ -38,7 +38,8 @@ from xsInterface.errors.checkerrors import _isobject, _isstr, _isarray,\
 
 # REL_PRECISION = 0.00001  # 0.001% - used to find indices in arrays
 OPERATION_MODES = ["multiply", "divide", "add", "subtract", "weight", 
-                   "weight1gr", "transpose"]
+                   "weight1gr", "sum", "transpose", "sum"]
+SINGLEVAR_MANIP = ["transpose"]
 
 class SingleSet():
     """Container that stores the most basic data set
@@ -394,6 +395,8 @@ class SingleSet():
                     val = np.sum(val1*val2) / sumval2
                 else:
                     val = 0.0
+            elif mode == "sum":
+                val = np.sum(val1*val2)
             else:
                 val = val1.transpose()
             
