@@ -14,7 +14,18 @@ Read the control deck file.
 
 .. code::
 
-	xs = Main("controlDeckFile")
+	xs = Main(inputfile)
+
+Where, ``inputfile`` is the name of the controlDict file (e.g., "controlDeckFile")
+
+If the results were previously saved using the :ref:`e_store` method then these can be loaded using the same execution:
+
+.. code::
+
+	xs = Main(inputfile)
+	
+but in this case ``inputfile`` must be an existing pickle file (e.g., "xsdata.pkl")
+
 
 Read universes' data and templates files and populate data.
 
@@ -51,6 +62,9 @@ where,
 
 	xs.Read(readUniverses=False, readTemplate=True, readMapTemplate=True)
 
+
+
+
 //////////////////////////////////////////////////////////////////
 
 
@@ -66,6 +80,8 @@ After the execution of ``xs.Read()``, the data can be manipulated and presented 
 Method							   		 Description
 ========================= ============================================
 :ref:`e_write`			      Write data to a user-defined template
+------------------------- --------------------------------------------
+:ref:`e_store`			      Store data to a pickle (binary) file
 ------------------------- --------------------------------------------
 :ref:`e_condense`	        Perform energy condensation.
 ========================= ============================================
@@ -96,6 +112,30 @@ where, ``writemode`` defines the writing mode and can be 'w', 'a', and so on.
 
 	xs.Write(writemode='w')
 	
+
+.. _e_store:
+
+=========
+Store
+=========
+
+
+**Store the data already read to a pickle (binary) file.**
+
+The entire object that includes values and object methods is stored. There is no need to execute the ``Read`` method (but it is allowed if needed).
+
+**Syntax:**
+
+.. code::
+
+	xs.Store(file)
+	
+where, ``file`` is the name (path+file name) of the file to be stored. This file must be a pickle file. If the file does not end with ``.pkl`` it will be auto added by the package.
+
+
+.. code::
+
+	xs.Store(file='xsdata.pkl')
 	
 	
 .. _e_condense:
