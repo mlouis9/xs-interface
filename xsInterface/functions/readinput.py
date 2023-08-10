@@ -33,13 +33,16 @@ from xsInterface.containers.container_header import DataSettingsCard,\
 from xsInterface.functions.readserpent import ReadSerpent
 from xsInterface.functions.readshift import ReadShiftFiles
 from xsInterface.containers.datasettings import DataSettings
-from xsInterface.containers.singleset import SingleSet
+from xsInterface.containers.singleset import SingleSet, SINGLEVAR_MANIP
 from xsInterface.containers.multiplesets import MultipleSets
 from xsInterface.containers.perturbationparameters import Perturbations
 from xsInterface.containers.universes import Universes
 from xsInterface.errors.checkerrors import _isstr, _isnonNegativeArray
 from xsInterface.errors.customerrors import NonInputError, InputGeneralError,\
     InputCardError, ControlFileError
+
+
+
 
 # General regular expressions needed for processing data
 SPECIAL_CHAR = compile(r'[\?\$\&\@\~\<\>\`]')  # special character
@@ -778,7 +781,7 @@ def _ImportManipulations(setLine, tlines):
     # -------------------------------------------------------------------------       
     if data != {}:  # manipulation is not mandatory
         for item, value in data.items():
-            if len(value) == 2 and 'transpose' in value[-1]:
+            if len(value) == 2 and value[-1] in SINGLEVAR_MANIP:
                 # for a transpose operation only one attribute is needed
                 data[item] = [value[0], value[0], value[1]]
             elif len(value) != 3:

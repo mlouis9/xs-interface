@@ -635,9 +635,17 @@ where in the **set** line,
 
 and, the following **lines** represent binary (between variable ``var1`` and ``var2``) mathematical operations to be performed.
 	- ``var`` name of the new variable to be created. 
-	- ``var1`` name of the first variable (e.g., ``inf_rabs``). Can only be of type ``macro`` or ``micro`` or a number..
+	- ``var1`` name of the first variable (e.g., ``inf_rabs``). Can only be of type ``macro`` or ``micro`` or a **number**.
 	- ``var2`` name of the second variable (e.g., ``sig_f``).	Can be either of type ``macro`` or ``micro`` or a number. This variable does not need to be provided if the operation mode is ``transpose``.
-	- ``operation`` mode of the mathematical operation with the following options only: ``add``, ``subtract``, ``multiply``, ``divide``, ``weight``, ``weight1gr``, ``transpose``.
+	- ``operation`` mode of the mathematical operation with the following options only: 
+		- **add**, e.g., ``a a1 a2 add``, :math:`a = a_1 + a_2`
+		- **subtract**, e.g., ``a a1 a2 subtract``, :math:`a = a_1 - a_2`. The order of :math:`a_1, a_2` is important.
+		- **multiply**, e.g., ``a a1 a2 multiply``, :math:`a = a_1 \times a_2`
+		- **divide**, e.g., ``a a1 a2 divide``, :math:`a = a_1 / a_2`. The order of :math:`a_1, a_2` is important.
+		- **sum**, e.g., ``a a1 a2 sum``, :math:`a = \sum a_{1,g}a_{2,g}` ; where ``g`` represents the group index. If either :math:`a_1, a_2` is one then all the group values are summed to their total.
+		- **weight**, e.g., ``a a1 a2 weight``, :math:`a = \frac{a_{1,g}a_{2,g}}{\sum a_{2,g}}`. The order of :math:`a_1, a_2` is important.
+		- **weight1gr**, e.g., ``a a1 a2 weight1gr``, :math:`a = \frac{\sum a_{1,g}a_{2,g}}{\sum a_{2,g}}`. The order of :math:`a_1, a_2` is important.
+		- **transpose**, e.g., ``a a1 transpose``, :math:`a = a_1^T`. Only  :math:`a_1` is required/allowed.
 
 **Notes:**
 	
