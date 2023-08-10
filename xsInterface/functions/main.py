@@ -5,7 +5,7 @@ Main class object that connects and executes all the reading, storing and
 printing cabalities.
 
 Created on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
-Last updated on Mon June 05 07:45:00 2023 @author: Dan Kotlyar
+Last updated on Thu August 10 13:45:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -23,7 +23,11 @@ Condense - 05/03/2023 - DK
 SlicePlot - 05/24/2023 - DK
 PopulateCoreData - 05/29/2023 - DK
 ChannelsPlot - 06/05/2023 - DK
+save/load pickle files - 08/10/2023 - DK
 """
+
+import pickle
+from pathlib import Path
 
 import copy
 from matplotlib import rcParams
@@ -50,6 +54,8 @@ class Main():
     ----------
     inputFile : str
         file directory path + file name.
+        if ``inputFile`` is a pickle file with all the cross sections then it
+        will be loaded.
 
     Attributes
     ----------
@@ -82,6 +88,12 @@ class Main():
 
     def __init__(self, inputFile):
         
+        # attempt to load a pickle file (if it is a pickle file)
+        data = self._LoadPickle(inputFile)
+        if data is not None:
+            self.__dict__ = data.__dict__.copy() 
+            return  # no need to read the dictionary file
+        
         # read the main 
         universes, outputs, templates, links, formats, externalIds, core =\
             Read(inputFile)
@@ -93,6 +105,9 @@ class Main():
         self._externalIds = externalIds
         self._dataFiles = {}
         self.core = core
+
+
+
 
 
     def Read(self, readUniverses=True, readTemplate=False,
@@ -178,6 +193,18 @@ class Main():
                 txtFile.writelines(dataFile)
         
 
+    def Store(self, file):
+        """save the data to a pickle file"""
+        
+        _isstr(file, "file")
+        if '.pkl' not in file:
+            file = file + '.pkl'
+        
+        # Open a file and use dump()
+        with open(file, 'wb') as file:
+            # A new file will be created
+            pickle.dump(self, file)
+        
 
     def Table(self, univId, attrs=None, **kwargs):
         """Obtain the values of the specific attribute across different states
@@ -857,6 +884,31 @@ class Main():
             for attr, vals in attrsvals.items():
                 attrval[attr] = np.array(vals[ich][ilayer])
         return attrval
+
+
+    @staticmethod
+    def _LoadPickle(file):
+        """Load pickle file with cross-section data"""
+
+        data = None
+        # check that `file` variable is a string and it is a pickle file
+        _isstr(file, "file")
+        if (len(file) > 4) and (file[-4:] == '.pkl'):
+            # pickle file
+            # read the file and return its content
+            filePath = Path(file)
+            if not filePath.is_file():
+                raise OSError("The pickle file {} does not exist."
+                              .format(file))
+    
+            print("... Reading pickle file ...\n<{}>\n".format(file))  
+    
+        
+            # Open the file in binary mode
+            with open(file, 'rb') as file:
+                # Call load method to deserialze
+                data = pickle.load(file)
+        return data
 
 
 # class _Container():

@@ -41,9 +41,15 @@
 </pre></div>
 </div>
 <p>Read the control deck file.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="n">Main</span><span class="p">(</span><span class="s2">&quot;controlDeckFile&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="n">Main</span><span class="p">(</span><span class="n">inputfile</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Where, <code class="docutils literal notranslate"><span class="pre">inputfile</span></code> is the name of the controlDict file (e.g., “controlDeckFile”)</p>
+<p>If the results were previously saved using the <a class="reference internal" href="#e-store"><span class="std std-ref">Store</span></a> method then these can be loaded using the same execution:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="n">Main</span><span class="p">(</span><span class="n">inputfile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>but in this case <code class="docutils literal notranslate"><span class="pre">inputfile</span></code> must be an existing pickle file (e.g., “xsdata.pkl”)</p>
 <p>Read universes’ data and templates files and populate data.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>
 </pre></div>
@@ -87,7 +93,10 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#e-write"><span class="std std-ref">Write</span></a></p></td>
 <td><p>Write data to a user-defined template</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#e-condense"><span class="std std-ref">Condense</span></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#e-store"><span class="std std-ref">Store</span></a></p></td>
+<td><p>Store data to a pickle (binary) file</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#e-condense"><span class="std std-ref">Condense</span></a></p></td>
 <td><p>Perform energy condensation.</p></td>
 </tr>
 </tbody>
@@ -103,6 +112,19 @@
 <p>where, <code class="docutils literal notranslate"><span class="pre">writemode</span></code> defines the writing mode and can be ‘w’, ‘a’, and so on.</p>
 <p><code class="docutils literal notranslate"><span class="pre">writemode</span></code> can be omitted, in which case the default will be ‘w’. e.g.,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">writemode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="store">
+<span id="e-store"></span><h2>Store<a class="headerlink" href="#store" title="Permalink to this headline">¶</a></h2>
+<p><strong>Store the data already read to a pickle (binary) file.</strong></p>
+<p>The entire object that includes values and object methods is stored. There is no need to execute the <code class="docutils literal notranslate"><span class="pre">Read</span></code> method (but it is allowed if needed).</p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Store</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where, <code class="docutils literal notranslate"><span class="pre">file</span></code> is the name (path+file name) of the file to be stored. This file must be a pickle file. If the file does not end with <code class="docutils literal notranslate"><span class="pre">.pkl</span></code> it will be auto added by the package.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Store</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;xsdata.pkl&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
