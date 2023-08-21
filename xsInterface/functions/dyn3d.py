@@ -30,6 +30,7 @@ DYN3D polishing - 06/06/2023 - DK
 
 import os
 import subprocess
+import time
 
 import re
 
@@ -40,7 +41,7 @@ from xsInterface.functions.newton_krylov_arnoldi import NewtonKrylov,\
     _reshapeTo1D, _numNodes
 from xsInterface.functions.plotters import Plot1d
 from xsInterface.errors.checkerrors import _islist, _isequallength, _isarray,\
-    _inlist, _isstr, _isnonNegativeArray, _iszeropositive, _inrange
+    _inlist, _isstr, _isnonNegativeArray, _iszeropositive, _inrange, _isnumber
 
 match_number = re.compile('-?\ *[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
 
@@ -123,8 +124,10 @@ class DYN3D():
         self.flux = None
         self.keff = None
         # store all results
+        self.iterkeff = None
         self.iterInputs = {}
         self.iterOutputs = {}
+        self.iterDifferences = {}
         self.norm_err = None
 
 
@@ -168,7 +171,7 @@ class DYN3D():
 
     def Iterate(self, corrattrs, refFlx, newtonIters: int, krylovSpan: int, 
                 dampingF=1.0, writestatus=True, pert=1e-03, eps=1e-12, 
-                lbound=0.2, ubound=3.0, alpha=0.0, attrObj=None):
+                lbound=0.2, ubound=3.0, alpha=0.0, attrObj=None, printstatus=False):
         """Calculate correction factors via non-linear iterations
         
         Iterative method to calculate correction factors
@@ -240,6 +243,12 @@ class DYN3D():
         if attrObj is not None:
             _inlist(attrObj, "objective attribute", expattrs)
 
+        if dampingF == "RM":
+            pass
+        else:
+            _isnumber(dampingF, "damping factor")
+
+
         if writestatus:
             print("... Iterative JFNK ...")  
 
@@ -275,7 +284,7 @@ class DYN3D():
                              newtonIters=newtonIters, krylovSpan=krylovSpan, 
                              dampingF=dampingF, pert=pert, eps=eps, 
                              lbound=lbound, ubound=ubound, alpha=alpha, 
-                             attrObj=attrObj)
+                             attrObj=attrObj, printstatus=printstatus)
                 
         self.fluxes = fluxes
         self.refFlxNorm = refFlxNorm
@@ -479,6 +488,9 @@ def exeDyn3D(casedir, casefile, exefile, printstatus=False):
 
     # lst file
     lstFile = os.path.join(casedir, casefile+'_lst.dat')
+
+    # Create a pause before reading
+    time.sleep(0.01)
 
     # obtain results from dyn3d _lst file
     keff, fluxes = lstRead(lstFile)

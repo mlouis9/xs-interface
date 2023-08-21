@@ -860,16 +860,23 @@ class Main():
         self._dataFiles = {}
                 
         # Read template files
-        for tmplkey, tmplfile in self._templates.items():
-            for ich, ch in enumerate(self.core.chIds):
-                layers = self.core.channels[ch]
-                for idx, layer in enumerate(layers['layers']):
+        for ich, ch in enumerate(self.core.chIds):
+            layers = self.core.channels[ch]
+            for idx, layer in enumerate(layers['layers']):
+                
+                for tmplkey, tmplfile in self._templates.items():
+                    
+                    if (tmplkey not in self._links.keys())\
+                        or (layer not in self._links[tmplkey]):
+                        continue
+                
                     fileId =\
                         self._outputs[tmplkey]+ch+'_'+str(idx)+'_'+layer+\
                         self._formats['postfix']        
             
                     attrval = self._ChannelLayerValue(attrsvals, ich, idx)        
             
+                    
             
                     self._dataFiles[fileId] =\
                         ReadTemplate(tmplfile, self.universes, self._formats,

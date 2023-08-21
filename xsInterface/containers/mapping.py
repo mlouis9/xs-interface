@@ -140,17 +140,25 @@ class Map:
         # Init to empty dictionary for storing data of a specific channel
         self.channels = {}
         # Identify all the unique channels types
-        self.chIds = set()
+        self.chIds = [] #set()
         for row in radmap:
-            self.chIds.update(row)
+            self.chIds = self.chIds + row
+            # self.chIds.update(row)
             
             
         # create channels indices
+        # c = 1
+        # for irow, row in enumerate(radmap):
+        #     for jcol, col in enumerate(row):
+        #         self.idxmap[irow][jcol] = c
+        #         c += 1
+
         c = 1
         for irow, row in enumerate(radmap):
             for jcol, col in enumerate(row):
                 self.idxmap[irow][jcol] = c
                 c += 1
+
         
         # core operational states for the results (not used here directly)
         self.corestates = {}
