@@ -15,7 +15,7 @@ email: dan.kotlyar@me.gatech.edu
 
 from xsInterface.functions.main import Main
 
-inputFile = ".\\inputs\\controlDict"
+inputFile = str(pathlib.Path("./inputs/controlDict"))
         
 
 

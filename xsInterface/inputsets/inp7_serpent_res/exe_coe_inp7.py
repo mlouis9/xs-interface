@@ -15,7 +15,7 @@ email: dan.kotlyar@me.gatech.edu
 from xsInterface.functions.main import Main
 
 
-inputFile = ".\\coe\\controlDict"
+inputFile = str(pathlib.Path("./coe/controlDict"))
 
 # Read the control dict
 xs = Main(inputFile)

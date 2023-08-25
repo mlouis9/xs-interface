@@ -13,7 +13,7 @@ email: dan.kotlyar@me.gatech.edu
 from xsInterface.functions.main import Main
 from omnWrite import omnGen
 
-inputFile = ".\\controlDict"
+inputFile = str(pathlib.Path("./controlDict"))
 
 # Read the control dict
 xs = Main(inputFile)

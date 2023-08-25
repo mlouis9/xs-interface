@@ -19,7 +19,7 @@ from xsInterface.functions.main import Main
 from xsInterface.functions.dyn3d import DYN3D
 from xsInterface.functions.plotters import Plot1d
 
-inputFile = ".\\inputs\\controlDict"
+inputFile = str(pathlib.Path("./inputs/controlDict"))
         
 
 
@@ -70,7 +70,7 @@ refFlx = refFlx['infflx']
 
 
 
-casedir = ".\\dyn3d"   # dyn3d dir
+casedir = str(pathlib.Path("./dyn3d"))   # dyn3d dir
 casefile = "bwr"  # name of dyn3d file
 exefile = "RUN_DYN3D" # dyn3d executuin file
 

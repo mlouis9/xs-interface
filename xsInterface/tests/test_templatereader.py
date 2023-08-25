@@ -28,9 +28,9 @@ from xsInterface.functions.readinput import ReadInput
 # universe data
 # -----------------------------------------------------------------------------
 
-univFile0 = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
-    "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\inputsets\\u0"
+univFile0 = str(pathlib.Path("C:/Users/dkotlyar6/Dropbox (GaTech)/"))+\
+    str(pathlib.Path("Reactor-Simulation-tools/GitHub Repositories/Public/"))+\
+        str(pathlib.Path("xs-interface/xsInterface/inputsets/u0"))
 UNIVERSES = ReadInput({}, u0=univFile0)
 
 # -----------------------------------------------------------------------------
@@ -83,7 +83,7 @@ BAD_VARO = [
 # -----------------------------------------------------------------------------
 # Path to all the input files
 # -----------------------------------------------------------------------------
-path2File = os.path.abspath(os.getcwd()) + "\\inputfiles\\"
+path2File = os.path.abspath(os.getcwd()) + str(pathlib.Path("/inputfiles/"))
 
 
 def test_universes(tmp_path):

@@ -10,8 +10,8 @@
 
 
 set universes
-u0 .\u0
-u1 .\u1
+u0 ./u0
+u1 ./u1
 
 
 # -----------------------------------------------------------------------------
@@ -19,16 +19,16 @@ u1 .\u1
 # -----------------------------------------------------------------------------
 
 set templates
-template0 .\template0
-template1 .\template1
+template0 ./template0
+template1 ./template1
 
 # -----------------------------------------------------------------------------
 #                            OUTPUT FILES
 # -----------------------------------------------------------------------------
 
 set outputs
-template0 .\outputs\output_
-template1 .\outputs\output_
+template0 ./outputs/output_
+template1 ./outputs/output_
 
 # -----------------------------------------------------------------------------
 #                           UNIVERSE-TO-FILES LINKS 

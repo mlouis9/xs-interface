@@ -29,13 +29,13 @@ from xsInterface.errors.customerrors import ControlFileError
 
 GOOD_UNIVERSES = [
     'set universes\n',
-    'u0 .\\inp1\\u0 \n',
-    'u1 .\\inp1\\u1 \n',] 
+    'u0 ./inp1/u0 \n',
+    'u1 ./inp1/u1 \n',] 
 
 GOOD_TEMPLATES = [
     'set templates        \n',
-    'tmpl0 tmpl\\template0\n',
-    'tmpl1 tmpl\\template1\n',] 
+    'tmpl0 tmpl/template0\n',
+    'tmpl1 tmpl/template1\n',] 
 
 GOOD_OUTPUTS = [
     'set outputs  \n',
@@ -50,8 +50,8 @@ GOOD_LINKS = [
 
 GOOD_SERP = [
     'set universes\n',
-    'fuel .\\inp1\\u0 \n',
-    'ref .\\inp1\\u1 \n',
+    'fuel ./inp1/u0 \n',
+    'ref ./inp1/u1 \n',
     'set links\n',
     'tmpl0 fuel0 \n',
     'tmpl1 ref1 \n',
@@ -70,12 +70,12 @@ GOOD_FORMATS = [
 BAD_UNIVERSES = [
     'set universes\n',
     'u0\n',
-    'u1 .\\inp1\\u1 \n',] 
+    'u1 ./inp1/u1 \n',] 
 
 BAD_TEMPLATES = [
     'set templates        \n',
     'tmpl0\n',
-    'tmpl1 tmpl\\template1\n',] 
+    'tmpl1 tmpl/template1\n',] 
 
 BAD_OUTPUTS = [
     'set outputs  \n',
@@ -103,8 +103,8 @@ BAD_FORMATS2 = [
 
 BAD_SERP = [
     'set universes\n',
-    'fuel .\\inp1\\u0 \n',
-    'ref .\\inp1\\u1 \n',
+    'fuel ./inp1/u0 \n',
+    'ref ./inp1/u1 \n',
     'set links\n',
     'tmpl0 fuel0 \n',
     'tmpl1 ref1 \n',
@@ -118,7 +118,7 @@ BAD_SERP = [
 # -----------------------------------------------------------------------------
 # Path to all the input files
 # -----------------------------------------------------------------------------
-path2File = os.path.abspath(os.getcwd()) + "\\inputfiles\\"
+path2File = os.path.abspath(os.getcwd()) + str(pathlib.Path("/inputfiles/"))
 
 
 def test_universes(tmp_path):

@@ -18,11 +18,11 @@ Last Checked:
 
 from xsInterface.functions.main import Main
 
-# inputFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
-#     "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-#         "xs-interface\\xsInterface\\inputsets\\inp1\\controlDict"
+# inputFile = str(pathlib.Path("C:/Users/dkotlyar6/Dropbox (GaTech)/"))+\
+#     str(pathlib.Path("Reactor-Simulation-tools/GitHub Repositories/Public/"))+\
+#         str(pathlib.Path("xs-interface/xsInterface/inputsets/inp1/controlDict"))
 
-inputFile = ".\\controlDict"
+inputFile = str(pathlib.Path("./controlDict"))
 
 # Read the control dict
 xs = Main(inputFile)

@@ -17,9 +17,9 @@ import pytest
 from xsInterface.errors.customerrors import SerpentFileError
 from xsInterface.functions.readserpent import ReadSerpent
 
-coeFile = "C:\\Users\\dkotlyar6\\Dropbox (GaTech)\\"+\
-    "Reactor-Simulation-tools\\GitHub Repositories\\Public\\"+\
-        "xs-interface\\xsInterface\\tests\\testfiles\\u0.coe"
+coeFile = str(pathlib.Path("C:/Users/dkotlyar6/Dropbox (GaTech)/"))+\
+    str(pathlib.Path("Reactor-Simulation-tools/GitHub Repositories/Public/"))+\
+        str(pathlib.Path("xs-interface/xsInterface/tests/testfiles/u0.coe"))
 
 
 def test_fnames():

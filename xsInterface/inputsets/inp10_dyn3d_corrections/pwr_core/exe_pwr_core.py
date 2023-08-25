@@ -14,7 +14,7 @@ email: dan.kotlyar@me.gatech.edu
 from xsInterface.functions.main import Main
 from xsInterface.functions.dyn3d import DYN3D
 
-controlFile = ".\\inputs\\controldict"
+controlFile = str(pathlib.Path("./inputs/controldict"))
 
 
 # -----------------------------------------------------------------------------
@@ -63,7 +63,7 @@ refFlx = refFlx['infflx']
 
 
 
-casedir = ".\\dyn3d"   # dyn3d dir
+casedir = str(pathlib.Path("./dyn3d"))   # dyn3d dir
 casefile = "core3D"  # name of dyn3d file
 exefile = "RUN_DYN3D" # dyn3d executuin file
 

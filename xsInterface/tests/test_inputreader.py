@@ -269,7 +269,7 @@ BAD_DATA = {
 # -----------------------------------------------------------------------------
 # Path to all the input files
 # -----------------------------------------------------------------------------
-path2File = os.path.abspath(os.getcwd()) + "\\inputfiles\\"
+path2File = os.path.abspath(os.getcwd()) + str(pathlib.Path("/inputfiles/"))
 
 
 def test_setData(tmp_path):
