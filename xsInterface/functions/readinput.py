@@ -121,7 +121,6 @@ def ReadInput(externalIds, **kwargs):
             externalIds[univId] = [None]
 
     for univId, inputFile in kwargs.items():
-
         externalSets = {} # dict to store external (e.g., serpent) data
         print("... Reading universe <{}> ...".format(univId))
         # check that `inputFile` variable is a string

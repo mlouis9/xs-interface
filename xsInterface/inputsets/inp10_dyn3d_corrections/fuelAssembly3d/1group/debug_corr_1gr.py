@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from xsInterface.functions.main import Main
 from xsInterface.functions.dyn3d import DYN3D
 from xsInterface.functions.plotters import Plot1d
+import pathlib
 
 inputFile = str(pathlib.Path("./inputs/controlDict"))
         

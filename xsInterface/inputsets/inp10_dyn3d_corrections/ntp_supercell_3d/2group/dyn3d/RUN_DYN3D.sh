@@ -1,0 +1,1 @@
+$DYN3D_EXE_NAME `pwd`/supercell_kin.dat `pwd`/supercell_lst.dat

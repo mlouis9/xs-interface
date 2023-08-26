@@ -15,8 +15,10 @@ email: dan.kotlyar@me.gatech.edu
 import numpy as np
 import matplotlib.pyplot as plt
 
+import xsInterface
 from xsInterface.functions.main import Main
 from xsInterface.functions.dyn3d import DYN3D
+import pathlib
 
 inputFile = str(pathlib.Path("./inputs/controlDict"))
         
@@ -71,7 +73,7 @@ refFlx = refFlx['infflx']
 
 casedir = str(pathlib.Path("./dyn3d"))   # dyn3d dir
 casefile = "supercell"  # name of dyn3d file
-exefile = "RUN_DYN3D" # dyn3d executuin file
+exefile = "RUN_DYN3D.sh" # dyn3d executuin file
 
 # Reset correction factors
 reslt = DYN3D(xs, casedir, casefile, exefile)

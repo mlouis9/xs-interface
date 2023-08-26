@@ -50,7 +50,8 @@ dens nom
 # -----------------------------------------------------------------------------
 
 set serpent 1 +1 infFlx 10.0E+6, 0.6025, 0.0
-nom  ./serpent/axial_TH_res.m
+nom  ./serpent/axial_th_res.m   # Note due to how control files are processed,
+                                # filenames CANNOT be case-senstive
 
 
 # -----------------------------------------------------------------------------

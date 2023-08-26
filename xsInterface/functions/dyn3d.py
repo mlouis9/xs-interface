@@ -474,7 +474,7 @@ def exeDyn3D(casedir, casefile, exefile, printstatus=False):
     
     if printstatus:
         print("... DYN3D Execution ... Start")
-    exe_process = subprocess.run(exefile, shell=True,
+    exe_process = subprocess.run(os.path.join(casedir,exefile), shell=True,
                                    stdout=subprocess.PIPE)   
     if exe_process.stderr is None:
         if printstatus:
