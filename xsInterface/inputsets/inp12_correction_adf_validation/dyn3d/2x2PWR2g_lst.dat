@@ -1,0 +1,913 @@
+
+
+                         ****   *   *  *   *    **   ****      *   *   **       *   *  **     **   
+                         *   *   * *   **  *   *  *  *   *     ** **  *         *   *    *   *  *  
+                         *   *    *    * * *     **  *   * *** * * *  * **  *** *   *   *    *  *  
+                         *   *   *     *  **   *  *  *   *     *   *  *  *       * *   *     *  *  
+                         ****   *      *   *    **   ****      *   *   **         *    * * *  **   
+
+
+ PROGRAM VERSION: DYN3D/VERSION FOR MULTI GROUPS (AND SP3)
+
+DYN3D Development build by DYN3D build system.
+Based on following SVN revision with local modifications.
+Revision Number : 1489
+Revision Date   : 03.11.2022 13:03:52
+Build Date      : Nov 08 2022 13:05:30                                             
+ ************************************************************************************************************************
+
+ DYN3D-MG RUN USES THE FOLLOWING FILES:
+
+ ************************************************************************************************************************
+
+ ********************************** DYN3D INPUT FILE OF NEUTRON KINETICS AND RUN CONTROL ********************************
+
+ ************************************************************************************************************************
+
+           POSITION: ====+====1====+====2====+====3====+====4====+====5====+====6====+====7====+====8
+
+                ===> $ TRANSIENT CALCULATION for a mini-core                                                                                                                                                                                                                        
+                ===> $ OECD MOX RIA 3-D                                                                                                                                                                                                                                             
+                ===> $ Calculation in 3D with reflecting boundary conditions                                                                                                                                                                                                        
+                ===> $ Modifications by Armando Gomez                                                                                                                                                                                                                               
+                ===> $  ICON IWQS IREWIN TOTIM       DTREST                                                                                                                                                                                                                         
+                         -1   22    1    18000.0       10.0                                                                                                                                                                                                                         
+                ===> $   -1    1    1    18000.0       6.0                                                                                                                                                                                                                          
+                ===> $  ISTART                                                                                                                                                                                                                                                      
+                         1                                                                                                                                                                                                                                                          
+                     OECD MOX RIA FOR MINI-CORE (PURDUE INIVERSITY)                                                                                                                                                                                                                 
+                     STANDARD MAP INPUT                                                                                                                                                                                                                                             
+                ===> $IDF GENERATION                                                                                                                                                                                                                                                
+                ===> $ IBKTYP                                                                                                                                                                                                                                                       
+                         2                                                                                                                                                                                                                                                          
+                     CONTROL OF CALCULATION                                                                                                                                                                                                                                         
+                ===> $ ITIM IOINP IH1  IH2  IH3  IH4  IH5                                                                                                                                                                                                                           
+                         1    1    0    0    0    0    1                                                                                                                                                                                                                            
+                     DIMENSIONS OF ARRAYS                                                                                                                                                                                                                                           
+                ===> $ISYM NJMAX NIMAX NCAS NZ NOBOU NOSYMS NOMAS NOBT                                                                                                                                                                                                              
+                       360    2   2     4    1    8    0      4     1                                                                                                                                                                                                               
+                ===> $   ndiv                                                                                                                                                                                                                                                       
+                          1                                                                                                                                                                                                                                                         
+                     NEUTRON ENERGY GROUPS                                                                                                                                                                                                                                          
+                ===> $   NG NOMAXDSC NOMAXUSC NGUPSC                                                                                                                                                                                                                                
+                          2      2       1      0                                                                                                                                                                                                                                   
+                     CONTROL OF ITERATION                                                                                                                                                                                                                                           
+                ===> $  EPSBES    EPSK       EPSF                                                                                                                                                                                                                                   
+                        .000002  .0000001   .0000001                                                                                                                                                                                                                                
+                ===> $ EKEFF                                                                                                                                                                                                                                                        
+                       1.0                                                                                                                                                                                                                                                          
+                ===> $ITOUMA ITINMA ITSCH                                                                                                                                                                                                                                           
+                       2000      40    7                                                                                                                                                                                                                                            
+                ===> $ ITOUTS                                                                                                                                                                                                                                                       
+                        0                                                                                                                                                                                                                                                           
+                     TOTAL POWER                                                                                                                                                                                                                                                    
+                ===> $   TOTPOW                                                                                                                                                                                                                                                     
+                      46.e-3                                                                                                                                                                                                                                                        
+                ===> $IBOR INDXE INDSM  KRIPAR ITKRIM                                                                                                                                                                                                                               
+                       1    0     0       1      100                                                                                                                                                                                                                                
+                ===> $ SOURCE                                                                                                                                                                                                                                                       
+                ===> $   0.0                                                                                                                                                                                                                                                        
+                ===> $   EPSKRI   EPSTF     EPSRH     THETA                                                                                                                                                                                                                         
+                       .00001   .005    .002      0.5                                                                                                                                                                                                                               
+                ===> $   BW      EKEFF0   CBLIM                                                                                                                                                                                                                                     
+                         0.00022     1.0     0.0                                                                                                                                                                                                                                    
+                ===> $ ICSTYP                                                                                                                                                                                                                                                       
+                         1                                                                                                                                                                                                                                                          
+                ===> $ NOFUEL                                                                                                                                                                                                                                                       
+                         4                                                                                                                                                                                                                                                          
+                ===> $ IBURN                                                                                                                                                                                                                                                        
+                         1                                                                                                                                                                                                                                                          
+                ===> $ ASSEMBLIES                                                                                                                                                                                                                                                   
+                       1                                                                                                                                                                                                                                                            
+                       2                                                                                                                                                                                                                                                            
+                       3                                                                                                                                                                                                                                                            
+                       4                                                                                                                                                                                                                                                            
+                     MATERIAL MAP                                                                                                                                                                                                                                                   
+                ===> $ JMIN JMAX                                                                                                                                                                                                                                                    
+                          0    1                                                                                                                                                                                                                                                    
+                ===> $ ILEFT(J)                                                                                                                                                                                                                                                     
+                        0 0                                                                                                                                                                                                                                                         
+                ===> $ IRIGHT(J)                                                                                                                                                                                                                                                    
+                        1 1                                                                                                                                                                                                                                                         
+                ===> $ NSHUFF       record 26                                                                                                                                                                                                                                       
+                         0                                                                                                                                                                                                                                                          
+                ===> $ IMAT(I)                                                                                                                                                                                                                                                      
+                       3 4                                                                                                                                                                                                                                                          
+                       1 2                                                                                                                                                                                                                                                          
+                     GEOMETRICAL PARAMETERS                                                                                                                                                                                                                                         
+                ===> $ AX                                                                                                                                                                                                                                                           
+                            2*21.5036                                                                                                                                                                                                                                               
+                ===> $ AY                                                                                                                                                                                                                                                           
+                            2*21.5036                                                                                                                                                                                                                                               
+                ===> $ AZ                                                                                                                                                                                                                                                           
+                      1.0                                                                                                                                                                                                                                                           
+                ===> $ IZBOT IZTOP                                                                                                                                                                                                                                                  
+                         1   1                                                                                                                                                                                                                                                      
+                     CONTROL RODS                                                                                                                                                                                                                                                   
+                ===> $ NOBANK NOW                                                                                                                                                                                                                                                   
+                         0    0                                                                                                                                                                                                                                                     
+                ===> $ ISUM                                                                                                                                                                                                                                                         
+                ===> $    1                                                                                                                                                                                                                                                         
+                ===> $ I0ROD  J0ROD  IRDTYP                                                                                                                                                                                                                                         
+                ===> $  0     0       2                                                                                                                                                                                                                                             
+                ===> $ IBK     ZRPOS(IBK)                                                                                                                                                                                                                                           
+                ===> $   1        365.755                                                                                                                                                                                                                                           
+                     ASSEMBLY DISCONTINUITY FACTORS                                                                                                                                                                                                                                 
+                ===> $ASSEMBLY DISCONTINUITY FACTORS – DIFFERING                                                                                                                                                                                                                    
+                ===> $SECOND MOMENT ASSEMBLY DISCONTINUITY FACTORS                                                                                                                                                                                                                  
+                     CURRENT COUPLING RELAXATION                                                                                                                                                                                                                                    
+                      0.5                                                                                                                                                                                                                                                           
+                     BOUNDARY RELATIONS                                                                                                                                                                                                                                             
+                          WHITE                                                                                                                                                                                                                                                     
+                ===> $ FEEDBACK ADJUSTING COEFFICIENTS                                                                                                                                                                                                                              
+                          0.0  0.0  0.0  0.0                                                                                                                                                                                                                                        
+                     WEIGHTED DOPPLER TEMPERATURE                                                                                                                                                                                                                                   
+                         0.7                                                                                                                                                                                                                                                        
+                ===> $NHYCHA                                                                                                                                                                                                                                                        
+                         0                                                                                                                                                                                                                                                          
+                     END OF DATA FOR STATIONARY CALCULATION                                                                                                                                                                                                                         
+                     FINE                                                                                                                                                                                                                                                           
+ ************************************************************************************************************************
+
+ ********************************** END OF INPUT FILE OF NEUTRON KINETICS AND RUN CONTROL *******************************
+
+ ************************************************************************************************************************
+
+ ************************************************************************************************************************
+
+ ****************************************** DYN3D INPUT FILE FOR THERMOHYDRAULICS ***************************************
+
+ ************************************************************************************************************************
+
+           POSITION: ====+====1====+====2====+====3====+====4====+====5====+====6====+====7====+====8
+
+                ===> $ MOX RIA Mini-core                                                                                                                                                                                                                                            
+                     IFC-67                                                                                                                                                                                                                                                         
+                ===> $ NST0 NST1 NSTD                                                                                                                                                                                                                                               
+                         1    0    0                                                                                                                                                                                                                                                
+                ===> $ NST2  NR   NTYP                                                                                                                                                                                                                                              
+                        1   10    1                                                                                                                                                                                                                                                 
+                ===> $ NST3                                                                                                                                                                                                                                                         
+                         1                                                                                                                                                                                                                                                          
+                ===> $ MISCH                                                                                                                                                                                                                                                        
+                         1                                                                                                                                                                                                                                                          
+                ===> $  NS  IKL  IGR                                                                                                                                                                                                                                                
+                         0    1   0                                                                                                                                                                                                                                                 
+                ===> $  DBI        DBA         FB      RLB       ROB          CB                                                                                                                                                                                                    
+                        0.000001   0.007902    0.975   0.003     10410.       0.3                                                                                                                                                                                                   
+                ===> $  DHI        DHA         FH      RLH       ROH          CH                                                                                                                                                                                                    
+                        0.008020   0.009166    0.0     0.0195    6504.        0.3                                                                                                                                                                                                   
+                ===> $      DHYD             S          AST         RPIN                                                                                                                                                                                                            
+                           0.01127      0.0126       0.02560375     264.                                                                                                                                                                                                            
+                ===> $      QR(1,NR)                                                                                                                                                                                                                                                
+                              1.0         1.0         1.0         1.0         1.0                                                                                                                                                                                                   
+                              1.0         1.0         1.0         1.0         1.0                                                                                                                                                                                                   
+                ===> $       ALSP                                                                                                                                                                                                                                                   
+                             10.0                                                                                                                                                                                                                                                   
+                ===> $       D0          TB0         TH0         PGAS         XHE                                                                                                                                                                                                   
+                ===> $      0.0190         20.         20.        0.25         1.0                                                                                                                                                                                                  
+                ===> $      RAUB        RAUH                                                                                                                                                                                                                                        
+                ===> $     0.00025     0.00015                                                                                                                                                                                                                                      
+                ===> $         HE          HA           ZA                                                                                                                                                                                                                          
+                               .0          .0           1.0                                                                                                                                                                                                                         
+                ===> $          P          DP                                                                                                                                                                                                                                       
+                             15.375      125.0                                                                                                                                                                                                                                      
+                ===> $    PLENMASS                                                                                                                                                                                                                                                  
+                          0.                                                                                                                                                                                                                                                        
+                ===> $    ZD(1,NH)                                                                                                                                                                                                                                                  
+                          1*0.25                                                                                                                                                                                                                                                    
+                ===> $    FR(1,NK)                                                                                                                                                                                                                                                  
+                       4*0.31106                                                                                                                                                                                                                                                    
+                ===> $  9*0.35                                                                                                                                                                                                                                                      
+                ===> $    ZE(1,NK)                                                                                                                                                                                                                                                  
+                       4*1.                                                                                                                                                                                                                                                         
+                ===> $    ITYP(1,NK)                                                                                                                                                                                                                                                
+                       4*1                                                                                                                                                                                                                                                          
+                ===> $       EPS1        EPS2        EPS3        EPS4        EPS5                                                                                                                                                                                                   
+                            0.002       0.002       0.005       0.001         0.8                                                                                                                                                                                                   
+                ===> $       EPS6        EPS7        EPS8        EPS9        EPS10                                                                                                                                                                                                  
+                            0.001       0.001         1.0         0.5         0.5                                                                                                                                                                                                   
+                ===> $   MIXING MODEL                                                                                                                                                                                                                                               
+                ===> $   NUMBER OF LOOPS                                                                                                                                                                                                                                            
+                            1                                                                                                                                                                                                                                                       
+                ===> $    RMS(1)     COOLANT TEMP    BORON ACID CONC.                                                                                                                                                                                                               
+                           1.0          287.0             1015.0                                                                                                                                                                                                                    
+                ===> $     IDRU                                                                                                                                                                                                                                                     
+                            0                                                                                                                                                                                                                                                       
+                ===> $  THERMOHYDRAULIC PERTURBATIONS                                                                                                                                                                                                                               
+                ===> $  MIPG  MIP(NSL)                                                                                                                                                                                                                                              
+                         0    0                                                                                                                                                                                                                                                     
+                     CONSTANT FEEDBACK CALCULATION                                                                                                                                                                                                                                  
+                     560.0 560.0 752.06 1000.0                                                                                                                                                                                                                                      
+ ************************************************************************************************************************
+
+ ****************************************** END OF INPUT FILE FOR THERMOHYDRAULICS **************************************
+
+ ************************************************************************************************************************
+
+ ************************************************************************************************************************
+
+ ****************************************** DYN3D CONTROL FILE FOR XS-LIBRARIES *****************************************
+
+ ************************************************************************************************************************
+
+           POSITION: ====+====1====+====2====+====3====+====4====+====5====+====6====+====7====+====8
+
+                     CONTROL OF XS-LIBRARY MOX RIA (Siegfried Mittag)                                                                                                                                                                                                               
+                     ./xs                                                                                                                                                                                                                                                           
+                     NEUTRON GROUPS   DELAYED NEUTRONS GROUPS                                                                                                                                                                                                                       
+                         2        6                                                                                                                                                                                                                                                 
+                     ****************************************************                                                                                                                                                                                                           
+                       ENERGY LIMITS                                                                                                                                                                                                                                                
+                       20.E6   6.2506E-1 1.0000E-4                                                                                                                                                                                                                                  
+                     ****************************************************                                                                                                                                                                                                           
+                        NXSCORE    NXSREFL                                                                                                                                                                                                                                          
+                          4          0                                                                                                                                                                                                                                              
+                     ****************************************************                                                                                                                                                                                                           
+                        NAME    NUMBER OF BURNUP STATES                                                                                                                                                                                                                             
+                ===> $ B01_2g_4sides.xs22                                                                                                                                                                                                                                           
+                ===> $ C01_2g_4sides.xs22                                                                                                                                                                                                                                           
+                ===> $ C02_2g_4sides.xs22                                                                                                                                                                                                                                           
+                ===> $ RR4_2g_4sides.xs22                                                                                                                                                                                                                                           
+                     xs_B01_0_uB01_2g_4sides.xs22     1                                                                                                                                                                                                                             
+                     xs_C02_0_uC02_2g_4sides.xs22     1                                                                                                                                                                                                                             
+                     xs_C01_0_uC02_2g_4sides.xs22     1                                                                                                                                                                                                                             
+                     xs_RR4_0_uRR4_2g_4sides.xs22     1                                                                                                                                                                                                                             
+ ************************************************************************************************************************
+
+ ****************************************** END OF CONTROL FILE FOR XS-LIBRARIES ****************************************
+
+ ************************************************************************************************************************
+
+ **************************************** DATE : AUG 28 17:47:33 2023*****************************************
+
+
+ ******************************************** BEGIN OF DYN3D  CALCULATION ***********************************************
+
+                                               TIME =  0.000E+00 MINUTES
+
+ ************************************************************************************************************************
+
+
+
+
+ OPTION OF DYN3D_3 CALCULATION: ICON =           -1
+
+
+ STATIONARY CALCULATION ONLY
+
+
+
+ DATA  FOR RESTART  ARE  SAVED  ON  FILE  32: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_rs2.dat                                                                                                                              
+
+ DATA  ARE SAVED AFTER CPU TIME     TOTIM =   18000.00 S
+ DATA  ARE SAVED EACH PROBLEM TIME DTREST =     10.000 S
+
+ DATA OF  PROBLEM  ARE  READ  FROM FILE   50: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_kin.dat                                                                                                                              
+ GROUP  CONSTANTS  ARE  READ  FROM FILE   52: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_wqs.dat                                                                                                                              
+
+ THERMOHYDR.  DATA ARE  READ  FROM FILE   51: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_thy.dat                                                                                                                              
+ POLYNOMIAL  COEFF. ARE STORED  ON FILE   36: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_wei.dat                                                                                                                              
+
+ TEMPORARY STORAGE DURING CALC. ON FILE   30: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_tmp.dat                                                                                                                              
+
+
+ CALCULATION WITH CARTESIAN NODAL METHOD 
+
+
+OECD MOX RIA FOR MINI-CORE (PURDUE INIVERSITY)                          
+ 
+ STANDARD MAP INPUT: FROM TOP TO BOTTOM
+ 
+ 
+ CALCULATION WITH DIFFUSION APPROXIMATION
+ 
+
+ CLUSTER CONTROL ROD MODEL WITH IBKTYP = 2
+
+
+ CONTROL PARAMETERS OF ITERATION IN THE STATIONARY STATE
+
+ ACCURACY OF EIGENVALUE  :  1.000E-07   ACCURACY OF FISSION RATE:  1.000E-07   INITIAL VALUE OF KEFF   :  1.0000000
+ MAX. NUMBER OF OUT. ITER:  2000        MAX. NUMBER OF IN.  ITER:  40          ORDER OF TSCH.-ACCELER. :   7
+
+
+ TOTAL POWER OF STATIONARY STATE: 4.600E-02 MW
+
+
+ CRITICAL STATE BY CHANGE OF MULTIPLICATION
+
+ CRITICAL ACCURACY              DKEFF:  1.000E-05  MAX. ITERATIONS WITH FEEDBACK ITKRIM:   100
+ ACCURACY OF FUEL               EPSTF:  5.000E-03  ACCURACY OF MOD. DENS OR TEMP  EPSRH:  2.000E-03
+ RELAXATION TH-NK ITER          THETA:  0.5000000
+
+ LOWER LIMIT OF BORON CONC.     CBLIM:     0.000
+
+ TARGET VALUE KEFF             EKEFF0:  1.000000
+
+ SYMMETRY IDENTIFIER ISYM =   360   ==> FULL CORE                                    
+
+
+ MAP OF 360 DEGREE SECTOR
+
+ SUBASSEMBLY NUMBERS AND INTERNAL CO-ORDINATES
+
+ J-AXIS
+             *---*---*
+ B           |  3|  4|
+             *---*---*
+ A           |  1|  2|
+             *---*---*
+
+ I-AXIS:       0   1
+
+
+
+
+ Number of internal nodes of assemblies: 
+
+             *---*---*
+ B           |  1|  1|
+             *---*---*
+ A           |  1|  1|
+             *---*---*
+
+ I-AXIS:       0   1
+
+
+
+
+ FUEL TYPES: 
+
+             *---*---*
+ B           |  3|  4|
+             *---*---*
+ A           |  1|  2|
+             *---*---*
+
+ I-AXIS:       0   1
+
+
+
+
+
+ DISTRIBUTION OF MATERIAL IN LAYER IZ =   1:
+
+             *---*---*
+ B           |  3|  4|
+             *---*---*
+ A           |  1|  2|
+             *---*---*
+
+ I-AXIS:       0   1
+
+
+
+
+
+ INPUT OF BURNUP DISTRIBUTION FROM FILE   25: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_brn.dat                                                                                                                              
+
+  !! ATTENTION: CALCULATION STARTED WITH BURNUP=0. FOR EACH NODE
+ BURNUP DISTRIBUTION:
+ 
+
+ CAS-NR.          1        2        3        4
+ K-AXIS
+    1:        0.000    0.000    0.000    0.000
+
+
+  INPUT DATA FOR ARRAY DIMENSIONS:
+
+  SYMMETRY SECTOR(DEG)        ISYM: 360  NUMBER OF ROWS OF CARTOGRAM  NJMAX:   2  NUMBER OF COLUMNS OF CARTOGRAM  NIMAX:   2
+  NUMBER OF ASSEMBLIES        NCAS:   4  NUMBER OF NODES IN Z-DIRECTION  NZ:   1  WHOLE NUMBER OF NODES             NON:   4
+  NUMBER OF SIDES           NOCORN:   4  NB. OF OUTER SIDES OF SECTOR NOBOU:   8  NUMBER OF SYMMETRY BOUNDARIES  NOSYMS:   0
+  NUMBER OF MATERIALS        NOMAS:   4  NUMBER OF BOUNDARY CONDITIONS NOBT:   1  NUMBER OF NEUTRON ENERGY GROUPS    NG:   2
+  TYP OF CROSS SECTION SET  ICSTYP:   1
+
+
+
+  DATA IN CASE OF FINER MESH:
+
+  FACTOR FOR FINER MESH       NDIV:   1  TOTAL NODES IN A PLANE       NODXY:   0  TOTAL SYSTEM NODES              NONOD:   0
+
+
+  MAX. DOWN-SCATTER BANDS NOMAXDSC:   0  MAX.   UP-SCATTER BANDS   NOMAXUSC:   0  LOWER LIMIT OF UP-SCATTERING   NGUPSC:   0
+
+
+ TYPE OF MACROCOPIC CROSS SECTIONS: ICSTYP = 1: SIGF1,SIGF2 IN (10**13 MWS/CM)
+                                                YIELDS OF XE AND SM IN ABSOLUTE UNITS 
+                                                ABSORPTION CROSS SECTION OF XE AND SM IN BARN
+
+                                    ICSTYP = 2: SIGF1,SIGF2 IN (MWS/CM)
+                                                YIELDS OF XE AND SM IN (MW*SEC) 
+                                                ABSORPTION CROSS SECTION OF XE AND SM IN CM**2
+
+
+  NUMBER OF FUEL ASSEMBLY TYPES  NOFUEL:   4
+
+
+ LENGTH OF NODES IN X-DIRECTION
+
+
+ X-AXIS :        1          2
+ AX(CM) :     21.504     21.504
+
+ MAX. DISTANCE IN X DIRECTION: 43.007 CM
+
+
+ LENGTH OF NODES IN Y-DIRECTION
+
+
+ Y-AXIS :        1          2
+ AY(CM) :     21.504     21.504
+
+ MAX. DISTANCE IN Y DIRECTION: 43.007 CM
+
+
+ LENGTH OF NODES IN Z-DIRECTION
+
+
+ Z-AXIS :        1
+ AZ(CM) :      1.000
+
+ MAX. DISTANCE IN Z DIRECTION:  1.000 CM
+
+ LOWER END OF FUEL IZBOT =   1
+ UPPER END OF FUEL IZTOP =   1
+
+
+
+ AXIAL MATERIAL DISTRIBUTION (WITH REFLECTORS) OF    4 DIFFERENT TYPES OF FUEL ELEMENTS:
+
+ TYPE NO.             1           2           3           4
+
+ AX. LAYER
+
+          1.000   -------     -------     -------     -------
+    1            |    1  |   |    2  |   |    3  |   |    4  | 
+          0.000   -------     -------     -------     -------
+ 
+  CALCULATION WITH ASSEMBLY DISCONTINUITY FACTORS
+ 
+ 
+ CALCULATION WITH RELAXATION OF CURRENT COUPLING AT THE RADIAL INTERFACES
+ RELAXATION FACTOR THETA_CN =  0.500
+
+
+ DIAGONAL BOUNDARY RELATIONS OF SIDES
+
+ GROUP      1         2
+ TYPE
+    1:  1.00000   1.00000
+ AT ALL BOUNDARIES THE SAME CONDITIONS
+ Reading XS library
+
+NO EXTRAPOLATION OF CROSS SECTIONS BEYOND THE LIMITS OF FEEDBACK PARAMETERS
+
+ 
+ LIMITS OF NEUTRON ENERGY GROUPS (eV)
+ 
+ GROUP  LOWER BOUND   UPPER BOUND
+ 
+   1    6.2506E-01    2.0000E+07
+   2    1.0000E-04    6.2506E-01
+ 
+
+ SET  SETNAME                             BURNUP POINTS
+
+   1  xs_B01_0_uB01_2g_4sides.xs22           1
+   2  xs_C02_0_uC02_2g_4sides.xs22           1
+   3  xs_C01_0_uC02_2g_4sides.xs22           1
+   4  xs_RR4_0_uRR4_2g_4sides.xs22           1
+ 
+
+      ISET  NOXSDENS  NOXSCB    NOXSTF    NOXSTM 
+
+       1         1         0         0         0
+       2         1         0         0         0
+       3         1         0         0         0
+       4         1         0         0         0
+ Reading XS library ... done
+ 
+ CALCULATION OF DOPPLER TEMPARATURE: 
+ 
+ T(DOPPLER) =  0.70*T(SURFACE) +  0.30*T(INNER)
+
+
+
+
+ CALCULATION WITH FEEDBACK
+
+
+
+ DISTRIBUTION OF HYDRAULIC CHANNELS:
+ CHANNEL NUMBERS AND INTERNAL CO-ORDINATES
+
+ J-AXIS
+
+             *---*---*
+ B           |  3|  4|
+             *---*---*
+ A           |  1|  2|
+             *---*---*
+
+ I-AXIS:       0   1
+
+
+
+
+
+ WEIGHT OF ASSEMBLIES COMPARED TO WHOLE CORE
+ 
+ ASSEMBLY NB.        :         1          2          3          4
+ PART IN SECTOR      :     1.00000    1.00000    1.00000    1.00000
+
+
+
+ 
+ SYMMETRY SECTOR WEIGHTED AREA OF CHANNELS IN CM**2
+ 
+ ASSEMBLY NB.        :         1          2          3          4
+ AREA OF CHANNEL     :      462.40     462.40     462.40     462.40
+
+
+
+ 
+ WATER PROPERTIES OF IFC-67 STANDARD
+ 
+ 
+ BORON TRANSPORT BY STANDARD MODEL
+ 
+
+
+ THERMO-HYDRAULIC CALCULATION BY CODE FLOCAL-DWR
+
+ INPUT OF DATA       SYSTEM OF UNITS - SI
+
+ POWER               KWATT          
+ ENERGY,ENTHALPY     KJOULE         
+ GEOMETRICAL DATA    M,M**2,M**3    
+ PRESSURE (DROP)     MPA (KPA)      
+ MASS                KG             
+ TIME                SECONDS        
+
+
+ GIVEN MASS FLOW RATE THROUGH EACH CHANNEL
+
+
+ MISCH >= 1 - IDEAL MIXING
+
+
+
+FUEL ROD PARAMETERS FOR TYPE NUMBER    1
+
+
+FUEL ELEMENT PARAMETERS          FUEL         CLADDING
+
+ INNER DIAMETER                 0.10000E-05    0.80200E-02
+ OUTER DIAMETER                 0.79020E-02    0.91660E-02
+ THERMAL CONDUCTIVITY (KW/M*K)  0.30000E-02    0.19500E-01
+ POWER FRACTION                  0.9750         0.0000
+ DENSITY                        0.10410E+05    0.65040E+04
+ THERMAL CAPACITY                0.3000         0.3000
+
+
+LATTICE GEOMETRICAL DATA
+
+ HYDRAULIC DIAMETER        0.11270E-01   HEATED    DIAMETER        0.13472E-01
+ LATTICE PITCH             0.12600E-01   FLOW AREA PER ROD         0.96984E-04   HEATED RODS PER ASSEMBLY    264.00000
+
+ HEAT TRANSFER IN GAS GAP  0.10000E+02
+
+
+RADIAL HEAT RELEASE DISTRIBUTION IN FUEL ROD
+
+   0.1000    0.1000    0.1000    0.1000    0.1000    0.1000    0.1000    0.1000    0.1000    0.1000
+
+ NUMBER OF LOOPS:     1
+
+ RELATIVE MASS FLOW RATES OF THE LOOPS, TEMPERATURES IN CELSIUS, BORON ACID CONCENTRATIONS IN G/KG
+ LOOP NUMBER I=    1:     1.000             287.000            1015.000
+
+ NODALISATION OF CORE
+
+ NUMBER OF COOLANT CHANNELS    4
+ NUMBER OF SPECIAL CHANNELS    0
+ AXIAL NODES IN CORE           1
+ RADIAL FUEL SEGMENTS         10
+ NUMBER OF FUEL ROD TYPES      1
+
+
+ GEOMETRICAL AND HYDRAULIC DATA
+
+
+ HEIGHT OF CORE                    0.10000E-01
+ ENTRY LENGTH                      0.00000E+00     EXIT  LENGTH                      0.00000E+00
+ EXIT RESISTANCE COEFFICIENT       0.10000E+01
+
+
+ EXIT PRESSURE                     0.15375E+02     PRESSURE DROP                     0.12500E+03
+
+
+
+ WATER MASS IN DOWNCOMER AND LOWER PLENUM
+
+ 0.00000E+00
+ TOTAL MASS FLOW RATE CORRESPONDS TO CORE INLET
+
+
+ RESISTANCE COEFFICIENTS ON DISTANCE LATTICES
+
+   0.250
+
+
+ CORE    CHANNEL INPUT DATA
+
+
+ NUMBER  FUEL ROD TYPE  INLET TEMPERATURE  INLET RESIST. COEFF.
+    1              1           287.000               1.000
+    2              1           287.000               1.000
+    3              1           287.000               1.000
+    4              1           287.000               1.000
+
+
+ FLOW RATE PER FUEL ROD (FIRST ESTIMATION OR INPUT)
+
+    0.3111      0.3111      0.3111      0.3111
+
+
+ BOR CONCENTRATION (PPM or G/KG) FOR CORE CHANNELS
+
+ 1015.0000   1015.0000   1015.0000   1015.0000
+
+
+ TRUNCATION CRITERIA FOR ITERATIONS (RELATIVE ERRORS)
+
+ MASS FLOW RATE FOR GIVEN PRESSURE DROP   0.00200
+ PRESSURE DISTRIBUTION - STEADY STATE     0.00200  TIME - DEPENDENT                         0.00500
+ ABSOLUTE ERROR OF VOID FRACTION          0.00100  RELAXATION FACTOR FOR HEAT FLUX          0.80000
+ RELATIVE ERROR OF WALL TEMPERATURE       0.00100  FUEL TEMPERATURE                         0.00100
+ RELAXATION FACTORS FOR ITERATIVE PROCEDURES
+
+ MASS FLOW RATE FOR GIVEN TOTAL MASS FLOW 1.00000
+ GAS GAP CONDUCTANCE                      0.50000
+ POST - CRITICAL WALL TEMPERATURE         0.50000
+
+ RELAXATION OF MASS FLOW DERIVATIVE:
+
+ ITERATIONS WITHOUT MASS FLOW DERIVATIVE  ITFRMIN    0
+ ITERATIONS WITH INCREASING FACTOR (0->1) ITFRGZ     1
+ MAXIMUM NUMBER OF ITERATIONS             ITFRMAX   10
+
+
+
+ NO PERTURBATION OF THERMOHYDRAULIC BOUNDARY CONDITIONS IN LOOP NUMBER:    1
+ 
+ INPUT OF DYN3D THERMOHYDRAULIC DATA FINISHED
+ 
+
+SPECIAL OPTION: CALCULATION WITH CONSTANT FEEDBACK; IDENTICAL VALUES IN EACH NODE
+NO THERMOHYDRAULIC CALCULATION
+
+ 
+ INPUT OF STEADY STATE NEUTRONIC DATA FINISHED
+ 
+ ITOU:  37 KEFF: 1.088909 DKF:0.331239E-10   DSOU:0.350524E-08 EVA12:0.733782E+00 ITIN:  40
+ KEFF VALUE (IN COMPARISON TO ORIGINAL STATE) EKEFFW: 1.088909 REACTIVITY:   0.08165
+
+ NUMBER OF (OUTER) STEP FOR CRITICAL STATE ITKRIT: 0
+
+ ACCURACY OF EIGENVALUE DKEFF: -8.89089E-02 ACCURACY OF FUEL TEMPERATURES DTF: 0.0000     AND DENSITIES DRHO: 0.0000    
+
+ ITOU:  33 KEFF: 1.000000 DKF:0.205257E-10   DSOU:0.241940E-08 EVA12:0.733754E+00 ITIN:  40
+ KEFF VALUE (IN COMPARISON TO ORIGINAL STATE) EKEFFW: 1.088909 REACTIVITY:   0.08165
+
+ NUMBER OF (OUTER) STEP FOR CRITICAL STATE ITKRIT: 1
+
+ ACCURACY OF EIGENVALUE DKEFF:  3.02303E-11 ACCURACY OF FUEL TEMPERATURES DTF: 0.0000     AND DENSITIES DRHO: 0.0000    
+
+
+ RESULTS OF TIME-DEPENDENT NEUTRON KINETICS AT TIME                      0.0000
+
+ DISTRIBUTION OF NODAL FLUXES IN 1/(CM**2*S)
+
+
+ VALUES MUST BE MULTIPLIED BY 10**  12
+
+ CAS-NR.          1        2        3        4
+
+ K-AXIS
+
+   1 GR  1:  8.97400E+01  7.54451E+01  7.54451E+01  4.70626E+01
+     GR  2:  1.98565E+01  1.02919E+01  1.02919E+01  1.39772E+00
+
+
+ NORMALIZED POWER DISTRIBUTION
+
+
+ CAS-NR.          1        2        3        4
+
+ ASS. POW.   1.0781   0.9609   0.9609   0.0000
+
+ K-AXIS
+    1:       1.0781   0.9609   0.9609   0.0000
+
+
+ keff =   1.088909  NORMALIZED ASSEMBLY POWERS IN THE MAP
+
+  B:    0.9609  0.0000
+ 
+  A:    1.0781  0.9609
+ 
+ 
+            0       1
+ 
+
+
+ NORMALIZED NODAL POWERS OF LAYER IZ =  1
+
+  B:    0.9609  0.0000
+ 
+  A:    1.0781  0.9609
+ 
+ 
+            0       1
+ 
+
+
+ CORE  AVERAGED K-INFINITY:  1.12994
+ AXIAL AVERAGED K-INFINITY VALUES IN THE MAP
+
+  B:    1.1306  0.0000
+ 
+  A:    1.1286  1.1306
+ 
+ 
+            0       1
+ 
+
+ RADIALLLY AVERAGED DISTRIBUTION
+  IZ   AXIAL POWER
+
+   1    1.00000
+
+
+ TOTAL REACTOR POWER: 0.460000E-01 MW
+
+ ASSEMBLY POWERS(MW) AND AVERAGE POWER DENSITIES IN THE NODES (W/CM**3)
+
+
+ CAS-NR.          1        2        3        4
+
+ ASS. POW. 1.65E+04 1.47E+04 1.47E+04 0.00E+00
+
+ VALUES MUST BE MULTIPLIED BY 10**   7
+
+ K-AXIS
+    1:        3.575    3.186    3.186    0.000
+
+
+ RADIAL PEAKING FACTOR (MAXIMUM TO AVERAGE OF EACH LAYER)                     : FXY(Z)
+ AVERAGE AXIAL POWER DISTRIBUTION (AVERAGE POWER OF LAYER TO TOTAL AVERAGE)   : P(Z)
+ MAXIMUM POWER PEAKING FACTOR OF LAYER (MAXIMUM IN THE LAYER TO TOTAL AVERAGE): Q(Z) = FXY(Z)*P(Z)
+
+
+  IZ    Z(CM)    FXY(IZ)   P(IZ)     Q(IZ)
+
+   1     0.50    1.0781    1.0000    1.0781
+
+ NODAL POWER PEAKING FACTORS:
+ FXY:  1.0781 IN ASS. NO :   1
+ FQ :  1.0781 IN ASS. NO :   1 AXIAL LAYER NO :   1
+ FZ :  1.0000                  AXIAL LAYER NO :   1
+
+
+
+ FLUXES AT THE NODE SURFACES 1/(CM**2*S)
+
+
+      NO OF SIDES: 
+                   
+       2         
+     _____       
+    |     |      
+  3 |     | 1    
+    |_____|      
+                
+       4         
+
+
+
+ VALUES MUST BE MULTIPLIED BY 10**  12
+
+ASS-NR.            1        2        3        4
+AXIAL  GR SIDE
+
+IZ= 1 GR= 1 1:  8.33747E+01  7.14827E+01  5.90888E+01  4.03787E+01
+            2:  8.33747E+01  5.90888E+01  7.14827E+01  4.03787E+01
+            3:  9.35290E+01  8.21948E+01  8.40398E+01  6.24375E+01
+            4:  9.35290E+01  8.40398E+01  8.21948E+01  6.24375E+01
+            T:  8.97400E+01  7.54451E+01  7.54451E+01  4.70626E+01
+            B:  8.97400E+01  7.54451E+01  7.54451E+01  4.70626E+01
+      GR= 2 1:  1.53077E+01  9.50165E+00  5.09258E+00  9.64253E-01
+            2:  1.53077E+01  5.09258E+00  9.50165E+00  9.64253E-01
+            3:  2.10889E+01  1.38418E+01  1.17376E+01  5.37264E+00
+            4:  2.10889E+01  1.17376E+01  1.38418E+01  5.37264E+00
+            T:  1.98565E+01  1.02919E+01  1.02919E+01  1.39772E+00
+            B:  1.98565E+01  1.02919E+01  1.02919E+01  1.39772E+00
+
+
+ NET CURRENTS FOR OUTER DIRECTION AT THE NODE SURFACES 1/(CM**2*S)
+
+
+ VALUES MUST BE MULTIPLIED BY 10**  11
+
+ASS-NR.            1        2        3        4
+AXIAL  GR SIDE
+
+IZ= 1 GR= 1 1:  5.03411E+00  0.00000E+00  2.58130E+01  0.00000E+00
+            2:  5.03411E+00  2.58130E+01  0.00000E+00  0.00000E+00
+            3:  0.00000E+00 -5.03411E+00  0.00000E+00 -2.58130E+01
+            4:  0.00000E+00  0.00000E+00 -5.03411E+00 -2.58130E+01
+            T:  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+            B:  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+      GR= 2 1:  6.39794E+00  0.00000E+00  8.07833E+00  0.00000E+00
+            2:  6.39794E+00  8.07833E+00  0.00000E+00  0.00000E+00
+            3:  0.00000E+00 -6.39794E+00  0.00000E+00 -8.07833E+00
+            4:  0.00000E+00  0.00000E+00 -6.39794E+00 -8.07833E+00
+            T:  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+            B:  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+
+
+ ALBEDOS AT THE NODE SURFACES
+
+
+ASS-NR.            1        2        3        4
+AXIAL  GR SIDE
+
+IZ= 1 GR= 1 1:  9.76136E-01  1.00000E+00  8.39300E-01  1.00000E+00
+            2:  9.76136E-01  8.39300E-01  1.00000E+00  1.00000E+00
+            3:  1.00000E+00  1.02480E+00  1.00000E+00  1.18027E+00
+            4:  1.00000E+00  1.00000E+00  1.02480E+00  1.18027E+00
+            T:  1.00000E+00  1.00000E+00  1.00000E+00  1.00000E+00
+            B:  1.00000E+00  1.00000E+00  1.00000E+00  1.00000E+00
+      GR= 2 1:  8.45715E-01  1.00000E+00  5.18305E-01  1.00000E+00
+            2:  8.45715E-01  5.18305E-01  1.00000E+00  1.00000E+00
+            3:  1.00000E+00  1.20372E+00  1.00000E+00  1.86009E+00
+            4:  1.00000E+00  1.00000E+00  1.20372E+00  1.86009E+00
+            T:  1.00000E+00  1.00000E+00  1.00000E+00  1.00000E+00
+            B:  1.00000E+00  1.00000E+00  1.00000E+00  1.00000E+00
+
+
+ Partial Currents AT THE NODE SURFACES
+
+
+ASS-NR.            1        2        3        4
+AXIAL  GR SIDE
+
+IZ= 1 GR= 1 1: in  205.9198 178.7067 134.8155 100.9468
+            1: out 210.9539 178.7067 160.6285 100.9468
+            2: in  205.9198 134.8155 178.7067 100.9468
+            2: out 210.9539 160.6285 178.7067 100.9468
+            3: in  233.8226 208.0041 210.0995 169.0003
+            3: out 233.8226 202.9700 210.0995 143.1873
+            4: in  233.8226 210.0995 208.0041 169.0003
+            4: out 233.8226 210.0995 202.9700 143.1873
+      GR= 2 1: in   35.0704  23.7541   8.6923   2.4106
+            1: out  41.4683  23.7541  16.7706   2.4106
+            2: in   35.0704   8.6923  23.7541   2.4106
+            2: out  41.4683  16.7706  23.7541   2.4106
+            3: in   52.7222  37.8034  29.3440  17.4708
+            3: out  52.7222  31.4055  29.3440   9.3924
+            4: in   52.7222  29.3440  37.8034  17.4708
+            4: out  52.7222  29.3440  31.4055   9.3924
+
+      **************************************** END OF STATIC CALCULATION ***************************************
+                                                TIME =  4.167E-03 MINUTES
+
+  DELETED FILES:
+ 
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_brn.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_rs1.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_rs2.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_wei.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_res.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_tmp.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_f50.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_f51.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_f52.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_xen.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_sam.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_nbr.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_eiw.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_int.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_mix.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_rec.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_sou.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_trn.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_trt.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_nuc.dat                                                                                                                              
+ C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_pyd.dat                                                                                                                              
+ 
+ **************************************** DATE : AUG 28 17:47:34 2023*****************************************
+
