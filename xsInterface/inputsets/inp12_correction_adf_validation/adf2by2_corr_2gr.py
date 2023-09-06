@@ -93,24 +93,15 @@ reslt = DYN3D(xs, casedir, casefile, exefile)
 #                 EXECUTE DYN3D - WITH CORRECTION
 # -----------------------------------------------------------------------------
 
-attr = 'adf'
-
 reslt.Iterate(
-    corrattrs=[attr], refFlx=refFlx, newtonIters=10, krylovSpan=10, groupWeights=None,
-    dampingF=0.5, lbound=0.70, ubound=1.3, pert=1E-03, newtonErr=0.01, 
-    sphMultp=['infTranspxs', 'trcTranspxs', 'infrabsxs', 'infnsf', 'fissjoule', 'infsp0'],
-    sphDiv=None)
+    corrattrs=['adf'], refFlx=refFlx, newtonIters=8,
+    dampingF=0.8, lbound=0.9, ubound=1.1, pert=1E-03)
 
 
+zmid = [0]
 
-
-
-# -----------------------------------------------------------------------------
-#                 PLOT RESULTS
-# -----------------------------------------------------------------------------
-zmid= [0.0]
 # plt.figure()
-reslt.PlotFluxes(zmid, iters=None,  markers=['<', '*', 'o'], chId="B01")
+reslt.PlotFluxes(zmid, iters=None,  markers=['<', '*', 'o'], chId="RR4")
 
 # Plot results
 xs.SlicePlot(reslt.iterOutputs[-1], layer=0, markersize=5000, spacesize=2.0,
@@ -157,14 +148,14 @@ xs.SlicePlot(reslt.iterDifferences[0], layer=0, markersize=5000, spacesize=2.0,
               egroup=1)
 
 
-xs.SlicePlot(reslt.iterInputs[attr][-1], layer=0, markersize=5000, spacesize=2.0,
+xs.SlicePlot(reslt.iterInputs['adf'][-1], layer=0, markersize=5000, spacesize=2.0,
               textsize=12, textcolor='w', textweight="bold", 
-              precision=".4f", edge=1.5, norm=1.0, label="{}s fast group".format(attr), 
+              precision=".4f", edge=1.5, norm=1.0, label="ADFs fast group", 
               egroup=0)
 
-xs.SlicePlot(reslt.iterInputs[attr][-1], layer=0, markersize=5000, spacesize=2.0,
+xs.SlicePlot(reslt.iterInputs['adf'][-1], layer=0, markersize=5000, spacesize=2.0,
               textsize=12, textcolor='w', textweight="bold", 
-              precision=".4f", edge=1.5, norm=1.0, label="{}s thermal group".format(attr), 
+              precision=".4f", edge=1.5, norm=1.0, label="ADFs thermal group", 
               egroup=1)
 
 
@@ -186,3 +177,13 @@ xs.SlicePlot(reslt.iterOutputs[0], layer=0, markersize=5000, spacesize=2.0,
 
 
 
+
+xs.SlicePlot(reslt.iterInputs['adf'][0], layer=0, markersize=5000, spacesize=2.0,
+              textsize=12, textcolor='w', textweight="bold", 
+              precision=".4f", edge=1.5, norm=1.0, label="ADFs fast group", 
+              egroup=0)
+
+xs.SlicePlot(reslt.iterInputs['adf'][0], layer=0, markersize=5000, spacesize=2.0,
+              textsize=12, textcolor='w', textweight="bold", 
+              precision=".4f", edge=1.5, norm=1.0, label="ADFs thermal group", 
+              egroup=1)

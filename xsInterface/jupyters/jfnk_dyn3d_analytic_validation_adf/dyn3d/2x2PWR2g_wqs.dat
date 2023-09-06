@@ -1,0 +1,22 @@
+CONTROL OF XS-LIBRARY MOX RIA (Siegfried Mittag)
+./xs
+NEUTRON GROUPS   DELAYED NEUTRONS GROUPS
+    2        6 
+****************************************************
+  ENERGY LIMITS
+  20.E6   6.2506E-1 1.0000E-4
+****************************************************
+   NXSCORE    NXSREFL
+     4          0
+****************************************************
+   NAME    NUMBER OF BURNUP STATES
+$ B01_2g_4sides.xs22
+$ C01_2g_4sides.xs22
+$ C02_2g_4sides.xs22
+$ RR4_2g_4sides.xs22
+xs_B01_0_uB01_2g_4sides.xs22     1  
+xs_C02_0_uC02_2g_4sides.xs22     1
+xs_C01_0_uC02_2g_4sides.xs22     1
+xs_RR4_0_uRR4_2g_4sides.xs22     1 
+  
+

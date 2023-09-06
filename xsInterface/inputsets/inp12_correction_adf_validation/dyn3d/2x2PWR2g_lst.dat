@@ -239,7 +239,7 @@ Build Date      : Nov 08 2022 13:05:30
 
  ************************************************************************************************************************
 
- **************************************** DATE : AUG 28 17:47:33 2023*****************************************
+ **************************************** DATE : SEP 06 15:21:04 2023*****************************************
 
 
  ******************************************** BEGIN OF DYN3D  CALCULATION ***********************************************
@@ -258,18 +258,18 @@ Build Date      : Nov 08 2022 13:05:30
 
 
 
- DATA  FOR RESTART  ARE  SAVED  ON  FILE  32: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_rs2.dat                                                                                                                              
+ DATA  FOR RESTART  ARE  SAVED  ON  FILE  32: C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_rs2.dat                                                                            
 
  DATA  ARE SAVED AFTER CPU TIME     TOTIM =   18000.00 S
  DATA  ARE SAVED EACH PROBLEM TIME DTREST =     10.000 S
 
- DATA OF  PROBLEM  ARE  READ  FROM FILE   50: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_kin.dat                                                                                                                              
- GROUP  CONSTANTS  ARE  READ  FROM FILE   52: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_wqs.dat                                                                                                                              
+ DATA OF  PROBLEM  ARE  READ  FROM FILE   50: C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_kin.dat                                                                            
+ GROUP  CONSTANTS  ARE  READ  FROM FILE   52: C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_wqs.dat                                                                            
 
- THERMOHYDR.  DATA ARE  READ  FROM FILE   51: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_thy.dat                                                                                                                              
- POLYNOMIAL  COEFF. ARE STORED  ON FILE   36: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_wei.dat                                                                                                                              
+ THERMOHYDR.  DATA ARE  READ  FROM FILE   51: C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_thy.dat                                                                            
+ POLYNOMIAL  COEFF. ARE STORED  ON FILE   36: C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_wei.dat                                                                            
 
- TEMPORARY STORAGE DURING CALC. ON FILE   30: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_tmp.dat                                                                                                                              
+ TEMPORARY STORAGE DURING CALC. ON FILE   30: C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_tmp.dat                                                                            
 
 
  CALCULATION WITH CARTESIAN NODAL METHOD 
@@ -365,7 +365,7 @@ OECD MOX RIA FOR MINI-CORE (PURDUE INIVERSITY)
 
 
 
- INPUT OF BURNUP DISTRIBUTION FROM FILE   25: C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_brn.dat                                                                                                                              
+ INPUT OF BURNUP DISTRIBUTION FROM FILE   25: C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_brn.dat                                                                            
 
   !! ATTENTION: CALCULATION STARTED WITH BURNUP=0. FOR EACH NODE
  BURNUP DISTRIBUTION:
@@ -672,19 +672,19 @@ NO THERMOHYDRAULIC CALCULATION
  
  INPUT OF STEADY STATE NEUTRONIC DATA FINISHED
  
- ITOU:  37 KEFF: 1.088909 DKF:0.331239E-10   DSOU:0.350524E-08 EVA12:0.733782E+00 ITIN:  40
- KEFF VALUE (IN COMPARISON TO ORIGINAL STATE) EKEFFW: 1.088909 REACTIVITY:   0.08165
+ ITOU:  37 KEFF: 1.088793 DKF:0.368167E-10   DSOU:0.355593E-08 EVA12:0.733877E+00 ITIN:  40
+ KEFF VALUE (IN COMPARISON TO ORIGINAL STATE) EKEFFW: 1.088793 REACTIVITY:   0.08155
 
  NUMBER OF (OUTER) STEP FOR CRITICAL STATE ITKRIT: 0
 
- ACCURACY OF EIGENVALUE DKEFF: -8.89089E-02 ACCURACY OF FUEL TEMPERATURES DTF: 0.0000     AND DENSITIES DRHO: 0.0000    
+ ACCURACY OF EIGENVALUE DKEFF: -8.87929E-02 ACCURACY OF FUEL TEMPERATURES DTF: 0.0000     AND DENSITIES DRHO: 0.0000    
 
- ITOU:  33 KEFF: 1.000000 DKF:0.205257E-10   DSOU:0.241940E-08 EVA12:0.733754E+00 ITIN:  40
- KEFF VALUE (IN COMPARISON TO ORIGINAL STATE) EKEFFW: 1.088909 REACTIVITY:   0.08165
+ ITOU:  33 KEFF: 1.000000 DKF:0.226804E-10   DSOU:0.243487E-08 EVA12:0.733848E+00 ITIN:  40
+ KEFF VALUE (IN COMPARISON TO ORIGINAL STATE) EKEFFW: 1.088793 REACTIVITY:   0.08155
 
  NUMBER OF (OUTER) STEP FOR CRITICAL STATE ITKRIT: 1
 
- ACCURACY OF EIGENVALUE DKEFF:  3.02303E-11 ACCURACY OF FUEL TEMPERATURES DTF: 0.0000     AND DENSITIES DRHO: 0.0000    
+ ACCURACY OF EIGENVALUE DKEFF:  3.43537E-11 ACCURACY OF FUEL TEMPERATURES DTF: 0.0000     AND DENSITIES DRHO: 0.0000    
 
 
  RESULTS OF TIME-DEPENDENT NEUTRON KINETICS AT TIME                      0.0000
@@ -698,8 +698,8 @@ NO THERMOHYDRAULIC CALCULATION
 
  K-AXIS
 
-   1 GR  1:  8.97400E+01  7.54451E+01  7.54451E+01  4.70626E+01
-     GR  2:  1.98565E+01  1.02919E+01  1.02919E+01  1.39772E+00
+   1 GR  1:  8.98294E+01  7.53921E+01  7.53921E+01  4.71620E+01
+     GR  2:  1.98848E+01  1.02816E+01  1.02816E+01  1.40077E+00
 
 
  NORMALIZED POWER DISTRIBUTION
@@ -707,17 +707,17 @@ NO THERMOHYDRAULIC CALCULATION
 
  CAS-NR.          1        2        3        4
 
- ASS. POW.   1.0781   0.9609   0.9609   0.0000
+ ASS. POW.   1.0797   0.9601   0.9601   0.0000
 
  K-AXIS
-    1:       1.0781   0.9609   0.9609   0.0000
+    1:       1.0797   0.9601   0.9601   0.0000
 
 
- keff =   1.088909  NORMALIZED ASSEMBLY POWERS IN THE MAP
+ keff =   1.088793  NORMALIZED ASSEMBLY POWERS IN THE MAP
 
-  B:    0.9609  0.0000
+  B:    0.9601  0.0000
  
-  A:    1.0781  0.9609
+  A:    1.0797  0.9601
  
  
             0       1
@@ -726,9 +726,9 @@ NO THERMOHYDRAULIC CALCULATION
 
  NORMALIZED NODAL POWERS OF LAYER IZ =  1
 
-  B:    0.9609  0.0000
+  B:    0.9601  0.0000
  
-  A:    1.0781  0.9609
+  A:    1.0797  0.9601
  
  
             0       1
@@ -759,12 +759,12 @@ NO THERMOHYDRAULIC CALCULATION
 
  CAS-NR.          1        2        3        4
 
- ASS. POW. 1.65E+04 1.47E+04 1.47E+04 0.00E+00
+ ASS. POW. 1.66E+04 1.47E+04 1.47E+04 0.00E+00
 
  VALUES MUST BE MULTIPLIED BY 10**   7
 
  K-AXIS
-    1:        3.575    3.186    3.186    0.000
+    1:        3.580    3.184    3.184    0.000
 
 
  RADIAL PEAKING FACTOR (MAXIMUM TO AVERAGE OF EACH LAYER)                     : FXY(Z)
@@ -774,11 +774,11 @@ NO THERMOHYDRAULIC CALCULATION
 
   IZ    Z(CM)    FXY(IZ)   P(IZ)     Q(IZ)
 
-   1     0.50    1.0781    1.0000    1.0781
+   1     0.50    1.0797    1.0000    1.0797
 
  NODAL POWER PEAKING FACTORS:
- FXY:  1.0781 IN ASS. NO :   1
- FQ :  1.0781 IN ASS. NO :   1 AXIAL LAYER NO :   1
+ FXY:  1.0797 IN ASS. NO :   1
+ FQ :  1.0797 IN ASS. NO :   1 AXIAL LAYER NO :   1
  FZ :  1.0000                  AXIAL LAYER NO :   1
 
 
@@ -803,18 +803,18 @@ NO THERMOHYDRAULIC CALCULATION
 ASS-NR.            1        2        3        4
 AXIAL  GR SIDE
 
-IZ= 1 GR= 1 1:  8.33747E+01  7.14827E+01  5.90888E+01  4.03787E+01
-            2:  8.33747E+01  5.90888E+01  7.14827E+01  4.03787E+01
-            3:  9.35290E+01  8.21948E+01  8.40398E+01  6.24375E+01
-            4:  9.35290E+01  8.40398E+01  8.21948E+01  6.24375E+01
-            T:  8.97400E+01  7.54451E+01  7.54451E+01  4.70626E+01
-            B:  8.97400E+01  7.54451E+01  7.54451E+01  4.70626E+01
-      GR= 2 1:  1.53077E+01  9.50165E+00  5.09258E+00  9.64253E-01
-            2:  1.53077E+01  5.09258E+00  9.50165E+00  9.64253E-01
-            3:  2.10889E+01  1.38418E+01  1.17376E+01  5.37264E+00
-            4:  2.10889E+01  1.17376E+01  1.38418E+01  5.37264E+00
-            T:  1.98565E+01  1.02919E+01  1.02919E+01  1.39772E+00
-            B:  1.98565E+01  1.02919E+01  1.02919E+01  1.39772E+00
+IZ= 1 GR= 1 1:  8.34296E+01  7.14161E+01  5.89989E+01  4.04615E+01
+            2:  8.34296E+01  5.89989E+01  7.14161E+01  4.04615E+01
+            3:  9.36317E+01  8.21755E+01  8.40067E+01  6.25736E+01
+            4:  9.36317E+01  8.40067E+01  8.21755E+01  6.25736E+01
+            T:  8.98294E+01  7.53921E+01  7.53921E+01  4.71620E+01
+            B:  8.98294E+01  7.53921E+01  7.53921E+01  4.71620E+01
+      GR= 2 1:  1.53643E+01  9.49196E+00  5.07141E+00  9.66508E-01
+            2:  1.53643E+01  5.07141E+00  9.49196E+00  9.66508E-01
+            3:  2.11162E+01  1.38072E+01  1.17304E+01  5.38354E+00
+            4:  2.11162E+01  1.17304E+01  1.38072E+01  5.38354E+00
+            T:  1.98848E+01  1.02816E+01  1.02816E+01  1.40077E+00
+            B:  1.98848E+01  1.02816E+01  1.02816E+01  1.40077E+00
 
 
  NET CURRENTS FOR OUTER DIRECTION AT THE NODE SURFACES 1/(CM**2*S)
@@ -825,16 +825,16 @@ IZ= 1 GR= 1 1:  8.33747E+01  7.14827E+01  5.90888E+01  4.03787E+01
 ASS-NR.            1        2        3        4
 AXIAL  GR SIDE
 
-IZ= 1 GR= 1 1:  5.03411E+00  0.00000E+00  2.58130E+01  0.00000E+00
-            2:  5.03411E+00  2.58130E+01  0.00000E+00  0.00000E+00
-            3:  0.00000E+00 -5.03411E+00  0.00000E+00 -2.58130E+01
-            4:  0.00000E+00  0.00000E+00 -5.03411E+00 -2.58130E+01
+IZ= 1 GR= 1 1:  5.16125E+00  0.00000E+00  2.58675E+01  0.00000E+00
+            2:  5.16125E+00  2.58675E+01  0.00000E+00  0.00000E+00
+            3:  0.00000E+00 -5.16125E+00  0.00000E+00 -2.58675E+01
+            4:  0.00000E+00  0.00000E+00 -5.16125E+00 -2.58675E+01
             T:  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
             B:  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
-      GR= 2 1:  6.39794E+00  0.00000E+00  8.07833E+00  0.00000E+00
-            2:  6.39794E+00  8.07833E+00  0.00000E+00  0.00000E+00
-            3:  0.00000E+00 -6.39794E+00  0.00000E+00 -8.07833E+00
-            4:  0.00000E+00  0.00000E+00 -6.39794E+00 -8.07833E+00
+      GR= 2 1:  6.33123E+00  0.00000E+00  8.09660E+00  0.00000E+00
+            2:  6.33123E+00  8.09660E+00  0.00000E+00  0.00000E+00
+            3:  0.00000E+00 -6.33123E+00  0.00000E+00 -8.09660E+00
+            4:  0.00000E+00  0.00000E+00 -6.33123E+00 -8.09660E+00
             T:  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
             B:  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
 
@@ -845,16 +845,16 @@ IZ= 1 GR= 1 1:  5.03411E+00  0.00000E+00  2.58130E+01  0.00000E+00
 ASS-NR.            1        2        3        4
 AXIAL  GR SIDE
 
-IZ= 1 GR= 1 1:  9.76136E-01  1.00000E+00  8.39300E-01  1.00000E+00
-            2:  9.76136E-01  8.39300E-01  1.00000E+00  1.00000E+00
-            3:  1.00000E+00  1.02480E+00  1.00000E+00  1.18027E+00
-            4:  1.00000E+00  1.00000E+00  1.02480E+00  1.18027E+00
+IZ= 1 GR= 1 1:  9.75557E-01  1.00000E+00  8.38763E-01  1.00000E+00
+            2:  9.75557E-01  8.38763E-01  1.00000E+00  1.00000E+00
+            3:  1.00000E+00  1.02544E+00  1.00000E+00  1.18026E+00
+            4:  1.00000E+00  1.00000E+00  1.02544E+00  1.18026E+00
             T:  1.00000E+00  1.00000E+00  1.00000E+00  1.00000E+00
             B:  1.00000E+00  1.00000E+00  1.00000E+00  1.00000E+00
-      GR= 2 1:  8.45715E-01  1.00000E+00  5.18305E-01  1.00000E+00
-            2:  8.45715E-01  5.18305E-01  1.00000E+00  1.00000E+00
-            3:  1.00000E+00  1.20372E+00  1.00000E+00  1.86009E+00
-            4:  1.00000E+00  1.00000E+00  1.20372E+00  1.86009E+00
+      GR= 2 1:  8.47720E-01  1.00000E+00  5.15951E-01  1.00000E+00
+            2:  8.47720E-01  5.15951E-01  1.00000E+00  1.00000E+00
+            3:  1.00000E+00  1.20194E+00  1.00000E+00  1.86038E+00
+            4:  1.00000E+00  1.00000E+00  1.20194E+00  1.86038E+00
             T:  1.00000E+00  1.00000E+00  1.00000E+00  1.00000E+00
             B:  1.00000E+00  1.00000E+00  1.00000E+00  1.00000E+00
 
@@ -865,49 +865,49 @@ IZ= 1 GR= 1 1:  9.76136E-01  1.00000E+00  8.39300E-01  1.00000E+00
 ASS-NR.            1        2        3        4
 AXIAL  GR SIDE
 
-IZ= 1 GR= 1 1: in  205.9198 178.7067 134.8155 100.9468
-            1: out 210.9539 178.7067 160.6285 100.9468
-            2: in  205.9198 134.8155 178.7067 100.9468
-            2: out 210.9539 160.6285 178.7067 100.9468
-            3: in  233.8226 208.0041 210.0995 169.0003
-            3: out 233.8226 202.9700 210.0995 143.1873
-            4: in  233.8226 210.0995 208.0041 169.0003
-            4: out 233.8226 210.0995 202.9700 143.1873
-      GR= 2 1: in   35.0704  23.7541   8.6923   2.4106
-            1: out  41.4683  23.7541  16.7706   2.4106
-            2: in   35.0704   8.6923  23.7541   2.4106
-            2: out  41.4683  16.7706  23.7541   2.4106
-            3: in   52.7222  37.8034  29.3440  17.4708
-            3: out  52.7222  31.4055  29.3440   9.3924
-            4: in   52.7222  29.3440  37.8034  17.4708
-            4: out  52.7222  29.3440  31.4055   9.3924
+IZ= 1 GR= 1 1: in  205.9933 178.5402 134.5634 101.1537
+            1: out 211.1545 178.5402 160.4309 101.1537
+            2: in  205.9933 134.5634 178.5402 101.1537
+            2: out 211.1545 160.4309 178.5402 101.1537
+            3: in  234.0793 208.0194 210.0167 169.3676
+            3: out 234.0793 202.8582 210.0167 143.5002
+            4: in  234.0793 210.0167 208.0194 169.3676
+            4: out 234.0793 210.0167 202.8582 143.5002
+      GR= 2 1: in   35.2451  23.7299   8.6302   2.4163
+            1: out  41.5763  23.7299  16.7268   2.4163
+            2: in   35.2451   8.6302  23.7299   2.4163
+            2: out  41.5763  16.7268  23.7299   2.4163
+            3: in   52.7904  37.6835  29.3259  17.5071
+            3: out  52.7904  31.3523  29.3259   9.4105
+            4: in   52.7904  29.3259  37.6835  17.5071
+            4: out  52.7904  29.3259  31.3523   9.4105
 
       **************************************** END OF STATIC CALCULATION ***************************************
-                                                TIME =  4.167E-03 MINUTES
+                                                TIME =  4.948E-03 MINUTES
 
   DELETED FILES:
  
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_brn.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_rs1.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_rs2.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_wei.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_res.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_tmp.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_f50.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_f51.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_f52.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_xen.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_sam.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_nbr.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_eiw.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_int.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_mix.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_rec.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_sou.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_trn.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_trt.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_nuc.dat                                                                                                                              
- C:/Users/dkotlyar6/Research Kotlyar/Git Hub Testing/xsInterface/PWR 2by2 supercell/2D-ADF-model-for-Dani/dyn3d/./2x2PWR2g_pyd.dat                                                                                                                              
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_brn.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_rs1.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_rs2.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_wei.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_res.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_tmp.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_f50.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_f51.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_f52.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_xen.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_sam.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_nbr.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_eiw.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_int.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_mix.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_rec.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_sou.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_trn.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_trt.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_nuc.dat                                                                            
+ C:/Users/dkotlyar6/Dropbox (GaTech)/Reactor-Simulation-tools/GitHub Repositories/Public/xs-interface/xsInterface/inputsets/inp12_correction_adf_validation/dyn3d/./2x2PWR2g_pyd.dat                                                                            
  
- **************************************** DATE : AUG 28 17:47:34 2023*****************************************
+ **************************************** DATE : SEP 06 15:21:05 2023*****************************************
 
