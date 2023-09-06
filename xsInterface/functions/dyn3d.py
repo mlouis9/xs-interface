@@ -38,11 +38,11 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 
-from xsInterface.functions.newton_krylov_arnoldi import NewtonKrylov,\
-    _reshapeTo1D, _numNodes
+from xsInterface.functions.newton_krylov_arnoldi import NewtonKrylov
 from xsInterface.functions.plotters import Plot1d
 from xsInterface.errors.checkerrors import _islist, _isequallength, _isarray,\
-    _inlist, _isstr, _isnonNegativeArray, _iszeropositive, _inrange, _isnumber
+    _inlist, _isstr, _isnonNegativeArray, _iszeropositive, _inrange, _isnumber,\
+    _exp2dshape
 
 match_number = re.compile('-?\ *[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
 
@@ -167,7 +167,7 @@ class DYN3D():
         # save results
         self.keff = keff 
         self.flux = prdFlx
-        
+                
 
     def Iterate(self, corrattrs, refFlx, newtonIters: int, krylovSpan=1000, 
                 krylovErr=5E-03, newtonErr=1E-05, dampingF=1.0, pert=1e-03, 
@@ -272,32 +272,27 @@ class DYN3D():
         print("... Iterative JFNK ...")  
 
         # check that refFlx is properly provided
-        for attr, corevals in self.xs.core.corevalues.items():
-            ng = len(corevals[0][0])  # expected number of energy groups
-            nchs = len(corevals)
-            _isarray(refFlx, "refFlx")
-            _isequallength(refFlx, nchs, "#channels refFlx")
-            # loop over all the channels
-            for ich, chvals in enumerate(corevals):
-                nlayers = len(chvals)  # expected #layers in a specific channel
-                _isarray(refFlx[ich], "refFlx channel={}".format(chIds[ich]))
-                _isequallength(refFlx[ich], nlayers, "#layers refFlx")
-                for ilayer, layervals in enumerate(chvals):
-                    _isarray(layervals, "refFlx ch={}, layer={}"
-                             .format(chIds[ich], ilayer))
-                    _isequallength(refFlx[ich][ilayer], ng, 
-                                   "#groups refFlx for ch={} "
-                                   "layer={}".format(chIds[ich], ilayer))
-            break  # only should be done for one attribute        
+        ng = self.xs.core.ng  # expected number of energy groups
+        nchs = len(chIds)  # expc number of channels
+        _isarray(refFlx, "refFlx")
+        _isequallength(refFlx, nchs, "#channels refFlx")
+        # loop over all the channels
+        for ich, chvals in enumerate(refFlx):
+            expShape = (self.xs.core.layers[ich], ng)
+            _exp2dshape(refFlx[ich], expShape, "Reference flux")
+            
 
         self.corrattrs = corrattrs
         self.refFlx = refFlx
 
-        nodesN = _numNodes(refFlx)  # total number of nodes
+        # Count the total number of channels and number of total nodes
+        self.xs.core._NumSpatialNodes()
 
         for attr in corrattrs:
             x0 =\
-            _reshapeTo1D(self.xs.core.corevalues[attr], nodesN, normFlag=False)
+                self.xs.core._reshapeTo1D(valsIn=self.xs.core.corevalues[attr], 
+                                          normFlag=False)      
+
             fluxes, xinputs, norm_err, refFlxNorm =\
                 NewtonKrylov(
                     dyn3d=self, iterScheme=attr, x0=x0, refFlx=refFlx, 
@@ -311,8 +306,8 @@ class DYN3D():
         self.refFlxNorm = refFlxNorm
         self.xinputs = xinputs
         self.norm_err = norm_err
+                
         
-
     def PlotFluxes(self, xvalues, iters,  
                    chId, layers=None, egroup=0, refFlag=True,
                    flip=False, xlabel="Height, cm", ylabel='Normalized flux',
@@ -621,12 +616,5 @@ def _getnums(line,integer=True):
         return [float(x) for x in re.findall(match_number, line)]
     
 ###############################################################################
-# def _assignFluxesToChannels(flxIn, radmap, idxmap, chIds):
-#     """assign DYN3D fluxes to the correct channels"""
-    
-#     nchs = len(chIds)  # number of channels
-    
-    
-    
-    
+ 
     

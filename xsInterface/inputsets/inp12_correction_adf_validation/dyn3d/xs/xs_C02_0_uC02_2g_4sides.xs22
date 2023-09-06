@@ -30,9 +30,9 @@
 * Kappa-Fission XSEC Table
 *
 * GROUP 1
-1.106218e-13 
+1.106343e-13 
 * GROUP 2
-2.285141e-12 
+2.285398e-12 
 *
 * Scattering XSEC Table
 *
@@ -48,9 +48,9 @@
 * ADF Table
 *
 * GROUP 1
-1.022472e+00 
+9.978853e-01 
 * GROUP 2
-1.033050e+00 
+1.062435e+00 
 *
 * Fission Spectrum
 *

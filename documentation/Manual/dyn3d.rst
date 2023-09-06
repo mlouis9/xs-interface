@@ -73,7 +73,7 @@ Method							   		 Description
 ------------------------- --------------------------------------------
 :ref:`d_iterate`	        Iterate on specific inputs via non-linear solution scheme.
 ------------------------- --------------------------------------------
-:ref:`d_plotfluxes`	      dddd.
+:ref:`d_plotfluxes`	      Plot the fluxes and differences for different channels.
 ========================= ============================================
 
 
@@ -133,6 +133,14 @@ where,
 **Note**:
 If ``corrattrs`` contains the preserved word 'sph' then all the printed cross sections will be multipled by the superhumanization (SPHs) factors.
 So far, there is no normalization of the SPH factors.
+
+
+After execution the object will contain the following attributes: 
+	- ``iterkeff`` : [1-dim array] multiplication factor as a function of Newton iteration.
+	- ``iterInputs`` : [dict] inputs (e.g., adf) values for all the Newton iterations. keys represent the attribute, and values represent the 3-dim values [channel, layer, egroup] for each iteration.
+	- ``iterOutputs`` : [dict] Output flux values for all the Newton iterations. keys represen the attribute, and values represent the 3-dim values  [channel, layer, egroup] for each iteration.
+	- ``norm_err`` : [array 1-dim] norm2 of the predcted minus the reference fluxes.
+
 
 **Example**
 
@@ -209,4 +217,5 @@ Complete application examples
 ==============================
 
 1. :ref:`dyn3d_example1`: Complete example of the iterative technique applied to find axial discontinuity factors for the 3D single fuel assembly case.
-2. Full core to be completed.
+2. :ref:`dyn3d_example2`: Complete example of the iterative technique applied to find radial discontinuity factors for a 2-dim fuel-reflector colorset.
+3. Full core to be completed.
