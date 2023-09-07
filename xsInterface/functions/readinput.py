@@ -361,22 +361,22 @@ def _PopulateSerpentSets(rc, states, serpent, labels, serpId, serpentData):
     
     # read serpent .coe only once
     if serpentData == {}:
-
+        numGroups = len(serpent['energy'])-1
         fnames = {'': serpent["files"]}
         attrs = rc.macro + rc.micro + rc.meta + rc.kinetics
     
         if serpent['time'] and serpent['timeFlag']:
             serpentData0, timepoints =\
                 ReadSerpent(fnames, labels, states.branches, attrs,
-                            times=states.time['values'])
+                            times=states.time['values'], numGroups=numGroups)
         elif serpent['time'] and not serpent['timeFlag']:
             serpentData0, timepoints =\
                 ReadSerpent(fnames, labels, states.branches, attrs,
-                            burnups=states.time['values'])        
+                            burnups=states.time['values'], numGroups=numGroups)        
         else:
             serpentData0, timepoints =\
                 ReadSerpent(fnames, labels, states.branches, attrs,
-                            burnup=states.time['values'])
+                            burnup=states.time['values'], numGroups=numGroups)
        
         serpentData['data'] = serpentData0
         serpentData['timepoints'] = timepoints
@@ -420,7 +420,6 @@ def _PopulateSerpentSets(rc, states, serpent, labels, serpId, serpentData):
 
                 # add the single set to multi sets
                 ms.Add(ss)
-        
     return ms, serpentData
     
 

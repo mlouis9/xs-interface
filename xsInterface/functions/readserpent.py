@@ -33,7 +33,7 @@ from serpentTools.parsers.results import ResultsReader
 
 
 def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
-                burnups=None):
+                burnups=None, numGroups=None):
     """Read .coe files and extract data in a dictionary format.
     
     The format of the final dictionary is:
@@ -84,7 +84,7 @@ def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
         attrs = [attr.lower() for attr in attrs]
 
     # Read all the .coe file
-    dataStrBranches = _ReadHistoryFiles(fnames, strLabels)
+    dataStrBranches = _ReadHistoryFiles(fnames, strLabels, numGroups=numGroups)
     
     # Replace the string branch values with numeric values
     dataNumBranches = _ReLabelStates(dataStrBranches, strLabels, numLabels)
@@ -95,7 +95,7 @@ def ReadSerpent(fnames, strLabels, numLabels, attrs=None, times=None,
     return dataOut, timepoints
 
 
-def _ReadHistoryFiles(fnames, strLabels):
+def _ReadHistoryFiles(fnames, strLabels, numGroups=None):
     """Read multiple serpent output .coe files
 
     Parameters
@@ -137,7 +137,7 @@ def _ReadHistoryFiles(fnames, strLabels):
             print("... Reading coe/_res.m file for hisotry <{}> ..."
                   .format(historyId))
             
-            coedata = _ReadCoefFile(coeFile)
+            coedata = _ReadCoefFile(coeFile, numGroups=numGroups)
             if isinstance(coedata, ResultsReader): 
                 coedata = _ReadResFile(coedata, strLabels)
         
@@ -152,7 +152,7 @@ def _ReadHistoryFiles(fnames, strLabels):
     
 
 
-def _ReadCoefFile(coeFile):
+def _ReadCoefFile(coeFile, numGroups=None):
     """Read serpent output .coe file
 
     Collection of data is obtained using the ``serpentTools``
@@ -222,6 +222,10 @@ def _ReadCoefFile(coeFile):
 
             # obtain the data container
             univData = brData.getUniv(univId, index=step)
+
+            # Now add user defined variables to hom universe
+            for key, value in [item for item in brData.stateData.items() if item[0] not in ["VERSION", "TIME","DATE"]]:
+                univData.addData(key, np.repeat(value, numGroups), uncertainty=False)
 
             # add the data to the data dictionary
             data[univId][step][brKeysLower] = univData
