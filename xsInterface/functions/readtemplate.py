@@ -305,6 +305,7 @@ def _PopulateValues(dataIn, universes, formats, uservals=None):
                 frmtDelim = formats["delimiter"]  # default delimiter
           
             # format the values to be printed
+            print(f"TLINE {tline}")
             tlines = _Array2tlines(tline, attrline0.group(0), valsPrint,
                                    nrowPrnt, frmtPrnt, frmtDelim)
             
@@ -400,6 +401,7 @@ def _CleanDataCopy(dataIn, fmt0):
                             raise TemplateFileError(msg0+'\n'+detail)  
                 else:
                     fmt = fmt0  # default variable format
+                    print(f"FORMAAT {fmt}")
                 try:
                     # evaluate expression
                     evalexpr = eval(strExe)
@@ -410,6 +412,11 @@ def _CleanDataCopy(dataIn, fmt0):
                         tline =\
                             tline.replace('{}'.format(strsComplete[istrExe]),
                                           fmt.format(*evalexpr))
+                    elif isinstance(evalexpr, str):
+                        # replace execution occurrences without using formatting code
+                        tline =\
+                            tline.replace('{}'.format(strsComplete[istrExe]),
+                                          evalexpr)
                     else:
                         # replace execution occurrences
                         tline =\
@@ -665,13 +672,22 @@ def _Array2tlines(tline, origstr, valsarray, nrow, frmt, delimiter):
         str0 = ''  # empty string to be appended
         nvalsrow = len(valsrow)
         delimFrmt = delimiter
+        print(f"DELIMFMT {delimFrmt}")
+        print(f"fmt {frmt}")
         for idx, val in enumerate(valsrow):
+            print(f"Val {val}")
             # no delimiter should be used for the last values
             if lastRow and idx == nvalsrow-1:
+                print("Lastrow")
                 delimFrmt = ''
             if isinstance(val, str):
+                print("val is string")
                 str0 += '{}{}'.format(val, delimFrmt)
             else:
+                print("uh oh")
+                print(f"FMTS: {frmt}, {delimFrmt}")
+                # if delimFrmt == None:
+                #     delimFrmt = ''
                 str0 += frmt.format(val) + delimFrmt
         
         if replaceFlag:
