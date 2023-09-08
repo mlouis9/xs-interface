@@ -156,7 +156,7 @@ def _PopulateValues(dataIn, universes, formats, uservals=None):
                 attrline = attrline.replace(condFrmt.group(0), '')
             elif FRMT_REGEX.search(attrline) is not None:
                 # the format included within <...> only
-                condFrmt = FRMT_N_REGEX.search(attrline)
+                condFrmt = FRMT_REGEX.search(attrline)
                 # format and delimiter can be provided
                 frmtData = condFrmt.group(1).split()
                 frmtPrnt = "{:" + frmtData[0] + "}"
