@@ -311,7 +311,6 @@ def _PopulateValues(dataIn, universes, formats, uservals=None):
                 frmtDelim = formats["delimiter"]  # default delimiter
           
             # format the values to be printed
-            print(f"TLINE {tline}")
             tlines = _Array2tlines(tline, attrline0.group(0), valsPrint,
                                    nrowPrnt, frmtPrnt, frmtDelim)
             
@@ -407,7 +406,6 @@ def _CleanDataCopy(dataIn, fmt0):
                             raise TemplateFileError(msg0+'\n'+detail)  
                 else:
                     fmt = fmt0  # default variable format
-                    print(f"FORMAAT {fmt}")
                 try:
                     # evaluate expression
                     evalexpr = eval(strExe)
