@@ -100,7 +100,7 @@ The <code class="docutils literal notranslate"><span class="pre">states</span></
 <td><p>Iterate on specific inputs via non-linear solution scheme.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#d-plotfluxes"><span class="std std-ref">PlotFluxes</span></a></p></td>
-<td><p>dddd.</p></td>
+<td><p>Plot the fluxes and differences for different channels.</p></td>
 </tr>
 </tbody>
 </table>
@@ -121,35 +121,51 @@ The governing method for the non-linear solution relies on the JFNK, which inclu
 <li><p>Newton-Krylov (outer iterations on the variation in x): xk = x0 + s*dx</p></li>
 </ol>
 <p><strong>Syntax</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span><span class="n">corrattrs</span><span class="p">,</span> <span class="n">refFlx</span><span class="p">,</span> <span class="n">newtonIters</span><span class="p">,</span> <span class="n">krylovSpan</span><span class="p">,</span> <span class="n">dampingF</span><span class="p">,</span> <span class="n">writestatus</span><span class="p">,</span> <span class="n">pert</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span>
-        <span class="n">lbound</span><span class="p">,</span> <span class="n">ubound</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">attrObj</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span><span class="n">corrattrs</span><span class="p">,</span> <span class="n">refFlx</span><span class="p">,</span> <span class="n">newtonIters</span><span class="p">,</span> <span class="n">krylovSpan</span><span class="p">,</span> <span class="n">krylovErr</span><span class="p">,</span>
+<span class="n">newtonErr</span><span class="p">,</span> <span class="n">dampingF</span><span class="p">,</span> <span class="n">pert</span><span class="p">,</span> <span class="n">lbound</span><span class="p">,</span> <span class="n">ubound</span><span class="p">,</span> <span class="n">attrObj</span><span class="p">,</span> <span class="n">groupWeights</span><span class="p">,</span> <span class="n">sphMultp</span><span class="p">,</span> <span class="n">sphDiv</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="simple">
 <dt>where,</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">corrattrs</span></code> [list of strs] name/s of the iterative attributes to be iterated for correction.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">refFlx</span></code> [3-dim list] reference flux solution for all the channels, layers, energy groups. Default is None. In which case the results will be obtained from the results on the xs object. The order/structure has to follow <code class="docutils literal notranslate"><span class="pre">refFlx[channel][layer][group]</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">newtonIters</span></code> [int] number of Newton iterates.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">krylovSpan</span></code> [int] number of Krylov iterates/vectors, must be &gt;= 1.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dampingF</span></code> [float] a damping factor between 0 and 1.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">writestatus</span></code> : [bool] a flag to indicate whether the iterative status should be printed on screen. Default is True.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">newtonIters</span></code> [int] number of Newton iterates. This is the limit but if the precision set by <code class="docutils literal notranslate"><span class="pre">newtonErr</span></code> is achieved the iterations are stopped.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">krylovSpan</span></code> [int] number of Krylov iterates/vectors, must be &gt;= 1. This is the limit but if the precision set by <code class="docutils literal notranslate"><span class="pre">krylovErr</span></code> is achieved the iterations are stopped.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">krylovErr</span></code> [float] tolerance for stopping the iterations on Krylov. Default is 5E-03. Lower number leads to more Krylov vectors created and higher computational overheads.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">newtonErr</span></code> [float] tolerance for stopping Newton iterations. Default is 1E-05. Lower number leads to more Newton iterations executed and thus higher computational overheads.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dampingF</span></code> [float] a damping factor between 0 and 1. It can also be a string equal to <code class="docutils literal notranslate"><span class="pre">RM</span></code> standing for Robbins Monro variable weighting factor (1/N). The RM factor can slow the convergence but in principle ensures convergence.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">attrObj</span></code> : [str] objective attribute used to multiply the flux to create a reaction rate objective function.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pert</span></code> : [float] a fraction that represents the perturbation that is required to be applied for x for each vector of the Krylov space.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">eps</span></code> : [float] criterion to stop arnoldi iteration.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">lbound</span></code> : [float] lower bound to limit the variation of correction factors during Newton iterations.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ubound</span></code> : [float] upper bound to limit the variation of correction factors during Newton iterations.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code> : [float] a hyper parameter for Ridge regression of the Krylov vectors following the Arnoldi procedure. Default value 0.0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">groupWeights</span></code>: [list] energy group-wise weighting factors for the objective function. These are normalization factors used only when SPH normalization is used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sphMultp</span></code>: [list] attributes that will be multiplied by the iterated SPH factors. Default is None. These attributes must be explicitly defined and exist otherwise an error will be thrown.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sphDiv</span></code>: [list] attributes that will be divided by the iterated SPH factors. Default is None. These attributes must be explicitly defined and exist otherwise an error will be thrown.</p></li>
 </ul>
 </dd>
 </dl>
 <p><strong>Note</strong>:
 If <code class="docutils literal notranslate"><span class="pre">corrattrs</span></code> contains the preserved word ‘sph’ then all the printed cross sections will be multipled by the superhumanization (SPHs) factors.
 So far, there is no normalization of the SPH factors.</p>
+<dl class="simple">
+<dt>After execution the object will contain the following attributes:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">iterkeff</span></code> : [1-dim array] multiplication factor as a function of Newton iteration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iterInputs</span></code> : [dict] inputs (e.g., adf) values for all the Newton iterations. keys represent the attribute, and values represent the 3-dim values [channel, layer, egroup] for each iteration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iterOutputs</span></code> : [dict] Output flux values for all the Newton iterations. keys represen the attribute, and values represent the 3-dim values  [channel, layer, egroup] for each iteration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">norm_err</span></code> : [array 1-dim] norm2 of the predcted minus the reference fluxes.</p></li>
+</ul>
+</dd>
+</dl>
 <p><strong>Example</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span><span class="n">corrattrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;topadf&#39;</span><span class="p">],</span> <span class="n">refFlx</span><span class="o">=</span><span class="n">refFlx</span><span class="p">,</span> <span class="n">newtonIters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">krylovSpan</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">dampingF</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span><span class="n">corrattrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;adf], refFlx=refFlx, newtonIters=10, krylovSpan=10, groupWeights=None, dampingF=0.5, lbound=0.70, ubound=1.3, pert=1E-03, newtonErr=0.001)</span>
 </pre></div>
 </div>
 <p>Please note that all the correction attributes defined for <code class="docutils literal notranslate"><span class="pre">corrattrs</span></code> must exist. You can define new attributes using the <code class="docutils literal notranslate"><span class="pre">PopulateCoreData</span></code> method.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reslt</span><span class="o">.</span><span class="n">Iterate</span><span class="p">(</span><span class="n">corrattrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sph], refFlx=refFlx, newtonIters=10, krylovSpan=10, groupWeights=None, dampingF=0.5, lbound=0.70, ubound=1.3, pert=1E-03, newtonErr=0.001,</span>
+<span class="n">sphMultp</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;infTranspxs&#39;</span><span class="p">,</span> <span class="s1">&#39;trcTranspxs&#39;</span><span class="p">,</span> <span class="s1">&#39;infrabsxs&#39;</span><span class="p">,</span> <span class="s1">&#39;infnsf&#39;</span><span class="p">,</span> <span class="s1">&#39;fissjoule&#39;</span><span class="p">,</span> <span class="s1">&#39;infsp0&#39;</span><span class="p">],</span> <span class="n">sphDiv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="plotfluxes">
 <span id="d-plotfluxes"></span><h2>PlotFluxes<a class="headerlink" href="#plotfluxes" title="Permalink to this headline">¶</a></h2>
@@ -196,6 +212,8 @@ So far, there is no normalization of the SPH factors.</p>
 <h2>Complete application examples<a class="headerlink" href="#complete-application-examples" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="example1_dyn3d.html#dyn3d-example1"><span class="std std-ref">Example 1: A single 3D fuel assembly</span></a>: Complete example of the iterative technique applied to find axial discontinuity factors for the 3D single fuel assembly case.</p></li>
+<li><p><a class="reference internal" href="example_jfnk_dyn3d_2by2_analytic.html#dyn3d-example2"><span class="std std-ref">Example 2: A fuel-reflector colorset</span></a>: Complete example of the iterative technique applied to find radial discontinuity factors for a 2-dim fuel-reflector colorset.</p></li>
+<li><p><a class="reference internal" href="jfnk_dyn3d_hex_supercell.html#dyn3d-example3"><span class="std std-ref">Example 2: A Fuel-Moderator supercell</span></a>: Complete example of the iterative technique applied to find radial discontinuity factors for a 2-dim fuel-moderator hexagonal supercell.</p></li>
 <li><p>Full core to be completed.</p></li>
 </ol>
 </section>

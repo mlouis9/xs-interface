@@ -73,7 +73,7 @@ Method							   		 Description
 ------------------------- --------------------------------------------
 :ref:`d_iterate`	        Iterate on specific inputs via non-linear solution scheme.
 ------------------------- --------------------------------------------
-:ref:`d_plotfluxes`	      dddd.
+:ref:`d_plotfluxes`	      Plot the fluxes and differences for different channels.
 ========================= ============================================
 
 
@@ -111,35 +111,51 @@ The governing method for the non-linear solution relies on the JFNK, which inclu
 
 .. code::
 
-	reslt.Iterate(corrattrs, refFlx, newtonIters, krylovSpan, dampingF, writestatus, pert, eps, 
-                lbound, ubound, alpha, attrObj)
+	reslt.Iterate(corrattrs, refFlx, newtonIters, krylovSpan, krylovErr, 
+	newtonErr, dampingF, pert, lbound, ubound, attrObj, groupWeights, sphMultp, sphDiv)
 	
 where,
 	- ``corrattrs`` [list of strs] name/s of the iterative attributes to be iterated for correction.
 	- ``refFlx`` [3-dim list] reference flux solution for all the channels, layers, energy groups. Default is None. In which case the results will be obtained from the results on the xs object. The order/structure has to follow ``refFlx[channel][layer][group]``
-	- ``newtonIters`` [int] number of Newton iterates.
-	- ``krylovSpan`` [int] number of Krylov iterates/vectors, must be >= 1. 
-	- ``dampingF`` [float] a damping factor between 0 and 1.		
-	- ``writestatus`` : [bool] a flag to indicate whether the iterative status should be printed on screen. Default is True.
+	- ``newtonIters`` [int] number of Newton iterates. This is the limit but if the precision set by ``newtonErr`` is achieved the iterations are stopped.
+	- ``krylovSpan`` [int] number of Krylov iterates/vectors, must be >= 1. This is the limit but if the precision set by ``krylovErr`` is achieved the iterations are stopped.
+	- ``krylovErr`` [float] tolerance for stopping the iterations on Krylov. Default is 5E-03. Lower number leads to more Krylov vectors created and higher computational overheads.
+	- ``newtonErr`` [float] tolerance for stopping Newton iterations. Default is 1E-05. Lower number leads to more Newton iterations executed and thus higher computational overheads.
+	- ``dampingF`` [float] a damping factor between 0 and 1. It can also be a string equal to ``RM`` standing for Robbins Monro variable weighting factor (1/N). The RM factor can slow the convergence but in principle ensures convergence. 
 	- ``attrObj`` : [str] objective attribute used to multiply the flux to create a reaction rate objective function.
 	- ``pert`` : [float] a fraction that represents the perturbation that is required to be applied for x for each vector of the Krylov space.  
-	- ``eps`` : [float] criterion to stop arnoldi iteration.
 	- ``lbound`` : [float] lower bound to limit the variation of correction factors during Newton iterations.
-	- ``ubound`` : [float] upper bound to limit the variation of correction factors during Newton iterations.        
-	- ``alpha`` : [float] a hyper parameter for Ridge regression of the Krylov vectors following the Arnoldi procedure. Default value 0.0
-
+	- ``ubound`` : [float] upper bound to limit the variation of correction factors during Newton iterations.   
+	- ``groupWeights``: [list] energy group-wise weighting factors for the objective function. These are normalization factors used only when SPH normalization is used.  
+	- ``sphMultp``: [list] attributes that will be multiplied by the iterated SPH factors. Default is None. These attributes must be explicitly defined and exist otherwise an error will be thrown.    
+	- ``sphDiv``: [list] attributes that will be divided by the iterated SPH factors. Default is None. These attributes must be explicitly defined and exist otherwise an error will be thrown.   
 
 **Note**:
 If ``corrattrs`` contains the preserved word 'sph' then all the printed cross sections will be multipled by the superhumanization (SPHs) factors.
 So far, there is no normalization of the SPH factors.
 
+
+After execution the object will contain the following attributes: 
+	- ``iterkeff`` : [1-dim array] multiplication factor as a function of Newton iteration.
+	- ``iterInputs`` : [dict] inputs (e.g., adf) values for all the Newton iterations. keys represent the attribute, and values represent the 3-dim values [channel, layer, egroup] for each iteration.
+	- ``iterOutputs`` : [dict] Output flux values for all the Newton iterations. keys represen the attribute, and values represent the 3-dim values  [channel, layer, egroup] for each iteration.
+	- ``norm_err`` : [array 1-dim] norm2 of the predcted minus the reference fluxes.
+
+
 **Example**
 
 .. code::
 
-	reslt.Iterate(corrattrs=['topadf'], refFlx=refFlx, newtonIters=4, krylovSpan=8, dampingF=1.0)
+	reslt.Iterate(corrattrs=['adf], refFlx=refFlx, newtonIters=10, krylovSpan=10, groupWeights=None, dampingF=0.5, lbound=0.70, ubound=1.3, pert=1E-03, newtonErr=0.001)
 
 Please note that all the correction attributes defined for ``corrattrs`` must exist. You can define new attributes using the ``PopulateCoreData`` method.
+
+**Example**
+
+.. code::
+
+	reslt.Iterate(corrattrs=['sph], refFlx=refFlx, newtonIters=10, krylovSpan=10, groupWeights=None, dampingF=0.5, lbound=0.70, ubound=1.3, pert=1E-03, newtonErr=0.001,
+	sphMultp=['infTranspxs', 'trcTranspxs', 'infrabsxs', 'infnsf', 'fissjoule', 'infsp0'], sphDiv=None)
 
 
 .. _d_plotfluxes:
@@ -201,4 +217,6 @@ Complete application examples
 ==============================
 
 1. :ref:`dyn3d_example1`: Complete example of the iterative technique applied to find axial discontinuity factors for the 3D single fuel assembly case.
-2. Full core to be completed.
+2. :ref:`dyn3d_example2`: Complete example of the iterative technique applied to find radial discontinuity factors for a 2-dim fuel-reflector colorset.
+3. :ref:`dyn3d_example3`: Complete example of the iterative technique applied to find radial discontinuity factors for a 2-dim fuel-moderator hexagonal supercell.
+4. Full core to be completed.

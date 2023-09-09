@@ -55,6 +55,7 @@
 * Axial ADF
 * bottom
 * GROUP 1
+<<<<<<< HEAD:xsInterface/inputsets/inp10_dyn3d_corrections/ntp_supercell_3d/2group/dyn3d/xs/xs_S1_7_u76.dat
 9.998103e-01 
 * GROUP 2
 9.999057e-01 
@@ -63,6 +64,16 @@
 9.998103e-01 
 * GROUP 2
 9.999057e-01 
+=======
+1.023458e+00 
+* GROUP 2
+1.040995e+00 
+* top
+* GROUP 1
+1.023458e+00 
+* GROUP 2
+1.040995e+00 
+>>>>>>> 6096968e5eb0bcd4d4af54a91891b006c05fd49d:xsInterface/inputsets/inp10_dyn3d_corrections/ntp_supercell_3d/2group/dyn3d/XS/xs_S1_7_u76.dat
 *
 * Fission Spectrum
 *
