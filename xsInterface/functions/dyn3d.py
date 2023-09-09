@@ -4,14 +4,14 @@
 Supporting classes and methods to work with the nodal diffusion code, DYN3D.
 The following methods include:
     (1) Single execution of DYN3D (including reading results from _lst file)
-    (2) Iterative (non-linear) methods to converge flux
+    (2) Iterative (non-linear) methods to converge flux / reaction rates
 
 The main ``Iterate`` method focuses on:
 Iterative method to calculate correction factors
 required to match the predicted flux solution (DYN3D) with the reference one. 
 
 Created on Sat May 27 16:20:00 2023 @author: Dan Kotlyar
-Last updated on Tue June 06 06:00:00 2023 @author: Dan Kotlyar
+Last updated on Mon August 28 17:30:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -25,6 +25,7 @@ lstreader - 05/30/2023 - DK
 Iterate - 06/03/2023 - DK
 PlotFluxes - 06/05/2023 - DK
 DYN3D polishing - 06/06/2023 - DK
+Iterate - 08/28/2023 - DK
 
 """
 
@@ -37,11 +38,11 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 
-from xsInterface.functions.newton_krylov_arnoldi import NewtonKrylov,\
-    _reshapeTo1D, _numNodes
+from xsInterface.functions.newton_krylov_arnoldi import NewtonKrylov
 from xsInterface.functions.plotters import Plot1d
 from xsInterface.errors.checkerrors import _islist, _isequallength, _isarray,\
-    _inlist, _isstr, _isnonNegativeArray, _iszeropositive, _inrange, _isnumber
+    _inlist, _isstr, _isnonNegativeArray, _iszeropositive, _inrange, _isnumber,\
+    _exp2dshape
 
 match_number = re.compile('-?\ *[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
 
@@ -163,16 +164,16 @@ class DYN3D():
         # Match the flux values to their channels positions
         # prdFlx are not necessarily alligned with the right channels
         
-        
         # save results
         self.keff = keff 
         self.flux = prdFlx
-        
+                
 
-    def Iterate(self, corrattrs, refFlx, newtonIters: int, krylovSpan: int, 
-                dampingF=1.0, writestatus=True, pert=1e-03, eps=1e-12, 
-                lbound=0.2, ubound=3.0, alpha=0.0, attrObj=None, printstatus=False):
-        """Calculate correction factors via non-linear iterations
+    def Iterate(self, corrattrs, refFlx, newtonIters: int, krylovSpan=1000, 
+                krylovErr=5E-03, newtonErr=1E-05, dampingF=1.0, pert=1e-03, 
+                lbound=0.2, ubound=3.0, attrObj=None, groupWeights=None, 
+                sphMultp=None, sphDiv=None):
+        """Calculate correction factors via non-linear JFNK iterations
         
         Iterative method to calculate correction factors
         required to match the predicted flux solution with the reference one. 
@@ -187,31 +188,38 @@ class DYN3D():
             the results on the xs object. The order/structure has to follow
             ``refFlx[channel][layer][group]``
         newtonIters : int
-            number of Newton iterates
+            number of Newton iterates. The number is set as a limit.
         krylovSpan : int
-            number of Krylov iterates/vectors, must be >= 1 
+            number of Krylov iterates/vectors, must be >= 1. 
+            This is the limit but the actual number used will be chosen 
+            on-the-fly.
+        newtonErr : float
+            tolerance for stopping the Newton iterations.
+        krylovErr : float
+            tolerance for stopping the iterations on Krylov.
         dampingF : float
             a damping factor between 0 and 1
-        writestatus : True
-            a flag to indicate whether the iterative status should be printed on screen 
-        attrObj : str
-            objective attribute used to multiply the flux to create a reaction
-            rate objective function
         pert : float
             a fraction that represents the perturbation that is required to be
             applied for x for each vector of the Krylov space.  
-        eps : float
-            criterion to stop arnoldi iteration.
         lbound : float
             lower bound to limit the variation of correction factors during 
-            Newton iterations.
+            Newton iterates.
         ubound : float
             upper bound to limit the variation of correction factors during 
-            Newton iterations.        
-        alpha : float
-            a hyper parameter for Ridge regression and it is a penalty
-            coefficient to minimize the coeff_y in the regression procedure. 
-            Default value 0.0
+            Newton iterates.
+        attrObj : str
+            objective attribute used to multiply the flux to create a reaction
+            rate objective function
+        groupWeights : list
+            energy group-wise weighting factors for the objective function.
+            Envisioned to be used for normalization techniques.
+        sphMultp : list
+            attributes that will be multiplied by the iterated SPH factors.
+            These attributes must exist otherwise an error will be thrown.
+        sphDiv : list
+            attributes that will be divided by the iterated SPH factors.        
+            These attributes must exist otherwise an error will be thrown.
             
         
         Returns
@@ -248,50 +256,58 @@ class DYN3D():
         else:
             _isnumber(dampingF, "damping factor")
 
+        if sphMultp is not None:
+            _islist(sphMultp, 'sphMultp')
+            sphMultp = [sphattr.lower() for sphattr in sphMultp]
+        if sphDiv is not None:
+            _islist(sphDiv, 'sphDiv')   
+            sphDiv = [sphattr.lower() for sphattr in sphDiv]
 
-        if writestatus:
-            print("... Iterative JFNK ...")  
+        NG = self.xs.core.ng
+        if groupWeights is not None:
+            groupWeights = np.array(groupWeights)
+            groupWeights = groupWeights / groupWeights.sum()
+            _isequallength(groupWeights, NG, "group weights")
+
+        print("... Iterative JFNK ...")  
 
         # check that refFlx is properly provided
-        for attr, corevals in self.xs.core.corevalues.items():
-            ng = len(corevals[0][0])  # expected number of energy groups
-            nchs = len(corevals)
-            _isarray(refFlx, "refFlx")
-            _isequallength(refFlx, nchs, "#channels refFlx")
-            # loop over all the channels
-            for ich, chvals in enumerate(corevals):
-                nlayers = len(chvals)  # expected #layers in a specific channel
-                _isarray(refFlx[ich], "refFlx channel={}".format(chIds[ich]))
-                _isequallength(refFlx[ich], nlayers, "#layers refFlx")
-                for ilayer, layervals in enumerate(chvals):
-                    _isarray(layervals, "refFlx ch={}, layer={}"
-                             .format(chIds[ich], ilayer))
-                    _isequallength(refFlx[ich][ilayer], ng, 
-                                   "#groups refFlx for ch={} "
-                                   "layer={}".format(chIds[ich], ilayer))
-            break  # only should be done for one attribute        
+        ng = self.xs.core.ng  # expected number of energy groups
+        nchs = len(chIds)  # expc number of channels
+        _isarray(refFlx, "refFlx")
+        _isequallength(refFlx, nchs, "#channels refFlx")
+        # loop over all the channels
+        for ich, chvals in enumerate(refFlx):
+            expShape = (self.xs.core.layers[ich], ng)
+            _exp2dshape(refFlx[ich], expShape, "Reference flux")
+            
 
         self.corrattrs = corrattrs
         self.refFlx = refFlx
 
-        nodesN = _numNodes(refFlx)  # total number of nodes
+        # Count the total number of channels and number of total nodes
+        self.xs.core._NumSpatialNodes()
 
         for attr in corrattrs:
             x0 =\
-            _reshapeTo1D(self.xs.core.corevalues[attr], nodesN, normFlag=False)
+                self.xs.core._reshapeTo1D(valsIn=self.xs.core.corevalues[attr], 
+                                          normFlag=False)      
+
             fluxes, xinputs, norm_err, refFlxNorm =\
-                NewtonKrylov(dyn3d=self, iterScheme=attr, x0=x0, refFlx=refFlx, 
-                             newtonIters=newtonIters, krylovSpan=krylovSpan, 
-                             dampingF=dampingF, pert=pert, eps=eps, 
-                             lbound=lbound, ubound=ubound, alpha=alpha, 
-                             attrObj=attrObj, printstatus=printstatus)
-                
+                NewtonKrylov(
+                    dyn3d=self, iterScheme=attr, x0=x0, refFlx=refFlx, 
+                    newtonIters=newtonIters, krylovSpan=krylovSpan, 
+                    newtonErr=newtonErr, krylovErr=krylovErr,
+                    weights=groupWeights, dampingF=dampingF, pert=pert, 
+                    lbound=lbound, ubound=ubound, sphMultp=sphMultp, 
+                    sphDiv=sphDiv, attrObj=attrObj)
+       
         self.fluxes = fluxes
         self.refFlxNorm = refFlxNorm
         self.xinputs = xinputs
         self.norm_err = norm_err
+                
         
-
     def PlotFluxes(self, xvalues, iters,  
                    chId, layers=None, egroup=0, refFlag=True,
                    flip=False, xlabel="Height, cm", ylabel='Normalized flux',
@@ -600,12 +616,5 @@ def _getnums(line,integer=True):
         return [float(x) for x in re.findall(match_number, line)]
     
 ###############################################################################
-# def _assignFluxesToChannels(flxIn, radmap, idxmap, chIds):
-#     """assign DYN3D fluxes to the correct channels"""
-    
-#     nchs = len(chIds)  # number of channels
-    
-    
-    
-    
+ 
     

@@ -1,0 +1,101 @@
+$ TRANSIENT CALCULATION for a mini-core
+$ OECD MOX RIA 3-D
+$ Calculation in 3D with reflecting boundary conditions
+$ Modifications by Armando Gomez
+$  ICON IWQS IREWIN TOTIM       DTREST 
+    -1   22    1    18000.0       10.0
+$   -1    1    1    18000.0       6.0
+$  ISTART
+    1
+OECD MOX RIA FOR MINI-CORE (PURDUE INIVERSITY)
+STANDARD MAP INPUT
+$IDF GENERATION
+$ IBKTYP
+    2
+CONTROL OF CALCULATION
+$ ITIM IOINP IH1  IH2  IH3  IH4  IH5   
+    1    1    0    0    0    0    1
+DIMENSIONS OF ARRAYS
+$ISYM NJMAX NIMAX NCAS NZ NOBOU NOSYMS NOMAS NOBT
+  360    2   2     4    1    8    0      4     1
+$   ndiv
+     1 
+NEUTRON ENERGY GROUPS
+$   NG NOMAXDSC NOMAXUSC NGUPSC
+     2      2       1      0   
+CONTROL OF ITERATION                                                 
+$  EPSBES    EPSK       EPSF              
+   .000002  .0000001   .0000001    
+$ EKEFF
+  1.0                                               
+$ITOUMA ITINMA ITSCH   
+  2000      40    7  
+$ ITOUTS
+   0                   
+TOTAL POWER                                                    
+$   TOTPOW      
+ 46.e-3
+$IBOR INDXE INDSM  KRIPAR ITKRIM    
+  1    0     0       1      100 
+$ SOURCE
+$   0.0                                            
+$   EPSKRI   EPSTF     EPSRH     THETA
+  .00001   .005    .002      0.5                         
+$   BW      EKEFF0   CBLIM
+    0.00022     1.0     0.0
+$ ICSTYP
+    1                 
+$ NOFUEL 
+    4
+$ IBURN
+    1 
+$ ASSEMBLIES
+  1
+  2
+  3
+  4
+MATERIAL MAP
+$ JMIN JMAX                                                   
+     0    1
+$ ILEFT(J)                                                    
+   0 0
+$ IRIGHT(J)                                                   
+   1 1
+$ NSHUFF       record 26
+    0
+$ IMAT(I)
+  3 4
+  1 2 
+GEOMETRICAL PARAMETERS
+$ AX
+       2*21.5036
+$ AY
+       2*21.5036
+$ AZ
+ 1.0
+$ IZBOT IZTOP      
+    1   1
+CONTROL RODS
+$ NOBANK NOW
+    0    0
+$ ISUM
+$    1
+$ I0ROD  J0ROD  IRDTYP
+$  0     0       2
+$ IBK     ZRPOS(IBK)
+$   1        365.755    
+ASSEMBLY DISCONTINUITY FACTORS
+$ASSEMBLY DISCONTINUITY FACTORS – DIFFERING
+$SECOND MOMENT ASSEMBLY DISCONTINUITY FACTORS
+CURRENT COUPLING RELAXATION
+ 0.5
+BOUNDARY RELATIONS
+     WHITE
+$ FEEDBACK ADJUSTING COEFFICIENTS
+     0.0  0.0  0.0  0.0
+WEIGHTED DOPPLER TEMPERATURE
+    0.7 
+$NHYCHA
+    0
+END OF DATA FOR STATIONARY CALCULATION                                  
+FINE 

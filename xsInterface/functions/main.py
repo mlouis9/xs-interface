@@ -5,7 +5,7 @@ Main class object that connects and executes all the reading, storing and
 printing cabalities.
 
 Created on Fri July 22 10:20:00 2022 @author: Dan Kotlyar
-Last updated on Thu August 10 13:45:00 2023 @author: Dan Kotlyar
+Last updated on Thu Sep 04 04:30:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -39,13 +39,16 @@ from xsInterface.functions.readinput import ReadInput
 from xsInterface.functions.readtemplate import ReadTemplate
 from xsInterface.functions.plotters import coreSlicePlot, Plot1d
 from xsInterface.errors.checkerrors import _inlist, _islist, _isequallength,\
-    _iszeropositive, _inrange, _isstr, _isnonNegativeArray
+    _iszeropositive, _inrange, _isstr, _isnonNegativeArray, _exp2dshape
 
 ALLOWED_MANIPULATION = ['multiply', 'divide']
 rcParams['figure.dpi'] = 300
 FONT_SIZE = 16
 MARKER_SIZE = 6
 
+
+# import cProfile, pstats, io
+# from pstats import SortKey
 
 class Main():
     """A container to store unique universes having MultipleSets objects
@@ -105,9 +108,6 @@ class Main():
         self._externalIds = externalIds
         self._dataFiles = {}
         self.core = core
-
-
-
 
 
     def Read(self, readUniverses=True, readTemplate=False,
@@ -251,8 +251,8 @@ class Main():
         return self.universes.TableValues(univId, attrs, **kwargs)
 
 
-    def Values(self, univId, attr, **kwargs):
-        """Obtain the values of a single attribute and corresponding states
+    def Values(self, univId, attrs, **kwargs):
+        """Obtain values of single/multiple attribute and corresponding states
 
         This method is similar to the ``Table``, but can only be applied
         for a single attribute. This method returns a clean dictionary with
@@ -263,7 +263,7 @@ class Main():
         ----------
         univId : string
             name of the universe
-        attr : string
+        attrs : string or list of strings
             name of the attribute
         kwargs : named arguments
             keys represent the state name and value represent the values.
@@ -281,11 +281,13 @@ class Main():
 
         """
 
-        if attr is not None:
-            if isinstance(attr, str):
-                attr = attr.lower()
+        if attrs is not None:
+            if isinstance(attrs, str):
+                attrs = attrs.lower()
+            elif isinstance(attrs, list):
+                attrs = [attr.lower() for attr in attrs] 
 
-        return self.universes.Values(univId, attr, **kwargs)
+        return self.universes.Values(univId, attrs, **kwargs)
 
 
     def Condense(self, cutoffE):
@@ -347,8 +349,8 @@ class Main():
         attrs : string or list of strings
             name of the attribute
         chIds : list of string
-            list with all the channel names. If None, the results for all the
-            channels is provided.
+            list with channel names. If None, the results for all the
+            channels are obtained by default.
         volManip : string or list of string
             volume manipulation ['multiply', 'divide']. Default is None.
         kwargs : named arguments
@@ -406,9 +408,6 @@ class Main():
 
        
         nchannels = len(chIds)  # number of channels
-        results = {}  # create a dictionary to host all the results
-        for attr in attrs:
-            results[attr] = [None]*nchannels
         
         # check that the states for all the channels are provided            
         for key, value in kwargs.items():
@@ -418,22 +417,24 @@ class Main():
                     "The number of states for <{}> must be of size {} and not "
                     "{}".format(key, nchannels, nvals))
 
-            
+        chResults = {}  # results for all attributes with keys as channels
         for idx, chId in enumerate(chIds):
             state = {}  # construct the channel state
             for key, value in kwargs.items():
                 state[key] = value[idx]   
+            # obtain the results for a specific channel    
+            chResults[idx] = self._ChannelValues(chId, attrs, volManip, **state)
         
-            for jattr, attr in enumerate(attrs):
-                # Evaluate the results for a specific channel
-                results[attr][idx] =\
-                    self._ChannelValues(chId, attr, volManip[jattr], **state)
-        
-            
+        results = {}  # results for all channels with keys as attributes   
+        for attr in attrs:
+            results[attr] = [None]*nchannels
+            for idx, chId in enumerate(chIds):
+                results[attr][idx] = chResults[idx][attr]
+           
         return results, chIds
             
                             
-    def _ChannelValues(self, chId, attr, volManip=None, **kwargs):
+    def _ChannelValues(self, chId, attrs, volManip=None, **kwargs):
         """Obtain the values of a single attribute and corresponding states
 
         This method returns a list vector for all the layers in the channel.
@@ -463,19 +464,24 @@ class Main():
 
         """
 
-        if volManip is not None:
-            _inlist(volManip, "Volume manipulation", ALLOWED_MANIPULATION)
+
+        for manipOper in volManip:
+            if manipOper is not None:
+                _inlist(manipOper, "Volume manipulation", ALLOWED_MANIPULATION)
 
         if chId not in self.core.chIds:
             raise KeyError("chId <{}> does not exist in {}"
                            .format(chId, self.core.chIds))
 
-        univs = self.core[chId]['layers']  # all the universes in a specific channel
+        univs = self.core[chId]['layers']  # all the universes in a channel
         nlayers = self.core[chId]['nlayers']  # number of layers
         vols = self.core[chId]['volumes']  # volumes
-        
-        values = [None]*nlayers
-
+                
+        # Uncomment to enable a profiler
+        # ---------------------------------------------------------------------
+        # pr = cProfile.Profile()
+        # pr.enable()
+                
         for idx, univ in enumerate(univs):
             
             # loop over all the perturbations to build the current state
@@ -488,16 +494,48 @@ class Main():
                         .format(len(value), nlayers, chId))
                 state[key] = value[idx]
 
+            # results for all the attributes in a layer-energy group pair
+            attrsvalues = self.Values(univ, attrs, **state)
+            
+            # create a dictionary to host all the results keys represent the 
+            # attributes and values arrays with [layers, groups] values
+            # reset an empty array for each attribute
+            if idx == 0:
+                results = self._resetChannelValues(attrs, nlayers, attrsvalues)
+            
+            # populate the data for each attribute
+            for attrIdx, attr in enumerate(attrs):
+                if volManip[attrIdx] is None:
+                    results[attr][idx, :] =\
+                        attrsvalues[attr][0, :]
+                elif volManip[attrIdx] == 'divide':
+                    results[attr][idx, :] =\
+                        attrsvalues[attr][0, :] / vols[idx]                        
+                elif volManip[attrIdx] == 'multiply':
+                    results[attr][idx, :] =\
+                        attrsvalues[attr][0, :] * vols[idx]                
+                
+        
+        # Uncomment to enable a profiler
+        # ---------------------------------------------------------------------
+        # pr.disable()
+        # s = io.StringIO()
+        # sortby = SortKey.CUMULATIVE
+        # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        # ps.print_stats()
+        # print(s.getvalue())
 
-            values[idx] = self.Values(univ, attr, **state)[attr][0]
-            if volManip == 'multiply':
-                manipvals = [val*vols[idx] for val in values[idx]]
-                values[idx] = manipvals
-            elif volManip == 'divide':
-                manipvals = [val/vols[idx] for val in values[idx]]
-                values[idx] = manipvals 
 
-        return values
+        return results
+
+
+    def _resetChannelValues(self, attrs, nlayers, attrvals):
+        """reset arrays to store data for all layers"""
+        
+        results0 = {}  # dictionary to store all results
+        for attr in attrs:
+            results0[attr] = np.empty((nlayers, len(attrvals[attr][0, :])))
+        return results0
 
 
     def ValidateMap(self):
@@ -525,8 +563,7 @@ class Main():
                     _inlist(univ, "universe", self.universes.universeIds)
                 
 
-    def PopulateCoreData(self, states, attributes=None, volManip=None,
-                         **addattrs):
+    def PopulateCoreData(self, states, attributes, volManip, **addattrs):
         """Populate new data for all the channels and layers
     
         Instead of using the universes directly, the data is evaluated for
@@ -543,7 +580,8 @@ class Main():
             names and values as 2-dim list with the values of the state for 
             channels and layers. e.g., time = [[0.0, 0.0, 0.0, 0.0]]*5
         volManip : string or list of string
-            volume manipulation ['multiply', 'divide']. Default is None.
+            volume manipulation ['multiply', 'divide']. If None no manipulation
+            is performed for any of the attributes.
         addattrs : **kwargs
             keys are the names of the new variables and corrsponding values
             are the values for these new attributes. If the values are None
@@ -568,6 +606,7 @@ class Main():
         >>> xs.PopulateCoreData(attributes=['infkappa', 'infsp0', 'infflx'],
         ...                     states=states, 
         ...                     volManip=[None, None, 'divide'],
+                                addkineticattrs=None
         ...                     sph=None, adf=adfvals)
 
         """
@@ -588,7 +627,8 @@ class Main():
                 volManipulations[idx] = volval  # insert the manipulation
         else:
             volManipulations = volManip
-                    
+
+                   
                        
         # obtain all the values for the reference points
         nomvalues, chIds =\
@@ -597,37 +637,40 @@ class Main():
                         volManip=volManipulations, 
                         **states)
         
-        chIds = list(chIds)
+        # obtain definitions of groups
+        rc = self.universes[self.universes.universeIds[0]][0]
+        
         nchs = len(chIds)  # number of channels
-        ng = len(nomvalues[attributes[0]][0][0])  # number of energy groups
+        ng = rc.ng  # number of energy groups
+        dn = rc.dn  # number of delayed neutron groups
 
         layers = np.zeros(nchs, dtype=int)  # number of layers in each channel
-        for chidx in range(nchs):
-            layers[chidx] = len(nomvalues[attributes[0]][chidx])
+        for chidx, chId in enumerate(chIds):
+            layers[chidx] = self.core.channels[chId]['nlayers']
 
         for key, value in addattrs.items():
+            if key in attributes:
+                raise KeyError("Attribute {} already exist in \n{}"
+                               .format(key, attributes))
             if value is None:
-                x0 = [1.0]*nchs
-                for ich, ch in enumerate(nomvalues[attributes[0]]):
-                    nlayers = len(ch)  # number of layers
-                    x0[ich] = [np.ones(ng)]*nlayers
+                x0 = [None]*nchs
+                for ich in range(nchs):
+                    x0[ich] = np.ones((layers[ich], ng))                           
                 nomvalues[key] = x0  # add the new attribute
             else:
                 _islist(value, "Values for {}".format(key))
                 _isequallength(value, nchs, "1st-dim for {}".format(key))
-                for ich, ch in enumerate(nomvalues[attributes[0]]):
-                    nlayers = len(ch)  # number of layers
-                    _isequallength(value[ich], nlayers, "2nd-dim for {}"
-                                   .format(key))
-                    for layer in value[ich]:
-                         _isequallength(layer, ng, 
-                                        "3rd-dim for {}".format(key))
+                for ich, chvals in enumerate(value):
+                    expShape = (layers[ich], ng)
+                    _exp2dshape(chvals, expShape, "Values for ch {}"
+                                .format(chIds[ich]))
                 nomvalues[key] = value  # add the new attribute
 
         self.core.chIds = chIds
         self.core.corevalues = nomvalues
         self.core.corestates = states
         self.core.ng = ng
+        self.core.dn = dn
         self.core.layers = layers
         
 
@@ -711,8 +754,10 @@ class Main():
         if chIds is None:
             chIds = list(self.core.chIds)
 
-        _iszeropositive(layer, "layer")
         _iszeropositive(egroup, "energy group")
+        if layer is not None:
+            _iszeropositive(layer, "layer")
+        
 
         nrow = len(radmap)
         ncol = len(radmap[0])
@@ -722,11 +767,17 @@ class Main():
             for icol, colVal in enumerate(rowVals):
                 if colVal is not None:
                     idx = chIds.index(colVal)
-                    nlayers = len(values[idx])
-                    _inrange(layer, "layer", [0, nlayers-1])
-                    ngroups = len(values[idx][layer])
-                    _inrange(egroup, "energy groups", [0, ngroups-1])
-                    valsMap[irow, icol] = values[idx][layer][egroup]
+                    if layer is not None:
+                        nlayers = len(values[idx])
+                        _inrange(layer, "layer", [0, nlayers-1])
+                        ngroups = len(values[idx][layer, :])
+                        _inrange(egroup, "energy groups", [0, ngroups-1])
+                        valsMap[irow, icol] = values[idx][layer, egroup]
+                    else:
+                        ngroups = len(values[idx][0, :])
+                        _inrange(egroup, "energy groups", [0, ngroups-1])
+                        valsMap[irow, icol] =\
+                            values[idx].mean(axis=0)[egroup]                        
            
         
         coreSlicePlot(
@@ -826,7 +877,7 @@ class Main():
             yvals = np.empty(nlayers)
             xvals = np.empty(nlayers) 
             for idx, ilayer in enumerate(layers):
-                yvals[idx] = results[idxch][ilayer][egroup]
+                yvals[idx] = results[idxch][ilayer, egroup]
                 xvals[idx] = xvalues[ilayer]
             
             yvalues[chId] = yvals 
@@ -889,7 +940,7 @@ class Main():
         attrval = {}
         if attrsvals is not None:
             for attr, vals in attrsvals.items():
-                attrval[attr] = np.array(vals[ich][ilayer])
+                attrval[attr] = np.array(vals[ich][ilayer, :])
         return attrval
 
 
@@ -916,13 +967,3 @@ class Main():
                 # Call load method to deserialze
                 data = pickle.load(file)
         return data
-
-
-# class _Container():
-#     """General container to hold whatever data is provided to it"""
-
-#     def __init__(self, **kwargs):     
-#         for key, value in kwargs.items():
-#             setattr(self, key, value)
-
-
