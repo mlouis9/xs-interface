@@ -43,6 +43,8 @@ Chapters							    Description
    general
    dyn3d
    example1_dyn3d
+   example_jfnk_dyn3d_2by2_analytic
+   jfnk_dyn3d_hex_supercell.rst
 
 
 Data Flow
