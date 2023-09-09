@@ -218,4 +218,5 @@ Complete application examples
 
 1. :ref:`dyn3d_example1`: Complete example of the iterative technique applied to find axial discontinuity factors for the 3D single fuel assembly case.
 2. :ref:`dyn3d_example2`: Complete example of the iterative technique applied to find radial discontinuity factors for a 2-dim fuel-reflector colorset.
-3. Full core to be completed.
+3. :ref:`dyn3d_example3`: Complete example of the iterative technique applied to find radial discontinuity factors for a 2-dim fuel-moderator hexagonal supercell.
+4. Full core to be completed.
