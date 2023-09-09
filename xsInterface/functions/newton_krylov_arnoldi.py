@@ -90,7 +90,7 @@ def ArnoldiIteration(dyn3d, Fx0, x0, b, nodesN: int, n: int, iterScheme,
       h: (n + 1) x n array, A on basis Q. h is the upper Hessenberg.  
     """
     
-       
+    NG = dyn3d.xs.core.ng  # number of energy groups   
     h = np.zeros((n+1,n))  # upper Hessenberg
     Q = np.zeros((nodesN,n+1))
 
@@ -134,14 +134,20 @@ def ArnoldiIteration(dyn3d, Fx0, x0, b, nodesN: int, n: int, iterScheme,
         # Execute DYN3D and obtain solution
         dyn3d.Execute(printstatus=False)
 
-        dyn3dFlux =\
-            dyn3d.xs.core._reshapeTo1D(valsIn=dyn3d.flux, normFlag=True, 
-                                       weights=weights) 
+
+        dynFlxNorm = dyn3d.flux.flatten()
+        if weights is not None:
+            for ig in range(NG):
+                dynFlxNorm[ig::NG] =\
+                    weights[ig]*dynFlxNorm[ig::NG]/dynFlxNorm[ig::NG].sum()
+        else:
+            dynFlxNorm = dynFlxNorm / dynFlxNorm.sum() 
+
                 
         if objmultp is None:
-            FxI = dyn3dFlux
+            FxI = dynFlxNorm
         else:
-            FxI = dyn3dFlux * objmultp
+            FxI = dynFlxNorm * objmultp
         
         
         v = (FxI - Fx0) / pert  # this is the matrix-vector product
@@ -263,7 +269,7 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
         objmultp = np.ones(meshes)
     
     refFlxNorm = refFlxNorm * objmultp
-    dyn3d.refFlx = dyn3d.xs.core._reshapeTo3D(refFlxNorm)  # _reshapeTo3D(dyn3d.refFlx, refFlxNorm)    
+    dyn3d.refFlx = dyn3d.xs.core._reshapeTo3D(refFlxNorm)  
 
     for newtonI in range(newtonIters):
 
@@ -289,18 +295,14 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
         else:
             dynFlxNorm = dynFlxNorm / dynFlxNorm.sum() 
         
-        # dynFlxNorm =\
-        #     dyn3d.xs.core._reshapeTo1D(valsIn=dyn3d.flux, normFlag=True, 
-        #                                weights=weights) 
-
         dynFlxNorm = dynFlxNorm * objmultp
 
         
-        dyn3d.iterOutputs[newtonI] = dyn3d.xs.core._reshapeTo3D(dynFlxNorm)  #  _reshapeTo3D(dyn3d.refFlx, dynFlxNorm)
+        dyn3d.iterOutputs[newtonI] = dyn3d.xs.core._reshapeTo3D(dynFlxNorm) 
         
         # store the differences in fluxes
         difference = 100*(1-dynFlxNorm/refFlxNorm)
-        dyn3d.iterDifferences[newtonI] = dyn3d.xs.core._reshapeTo3D(difference)  # _reshapeTo3D(dyn3d.refFlx, difference)
+        dyn3d.iterDifferences[newtonI] = dyn3d.xs.core._reshapeTo3D(difference)  
         
         # save the current iterate
         fluxes[newtonI, :] = dynFlxNorm  
@@ -364,7 +366,7 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
             x0[umask] = ubound - pert
     
             # reshape xI to fit the flux structure [channels x layers x groups]
-            x0core = dyn3d.xs.core._reshapeTo3D(x0)  # _reshapeTo3D(dyn3d.refFlx, x0)
+            x0core = dyn3d.xs.core._reshapeTo3D(x0)  
     
             # update the cross sections
             dyn3d.xs.core.corevalues[iterScheme] = x0core
@@ -400,18 +402,13 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
             else:
                 dynFlxNorm = dynFlxNorm / dynFlxNorm.sum() 
 
-            # dynFlxNorm =\
-            #     dyn3d.xs.core._reshapeTo1D(valsIn=dyn3d.flux, normFlag=True, 
-            #                                weights=weights) 
-            # dynFlxNorm =\
-            #     _reshapeTo1D(dyn3d.flux, nodes, normFlag=True, weights=weights)
             dynFlxNorm = dynFlxNorm * objmultp           
 
             # Evaluate the predicted error
             prdNormErr[krylovN-1] = np.linalg.norm(dynFlxNorm-refFlxNorm)
             
-            # print("({:.2e}/{:.2e})"
-            #       .format(expNormErr[krylovN-1],prdNormErr[krylovN-1]), end="")
+            print("({:.2e}/{:.2e})"
+                  .format(expNormErr[krylovN-1],prdNormErr[krylovN-1]), end="")
             
             cond1 = expNormErr[krylovN-1]/prdNormErr[krylovN-1] < krylovErr
             cond2 = False
@@ -443,7 +440,7 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
         x0[umask] = ubound - pert
 
         # reshape xI to fit the flux structure [channels x layers x groups]
-        x0core = dyn3d.xs.core._reshapeTo3D(x0)  #  _reshapeTo3D(dyn3d.refFlx, x0)
+        x0core = dyn3d.xs.core._reshapeTo3D(x0)  
         
         # input for the updated Newton step
         xinputs[newtonI+1, :] = x0
@@ -486,18 +483,14 @@ def NewtonKrylov(dyn3d, iterScheme, x0, refFlx, newtonIters: int,
     else:
         dynFlxNorm = dynFlxNorm / dynFlxNorm.sum() 
 
-    # dynFlxNorm =\
-    #     dyn3d.xs.core._reshapeTo1D(valsIn=dyn3d.flux, normFlag=True, 
-    #                                weights=weights) 
-
     dynFlxNorm = dynFlxNorm * objmultp
     
     # dyn3d.iterOutputs[newtonI] = dyn3d.flux
-    dyn3d.iterOutputs[newtonI+1] = dyn3d.xs.core._reshapeTo3D(dynFlxNorm)  # _reshapeTo3D(dyn3d.refFlx, dynFlxNorm)
+    dyn3d.iterOutputs[newtonI+1] = dyn3d.xs.core._reshapeTo3D(dynFlxNorm)  
 
     # store the differences in fluxes
     difference = 100*(1-dynFlxNorm/refFlxNorm)
-    dyn3d.iterDifferences[newtonI+1] = dyn3d.xs.core._reshapeTo3D(difference)  # _reshapeTo3D(dyn3d.refFlx, difference)
+    dyn3d.iterDifferences[newtonI+1] = dyn3d.xs.core._reshapeTo3D(difference)  
 
     
     # save the current iterate
