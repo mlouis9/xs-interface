@@ -4,7 +4,7 @@
 Container to collect and store ``MultipleSets``.
 
 Created on Mon June 13 21:20:00 2022 @author: Dan Kotlyar
-Last updated on Wed May 03 16:00:00 2023 @author: Dan Kotlyar
+Last updated on Sun Sep 03 19:20:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -19,12 +19,11 @@ Values - 06/16/2022 - DK
 PrintValues - 07/18/2022 - DK
 PandaTables - 07/21/2022 - DK
 Condense - 05/03/2023 - DK
+Values - 09/03/2023 - DK
 
 Need to add error checking!!!
 
 """
-
-import copy
 
 import numpy as np
 import pandas as pd
@@ -70,7 +69,9 @@ class Universes():
         self.universeIds = []  # names of all the universes
         self.universes = {}  # empty dictionary to store all universes
         self.filteredstates = {}  # empty dict to store states & data for print
-
+        self.squareattrs = {}  # attributes with square matrices in universes
+        
+        
     def Add(self, univId, rc, states, multisets):
         """Add new data for a specific set
 
@@ -281,19 +282,21 @@ class Universes():
         return rc, states, condMsets
         
 
-    def Values(self, univId, attr, **kwargs):
+    def Values(self, univId, attrs, **kwargs):
         """Obtain the values of a single attribute and corresponding states
 
         This method is similar to the ``TableValues``, but can only be applied
         for a single attribute. This method returns a clean dictionary with
-        occurances of all the states and the specific attribute result.
+        occurances of all the states and the specific attributes results.
+        States are stored in list and attributes values in 2-dim array, where
+        the column represents the energy or delayed group and row the state.
 
 
         Parameters
         ----------
         univId : string
             name of the universe
-        attr : string
+        attrs : string or list of strings
             name of the attribute
         kwargs : named arguments
             keys represent the state name and value represent the values.
@@ -301,7 +304,12 @@ class Universes():
 
         Returns
         -------
-        history : array
+        results : dict
+            dictionary with occurances of all the states and the specific 
+            attributes results.
+            States are stored in list and attributes values in 2-dim array, 
+            where the column represents the energy or delayed group and row 
+            the state.
             
 
         Raises
@@ -315,31 +323,51 @@ class Universes():
 
         Examples
         --------
-        >>> universes.Values("u0", attr="inf_nsf", fuel=900)
-        ... {'inf_nsf': [array([0.36666667]), array([0.36666667])],
-        ...  'history': array(['nom', 'nom'], dtype='<U3'),
-        ...  'time': array([0., 0.]),
-        ...  'fuel': array([900., 900.]),
-        ...  'mod': array([600., 600.]),
-        ...  'cool': array([600., 500.])}
+        >>> universes.Values("u0", attr=["infnsf", "inffiss"], fuel=900)
+        ... {'infnsf': array([[0.36666667], [0.36666667]),
+        ...  'inffiss': array([[0.36666667], [0.36666667]),                       
+        ...  'history': ['nom', 'nom'],
+        ...  'time': [0., 0.],
+        ...  'fuel': [900., 900.],
+        ...  'mod': [600., 600.],
+        ...  'cool': [600., 500.]}
 
         """
 
-        _isstr(attr, "Attribute name")
-        pd0 = self.TableValues(univId, attr, **kwargs)
+        if isinstance(attrs, str):
+            attrs = [attrs]
+
+        pd0 = self.TableValues(univId, attrs, **kwargs)
         pdDict = pd0.to_dict()
-        
+                
         results = {}  # returned dictionary with states and attribute values
-               
+        self.squareattrs[univId] = []
+        
         # handle the states(history, time, and branches)
         for key, valsDict in pdDict.items():
-            arr = [None]*len(valsDict)
-            for index, keyval in enumerate(valsDict):
-                arr[index] = valsDict[keyval]
-            if key != attr:
-                results[key] = np.array(arr)
+            nstates = len(valsDict)
+            if key in attrs:
+                if valsDict[0].ndim == 2:
+                    ng = len(valsDict[0][0])  # number of values
+                    ng = int(ng*ng)
+                    # square matrices (e.g., scattering)
+                    if key not in self.squareattrs[univId]:
+                        self.squareattrs[univId] = self.squareattrs[univId]+[key]
+                    vals = np.empty((nstates, ng))  # reset a matrix
+                    for istate, statevals in valsDict.items():
+                        vals[istate, :] = statevals.flatten()
+                else:
+                    ng = len(valsDict[0])  # number of values
+                    vals = np.empty((nstates, ng))  # reset a matrix
+                    for istate, statevals in valsDict.items():
+                        vals[istate, :] = statevals
             else:
-                results[key] = arr
+                vals = [None]*nstates  # a list to hold states and not attrs
+                for istate, statevals in valsDict.items():
+                    vals[istate] = statevals
+            # assign the attributes to results
+            results[key] = vals    
+                
         return results
 
         
