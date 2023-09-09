@@ -672,22 +672,13 @@ def _Array2tlines(tline, origstr, valsarray, nrow, frmt, delimiter):
         str0 = ''  # empty string to be appended
         nvalsrow = len(valsrow)
         delimFrmt = delimiter
-        print(f"DELIMFMT {delimFrmt}")
-        print(f"fmt {frmt}")
         for idx, val in enumerate(valsrow):
-            print(f"Val {val}")
             # no delimiter should be used for the last values
             if lastRow and idx == nvalsrow-1:
-                print("Lastrow")
                 delimFrmt = ''
             if isinstance(val, str):
-                print("val is string")
                 str0 += '{}{}'.format(val, delimFrmt)
             else:
-                print("uh oh")
-                print(f"FMTS: {frmt}, {delimFrmt}")
-                # if delimFrmt == None:
-                #     delimFrmt = ''
                 str0 += frmt.format(val) + delimFrmt
         
         if replaceFlag:
