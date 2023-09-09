@@ -8,7 +8,7 @@ channels must be provided.
 
 
 Created on Mon May 01 13:00:00 2023 @author: Dan Kotlyar
-Last updated on Mon May 02 13:30:00:00 2023 @author: Dan Kotlyar
+Last updated on Mon Sep 04 06:15:00 2023 @author: Dan Kotlyar
 
 email: dan.kotlyar@me.gatech.edu
 
@@ -17,6 +17,7 @@ List changes / additions:
 --------------------------
 "Concise description" - MM/DD/YYY - Name initials
 Validate - 05/02/2023 - DK
+_reshapeTo1D, _reshapeTo3D - 09/04/2023 - DK
 
 """
 
@@ -140,23 +141,26 @@ class Map:
         # Init to empty dictionary for storing data of a specific channel
         self.channels = {}
         # Identify all the unique channels types
-        self.chIds = [] #set()
+        self.chIds = [] #set() +DK
         for row in radmap:
-            self.chIds = self.chIds + row
+            self.chIds = self.chIds + row  # +DK
             # self.chIds.update(row)
+        self.chIds = list(np.unique(self.chIds))
             
-            
-        # create channels indices
-        # c = 1
-        # for irow, row in enumerate(radmap):
-        #     for jcol, col in enumerate(row):
-        #         self.idxmap[irow][jcol] = c
-        #         c += 1
-
-        c = 1
+        self.linkChannelsInMap = {}
+        self.orderedChIds = []
+        c = 0  # the first channel is the zero channel
         for irow, row in enumerate(radmap):
             for jcol, col in enumerate(row):
                 self.idxmap[irow][jcol] = c
+                # map the channels to their positions
+                chId = radmap[irow][jcol]  # get chId in this location
+                self.orderedChIds.append(chId)
+                if chId in self.linkChannelsInMap:
+                    self.linkChannelsInMap[chId] =\
+                        self.linkChannelsInMap[chId] + [c]
+                else:
+                    self.linkChannelsInMap[chId] = [c]                    
                 c += 1
 
         
@@ -274,6 +278,151 @@ class Map:
         return self.channels[pos]
 
 
+    def _NumSpatialNodes(self):
+        """count the total number of spatial nodes in the system ch x layers"""
+        # this method can only be executed if all the fields already exist
+
+        numChannels = 0
+        numNodes = 0
+        for chId, chData in self.channels.items():
+            chs = self.linkChannelsInMap[chId]
+            nchs = len(chs)
+            chData['channelsIdx'] = chs   # indices
+            chData['nchannels'] = nchs    # number of repetitions
+            self.channels[chId] = chData  # update the data
+            numChannels += nchs
+            numNodes += nchs*chData['nlayers']
+        self.numNodes = numNodes
+        self.numChannels = numChannels
+
+
+
+    def _reshapeTo1D(self, valsIn, normFlag=True, weights=None):
+        """reshape the 3D matrix to a 1D vector corresponding to radial map
+        
+        Parameters
+        ----------
+        self : core Map object
+            the object includes data about the channels, layers, ng
+            the ``self`` object also includes channels Ids
+        valsIn : 1-dim list (with 2-dim arrays)
+            input vector with the following structure:
+            [channel][layer, energy]
+            valsIn are provided in the order of the self.chIds
+        normFlag : bool
+            indicator whether the returned value should be normalized to 1.
+        groupWeights : list
+            energy group-wise weighting factors for the objective function.
+            Should include a value for each enegy group.
+            Envisioned to be used for normalization techniques.
+            
+        Returns
+        -------
+        valsOut : 1-dim array
+            output vector with the following structure:
+            
+             gr1, gr-2, ...    gr1, gr-2, ...  gr1, gr-2, ...    gr1, gr-2, ...
+            \______________/ \______________/ \______________/ \______________/
+                 layer-0         layer-1                      ...
+                \___________________________/  \___________________________/
+                         channel-0                      channels-N
+            
+        
+        """
+
+        valsChs = [None]*self.numChannels  # total number of channels
+        for idxFrom, chId in enumerate(self.chIds):
+            # all the parameters that describe the channels
+            # nlayers, layers, volumes, channelsIdx, nchannels
+            chData = self.channels[chId]
+            
+            # 1-dim array with all the values for all layers and group
+            # layer0 [g0, g1, ...], layer1 [g0, g1, ...], ...
+            valsFrom = valsIn[idxFrom]
+            
+            valsFrom = valsFrom.reshape(valsFrom.shape[0]*valsFrom.shape[1])
+            
+            # insert the values to the correct channel
+            for idxTo in chData['channelsIdx']:
+                valsChs[idxTo] = valsFrom
+            
+        # produce a 1-dim array [channel][layer][group]
+        valsOut = np.concatenate(valsChs)
+        
+        # normalization (if needed)
+        if weights is not None:
+            for ig in range(self.ng):
+                valsOut[ig::self.ng] =\
+                    weights[ig]*valsOut[ig::self.ng]/valsOut[ig::self.ng].sum()
+        elif normFlag:
+            valsOut = valsOut / valsOut.sum()
+        
+        # final 1-dim numpy array        
+        return valsOut
+            
+
+    def _reshapeTo3D(self, valsIn):
+        """reshape the 1D matrix to a 3D vector corresponding to radial map
+        
+        Parameters
+        ----------
+        self : core Map object
+            the object includes data about the channels, layers, ng
+            the ``self`` object also includes channels Ids
+        valsIn : 1-dim numpy array
+            input vector with the following structure:
+             gr1, gr-2, ...    gr1, gr-2, ...  gr1, gr-2, ...    gr1, gr-2, ...
+            \______________/ \______________/ \______________/ \______________/
+                 layer-0         layer-1                      ...
+                \___________________________/  \___________________________/
+                         channel-0                      channels-N
+                                     
+        Returns
+        -------
+        valsOut : 3-dim array
+            output vector with the following structure:
+            [channels][layers][groups]
+            
+        """
+
+        numUniqueChannels = len(self.chIds)
+        ng = self.ng
+        # loop over all the channels in the radial maps 
+        # even if these have the same chId
+        valsInFull = [None]*self.numChannels  # holds the entire distribution
+                                              # of channels with repetitive ids
+        idx0 = 0
+        for idx, chId in enumerate(self.orderedChIds):
+            chData = self.channels[chId]  # includes layers, channels, ...
+            
+            idx1 = idx0 + chData['nlayers']*ng
+            
+            chVals1D = valsIn[idx0:idx1]  # layers and groups for a specific ch
+            idx0 = idx1  # update for the next channel
+            
+            # reshape the values to 2-m array [layers][groups]
+            chVals2D = chVals1D.reshape((chData['nlayers'], ng))
+                
+            # insert the layer-group values into the channels values list
+            valsInFull[idx] = chVals2D
+        
+        
+        # the final 3D list os only defined for the defined unique channels
+        valsOut = [None]*numUniqueChannels
+        # insert the values to the correct channel
+        for idxTo, chId in enumerate(self.chIds):
+            chData = self.channels[chId]
+            # reset group values for all the layers
+            groupVals = np.zeros((chData['nlayers'], ng))  
+            for idxFrom in chData['channelsIdx']:
+                groupVals = groupVals + valsInFull[idxFrom]
+            valsOut[idxTo] = groupVals / chData['nchannels']
+            
+        # final 3-dim numpy array        
+        return valsOut
+
+
+            
     def Validate(self):
         """post validation to check that all channels were defined
 

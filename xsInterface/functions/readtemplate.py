@@ -258,33 +258,39 @@ def _PopulateValues(dataIn, universes, formats, uservals=None):
             # Get values
             try:
                 if uservals is not None and attr in uservals:
-                    vals = [uservals[attr]]
+                    vals = uservals[attr]
+                    vals = vals.reshape((1, len(vals)))
                 else:
                     vals =\
-                        universes.Values(univId, attr, **states)[attr]              
+                        universes.Values(univId, attr, **states)[attr]
             except ValueError as detail:
                 msg0 = 'The "values" command is not properly defined.\n{}\n{}'\
                         'Follow the format:\n.'.format(tline, detail)
-                raise TemplateFileError(msg0+msg_exe)            
+                raise TemplateFileError(msg0+msg_exe)         
 
             if vals == []:
                 msg0 = 'The "values" command is not properly defined.\n{}'\
                         '\nThe evaluated states do not exist: {}\n'\
                         .format(tline, states)
-                raise TemplateFileError(msg0)    
+                raise TemplateFileError(msg0) 
+            
 
             try:
                 valsPrint = np.array([])  # array for printed values
-                for val in vals:
+                for ival in range(vals.shape[0]):  # loop over all states
+                    valsflat = vals[ival, :]   # 1-dim values for a state
+                    # create a square matrix for scattering xs
+                    if attr in universes.squareattrs[univId]:
+                        ng = int(np.sqrt(len(valsflat)))
+                        valsflat = valsflat.reshape((ng, ng))                    
                     if indices != []:
                         try:
-                            valsPrint = np.append(valsPrint, val[indices])   
+                            valsPrint = np.append(valsPrint, valsflat[indices])   
                         except:
-                             
                              valsPrint = np.append(valsPrint,
-                                                   val[list(indices)])
+                                                   valsflat[list(indices)])
                     else:
-                        valsPrint = np.append(valsPrint, val)
+                        valsPrint = np.append(valsPrint, valsflat)
             except:
                 msg0 = 'The "values" command is not properly defined.\n{}'\
                     '<{}> cannot be appended into an array.'\

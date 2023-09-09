@@ -1,0 +1,94 @@
+$ STATIC CALCULATION 
+$  ICON IWQS IREWIN TOTIM       DTREST 
+    -1   22    1    18000.0       1.0
+$  ISTART
+    1
+$RBWR
+HEXNEM1
+$STANDARD MAP INPUT
+$SP3 
+$ IBKTYP
+    2
+CONTROL OF CALCULATION
+$ ITIM IOINP IH1  IH2  IH3  IH4  IH5   
+    1    1    0    1    0    0    0
+DIMENSIONS OF ARRAYS
+$ISYM NJMAX NIMAX NCAS NZ NOBOU NOSYMS NOMAS NOBT
+ 360    3     3     7  1   18      0     2    1
+$   ndiv
+     1 
+NEUTRON ENERGY GROUPS
+$   NG NOMAXDSC NOMAXUSC NGUPSC
+     2      7       2      0   
+CONTROL OF ITERATION                                                 
+$  EPSBES    EPSK       EPSF              
+   .00002  .00000001   .000000001    
+$ EKEFF
+  1.0                                               
+$ITOUMA ITINMA ITSCH   
+  500      4    7  
+$ ITOUTS
+   0                   
+TOTAL POWER                                                    
+$   TOTPOW    arbitrary chosen
+     70367.34694E-06 
+$     3565.
+$IBOR INDXE INDSM  KRIPAR ITKRIM    
+  1    0     0       1      100 
+$   EPSKRI   EPSTF     EPSRH     THETA
+  .000001   .0001      .0002    0.5                          
+$   BW      EKEFF0   CBLIM
+  .00022     1.0     0.0
+$ ICSTYP
+    1                 
+$ NOFUEL 
+    2
+$ IBURN
+    0 
+$ fuel types
+1
+2
+MATERIAL MAP
+$ JMIN JMAX
+    -1    1
+$ ILEFT    
+    0 -1 -1
+$ IRIGHT    
+    1 1 0
+$ nsub
+$   0
+$ NSHUFF 
+    0
+$MAP
+  2 2
+ 2 1 2
+  2 2 
+GEOMETRICAL PARAMETERS
+$ AX
+ 2.45     
+$ AZ
+ 1
+$ IZBOT IZTOP      
+    1   1
+CONTROL RODS
+$ NOBANK NOW
+    0    0
+$                                                                                                                   
+ASSEMBLY DISCONTINUITY FACTORS
+$ AXIAL ASSEMBLY DISCONTINUITY FACTORS
+CURRENT COUPLING RELAXATION
+$ THETA_CN
+     0.7
+BOUNDARY RELATIONS
+    1.0 1.0
+$ FEEDBACK ADJUSTING COEFFICIENTS
+     0.0  0.0  0.0  0.0
+$NHYCHA
+    0
+$ALBEDOS
+$    3
+$    8   16  22
+END OF DATA FOR STATIONARY CALCULATION                                  
+CALCULATION WITH GIVEN POWER
+FINE 
+
