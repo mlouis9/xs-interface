@@ -346,28 +346,28 @@ class Universes():
         # handle the states(history, time, and branches)
         for key, valsDict in pdDict.items():
             nstates = len(valsDict)
+            valsDictKeys = list(valsDict.keys())
             if key in attrs:
-                if valsDict[0].ndim == 2:
-                    ng = len(valsDict[0][0])  # number of values
+                if valsDict[valsDictKeys[0]].ndim == 2:
+                    ng = len(valsDict[valsDictKeys[0]][0])  # number of values
                     ng = int(ng*ng)
                     # square matrices (e.g., scattering)
                     if key not in self.squareattrs[univId]:
                         self.squareattrs[univId] = self.squareattrs[univId]+[key]
                     vals = np.empty((nstates, ng))  # reset a matrix
-                    for istate, statevals in valsDict.items():
+                    for istate, statevals in enumerate(valsDict.values()):
                         vals[istate, :] = statevals.flatten()
                 else:
-                    ng = len(valsDict[0])  # number of values
+                    ng = len(valsDict[valsDictKeys[0]])  # number of values
                     vals = np.empty((nstates, ng))  # reset a matrix
-                    for istate, statevals in valsDict.items():
+                    for istate, statevals in enumerate(valsDict.values()):
                         vals[istate, :] = statevals
             else:
                 vals = [None]*nstates  # a list to hold states and not attrs
-                for istate, statevals in valsDict.items():
+                for istate, statevals in enumerate(valsDict.values()):
                     vals[istate] = statevals
             # assign the attributes to results
-            results[key] = vals    
-                
+            results[key] = vals 
         return results
 
         
