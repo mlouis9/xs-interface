@@ -416,6 +416,12 @@ def _CleanDataCopy(dataIn, fmt0):
                         tline =\
                             tline.replace('{}'.format(strsComplete[istrExe]),
                                           fmt.format(*evalexpr))
+                    elif isinstance(evalexpr, str):
+                        # replace execution occurrences without using 
+                        # formatting code
+                        tline =\
+                            tline.replace('{}'.format(strsComplete[istrExe]),
+                                          evalexpr)
                     else:
                         # replace execution occurrences
                         tline =\
