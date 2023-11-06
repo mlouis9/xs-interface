@@ -207,6 +207,12 @@ def _ReadCoefFile(coeFile):
     for brKeys, brData in coe0.items():
         # converet to lower case
         brKeysLower = tuple([i.lower() for i in brKeys])
+
+        if isinstance(brKeys, str):
+            # If only a single branch, brKeys is only a single string, not a list
+            # and so the lowering operation incorrectly returns a list of individual letters
+            brKeysLower = (''.join(brKeysLower),)
+        
         # Loop over all the universes and time points
         for univKey in brData:
             
